@@ -5,9 +5,6 @@ import java.util.List;
 
 import android.util.Log;
 
-import com.luis.army.Army;
-import com.luis.connection.Download;
-import com.luis.data.DataKingdom;
 import com.luis.lgameengine.menu.Button;
 import com.luis.lgameengine.menu.MenuBox;
 import com.luis.lgameengine.menu.MenuManager;
@@ -17,23 +14,21 @@ import com.luis.lgameengine.gameutils.gameworld.GfxEffects;
 import com.luis.lgameengine.gameutils.gameworld.ParticleManager;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.implementation.graphics.Graphics;
-import com.luis.map.Kingdom;
-import com.luis.map.Map;
+import com.luis.lgameengine.implementation.input.TouchData;
+import com.luis.strategy.army.Army;
+import com.luis.strategy.connection.Download;
 import com.luis.strategy.constants.Define;
+import com.luis.strategy.data.DataKingdom;
 import com.luis.strategy.game.GameManager;
 import com.luis.strategy.game.Player;
+import com.luis.strategy.map.Kingdom;
+import com.luis.strategy.map.Map;
 
 /**
  * 
  * @author Luis Valdes Frances
  */
 public class ModeGame {
-	
-	/**
-	 * Perfomarce options
-	 */
-	public static final int PERF_BUTTON_W = Define.SIZEX12;
-	public static final int PERF_BUTTON_H = Define.SIZEY12;
 	
 	/**/
 	public static boolean isGamePaused;
@@ -180,7 +175,6 @@ public class ModeGame {
 					Font.FONT_MEDIUM, Font.FONT_MEDIUM){
 				@Override
 				public void onButtonPressUp(){
-					Log.i("Debug", "Index: " + this.getIndexPressed());
 					switch(this.getIndexPressed()){
 					case 0:
 						UserInput.getInstance().getMultiTouchHandler().resetTouch();
@@ -213,6 +207,7 @@ public class ModeGame {
 			gfxEffects.update(Main.getDeltaSec());
 			
 			gameManager.update(Main.getDeltaSec());
+			updateDebugButton();
 			break;
 			
 		case Define.ST_GAME_PAUSE:
@@ -269,7 +264,7 @@ public class ModeGame {
 				_g.drawText("DeltaTime: " + Main.getDeltaSec(), Define.SIZEX2, _g.getTextHeight(), Main.COLOR_WHITE);
 				*/
 			}
-			
+			drawDebugButton(_g);
 			
 			
 			break;
@@ -287,5 +282,25 @@ public class ModeGame {
 		}
 	}
 	
+	public static boolean showDebugInfo;
+	public static final int DEBUG_BUTTON_W = Define.SIZEX12;
+	public static final int DEBUG_BUTTON_H = Define.SIZEY12;
+	private static void drawDebugButton(Graphics _g){
+		_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+		if(!showDebugInfo){
+			_g.setColor(Main.COLOR_RED);
+		}else{
+			_g.setColor(Main.COLOR_GREEN);
+		}
+		_g.fillRect(0, Define.SIZEY - DEBUG_BUTTON_H, DEBUG_BUTTON_W, DEBUG_BUTTON_H);
+		_g.drawText("DEBUG", 0, Define.SIZEY, Main.COLOR_WHITE);
+	}
+	
+	private static void updateDebugButton(){
+		if((UserInput.getInstance().getMultiTouchHandler().getTouchFrames(0) == 1) && 
+			UserInput.getInstance().compareTouch(0, Define.SIZEY - DEBUG_BUTTON_H, DEBUG_BUTTON_W, Define.SIZEY, 0)){
+			showDebugInfo = !showDebugInfo;
+		}
+	}
 	
 }

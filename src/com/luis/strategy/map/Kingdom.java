@@ -1,4 +1,4 @@
-package com.luis.map;
+package com.luis.strategy.map;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,17 +7,16 @@ import com.luis.strategy.GfxManager;
 
 public class Kingdom extends MapObject{
 	
-	public static int DOMAIN_FREE = 0;
-	public static int DOMAIN_1 = 1;
-	public static int DOMAIN_2 = 2;
-	public static int DOMAIN_3 = 4;
-	public static int DOMAIN_4 = 5;
-	
 	private String name;
 	private int id;
 	
 	private List<Terrain> terrainList;
 	private List<Kingdom> borderList;
+	
+	//Si hay ejercito enemigo o es del dominio, estandarte
+	//En otro caso state
+	private int touchX;
+	private int touchY;
 	
 	//Numero de combates por territorios = MONTANYA,BOSQUE, LLANO, CIUDAD
 	private int state;
@@ -81,6 +80,7 @@ public class Kingdom extends MapObject{
 
 	public void setTerrainList(List<Terrain> terrainList) {
 		this.terrainList = terrainList;
+		totalStates = terrainList.size();
 	}
 
 	public List<Kingdom> getBorderList() {
@@ -118,4 +118,14 @@ public class Kingdom extends MapObject{
 	public void setState(int state) {
 		this.state = state;
 	}
+
+	public int getTotalStates() {
+		return totalStates;
+	}
+
+	public void setTotalStates(int totalStates) {
+		this.totalStates = totalStates;
+	}
+	
+	
 }

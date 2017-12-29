@@ -37,7 +37,17 @@ public class GfxManager {
 	   public static Image imgButtonCancelRelease;
 	   public static Image imgButtonCancelFocus;
 	   
+	   public static Image imgBigBox;
+	   public static Image imgSmallBox;
+	   public static Image imgButtonCombatRelease;
+	   public static Image imgButtonCombatFocus;
+	   public static Image imgButtonCardRelease;
+	   public static Image imgButtonCardFocus;
+	   public static Image imgButtonOkRelease;
+	   public static Image imgButtonOkFocus;
+	   
 	   public static Image imgMap;
+	   public static Image imgTerrainOk;
 	   public static Image imgPlain;
 	   public static Image imgForest;
 	   public static Image imgMontain;
@@ -119,6 +129,7 @@ public class GfxManager {
 	            		break;
 	            	}
 	            	
+	            	imgTerrainOk = Image.createImage("/terrain_ok.png");
 	            	imgPlain = Image.createImage("/plain.png");
 	            	imgForest = Image.createImage("/forest.png");
 	            	imgMontain = Image.createImage("/montain.png");
@@ -139,6 +150,15 @@ public class GfxManager {
 	            	imgButtonCancelFocus = Image.createImage("/cancel_focus.png");
 	            	imgButtonNextRelease = Image.createImage("/next_release.png");
 	            	imgButtonNextFocus = Image.createImage("/next_focus.png");
+	            	imgButtonOkRelease = Image.createImage("/ok_release.png");
+	            	imgButtonOkFocus = Image.createImage("/ok_focus.png");
+	            	
+	            	imgBigBox =  Image.createImage("/big_box.png");
+	            	imgSmallBox =  Image.createImage("/small_box.png");
+	            	imgButtonCombatRelease = Image.createImage("/combat_release.png");
+	            	imgButtonCombatFocus = Image.createImage("/combat_focus.png");
+	            	imgButtonCardRelease = Image.createImage("/card_release.png");
+	            	imgButtonCardFocus = Image.createImage("/card_focus.png");
 	            	
 	            	imgFlagList = new ArrayList<Image>();
 	            	imgFlagSmallList = new ArrayList<Image>();

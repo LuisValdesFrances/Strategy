@@ -3,11 +3,13 @@ package com.luis.strategy.game;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.luis.army.Army;
-import com.luis.lgameengine.implementation.graphics.Graphics;
-import com.luis.map.Kingdom;
+import com.luis.strategy.army.Army;
+import com.luis.strategy.map.Kingdom;
 
 public class Player {
+	
+	private static int idCount;
+	private int id;
 	
 	private String name;
 	
@@ -19,6 +21,7 @@ public class Player {
 	private int flag;
 	
 	public Player(int flag){
+		this.id = idCount++;
 		this.flag = flag;
 		this.armyList = new ArrayList<Army>();
 		this.kingdomList = new ArrayList<Kingdom>();
@@ -31,12 +34,6 @@ public class Player {
 		}
 	}
 	
-	public void draw(Graphics g){
-		for(Army army : armyList){
-			army.draw(g);
-		}
-	}
-	
 	public boolean hasKingom(Kingdom kingdom){
 		boolean k = false;
 		for(int i = 0; !k && i < kingdomList.size(); i++){
@@ -44,6 +41,14 @@ public class Player {
 				k= true;
 		}
 		return k;
+	}
+	
+	public void removeKingdom(Kingdom kingdom){
+		for(int i = 0; i < kingdomList.size(); i++){
+			if(kingdomList.get(i).getId() == kingdom.getId()){
+				kingdomList.remove(i);
+			}
+		}
 	}
 	
 	public Army getArmy(Kingdom kingdom){
@@ -97,6 +102,16 @@ public class Player {
 
 	public void setFlag(int flag) {
 		this.flag = flag;
+	}
+
+
+	public int getId() {
+		return id;
+	}
+
+
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	

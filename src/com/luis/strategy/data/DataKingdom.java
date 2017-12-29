@@ -1,13 +1,13 @@
-package com.luis.data;
+package com.luis.strategy.data;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.luis.lgameengine.implementation.graphics.Image;
-import com.luis.map.Kingdom;
-import com.luis.map.Terrain;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.constants.GameParams;
+import com.luis.strategy.map.Kingdom;
+import com.luis.strategy.map.Terrain;
 
 public class DataKingdom {
 	
@@ -33,12 +33,12 @@ public class DataKingdom {
 		terrainList.add(new Terrain((int)(110f/(float)map.getWidth()*100f), (int)(270f/(float)map.getHeight()*100f), GfxManager.imgMediumCity.getWidth(), GfxManager.imgMediumCity.getHeight(), mapX, mapY, map.getWidth(), map.getHeight(), GameParams.MEDIUM_CITY, false));
 		k2.setTerrainList(terrainList);
 		
-		Kingdom k3 = new Kingdom((int)(275f/(float)map.getWidth()*100f), (int)(580f/(float)map.getHeight()*100f), mapX, mapY, map.getWidth(), map.getHeight());
+		Kingdom k3 = new Kingdom((int)(190f/(float)map.getWidth()*100f), (int)(430f/(float)map.getHeight()*100f), mapX, mapY, map.getWidth(), map.getHeight());
 		k3.setId(3);
 		k3.setName("Lyecee");
 		//La posicion del terreno se expresa en porcentajes respecto al ancho y alto del mapa
 		terrainList = new ArrayList<Terrain>();
-		terrainList.add(new Terrain((int)(220f/(float)map.getWidth()*100f), (int)(452f/(float)map.getHeight()*100f), GfxManager.imgPlain.getWidth(), GfxManager.imgPlain.getHeight(), mapX, mapY, map.getWidth(), map.getHeight(), GameParams.PLAIN, false));
+		terrainList.add(new Terrain((int)(245f/(float)map.getWidth()*100f), (int)(590f/(float)map.getHeight()*100f), GfxManager.imgPlain.getWidth(), GfxManager.imgPlain.getHeight(), mapX, mapY, map.getWidth(), map.getHeight(), GameParams.PLAIN, false));
 		terrainList.add(new Terrain((int)(190f/(float)map.getWidth()*100f), (int)(515f/(float)map.getHeight()*100f), GfxManager.imgMediumCity.getWidth(), GfxManager.imgMediumCity.getHeight(), mapX, mapY, map.getWidth(), map.getHeight(), GameParams.MEDIUM_CITY, false));
 		k3.setTerrainList(terrainList);
 		
@@ -75,7 +75,7 @@ public class DataKingdom {
 		terrainList = new ArrayList<Terrain>();
 		terrainList.add(new Terrain((int)(497f/(float)map.getWidth()*100f), (int)(485f/(float)map.getHeight()*100f), GfxManager.imgPlain.getWidth(), GfxManager.imgPlain.getHeight(), mapX, mapY, map.getWidth(), map.getHeight(), GameParams.FOREST, false));
 		terrainList.add(new Terrain((int)(562f/(float)map.getWidth()*100f), (int)(485f/(float)map.getHeight()*100f), GfxManager.imgPlain.getWidth(), GfxManager.imgPlain.getHeight(), mapX, mapY, map.getWidth(), map.getHeight(), GameParams.PLAIN, false));
-		terrainList.add(new Terrain((int)(425f/(float)map.getWidth()*100f), (int)(415f/(float)map.getHeight()*100f), GfxManager.imgPlain.getWidth(), GfxManager.imgPlain.getHeight(), mapX, mapY, map.getWidth(), map.getHeight(), GameParams.MEDIUM_CITY, false));
+		terrainList.add(new Terrain((int)(415f/(float)map.getWidth()*100f), (int)(430f/(float)map.getHeight()*100f), GfxManager.imgPlain.getWidth(), GfxManager.imgPlain.getHeight(), mapX, mapY, map.getWidth(), map.getHeight(), GameParams.MEDIUM_CITY, false));
 		k7.setTerrainList(terrainList);
 		
 		Kingdom k8 = new Kingdom((int)(600f/(float)map.getWidth()*100f), (int)(565f/(float)map.getHeight()*100f), mapX, mapY, map.getWidth(), map.getHeight());

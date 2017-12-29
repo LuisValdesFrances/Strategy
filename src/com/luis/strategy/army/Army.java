@@ -1,4 +1,4 @@
-package com.luis.army;
+package com.luis.strategy.army;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,24 +8,29 @@ import com.luis.lgameengine.gameutils.fonts.TextManager;
 import com.luis.lgameengine.gameutils.gameworld.Math2D;
 import com.luis.lgameengine.gameutils.gameworld.SpriteImage;
 import com.luis.lgameengine.implementation.graphics.Graphics;
-import com.luis.map.Kingdom;
-import com.luis.map.MapObject;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.Main;
 import com.luis.strategy.constants.Define;
+import com.luis.strategy.map.Kingdom;
+import com.luis.strategy.map.MapObject;
 
 public class Army extends MapObject{
+	
+	private static int idCount;
+	private int id;
+	
+	public boolean controller;
+	public boolean defeat;
 	
 	private List<Troop> troopList;
 	private Kingdom lastKingdom;
 	private Kingdom kingdom;
-	private Kingdom targetKingdom;
 	
+	private int state;
 	public static final int STATE_ON = 0;
 	public static final int STATE_MOVE = 1;
 	public static final int STATE_OFF = 2;
 	
-	private int state;
 	
 	private boolean flip;
 	public int anim;
@@ -49,6 +54,7 @@ public class Army extends MapObject{
 				GfxManager.imgArmyIdle.getWidth()/9, GfxManager.imgArmyIdle.getHeight(), 
 				mapX, mapY, mapWidth, mapHeight);
 		
+		this.id = idCount++;
 		this.kingdom = kingdom;
 		this.flag = flag;
 		this.state = STATE_ON;
@@ -120,13 +126,6 @@ public class Army extends MapObject{
 					Graphics.HFLIP);
 		}
 		*/
-		
-		
-		//Debug
-		TextManager.drawSimpleText(g, Font.FONT_MEDIUM, ""+kingdom.getId(), 
-			getAbsoluteX()-GfxManager.imgArmyOff.getWidth()/4, 
-			getAbsoluteY()-GfxManager.imgArmyOff.getHeight()/4,
-			Graphics.BOTTOM | Graphics.RIGHT);
 	}
 	
 	public int getCombat(int terrain){
@@ -147,10 +146,10 @@ public class Army extends MapObject{
 			anim = ANIN_MOVE;
 			spriteList.get(anim).resetAnimation(0);
 			
-			flip = lastKingdom.getAbsoluteX() > targetKingdom.getAbsoluteX(); 
+			flip = lastKingdom.getAbsoluteX() > kingdom.getAbsoluteX(); 
 			
 			angle = Math2D.getAngle360(
-				lastKingdom.getAbsoluteX(), lastKingdom.getAbsoluteY(), targetKingdom.getAbsoluteX(), targetKingdom.getAbsoluteY());
+				lastKingdom.getAbsoluteX(), lastKingdom.getAbsoluteY(), kingdom.getAbsoluteX(), kingdom.getAbsoluteY());
 			cos = Math.cos(angle * (Math.PI/180f));
 			sin = Math.sin(angle * (Math.PI/180f));
 			break;
@@ -184,16 +183,6 @@ public class Army extends MapObject{
 		this.lastKingdom = lastKingdom;
 	}
 	
-	
-
-	public Kingdom getTargetKingdom() {
-		return targetKingdom;
-	}
-
-	public void setTargetKingdom(Kingdom targetKingdom) {
-		this.targetKingdom = targetKingdom;
-	}
-
 	@Override
 	public boolean onFocus() {
 		// TODO Auto-generated method stub
@@ -204,6 +193,30 @@ public class Army extends MapObject{
 	public boolean onSelect() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public boolean isController() {
+		return controller;
+	}
+
+	public void setController(boolean controller) {
+		this.controller = controller;
+	}
+
+	public boolean isDefeat() {
+		return defeat;
+	}
+
+	public void setDefeat(boolean defeat) {
+		this.defeat = defeat;
 	}
 	
 	

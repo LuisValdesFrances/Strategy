@@ -1,4 +1,4 @@
-package com.luis.connection;
+package com.luis.strategy.connection;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.luis.map;
+package com.luis.strategy.map;
 
 
 public class Terrain extends MapObject{

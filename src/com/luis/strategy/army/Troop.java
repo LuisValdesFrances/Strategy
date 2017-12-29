@@ -1,4 +1,4 @@
-package com.luis.army;
+package com.luis.strategy.army;
 
 public class Troop {
 	

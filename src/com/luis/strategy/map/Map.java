@@ -1,10 +1,14 @@
-package com.luis.map;
+package com.luis.strategy.map;
 
 import java.util.List;
 
+import com.luis.lgameengine.gameutils.fonts.Font;
+import com.luis.lgameengine.gameutils.fonts.TextManager;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.graphics.Image;
 import com.luis.strategy.GfxManager;
+import com.luis.strategy.Main;
+import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 
 
@@ -58,14 +62,11 @@ public class Map {
 		alpha = Math.max(100f, alpha);
 		alpha = Math.min(200f, alpha);
 	}
-	public void draw(Graphics g){
+	public void drawMap(Graphics g){
 		
 		g.drawImage(imgMap, x, y, Graphics.VCENTER | Graphics.HCENTER);
 		
 		for(Kingdom k : kingdomList){
-			
-			
-			
 			
 			for(Terrain t : k.getTerrainList()){
 				Image img = null;
@@ -81,12 +82,28 @@ public class Map {
 				
 				if(t.isFocus())
 					g.setImageSize(1.25f, 1.25f);
+				
 				g.drawImage(img, 
 						t.getAbsoluteX(),
 						t.getAbsoluteY(),
 						Graphics.VCENTER | Graphics.HCENTER);
 				g.setImageSize(1f, 1f);
 			}
+			
+			//OK
+			for(int i = 0; i < k.getState(); i++){
+				g.drawImage(GfxManager.imgTerrainOk, 
+						(int)(k.getTerrainList().get(i).getAbsoluteX()+GfxManager.imgPlain.getWidth()*0.30f),
+						(int)(k.getTerrainList().get(i).getAbsoluteY()+GfxManager.imgPlain.getHeight()*0.30f),
+						Graphics.VCENTER | Graphics.HCENTER);
+			}
+		}
+	}
+	
+	public void drawTarget(Graphics g){
+		
+		g.setClip(0, 0, Define.SIZEX, Define.SIZEX);
+		for(Kingdom k : kingdomList){
 			
 			if(k.getTarget() != -1){
 				
@@ -97,18 +114,12 @@ public class Map {
 				switch(k.getTarget()){
 				case Kingdom.TARGET_BATTLE:
 					imgTarget = GfxManager.imgTargetBattle;
-					x = k.getTerrainList().get(k.getState()).getAbsoluteX();
-					y = k.getTerrainList().get(k.getState()).getAbsoluteY();
 					break;
 				case Kingdom.TARGET_DOMAIN:
 					imgTarget = GfxManager.imgTargetDomain;
-					x = k.getAbsoluteX();
-					y = k.getAbsoluteY();
 					break;
 				case Kingdom.TARGET_AGGREGATION:
 					imgTarget = GfxManager.imgTargetAggregation;
-					x = k.getAbsoluteX();
-					y = k.getAbsoluteY();
 					break;
 				}
 				x = k.getAbsoluteX();

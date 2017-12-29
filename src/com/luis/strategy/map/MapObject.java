@@ -1,5 +1,6 @@
-package com.luis.map;
+package com.luis.strategy.map;
 
+import com.luis.lgameengine.implementation.input.TouchData;
 import com.luis.strategy.UserInput;
 
 public abstract class MapObject implements Selectable{
@@ -40,7 +41,8 @@ public abstract class MapObject implements Selectable{
 	}
 	
 	public boolean isSelect(){
-		if(!UserInput.getInstance().getMultiTouchHandler().isTouchingScreen()){
+		if(UserInput.getInstance().getMultiTouchHandler().getTouchAction(0) == TouchData.ACTION_DOWN
+			&& UserInput.getInstance().getMultiTouchHandler().getTouchFrames(0) == 1){
 			return(UserInput.getInstance().
 					compareTouch(
 							getAbsoluteX()-width/2, 
@@ -80,8 +82,5 @@ public abstract class MapObject implements Selectable{
 	public void setY(float y) {
 		this.y = y;
 	}
-	
-	
-	
 
 }
