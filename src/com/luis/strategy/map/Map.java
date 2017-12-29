@@ -68,9 +68,9 @@ public class Map {
 		
 		for(Kingdom k : kingdomList){
 			
-			for(Terrain t : k.getTerrainList()){
+			for(int i = 0; i < k.getTerrainList().size(); i++){
 				Image img = null;
-				switch(t.getType()){
+				switch(k.getTerrainList().get(i).getType()){
 				case GameParams.BIG_CITY : img = imgBigCity; break;
 				case GameParams.MEDIUM_CITY : img = imgMediumCity; break;
 				case GameParams.SMALL_CITY : img = imgSmallCity; break;
@@ -80,13 +80,19 @@ public class Map {
 				case GameParams.MONTAIN : img = imgMontain; break;
 				}
 				
-				if(t.isFocus())
+				if(k.getTerrainList().get(i).isFocus())
 					g.setImageSize(1.25f, 1.25f);
 				
+				if(i < k.getState()){
+					g.setAlpha(100);
+				}
+				
 				g.drawImage(img, 
-						t.getAbsoluteX(),
-						t.getAbsoluteY(),
-						Graphics.VCENTER | Graphics.HCENTER);
+					k.getTerrainList().get(i).getAbsoluteX(),
+					k.getTerrainList().get(i).getAbsoluteY(),
+					Graphics.VCENTER | Graphics.HCENTER);
+				
+				g.setAlpha(255);
 				g.setImageSize(1f, 1f);
 			}
 			
@@ -122,14 +128,9 @@ public class Map {
 					imgTarget = GfxManager.imgTargetAggregation;
 					break;
 				}
-				x = k.getAbsoluteX();
-				y = k.getAbsoluteY();
 				
 				g.setAlpha((int)alpha);
-				g.drawImage(imgTarget,
-						x,
-						y,
-						Graphics.VCENTER | Graphics.HCENTER);
+				g.drawImage(imgTarget, k.getTouchX(), k.getTouchY(), Graphics.VCENTER | Graphics.HCENTER);
 				g.setAlpha(255);
 			}
 		}

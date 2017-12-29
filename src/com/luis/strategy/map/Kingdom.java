@@ -13,11 +13,6 @@ public class Kingdom extends MapObject{
 	private List<Terrain> terrainList;
 	private List<Kingdom> borderList;
 	
-	//Si hay ejercito enemigo o es del dominio, estandarte
-	//En otro caso state
-	private int touchX;
-	private int touchY;
-	
 	//Numero de combates por territorios = MONTANYA,BOSQUE, LLANO, CIUDAD
 	private int state;
 	private int totalStates;
@@ -126,6 +121,6 @@ public class Kingdom extends MapObject{
 	public void setTotalStates(int totalStates) {
 		this.totalStates = totalStates;
 	}
-	
+
 	
 }

@@ -10,6 +10,11 @@ public abstract class MapObject implements Selectable{
 	protected int width;
 	protected int height;
 	
+	//Si hay ejercito enemigo o es del dominio, estandarte
+	//En otro caso state
+	protected int touchX;
+	protected int touchY;
+	
 	protected int mapX;
 	protected int mapY;
 	protected int mapWidth;
@@ -26,16 +31,18 @@ public abstract class MapObject implements Selectable{
 		this.mapY = mapY;
 		this.mapWidth = mapWidth;
 		this.mapHeight = mapHeight;
+		this.touchX = getAbsoluteX();
+		this.touchY = getAbsoluteY();
 	}
 	
 	public boolean isFocus(){
 		if(UserInput.getInstance().getMultiTouchHandler().isTouchingScreen()){
 			return(UserInput.getInstance().
 					compareTouch(
-							getAbsoluteX()-width/2, 
-							getAbsoluteY()-height/2, 
-							getAbsoluteX()+width/2, 
-							getAbsoluteY()+height/2, 0));
+							getTouchX()-width/2, 
+							getTouchY()-height/2, 
+							getTouchX()+width/2, 
+							getTouchY()+height/2, 0));
 		}
 		return false;
 	}
@@ -45,10 +52,10 @@ public abstract class MapObject implements Selectable{
 			&& UserInput.getInstance().getMultiTouchHandler().getTouchFrames(0) == 1){
 			return(UserInput.getInstance().
 					compareTouch(
-							getAbsoluteX()-width/2, 
-							getAbsoluteY()-height/2, 
-							getAbsoluteX()+width/2, 
-							getAbsoluteY()+height/2, 0));
+							getTouchX()-width/2, 
+							getTouchY()-height/2, 
+							getTouchX()+width/2, 
+							getTouchY()+height/2, 0));
 		}
 		return false;
 	}
@@ -81,6 +88,21 @@ public abstract class MapObject implements Selectable{
 
 	public void setY(float y) {
 		this.y = y;
+	}
+	
+	public int getTouchX() {
+		return touchX;
+	}
+
+	public void setTouchX(int touchX) {
+		this.touchX = touchX;
+	}
+	public int getTouchY() {
+		return touchY;
+	}
+
+	public void setTouchY(int touchY) {
+		this.touchY = touchY;
 	}
 
 }

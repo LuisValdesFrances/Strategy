@@ -182,19 +182,34 @@ public class GameManager {
 								if(kingdom.getTarget()== -1 && kingdom.getId() == border.getId()){
 									
 									//Si tengo un ejercito en la zona me uno
-									if(playerList.get(currentPlayer).getArmy(kingdom) != null){
+									if(
+										playerList.get(currentPlayer).getArmy(kingdom) != null){
 										kingdom.setTarget(Kingdom.TARGET_AGGREGATION);
+										kingdom.setTouchX(kingdom.getAbsoluteX());
+										kingdom.setTouchY(kingdom.getAbsoluteY());
 									}else{
 										//Si el territorio es mio
 										if(playerList.get(currentPlayer).hasKingom(kingdom)){
 											//Busco ejercitos enemigos
 											if(getEnemyAtKingdom(playerList.get(currentPlayer), kingdom) != null){
 												kingdom.setTarget(Kingdom.TARGET_BATTLE);
+												kingdom.setTouchX(kingdom.getAbsoluteX());
+												kingdom.setTouchY(kingdom.getAbsoluteY());
 											}else{
 												kingdom.setTarget(Kingdom.TARGET_DOMAIN);
+												kingdom.setTouchX(kingdom.getAbsoluteX());
+												kingdom.setTouchY(kingdom.getAbsoluteY());
 											}
 										}else{
 											kingdom.setTarget(Kingdom.TARGET_BATTLE);
+											//Busco ejercitos enemigos
+											if(getEnemyAtKingdom(playerList.get(currentPlayer), kingdom) != null){
+												kingdom.setTouchX(kingdom.getAbsoluteX());
+												kingdom.setTouchY(kingdom.getAbsoluteY());
+											}else{
+												kingdom.setTouchX(kingdom.getTerrainList().get(0).getAbsoluteX());
+												kingdom.setTouchY(kingdom.getTerrainList().get(0).getAbsoluteY());
+											}
 										}
 									}
 								}
@@ -203,6 +218,10 @@ public class GameManager {
 						//Si estoy en territorio hostil(A midad de una conquista), lo añado a los seleccionables
 						if(!playerList.get(currentPlayer).hasKingom(activeArmy.getKingdom())){
 							activeArmy.getKingdom().setTarget(Kingdom.TARGET_BATTLE);
+							activeArmy.getKingdom().setTouchX(activeArmy.getKingdom().
+									getTerrainList().get(activeArmy.getKingdom().getState()).getAbsoluteX());
+							activeArmy.getKingdom().setTouchY(activeArmy.getKingdom().
+									getTerrainList().get(activeArmy.getKingdom().getState()).getAbsoluteY());
 						}
 					}
 				}
@@ -220,8 +239,9 @@ public class GameManager {
 							activeArmy.getKingdom().setState(0);
 						}
 						
-						activeArmy.setLastKingdom(activeArmy.getKingdom());
-						activeArmy.setKingdom(kingdom);
+						putArmyAtKingdom(activeArmy, activeArmy.getKingdom(), kingdom);
+						
+						
 						activeArmy.changeState(Army.STATE_MOVE);
 						
 						subState = SUB_STATE_ACTION_ARMY_MOVE;
@@ -656,6 +676,13 @@ public class GameManager {
 		Log.i("Debug", "Aggregation");
 	}
 	
+	private void putArmyAtKingdom(Army army, Kingdom lastKingdom, Kingdom newKingdom){
+		army.setLastKingdom(lastKingdom);
+		army.setKingdom(newKingdom);
+		//Actulizo su zona de touch (Se altera al moverse)
+		army.setTouchX(newKingdom.getAbsoluteX());
+		army.setTouchY(newKingdom.getAbsoluteY());
+	}
 	private void addNewConquest(Player player, Kingdom kingdom){
 		//Elimino el territorio del domino de cualquier jugador
 		for(Player p : playerList){
@@ -697,8 +724,8 @@ public class GameManager {
 			
 			if(defeatTarget != null){
 				enemy.setDefeat(true);
-				enemy.setLastKingdom(enemy.getKingdom());
-				enemy.setKingdom(defeatTarget);
+				
+				putArmyAtKingdom(enemy, enemy.getKingdom(), defeatTarget);
 				resultBox.start(ResultBox.TYPE_VICTORY);
 			}else{
 				resultBox.start(ResultBox.TYPE_MASSACRE);
@@ -750,6 +777,15 @@ public class GameManager {
 
 	public void setSubState(int state) {
 		this.subState = state;
+	}
+
+	
+	public List<Player> getPlayerList() {
+		return playerList;
+	}
+
+	public void setPlayerList(List<Player> playerList) {
+		this.playerList = playerList;
 	}
 
 	public int getCurrentPlayer() {

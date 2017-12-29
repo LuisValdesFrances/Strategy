@@ -459,7 +459,7 @@ public class ModeMenu {
 			//_g.drawImage(GfxManager.vImgBackground, 0, 0, 0);
 			_g.setColor(Main.COLOR_RED);
 			_g.fillRect(0, 0, Define.SIZEX, Define.SIZEY);
-			MenuManager.drawButtonsAndTextY(_g, 2, new String[]{"CROM", "GENTEREX"},
+			MenuManager.drawButtonsAndTextY(_g, 2, new String[]{"GENTEREX ", "CROM"},
 				    Font.FONT_BIG, optionSelect, null, GfxManager.vImgMenuButtons, Main.iFrame);
 			break;
 			

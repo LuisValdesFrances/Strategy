@@ -253,12 +253,21 @@ public class ModeGame {
 				_g.setTextSize(32);
 				_g.setAlpha(160);
 				_g.setColor(0x88000000);
-				_g.fillRect(0, 0, Define.SIZEX, _g.getTextHeight() * 1);
+				_g.fillRect(0, 0, Define.SIZEX, _g.getTextHeight() * 2);
 				_g.setAlpha(255);
 				
 				_g.drawText("State: " + gameManager.getState(), 0, _g.getTextHeight(), Main.COLOR_WHITE);
 				_g.drawText("Sub-State: " + gameManager.getSubState(), (int)(Define.SIZEX*0.33), _g.getTextHeight(), Main.COLOR_WHITE);
 				_g.drawText("Player: " + (gameManager.getCurrentPlayer()+1), (int)(Define.SIZEX*0.66), _g.getTextHeight(), Main.COLOR_WHITE);
+				
+				String kingdomList = "";
+				for(Kingdom kingdom : gameManager.getPlayerList().get(gameManager.getCurrentPlayer()).getKingdomList()){
+					kingdomList += kingdom.getId() + ", ";
+				}
+				_g.drawText("Domains: " + kingdomList, 0, _g.getTextHeight()*2, Main.COLOR_WHITE);
+				
+				
+				//Reinos
 				/*
 				_g.drawText("FramesXSecond: " + Main.iFramesXSecond, 0, _g.getTextHeight(), Main.COLOR_WHITE);
 				_g.drawText("DeltaTime: " + Main.getDeltaSec(), Define.SIZEX2, _g.getTextHeight(), Main.COLOR_WHITE);
