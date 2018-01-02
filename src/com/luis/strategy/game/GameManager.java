@@ -5,7 +5,7 @@ import java.util.List;
 import android.util.Log;
 
 import com.luis.army.gui.BattleBox;
-import com.luis.army.gui.ResultBox;
+import com.luis.army.gui.SimpleBox;
 import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gameutils.fonts.TextManager;
 import com.luis.lgameengine.implementation.graphics.Graphics;
@@ -19,12 +19,12 @@ import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.map.Kingdom;
 import com.luis.strategy.map.Map;
+import com.luis.strategy.map.Terrain;
 
 public class GameManager {
 	
 	private int turnCount = 0;
-	private static Button btnNext;
-	private static Button btnCancel;
+	
 	
 	private Map map;
 	
@@ -35,9 +35,10 @@ public class GameManager {
 	
 	private int state;
 	public static final int STATE_INCOME = 0;
-	public static final int STATE_PAY = 1;
+	public static final int STATE_ECONOMY = 1;
 	public static final int STATE_MANAGEMENT = 2;
 	public static final int STATE_ACTION = 3;
+	public static final int STATE_END = 4;
 	
 	
 	//SUB-STATE MANAGEMENT
@@ -54,12 +55,15 @@ public class GameManager {
 	public static final int SUB_STATE_ACTION_RESULT = 5;
 	public static final int SUB_STATE_ACTION_ESCAPE = 6;
 	
-	private boolean nextAvailable;
-	private boolean cancelAvailable;
-	
 	//GUI
+	private static Button btnNext;
+	private static Button btnCancel;
+	private static Button btnHelmet;
+	private static Button btnChest;
 	private BattleBox battleBox;
-	private ResultBox resultBox;
+	private SimpleBox managementBox;
+	private SimpleBox resultBox;
+	
 	
 	public GameManager(Map map, List<Player> playerList){
 		this.map = map;
@@ -98,6 +102,38 @@ public class GameManager {
 			}
 		};
 		
+		int mapDif = (Define.SIZEX-map.getImgMap().getWidth())/2;
+		int GUIMargin = (mapDif-GfxManager.imgButtonChestRelease.getWidth())/2;
+		btnChest = new Button(
+				GfxManager.imgButtonChestRelease, 
+				GfxManager.imgButtonChestFocus, 
+				GUIMargin + GfxManager.imgButtonChestRelease.getWidth()/2, 
+				GUIMargin + GfxManager.imgButtonChestRelease.getHeight()/2,
+				null, 0){
+			@Override
+			public void onButtonPressDown(){}
+			
+			@Override
+			public void onButtonPressUp(){
+				setTouching(false);
+			}
+		};
+		
+		btnHelmet = new Button(
+				GfxManager.imgButtonHelmetRelease, 
+				GfxManager.imgButtonHelmetFocus, 
+				GUIMargin + GfxManager.imgButtonCancelRelease.getWidth()/2, 
+				GUIMargin*2 + GfxManager.imgButtonCancelRelease.getHeight() + GfxManager.imgButtonCancelRelease.getHeight()/2,
+				null, 0){
+			@Override
+			public void onButtonPressDown(){}
+			
+			@Override
+			public void onButtonPressUp(){
+				setTouching(false);
+			}
+		};
+		
 		battleBox = new BattleBox(){
 			@Override
 			public void onButtonPressUp(){
@@ -114,10 +150,17 @@ public class GameManager {
 			}
 		};
 		
-		resultBox = new ResultBox(){
+		resultBox = new SimpleBox(){
 			@Override
 			public void onButtonPressUp(){
 				startEscape();
+			}
+		};
+		
+		managementBox = new SimpleBox(){
+			@Override
+			public void onButtonPressUp(){
+				nextState();
 			}
 		};
 		
@@ -127,9 +170,6 @@ public class GameManager {
 	
 	public void update(float delta){
 		
-		cancelAvailable = false;
-		nextAvailable = false;
-		
 		switch(state){
 		case STATE_INCOME:
 			if(!updatePresentation(delta)){
@@ -137,9 +177,9 @@ public class GameManager {
 				nextState();
 			}
 			break;
-		case STATE_PAY:
+		case STATE_ECONOMY:
 			
-			nextState();
+			managementBox.update(delta, UserInput.getInstance().getMultiTouchHandler());
 			break;
 		case STATE_MANAGEMENT:
 			switch(subState){
@@ -149,7 +189,7 @@ public class GameManager {
 				break;
 				
 			case SUB_STATE_MANAGEMENT_SELECT:
-				nextAvailable = true;
+				btnNext.setDisabled(false);
 				break;
 			}
 			break;
@@ -163,17 +203,18 @@ public class GameManager {
 				
 				break;
 			case SUB_STATE_ACTION_WAIT:
-				nextAvailable = true;
+				btnNext.setDisabled(false);
 				
 				//Atcualizar interacion terreno:
 				
 				//Actualizar animaciones
-				playerList.get(currentPlayer).updateAnimations(Main.getDeltaSec());
+				playerList.get(currentPlayer).updateAnimations(delta);
 				
 				for(Army army: playerList.get(currentPlayer).getArmyList()){
 					if(army.getState() == Army.STATE_ON && army.isSelect()){
 						subState = SUB_STATE_ACTION_ARMY_SELECT;
 						activeArmy = army;
+						btnNext.setDisabled(true);
 						
 						Log.i("Debug", "Seleccionado ejercito de: " + activeArmy.getKingdom().getName());
 						
@@ -229,7 +270,7 @@ public class GameManager {
 				break;
 				
 			case SUB_STATE_ACTION_ARMY_SELECT:
-				cancelAvailable = true;
+				btnCancel.setDisabled(false);
 				for(Kingdom kingdom: map.getKingdomList()){
 					if(kingdom.getTarget()!= -1 && kingdom.isSelect()){
 						
@@ -286,7 +327,7 @@ public class GameManager {
 						activeArmy.changeState(Army.STATE_OFF);
 						subState = SUB_STATE_ACTION_WAIT;
 						cleanArmyAction();
-						nextAvailable = true;
+						btnNext.setDisabled(false);
 						
 					}else{
 						//Si el territorio es mio
@@ -300,7 +341,7 @@ public class GameManager {
 								activeArmy.changeState(Army.STATE_OFF);
 								subState = SUB_STATE_ACTION_WAIT;
 								cleanArmyAction();
-								nextAvailable = true;
+								btnNext.setDisabled(false);
 							}
 						}else{
 							
@@ -358,17 +399,15 @@ public class GameManager {
 					defeat.changeState(Army.STATE_ON);
 						
 					subState = SUB_STATE_ACTION_WAIT;
-					nextAvailable = true;
+					btnNext.setDisabled(false);
 					}
 				break;
 			}
 		break;
 		}
 		
-		if(cancelAvailable)
-			btnCancel.update(UserInput.getInstance().getMultiTouchHandler());
-		if(nextAvailable)
-			btnNext.update(UserInput.getInstance().getMultiTouchHandler());
+		updateGUI();
+			
 		map.update(delta);
 		
 		//Actualizar animaciones
@@ -407,11 +446,7 @@ public class GameManager {
 		
 		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 		
-		if(cancelAvailable)
-			btnCancel.draw(g, 0, 0);
-		if(nextAvailable)
-			btnNext.draw(g, 0, 0);
-		
+		drawGUI(g);
 		
 		if(ModeGame.showDebugInfo){
 			for(Kingdom k : map.getKingdomList())
@@ -430,18 +465,34 @@ public class GameManager {
 					Graphics.BOTTOM | Graphics.RIGHT);
 		}
 		
+		managementBox.draw(g);
 		battleBox.draw(g);
 		resultBox.draw(g);
 		drawPresentation(g);
 	}
 	
+	private void updateGUI(){
+		btnCancel.update(UserInput.getInstance().getMultiTouchHandler());
+		btnNext.update(UserInput.getInstance().getMultiTouchHandler());
+		btnChest.update(UserInput.getInstance().getMultiTouchHandler());
+		btnHelmet.update(UserInput.getInstance().getMultiTouchHandler());
+	}
+	
+	private void drawGUI(Graphics g) {
+		btnCancel.draw(g, 0, 0);
+		btnNext.draw(g, 0, 0);
+		btnChest.draw(g, 0, 0);
+		btnHelmet.draw(g, 0, 0);
+		
+	}
+
 	public void cancelAction(){
-		cancelAvailable = false;
+		btnCancel.setDisabled(true);
 		switch(state){
 		case STATE_INCOME:
 			
 			break;
-		case STATE_PAY:
+		case STATE_ECONOMY:
 			
 			break;
 		case STATE_MANAGEMENT:
@@ -467,11 +518,14 @@ public class GameManager {
 	public void nextState(){
 		UserInput.getInstance().getMultiTouchHandler().resetTouch();
 		cleanArmyAction();
-		nextAvailable = false;
-		cancelAvailable = false;
+		btnCancel.setDisabled(true);
+		btnNext.setDisabled(true);
 		subState = 0;
+		state++;
 		switch(state){
 		case STATE_INCOME:
+			break;
+		case STATE_ECONOMY:
 			
 			
 			//Activo tropas
@@ -479,21 +533,31 @@ public class GameManager {
 				for(Army army : player.getArmyList())
 					army.changeState(Army.STATE_ON);
 			
-			state=STATE_PAY;
-			break;
-		case STATE_PAY:
-			state=STATE_MANAGEMENT;
-			startPresentation(Font.FONT_MEDIUM, "MANAGEMENT");
+			//Calculo de ganancias:
+			int tax = 0;
+			for(Player player : playerList){
+				for(Kingdom kingdom : player.getKingdomList()){
+					for(Terrain terrain : kingdom.getTerrainList()){
+						tax += GameParams.TERRAIN_TAX[terrain.getType()];
+					}
+				}
+			}
+			playerList.get(currentPlayer).setGold(tax);
+			
+			managementBox.start("ECONOMY", "EARNING: +" +tax + " SALARY: -" + 0);
+			
 			break;
 		case STATE_MANAGEMENT:
-			state=STATE_ACTION;
-			startPresentation(Font.FONT_MEDIUM, "ACTION");
+			startPresentation(Font.FONT_MEDIUM, "MANAGEMENT");
 			break;
 		case STATE_ACTION:
-			state = STATE_INCOME;
+			startPresentation(Font.FONT_MEDIUM, "ACTION");
+			break;
+		case STATE_END:
 			turnCount++;
 			currentPlayer = (currentPlayer+1)%playerList.size();
 			startPresentation(Font.FONT_BIG, "PLAYER " + (currentPlayer+1));
+			state = STATE_INCOME;
 			break;
 		}
 	}
@@ -666,7 +730,7 @@ public class GameManager {
 			subState = SUB_STATE_ACTION_ESCAPE;
 		}else{
 			subState = SUB_STATE_ACTION_WAIT;
-			nextAvailable = true;
+			btnNext.setDisabled(false);
 		}
 		
 	}
@@ -726,9 +790,9 @@ public class GameManager {
 				enemy.setDefeat(true);
 				
 				putArmyAtKingdom(enemy, enemy.getKingdom(), defeatTarget);
-				resultBox.start(ResultBox.TYPE_VICTORY);
+				resultBox.start("RESULT", "VICTORY");
 			}else{
-				resultBox.start(ResultBox.TYPE_MASSACRE);
+				resultBox.start("RESULT", "MASSACRE");
 				removeArmy(enemy);
 			}
 			
@@ -747,7 +811,7 @@ public class GameManager {
 				activeArmy.getKingdom().setState(state);
 				activeArmy.getKingdom().setTarget(-1);
 				activeArmy.changeState(Army.STATE_OFF);
-				resultBox.start(ResultBox.TYPE_VICTORY);
+				resultBox.start("RESULT", "VICTORY");
 				
 			}
 			//Conquista
@@ -756,7 +820,7 @@ public class GameManager {
 				activeArmy.getKingdom().setTarget(-1);
 				activeArmy.changeState(Army.STATE_OFF);
 				addNewConquest(playerList.get(currentPlayer), activeArmy.getKingdom());
-				resultBox.start(ResultBox.TYPE_CONQUEST);
+				resultBox.start("RESULT", "CONQUEST");
 			}
 		}
 		

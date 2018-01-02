@@ -248,7 +248,7 @@ public class ModeGame {
 			gameManager.draw(_g);
 			btnPause.draw(_g, 0, 0);
 			
-			if (Main.IS_GAME_DEBUG) {
+			if (showDebugInfo) {
 				_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 				_g.setTextSize(32);
 				_g.setAlpha(160);
@@ -292,8 +292,8 @@ public class ModeGame {
 	}
 	
 	public static boolean showDebugInfo;
-	public static final int DEBUG_BUTTON_W = Define.SIZEX12;
-	public static final int DEBUG_BUTTON_H = Define.SIZEY12;
+	public static final int DEBUG_BUTTON_W = Define.SIZEX12+Define.SIZEX16;
+	public static final int DEBUG_BUTTON_H = Define.SIZEY12-Define.SIZEY32;
 	private static void drawDebugButton(Graphics _g){
 		_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 		if(!showDebugInfo){
@@ -302,7 +302,7 @@ public class ModeGame {
 			_g.setColor(Main.COLOR_GREEN);
 		}
 		_g.fillRect(0, Define.SIZEY - DEBUG_BUTTON_H, DEBUG_BUTTON_W, DEBUG_BUTTON_H);
-		_g.drawText("DEBUG", 0, Define.SIZEY, Main.COLOR_WHITE);
+		_g.drawText("DEBUG", DEBUG_BUTTON_W/8, Define.SIZEY-DEBUG_BUTTON_H/8, Main.COLOR_WHITE);
 	}
 	
 	private static void updateDebugButton(){

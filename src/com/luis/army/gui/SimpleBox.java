@@ -8,16 +8,11 @@ import com.luis.lgameengine.menu.MenuBox;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.constants.Define;
 
-public class ResultBox extends MenuBox{
+public class SimpleBox extends MenuBox{
 	
-	private int type;
+	private String textBody;
 	
-	public static final int TYPE_DEFEAT = 0;
-	public static final int TYPE_VICTORY = 1;
-	public static final int TYPE_MASSACRE = 2;
-	public static final int TYPE_CONQUEST = 3;
-	
-	public ResultBox() {
+	public SimpleBox() {
 		
 		super(Define.SIZEX, Define.SIZEY, GfxManager.imgSmallBox, null, null, 
 				"RESULT",
@@ -33,8 +28,9 @@ public class ResultBox extends MenuBox{
 	}
 	
 	
-	public void start(int type){
-		this.type = type;
+	public void start(String textHeader, String textBody){
+		this.textHeader = textHeader;
+		this.textBody = textBody;
 		start();
 	}
 	
@@ -42,28 +38,11 @@ public class ResultBox extends MenuBox{
 	public void draw(Graphics g){
 		super.draw(g);
 		if(state != STATE_UNACTIVE){
-			String text="";
 			
-			switch(type){
-			case TYPE_DEFEAT:
-				text="DEFEAT";
-				break;
-			case TYPE_VICTORY:
-				text="VICTORY";
-				break;
-			case TYPE_CONQUEST:
-				text="CONQUEST";
-				break;
-			case TYPE_MASSACRE:
-				text="MASSACRE";
-				break;
-			}
-			
-			TextManager.drawSimpleText(g, 
-					Font.FONT_SMALL,
-					text,
-					x+(int)modPosX, y - Font.getFontHeight(Font.FONT_SMALL),
-					Graphics.VCENTER|Graphics.HCENTER);
+			TextManager.draw(g, Font.FONT_SMALL, textBody, 
+					x+(int)modPosX, y + Font.getFontHeight(Font.FONT_MEDIUM)/2, 
+					imgBox.getWidth()-imgBox.getWidth()/8,
+					TextManager.ALING_CENTER, -1);
 		}
 	}
 

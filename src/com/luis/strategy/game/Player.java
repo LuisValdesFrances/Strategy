@@ -13,7 +13,7 @@ public class Player {
 	
 	private String name;
 	
-	private String gold;
+	private int gold;
 	
 	private List<Army> armyList;
 	private List<Kingdom> kingdomList;
@@ -70,11 +70,11 @@ public class Player {
 		this.name = name;
 	}
 
-	public String getGold() {
+	public int getGold() {
 		return gold;
 	}
 
-	public void setGold(String gold) {
+	public void setGold(int gold) {
 		this.gold = gold;
 	}
 

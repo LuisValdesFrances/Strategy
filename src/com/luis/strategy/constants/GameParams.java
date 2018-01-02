@@ -17,7 +17,8 @@ public class GameParams {
 	public static final int[] SIEGE_COMBAT = 		new int[]{0, 0, 0, 5, 5, 5, 5};
 	
 	public static final int[] TERRAIN_DEFENSE =		new int[]{3, 5, 8, 10, 15, 25, 8};
-	public static final int[] TERRAIN_GOLD =		new int[]{5, 3, 1, 2, 4, 8, 1};
+	//Ganancias reportadas por el territorio
+	public static final int[] TERRAIN_TAX =			new int[]{5, 3, 1, 2, 4, 8, 1};
 	
 	
 	//Id tropa

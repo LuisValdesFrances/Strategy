@@ -45,6 +45,10 @@ public class GfxManager {
 	   public static Image imgButtonCardFocus;
 	   public static Image imgButtonOkRelease;
 	   public static Image imgButtonOkFocus;
+	   public static Image imgButtonHelmetRelease;
+	   public static Image imgButtonHelmetFocus;
+	   public static Image imgButtonChestRelease;
+	   public static Image imgButtonChestFocus;
 	   
 	   public static Image imgMap;
 	   public static Image imgTerrainOk;
@@ -159,6 +163,10 @@ public class GfxManager {
 	            	imgButtonCombatFocus = Image.createImage("/combat_focus.png");
 	            	imgButtonCardRelease = Image.createImage("/card_release.png");
 	            	imgButtonCardFocus = Image.createImage("/card_focus.png");
+	            	imgButtonHelmetRelease = Image.createImage("/helmet_release.png");
+	            	imgButtonHelmetFocus = Image.createImage("/helmet_focus.png");
+	            	imgButtonChestRelease = Image.createImage("/chest_release.png");
+	            	imgButtonChestFocus = Image.createImage("/chest_focus.png");
 	            	
 	            	imgFlagList = new ArrayList<Image>();
 	            	imgFlagSmallList = new ArrayList<Image>();
