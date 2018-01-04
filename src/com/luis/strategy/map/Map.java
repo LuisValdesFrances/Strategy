@@ -2,21 +2,17 @@ package com.luis.strategy.map;
 
 import java.util.List;
 
-import com.luis.lgameengine.gameutils.fonts.Font;
-import com.luis.lgameengine.gameutils.fonts.TextManager;
+import com.luis.lgameengine.gameutils.gameworld.GameCamera;
+import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.graphics.Image;
 import com.luis.strategy.GfxManager;
-import com.luis.strategy.Main;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 
 
 
-public class Map {
-	
-	private int x;
-	private int y;
+public class Map extends MapObject{
 	
 	private List<Kingdom> kingdomList;
 	private Image imgMap;
@@ -32,14 +28,16 @@ public class Map {
 	private float alpha = 255;
 	
 	
-	public Map(int x, int y,
-			List<Kingdom> kingdomList, Image imgMap, Image imgSmallCity,
+	public Map(
+			WorldConver worldConver, GameCamera gameCamera,
+			int x, int y,
+			Image imgMap, Image imgSmallCity,
 			Image imgMediumCity, Image imgBigCity, Image imgPlain,
 			Image imgForest, Image imgMontain, Image imgCastle) {
-		super();
+		super(worldConver, gameCamera, x, y, imgMap.getWidth(), imgMap.getHeight(), x, y, imgMap.getWidth(), imgMap.getHeight());
 		this.x = x;
 		this.y = y;
-		this.kingdomList = kingdomList;
+		
 		this.imgMap = imgMap;
 		this.imgSmallCity = imgSmallCity;
 		this.imgMediumCity = imgMediumCity;
@@ -64,7 +62,10 @@ public class Map {
 	}
 	public void drawMap(Graphics g){
 		
-		g.drawImage(imgMap, x, y, Graphics.VCENTER | Graphics.HCENTER);
+		g.drawImage(imgMap, 
+				worldConver.getConversionDrawX(gameCamera.getPosX(), x),
+				worldConver.getConversionDrawY(gameCamera.getPosY(), y),
+				Graphics.VCENTER | Graphics.HCENTER);
 		
 		for(Kingdom k : kingdomList){
 			
@@ -88,8 +89,8 @@ public class Map {
 				}
 				
 				g.drawImage(img, 
-					k.getTerrainList().get(i).getAbsoluteX(),
-					k.getTerrainList().get(i).getAbsoluteY(),
+					worldConver.getConversionDrawX(gameCamera.getPosX(), k.getTerrainList().get(i).getAbsoluteX()),
+					worldConver.getConversionDrawY(gameCamera.getPosY(), k.getTerrainList().get(i).getAbsoluteY()),
 					Graphics.VCENTER | Graphics.HCENTER);
 				
 				g.setAlpha(255);
@@ -98,10 +99,10 @@ public class Map {
 			
 			//OK
 			for(int i = 0; i < k.getState(); i++){
-				g.drawImage(GfxManager.imgTerrainOk, 
-						(int)(k.getTerrainList().get(i).getAbsoluteX()+GfxManager.imgPlain.getWidth()*0.30f),
-						(int)(k.getTerrainList().get(i).getAbsoluteY()+GfxManager.imgPlain.getHeight()*0.30f),
-						Graphics.VCENTER | Graphics.HCENTER);
+				g.drawImage(GfxManager.imgTerrainOk,
+					worldConver.getConversionDrawX(gameCamera.getPosX(), (k.getTerrainList().get(i).getAbsoluteX()+GfxManager.imgPlain.getWidth()*0.30f)),
+					worldConver.getConversionDrawY(gameCamera.getPosY(), (k.getTerrainList().get(i).getAbsoluteY()+GfxManager.imgPlain.getHeight()*0.30f)),
+					Graphics.VCENTER | Graphics.HCENTER);
 			}
 		}
 	}
@@ -113,8 +114,6 @@ public class Map {
 			
 			if(k.getTarget() != -1){
 				
-				int x = 0;
-				int y = 0;
 				Image imgTarget = null;
 				
 				switch(k.getTarget()){
@@ -154,22 +153,6 @@ public class Map {
 	}
 
 	
-	public int getX() {
-		return x;
-	}
-
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	public int getY() {
-		return y;
-	}
-
-	public void setY(int y) {
-		this.y = y;
-	}
-
 	public List<Kingdom> getKingdomList() {
 		return kingdomList;
 	}
@@ -184,5 +167,17 @@ public class Map {
 
 	public void setImgMap(Image imgMap) {
 		this.imgMap = imgMap;
+	}
+
+	@Override
+	public boolean onFocus() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean onSelect() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

@@ -28,5 +28,8 @@ public class GameParams {
 	public static final int SIEGE = 3;
 	
 	public static final int[] TROOP_COST = 			new int[]{5, 8, 3, 7};
+	
+	//GAME CONFIG:
+	public static float CAMERA_SPEED = 160f;//Pixeles por segundo
 
 }

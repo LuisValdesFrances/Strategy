@@ -30,6 +30,7 @@ public class GfxManager {
 	   public static Image imgButtonFocus;
 	   
 	   //Game images:
+	   public static Image imgGameHud;
 	   public static Image imgButtonPauseRelease;
 	   public static Image imgButtonPauseFocus;
 	   public static Image imgButtonNextRelease;
@@ -148,6 +149,7 @@ public class GfxManager {
 	            	imgArmyRun = Image.createImage("/army_run.png");
 	            	imgArmyOff = Image.createImage("/army_off.png");
 	            	
+	            	imgGameHud = Image.createImage("/game_hud.png");
 	            	imgButtonPauseRelease = Image.createImage("/pause_release.png");
 	            	imgButtonPauseFocus = Image.createImage("/pause_focus.png");
 	            	imgButtonCancelRelease = Image.createImage("/cancel_release.png");

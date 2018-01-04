@@ -1,10 +1,14 @@
 package com.luis.strategy.map;
 
+import com.luis.lgameengine.gameutils.gameworld.GameCamera;
+import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.implementation.input.TouchData;
 import com.luis.strategy.UserInput;
 
 public abstract class MapObject implements Selectable{
 	
+	protected WorldConver worldConver;
+	protected GameCamera gameCamera;
 	protected float x;
 	protected float y;
 	protected int width;
@@ -15,14 +19,18 @@ public abstract class MapObject implements Selectable{
 	protected int touchX;
 	protected int touchY;
 	
-	protected int mapX;
-	protected int mapY;
+	protected float mapX;
+	protected float mapY;
 	protected int mapWidth;
 	protected int mapHeight;
 	
-	public MapObject(float x, float y, int width, int height, 
-			int mapX, int mapY, int mapWidth, int mapHeight) {
+	public MapObject(
+			WorldConver worldConver, GameCamera gameCamera,
+			float x, float y, int width, int height, 
+			float mapX, float mapY, int mapWidth, int mapHeight) {
 		super();
+		this.worldConver = worldConver;
+		this.gameCamera = gameCamera;
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -61,17 +69,17 @@ public abstract class MapObject implements Selectable{
 	}
 	
 	public int getRelativeX() {
-		return (int)(x*mapWidth)/100;
+		return (int)((x*mapWidth)/100f);
 	}
 	public int getRelativeY() {
-		return (int)(y*mapHeight)/100;
+		return (int)((y*mapHeight)/100f);
 	}
 	
 	public int getAbsoluteX() {
-		return mapX-mapWidth/2 + getRelativeX();
+		return (int)(mapX-mapWidth/2f + getRelativeX());
 	}
 	public int getAbsoluteY() {
-		return mapY-mapHeight/2 + getRelativeY();
+		return (int)(mapY-mapHeight/2f + getRelativeY());
 	}
 	
 	public float getX() {
@@ -90,15 +98,31 @@ public abstract class MapObject implements Selectable{
 		this.y = y;
 	}
 	
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
 	public int getTouchX() {
-		return touchX;
+		return worldConver.getConversionDrawX(gameCamera.getPosX(), touchX);
 	}
 
 	public void setTouchX(int touchX) {
 		this.touchX = touchX;
 	}
 	public int getTouchY() {
-		return touchY;
+		return worldConver.getConversionDrawY(gameCamera.getPosY(), touchY);
 	}
 
 	public void setTouchY(int touchY) {

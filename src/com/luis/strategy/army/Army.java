@@ -3,10 +3,10 @@ package com.luis.strategy.army;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.luis.lgameengine.gameutils.fonts.Font;
-import com.luis.lgameengine.gameutils.fonts.TextManager;
+import com.luis.lgameengine.gameutils.gameworld.GameCamera;
 import com.luis.lgameengine.gameutils.gameworld.Math2D;
 import com.luis.lgameengine.gameutils.gameworld.SpriteImage;
+import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.Main;
@@ -37,9 +37,6 @@ public class Army extends MapObject{
 	public static final int ANIN_IDLE=0;
 	public static final int ANIN_MOVE=1;
 	
-	private float angle;
-	private double sin;
-	private double cos;
 	private static final float SPEED = 10f;
 	
 	private int idleRepeatCount;
@@ -48,11 +45,13 @@ public class Army extends MapObject{
 	
 	private int flag;
 	
-	public Army (Kingdom kingdom, int flag, int mapX, int mapY, int mapWidth, int mapHeight) {
-		super(
-				kingdom.getX(), kingdom.getY(),
-				GfxManager.imgArmyIdle.getWidth()/9, GfxManager.imgArmyIdle.getHeight(), 
-				mapX, mapY, mapWidth, mapHeight);
+	public Army (WorldConver worldConver, GameCamera gameCamera,
+			Kingdom kingdom, int flag, float mapX, float mapY, int mapWidth, int mapHeight) {
+		
+		super(worldConver, gameCamera,
+			kingdom.getX(), kingdom.getY(),
+			GfxManager.imgArmyIdle.getWidth()/9, GfxManager.imgArmyIdle.getHeight(), 
+			mapX, mapY, mapWidth, mapHeight);
 		
 		this.id = idCount++;
 		this.kingdom = kingdom;
@@ -82,6 +81,12 @@ public class Army extends MapObject{
 			break;
 		case STATE_MOVE:
 			
+			float angle = Math2D.getAngle360(
+				getAbsoluteX(), getAbsoluteY(), 
+				kingdom.getAbsoluteX(), kingdom.getAbsoluteY());
+			double cos = Math.cos(angle * (Math.PI/180f));
+			double sin = Math.sin(angle * (Math.PI/180f));
+			
 			float speedX = (float)((SPEED*cos)*delta);
 			float speedY = (float)((SPEED*sin)*delta);
 			setX(getX()+speedX);
@@ -96,25 +101,36 @@ public class Army extends MapObject{
 			g.setAlpha(140);
 		}
 		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-		int flagX = getAbsoluteX() + 
+		float flagX = getAbsoluteX() + 
 			(int)(flip?-GfxManager.imgFlagSmallList.get(flag).getWidth()*0.5:
 					   -GfxManager.imgFlagSmallList.get(flag).getWidth()*0.25);
-		int flagY = getAbsoluteY()-GfxManager.imgFlagSmallList.get(flag).getHeight();
+		float flagY = getAbsoluteY()-GfxManager.imgFlagSmallList.get(flag).getHeight();
 		
 		int angle = flip?15:-15;
 		
-		g.drawRegion(GfxManager.imgFlagSmallList.get(flag), flagX, flagY, 0, 0, 
+		g.drawRegion(GfxManager.imgFlagSmallList.get(flag), 
+				worldConver.getConversionDrawX(gameCamera.getPosX(), (int)flagX),
+				worldConver.getConversionDrawY(gameCamera.getPosY(), (int)flagY),
+				0, 0, 
 				GfxManager.imgFlagSmallList.get(flag).getWidth(), GfxManager.imgFlagSmallList.get(flag).getHeight(), 
-				angle, flagX+GfxManager.imgFlagSmallList.get(flag).getWidth()/2, flagY+GfxManager.imgFlagSmallList.get(flag).getHeight()/2);
+				angle, 
+				worldConver.getConversionDrawX(gameCamera.getPosX(), (int)flagX+GfxManager.imgFlagSmallList.get(flag).getWidth()/2), 
+				worldConver.getConversionDrawY(gameCamera.getPosY(), (int)flagY+GfxManager.imgFlagSmallList.get(flag).getHeight()/2));
 		
 		//g.drawImage(GfxManager.imgFlagSmallList.get(flag), flagX, flagY, Graphics.HFLIP);
 		
 		switch(anim){
 		case ANIN_IDLE:
-			spriteList.get(anim).drawFrame(g, GfxManager.imgArmyIdle, getAbsoluteX(), getAbsoluteY(), flip, Graphics.VCENTER | Graphics.HCENTER);
+			spriteList.get(anim).drawFrame(g, GfxManager.imgArmyIdle, 
+					worldConver.getConversionDrawX(gameCamera.getPosX(), getAbsoluteX()),
+					worldConver.getConversionDrawY(gameCamera.getPosY(), getAbsoluteY()),
+					flip, Graphics.VCENTER | Graphics.HCENTER);
 			break;
 		case ANIN_MOVE:
-			spriteList.get(anim).drawFrame(g, GfxManager.imgArmyRun, getAbsoluteX(), getAbsoluteY(), flip, Graphics.VCENTER | Graphics.HCENTER);
+			spriteList.get(anim).drawFrame(g, GfxManager.imgArmyRun,
+					worldConver.getConversionDrawX(gameCamera.getPosX(), getAbsoluteX()),
+					worldConver.getConversionDrawY(gameCamera.getPosY(), getAbsoluteY()),
+					flip, Graphics.VCENTER | Graphics.HCENTER);
 			break;
 		}
 		g.setAlpha(255);
@@ -147,11 +163,6 @@ public class Army extends MapObject{
 			spriteList.get(anim).resetAnimation(0);
 			
 			flip = lastKingdom.getAbsoluteX() > kingdom.getAbsoluteX(); 
-			
-			angle = Math2D.getAngle360(
-				lastKingdom.getAbsoluteX(), lastKingdom.getAbsoluteY(), kingdom.getAbsoluteX(), kingdom.getAbsoluteY());
-			cos = Math.cos(angle * (Math.PI/180f));
-			sin = Math.sin(angle * (Math.PI/180f));
 			break;
 		case STATE_OFF:
 			anim = ANIN_IDLE;

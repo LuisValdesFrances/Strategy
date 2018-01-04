@@ -1,15 +1,20 @@
 package com.luis.strategy.map;
 
+import com.luis.lgameengine.gameutils.gameworld.GameCamera;
+import com.luis.lgameengine.gameutils.gameworld.WorldConver;
+
 
 public class Terrain extends MapObject{
 	
 	private int type;
 	private boolean conquest;
 	
-	public Terrain(int x, int y, int width, int height,
-			int mapX, int mapY,
+	public Terrain(
+			WorldConver worldConver, GameCamera gameCamera,
+			float x, float y, int width, int height,
+			float mapX, float mapY,
 			int mapWidth, int mapHeight, int type, boolean conquest) {
-		super(x, y, width, height, mapX, mapY, mapWidth, mapHeight);
+		super(worldConver, gameCamera, x, y, width, height, mapX, mapY, mapWidth, mapHeight);
 		this.type = type;
 		this.conquest = conquest;
 	}

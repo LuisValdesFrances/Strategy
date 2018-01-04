@@ -8,7 +8,10 @@ import com.luis.army.gui.BattleBox;
 import com.luis.army.gui.SimpleBox;
 import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gameutils.fonts.TextManager;
+import com.luis.lgameengine.gameutils.gameworld.GameCamera;
+import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.implementation.graphics.Graphics;
+import com.luis.lgameengine.implementation.input.KeyData;
 import com.luis.lgameengine.menu.Button;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.Main;
@@ -24,6 +27,9 @@ import com.luis.strategy.map.Terrain;
 public class GameManager {
 	
 	private int turnCount = 0;
+	
+	public static GameCamera gameCamera;
+	public static WorldConver worldConver;
 	
 	
 	private Map map;
@@ -65,7 +71,9 @@ public class GameManager {
 	private SimpleBox resultBox;
 	
 	
-	public GameManager(Map map, List<Player> playerList){
+	public GameManager(WorldConver worldConver, GameCamera gameCamera, Map map, List<Player> playerList){
+		this.worldConver = worldConver;
+		this.gameCamera = gameCamera;
 		this.map = map;
 		this.playerList = playerList;
 		
@@ -102,7 +110,7 @@ public class GameManager {
 			}
 		};
 		
-		int mapDif = (Define.SIZEX-map.getImgMap().getWidth())/2;
+		int mapDif = (Define.SIZEX-map.getWidth())/2;
 		int GUIMargin = (mapDif-GfxManager.imgButtonChestRelease.getWidth())/2;
 		btnChest = new Button(
 				GfxManager.imgButtonChestRelease, 
@@ -406,8 +414,9 @@ public class GameManager {
 		break;
 		}
 		
+		
 		updateGUI();
-			
+		
 		map.update(delta);
 		
 		//Actualizar animaciones
@@ -425,12 +434,11 @@ public class GameManager {
 			for(Kingdom kingdom : player.getKingdomList()){
 				g.setClip(0, 0, Define.SIZEX, Define.SIZEX);
 				g.drawImage(GfxManager.imgFlagList.get(player.getFlag()), 
+						worldConver.getConversionDrawX(
+						gameCamera.getPosX(), kingdom.getTerrainList().get(kingdom.getTerrainList().size()-1).getAbsoluteX())+GfxManager.imgPlain.getWidth()/2,
+						worldConver.getConversionDrawY(
+						gameCamera.getPosY(), kingdom.getTerrainList().get(kingdom.getTerrainList().size()-1).getAbsoluteY())+GfxManager.imgPlain.getHeight()/2,
 						
-						kingdom.getTerrainList().get(kingdom.getTerrainList().size()-1).getAbsoluteX()+GfxManager.imgPlain.getWidth()/2,
-						kingdom.getTerrainList().get(kingdom.getTerrainList().size()-1).getAbsoluteY()+GfxManager.imgPlain.getHeight()/2,
-						
-						//kingdom.getAbsoluteX()-GfxManager.imgFlagList.get(player.getFlag()).getWidth()/2, 
-						//kingdom.getAbsoluteY()-GfxManager.imgFlagList.get(player.getFlag()).getHeight()/2, 
 						Graphics.BOTTOM | Graphics.HCENTER);
 			}
 		}
@@ -440,7 +448,7 @@ public class GameManager {
 			for(Army army: player.getArmyList())
 				army.draw(g);
 		}
-			
+		
 		map.drawTarget(g);
 		
 		
@@ -452,16 +460,16 @@ public class GameManager {
 			for(Kingdom k : map.getKingdomList())
 				TextManager.drawSimpleText(g, Font.FONT_MEDIUM, 
 						"ST:" + k.getState(),
-					k.getAbsoluteX(), 
-					k.getAbsoluteY(),
+					worldConver.getConversionDrawX(gameCamera.getPosX(), k.getAbsoluteX()),
+					worldConver.getConversionDrawY(gameCamera.getPosY(), k.getAbsoluteY()),
 					Graphics.BOTTOM | Graphics.RIGHT);
 			
-		for(Player p : playerList)
-			for(Army a : p.getArmyList())
-				TextManager.drawSimpleText(g, Font.FONT_SMALL, 
+			for(Player p : playerList)
+				for(Army a : p.getArmyList())
+					TextManager.drawSimpleText(g, Font.FONT_SMALL, 
 						""+a.getKingdom().getId() + "-" + a.getId(),
-					a.getAbsoluteX()-GfxManager.imgArmyOff.getWidth()/4, 
-					a.getAbsoluteY()-GfxManager.imgArmyOff.getHeight()/4,
+					worldConver.getConversionDrawX(gameCamera.getPosX(), a.getAbsoluteX()-GfxManager.imgArmyOff.getWidth()/4),
+					worldConver.getConversionDrawY(gameCamera.getPosY(), a.getAbsoluteY()-GfxManager.imgArmyOff.getHeight()/4),
 					Graphics.BOTTOM | Graphics.RIGHT);
 		}
 		
@@ -479,6 +487,7 @@ public class GameManager {
 	}
 	
 	private void drawGUI(Graphics g) {
+		g.drawImage(GfxManager.imgGameHud, 0, Define.SIZEY, Graphics.BOTTOM | Graphics.LEFT);
 		btnCancel.draw(g, 0, 0);
 		btnNext.draw(g, 0, 0);
 		btnChest.draw(g, 0, 0);

@@ -8,16 +8,19 @@ import android.util.Log;
 import com.luis.lgameengine.menu.Button;
 import com.luis.lgameengine.menu.MenuBox;
 import com.luis.lgameengine.menu.MenuManager;
+import com.luis.lgameengine.gameutils.GamePerformance;
 import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gameutils.gameworld.GameCamera;
 import com.luis.lgameengine.gameutils.gameworld.GfxEffects;
 import com.luis.lgameengine.gameutils.gameworld.ParticleManager;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.implementation.graphics.Graphics;
+import com.luis.lgameengine.implementation.input.KeyData;
 import com.luis.lgameengine.implementation.input.TouchData;
 import com.luis.strategy.army.Army;
 import com.luis.strategy.connection.Download;
 import com.luis.strategy.constants.Define;
+import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.data.DataKingdom;
 import com.luis.strategy.game.GameManager;
 import com.luis.strategy.game.Player;
@@ -39,8 +42,11 @@ public class ModeGame {
 	public static float worldWidth;
 	public static float worldHeight;
 	
-	static GameCamera gameCamera;
+	private static GameCamera gameCamera;
 	private static WorldConver worldConver;
+	private static float cameraTargetX;
+	private static float cameraTargetY;
+	
 	private static ParticleManager particleManager;
 	private static GfxEffects gfxEffects;
 	
@@ -92,37 +98,46 @@ public class ModeGame {
 				}
 			};
 			
-			worldConver = new WorldConver(Define.SIZEX, Define.SIZEY, 0, 0, 0, 0, worldWidth, worldHeight);
-			
 			particleManager = ParticleManager.getInstance();
 			gfxEffects = GfxEffects.getInstance();
 			
 			gameFrame = 0;
 			
+			worldConver = new WorldConver(
+					Define.SIZEX, Define.SIZEY-GfxManager.imgGameHud.getHeight(),
+					0, GfxManager.imgGameHud.getHeight(), 0, 0, GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
+			
+			gameCamera = new GameCamera(worldConver.getCentlayoutX(), worldConver.getCentlayoutY(), worldConver.getWorldWidth(), worldConver.getWorldHeight(), 
+					GamePerformance.getInstance().getFrameMult(Main.targetFPS));
+			
 			map = new Map(
-					Define.SIZEX2,
-					Define.SIZEY2,
-					DataKingdom.getGenterex(Define.SIZEX2, Define.SIZEY2, GfxManager.imgMap),
+					worldConver, gameCamera, 
+					GfxManager.imgMap.getWidth()/2, GfxManager.imgMap.getHeight()/2,
 					GfxManager.imgMap,
 					GfxManager.imgSmallCity, GfxManager.imgMediumCity, GfxManager.imgBigCity, 
 					GfxManager.imgPlain, GfxManager.imgForest, GfxManager.imgMontain, null);
+			
+			map.setKingdomList(DataKingdom.getGenterex(worldConver, gameCamera, map));
+			
+			cameraTargetX=worldConver.getCentlayoutX();
+			cameraTargetY=worldConver.getCentlayoutY();
 			
 			Player player1 = new Player(1);
 			player1.getKingdomList().add(map.getKingdom(1));
 			player1.getKingdomList().add(map.getKingdom(2));
 			player1.getKingdomList().add(map.getKingdom(3));
-			player1.getArmyList().add(new Army(map.getKingdom(1),player1.getFlag(), 
+			player1.getArmyList().add(new Army(worldConver, gameCamera, map.getKingdom(1),player1.getFlag(), 
 					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight()));
-			player1.getArmyList().add(new Army(map.getKingdom(2),player1.getFlag(), 
+			player1.getArmyList().add(new Army(worldConver, gameCamera, map.getKingdom(2),player1.getFlag(), 
 					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight()));
 			
 			Player player2 = new Player(2);
 			player2.getKingdomList().add(map.getKingdom(7));
 			player2.getKingdomList().add(map.getKingdom(8));
 			player2.getKingdomList().add(map.getKingdom(6));
-			player2.getArmyList().add(new Army(map.getKingdom(7),player2.getFlag(), 
+			player2.getArmyList().add(new Army(worldConver, gameCamera, map.getKingdom(7),player2.getFlag(), 
 					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight()));
-			player2.getArmyList().add(new Army(map.getKingdom(8),player2.getFlag(), 
+			player2.getArmyList().add(new Army(worldConver, gameCamera, map.getKingdom(8),player2.getFlag(), 
 					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight()));
 			
 			List<Player> playerList = new ArrayList<Player>();
@@ -130,7 +145,7 @@ public class ModeGame {
 			playerList.add(player1);
 			playerList.add(player2);
 			
-			gameManager = new GameManager(map, playerList);
+			gameManager = new GameManager(worldConver, gameCamera, map, playerList);
 			
 			/*
 			army = new Army();
@@ -202,10 +217,37 @@ public class ModeGame {
 			gameFrame++;
 			btnPause.update(UserInput.getInstance().getMultiTouchHandler());
 			
-			//gameCamera.updateCamera(player.getPosX(), player.getPosY());
+			
+			
+			
+			float cameraSpeed = GameParams.CAMERA_SPEED * Main.getDeltaSec();
+			if(UserInput.getInstance().getKeyboardHandler().getPressedKeys(UserInput.KEYCODE_LEFT).getAction() == KeyData.KEY_DOWN
+				||
+				UserInput.getInstance().getKeyboardHandler().getPressedKeys(UserInput.KEYCODE_LEFT).getAction() == KeyData.KEY_PRESS){
+					cameraTargetX -=cameraSpeed;
+				}
+			else if(UserInput.getInstance().getKeyboardHandler().getPressedKeys(UserInput.KEYCODE_RIGHT).getAction() == KeyData.KEY_DOWN
+				||
+				UserInput.getInstance().getKeyboardHandler().getPressedKeys(UserInput.KEYCODE_RIGHT).getAction() == KeyData.KEY_PRESS){
+					cameraTargetX +=cameraSpeed;
+				}
+			if(UserInput.getInstance().getKeyboardHandler().getPressedKeys(UserInput.KEYCODE_UP).getAction() == KeyData.KEY_DOWN
+				||
+				UserInput.getInstance().getKeyboardHandler().getPressedKeys(UserInput.KEYCODE_UP).getAction() == KeyData.KEY_PRESS){
+					cameraTargetY -=cameraSpeed;
+			}
+			else if(UserInput.getInstance().getKeyboardHandler().getPressedKeys(UserInput.KEYCODE_DOWN).getAction() == KeyData.KEY_DOWN
+				||
+				UserInput.getInstance().getKeyboardHandler().getPressedKeys(UserInput.KEYCODE_DOWN).getAction() == KeyData.KEY_PRESS){
+					cameraTargetY +=cameraSpeed;
+			}
+			
+			
+			
 			particleManager.update(Main.getDeltaSec());
 			gfxEffects.update(Main.getDeltaSec());
-			
+			gameCamera.setPosX(cameraTargetX);
+			gameCamera.setPosY(cameraTargetY);
 			gameManager.update(Main.getDeltaSec());
 			updateDebugButton();
 			break;
@@ -253,18 +295,20 @@ public class ModeGame {
 				_g.setTextSize(32);
 				_g.setAlpha(160);
 				_g.setColor(0x88000000);
-				_g.fillRect(0, 0, Define.SIZEX, _g.getTextHeight() * 2);
+				_g.fillRect(0, 0, Define.SIZEX, _g.getTextHeight() * 3);
 				_g.setAlpha(255);
 				
-				_g.drawText("State: " + gameManager.getState(), 0, _g.getTextHeight(), Main.COLOR_WHITE);
-				_g.drawText("Sub-State: " + gameManager.getSubState(), (int)(Define.SIZEX*0.33), _g.getTextHeight(), Main.COLOR_WHITE);
-				_g.drawText("Player: " + (gameManager.getCurrentPlayer()+1), (int)(Define.SIZEX*0.66), _g.getTextHeight(), Main.COLOR_WHITE);
+				_g.drawText("CameraX: " + cameraTargetX, 0, _g.getTextHeight(), Main.COLOR_WHITE);
+				_g.drawText("CameraY: " + cameraTargetY, (int)(Define.SIZEX*0.33), _g.getTextHeight(), Main.COLOR_WHITE);
+				_g.drawText("State: " + gameManager.getState(), 0, _g.getTextHeight()*2, Main.COLOR_WHITE);
+				_g.drawText("Sub-State: " + gameManager.getSubState(), (int)(Define.SIZEX*0.33), _g.getTextHeight()*2, Main.COLOR_WHITE);
+				_g.drawText("Player: " + (gameManager.getCurrentPlayer()+1), (int)(Define.SIZEX*0.66), _g.getTextHeight()*2, Main.COLOR_WHITE);
 				
 				String kingdomList = "";
 				for(Kingdom kingdom : gameManager.getPlayerList().get(gameManager.getCurrentPlayer()).getKingdomList()){
 					kingdomList += kingdom.getId() + ", ";
 				}
-				_g.drawText("Domains: " + kingdomList, 0, _g.getTextHeight()*2, Main.COLOR_WHITE);
+				_g.drawText("Domains: " + kingdomList, 0, _g.getTextHeight()*3, Main.COLOR_WHITE);
 				
 				
 				//Reinos
