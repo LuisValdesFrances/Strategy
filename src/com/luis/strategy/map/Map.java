@@ -34,7 +34,9 @@ public class Map extends MapObject{
 			Image imgMap, Image imgSmallCity,
 			Image imgMediumCity, Image imgBigCity, Image imgPlain,
 			Image imgForest, Image imgMontain, Image imgCastle) {
-		super(worldConver, gameCamera, x, y, imgMap.getWidth(), imgMap.getHeight(), x, y, imgMap.getWidth(), imgMap.getHeight());
+		super(worldConver, gameCamera, null, x, y, imgMap.getWidth(), imgMap.getHeight(), x, y, imgMap.getWidth(), imgMap.getHeight());
+		
+		this.map = this;
 		this.x = x;
 		this.y = y;
 		
@@ -167,6 +169,16 @@ public class Map extends MapObject{
 
 	public void setImgMap(Image imgMap) {
 		this.imgMap = imgMap;
+	}
+	
+	
+
+	public float getAlpha() {
+		return alpha;
+	}
+
+	public void setAlpha(float alpha) {
+		this.alpha = alpha;
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import java.util.List;
 import android.util.Log;
 
 import com.luis.lgameengine.menu.Button;
+import com.luis.lgameengine.menu.GamePad;
 import com.luis.lgameengine.menu.MenuBox;
 import com.luis.lgameengine.menu.MenuManager;
 import com.luis.lgameengine.gameutils.GamePerformance;
@@ -37,7 +38,8 @@ public class ModeGame {
 	public static boolean isGamePaused;
 	private static int gameFrame;
 	
-	public static final int TILE_SET_SIZE[] = {24,32,48,64};
+	//Pad
+	private static GamePad gamePad;
 	
 	public static float worldWidth;
 	public static float worldHeight;
@@ -105,10 +107,29 @@ public class ModeGame {
 			
 			worldConver = new WorldConver(
 					Define.SIZEX, Define.SIZEY-GfxManager.imgGameHud.getHeight(),
-					0, GfxManager.imgGameHud.getHeight(), 0, 0, GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
+					0, 0, 0, 0, GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
 			
-			gameCamera = new GameCamera(worldConver.getCentlayoutX(), worldConver.getCentlayoutY(), worldConver.getWorldWidth(), worldConver.getWorldHeight(), 
+			cameraTargetX=worldConver.getCentlayoutX();
+			cameraTargetY=worldConver.getCentlayoutY();
+			gameCamera = new GameCamera(worldConver, cameraTargetX, cameraTargetY, 
 					GamePerformance.getInstance().getFrameMult(Main.targetFPS));
+			
+			gamePad = new GamePad(GfxManager.imgPadUp, GfxManager.imgPadLeft, GfxManager.imgPadDown, GfxManager.imgPadRight, 
+					GfxManager.imgPadUp.getWidth()*2, Define.SIZEY-GfxManager.imgGameHud.getHeight()*2){
+				@Override
+				public void onButtonNorthPress(){
+					cameraTargetY -=(GameParams.CAMERA_SPEED * Main.getDeltaSec());}
+				@Override
+				public void onButtonEastPress(){
+					cameraTargetX -=(GameParams.CAMERA_SPEED * Main.getDeltaSec());}
+				@Override
+				public void onButtonSouthPress(){
+					cameraTargetY +=(GameParams.CAMERA_SPEED * Main.getDeltaSec());}
+				@Override
+				public void onButtonWestPress(){
+					cameraTargetX +=(GameParams.CAMERA_SPEED * Main.getDeltaSec());
+					}
+			};
 			
 			map = new Map(
 					worldConver, gameCamera, 
@@ -119,25 +140,23 @@ public class ModeGame {
 			
 			map.setKingdomList(DataKingdom.getGenterex(worldConver, gameCamera, map));
 			
-			cameraTargetX=worldConver.getCentlayoutX();
-			cameraTargetY=worldConver.getCentlayoutY();
 			
 			Player player1 = new Player(1);
 			player1.getKingdomList().add(map.getKingdom(1));
 			player1.getKingdomList().add(map.getKingdom(2));
 			player1.getKingdomList().add(map.getKingdom(3));
-			player1.getArmyList().add(new Army(worldConver, gameCamera, map.getKingdom(1),player1.getFlag(), 
+			player1.getArmyList().add(new Army(worldConver, gameCamera, map, map.getKingdom(1),player1.getFlag(), 
 					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight()));
-			player1.getArmyList().add(new Army(worldConver, gameCamera, map.getKingdom(2),player1.getFlag(), 
+			player1.getArmyList().add(new Army(worldConver, gameCamera, map, map.getKingdom(2),player1.getFlag(), 
 					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight()));
 			
 			Player player2 = new Player(2);
 			player2.getKingdomList().add(map.getKingdom(7));
 			player2.getKingdomList().add(map.getKingdom(8));
 			player2.getKingdomList().add(map.getKingdom(6));
-			player2.getArmyList().add(new Army(worldConver, gameCamera, map.getKingdom(7),player2.getFlag(), 
+			player2.getArmyList().add(new Army(worldConver, gameCamera, map, map.getKingdom(7),player2.getFlag(), 
 					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight()));
-			player2.getArmyList().add(new Army(worldConver, gameCamera, map.getKingdom(8),player2.getFlag(), 
+			player2.getArmyList().add(new Army(worldConver, gameCamera, map, map.getKingdom(8),player2.getFlag(), 
 					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight()));
 			
 			List<Player> playerList = new ArrayList<Player>();
@@ -221,6 +240,7 @@ public class ModeGame {
 			
 			
 			float cameraSpeed = GameParams.CAMERA_SPEED * Main.getDeltaSec();
+			gamePad.update(UserInput.getInstance().getMultiTouchHandler());
 			if(UserInput.getInstance().getKeyboardHandler().getPressedKeys(UserInput.KEYCODE_LEFT).getAction() == KeyData.KEY_DOWN
 				||
 				UserInput.getInstance().getKeyboardHandler().getPressedKeys(UserInput.KEYCODE_LEFT).getAction() == KeyData.KEY_PRESS){
@@ -242,18 +262,25 @@ public class ModeGame {
 					cameraTargetY +=cameraSpeed;
 			}
 			
+			cameraTargetX = Math.max(cameraTargetX, worldConver.getLayoutX() / 2f);
+			cameraTargetX = Math.min(cameraTargetX, worldConver.getWorldWidth() - worldConver.getLayoutX() / 2f);
+			cameraTargetY = Math.max(cameraTargetY, worldConver.getLayoutY() / 2f);
+			cameraTargetY = Math.min(cameraTargetY, worldConver.getWorldHeight() - worldConver.getLayoutY() / 2f);
+			
 			
 			
 			particleManager.update(Main.getDeltaSec());
 			gfxEffects.update(Main.getDeltaSec());
-			gameCamera.setPosX(cameraTargetX);
-			gameCamera.setPosY(cameraTargetY);
+			//gameCamera.setPosX(cameraTargetX);
+			//gameCamera.setPosY(cameraTargetY);
+			//gameCamera.updateCamera(worldConver.getConversionDrawX(gameCamera.getPosX(), (int)cameraTargetX), worldConver.getConversionDrawY(gameCamera.getPosY(), (int)cameraTargetY));
+			gameCamera.updateCamera((int)cameraTargetX, (int)cameraTargetY);
 			gameManager.update(Main.getDeltaSec());
 			updateDebugButton();
 			break;
 			
 		case Define.ST_GAME_PAUSE:
-			if(!confirmationQuit.update(Main.getDeltaSec(), UserInput.getInstance().getMultiTouchHandler())){
+			if(!confirmationQuit.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec())){
 				
 				optionSelect = UserInput.getInstance().getOptionMenuTouched_Y(2, optionSelect);
 				
@@ -289,6 +316,7 @@ public class ModeGame {
 			
 			gameManager.draw(_g);
 			btnPause.draw(_g, 0, 0);
+			gamePad.draw(_g);
 			
 			if (showDebugInfo) {
 				_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
@@ -336,8 +364,10 @@ public class ModeGame {
 	}
 	
 	public static boolean showDebugInfo;
-	public static final int DEBUG_BUTTON_W = Define.SIZEX12+Define.SIZEX16;
-	public static final int DEBUG_BUTTON_H = Define.SIZEY12-Define.SIZEY32;
+	public static final int DEBUG_BUTTON_W = Define.SIZEX32;
+	public static final int DEBUG_BUTTON_H = Define.SIZEX32;
+	public static final int DEBUG_BUTTON_X = DEBUG_BUTTON_W+Define.SIZEX-DEBUG_BUTTON_W;
+	public static final int DEBUG_BUTTON_Y = DEBUG_BUTTON_H+Define.SIZEX16;
 	private static void drawDebugButton(Graphics _g){
 		_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 		if(!showDebugInfo){
@@ -345,13 +375,13 @@ public class ModeGame {
 		}else{
 			_g.setColor(Main.COLOR_GREEN);
 		}
-		_g.fillRect(0, Define.SIZEY - DEBUG_BUTTON_H, DEBUG_BUTTON_W, DEBUG_BUTTON_H);
-		_g.drawText("DEBUG", DEBUG_BUTTON_W/8, Define.SIZEY-DEBUG_BUTTON_H/8, Main.COLOR_WHITE);
+		_g.fillRect(DEBUG_BUTTON_X, DEBUG_BUTTON_Y, DEBUG_BUTTON_W, DEBUG_BUTTON_H);
 	}
 	
 	private static void updateDebugButton(){
 		if((UserInput.getInstance().getMultiTouchHandler().getTouchFrames(0) == 1) && 
-			UserInput.getInstance().compareTouch(0, Define.SIZEY - DEBUG_BUTTON_H, DEBUG_BUTTON_W, Define.SIZEY, 0)){
+			UserInput.getInstance().compareTouch(
+				DEBUG_BUTTON_X, DEBUG_BUTTON_Y, DEBUG_BUTTON_X + DEBUG_BUTTON_W, DEBUG_BUTTON_Y + DEBUG_BUTTON_H, 0)){
 			showDebugInfo = !showDebugInfo;
 		}
 	}

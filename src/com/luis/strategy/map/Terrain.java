@@ -10,11 +10,11 @@ public class Terrain extends MapObject{
 	private boolean conquest;
 	
 	public Terrain(
-			WorldConver worldConver, GameCamera gameCamera,
+			WorldConver worldConver, GameCamera gameCamera, Map map,
 			float x, float y, int width, int height,
 			float mapX, float mapY,
 			int mapWidth, int mapHeight, int type, boolean conquest) {
-		super(worldConver, gameCamera, x, y, width, height, mapX, mapY, mapWidth, mapHeight);
+		super(worldConver, gameCamera, map, x, y, width, height, mapX, mapY, mapWidth, mapHeight);
 		this.type = type;
 		this.conquest = conquest;
 	}

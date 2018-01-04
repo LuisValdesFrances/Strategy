@@ -9,6 +9,7 @@ public abstract class MapObject implements Selectable{
 	
 	protected WorldConver worldConver;
 	protected GameCamera gameCamera;
+	protected Map map;
 	protected float x;
 	protected float y;
 	protected int width;
@@ -26,11 +27,13 @@ public abstract class MapObject implements Selectable{
 	
 	public MapObject(
 			WorldConver worldConver, GameCamera gameCamera,
+			Map map,
 			float x, float y, int width, int height, 
 			float mapX, float mapY, int mapWidth, int mapHeight) {
 		super();
 		this.worldConver = worldConver;
 		this.gameCamera = gameCamera;
+		this.map = map;
 		this.x = x;
 		this.y = y;
 		this.width = width;

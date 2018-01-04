@@ -5,13 +5,16 @@ import java.util.List;
 import android.util.Log;
 
 import com.luis.army.gui.BattleBox;
+import com.luis.army.gui.FlagButton;
 import com.luis.army.gui.SimpleBox;
 import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gameutils.fonts.TextManager;
 import com.luis.lgameengine.gameutils.gameworld.GameCamera;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.implementation.graphics.Graphics;
+import com.luis.lgameengine.implementation.graphics.Image;
 import com.luis.lgameengine.implementation.input.KeyData;
+import com.luis.lgameengine.implementation.input.TouchData;
 import com.luis.lgameengine.menu.Button;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.Main;
@@ -64,8 +67,8 @@ public class GameManager {
 	//GUI
 	private static Button btnNext;
 	private static Button btnCancel;
-	private static Button btnHelmet;
-	private static Button btnChest;
+	private static FlagButton btnFlagHelmet;
+	private static FlagButton btnFlagCastle;
 	private BattleBox battleBox;
 	private SimpleBox managementBox;
 	private SimpleBox resultBox;
@@ -81,15 +84,15 @@ public class GameManager {
 		btnNext = new Button(
 				GfxManager.imgButtonNextRelease, 
 				GfxManager.imgButtonNextFocus, 
-				Define.SIZEX-GfxManager.imgButtonNextRelease.getWidth(), 
-				Define.SIZEY-GfxManager.imgButtonNextRelease.getHeight(),
+				Define.SIZEX2, 
+				Define.SIZEY-GfxManager.imgGameHud.getHeight()/2,
 				null, 0){
 			@Override
 			public void onButtonPressDown(){}
 			
 			@Override
 			public void onButtonPressUp(){
-				nextState();
+				changeState(state+1);
 				reset();
 			}
 		};
@@ -97,8 +100,8 @@ public class GameManager {
 		btnCancel = new Button(
 				GfxManager.imgButtonCancelRelease, 
 				GfxManager.imgButtonCancelFocus, 
-				GfxManager.imgButtonCancelRelease.getWidth(), 
-				Define.SIZEY-GfxManager.imgButtonCancelRelease.getHeight(),
+				Define.SIZEX2- GfxManager.imgButtonCancelRelease.getWidth()*2, 
+				Define.SIZEY-GfxManager.imgGameHud.getHeight()/2,
 				null, 0){
 			@Override
 			public void onButtonPressDown(){}
@@ -110,37 +113,40 @@ public class GameManager {
 			}
 		};
 		
-		int mapDif = (Define.SIZEX-map.getWidth())/2;
-		int GUIMargin = (mapDif-GfxManager.imgButtonChestRelease.getWidth())/2;
-		btnChest = new Button(
-				GfxManager.imgButtonChestRelease, 
-				GfxManager.imgButtonChestFocus, 
-				GUIMargin + GfxManager.imgButtonChestRelease.getWidth()/2, 
-				GUIMargin + GfxManager.imgButtonChestRelease.getHeight()/2,
-				null, 0){
+		
+		btnFlagHelmet = new FlagButton(
+				GfxManager.imgButtonFlagHelmetRelease, 
+				GfxManager.imgButtonFlagHelmetFocus, 
+				GfxManager.imgButtonFlagHelmetRelease.getWidth()/2, 
+				Define.SIZEY-GfxManager.imgButtonFlagHelmetRelease.getHeight()/2){
 			@Override
 			public void onButtonPressDown(){}
 			
 			@Override
 			public void onButtonPressUp(){
-				setTouching(false);
+				reset();
+				if(subState == SUB_STATE_ACTION_WAIT){
+					hide();
+					changeSubState(SUB_STATE_ACTION_ARMY_SELECT);
+				}
 			}
 		};
 		
-		btnHelmet = new Button(
-				GfxManager.imgButtonHelmetRelease, 
-				GfxManager.imgButtonHelmetFocus, 
-				GUIMargin + GfxManager.imgButtonCancelRelease.getWidth()/2, 
-				GUIMargin*2 + GfxManager.imgButtonCancelRelease.getHeight() + GfxManager.imgButtonCancelRelease.getHeight()/2,
-				null, 0){
+		btnFlagCastle = new FlagButton(
+				GfxManager.imgButtonFlagCastleRelease, 
+				GfxManager.imgButtonFlagCastleFocus, 
+				Define.SIZEX-GfxManager.imgButtonFlagCastleRelease.getWidth()/2, 
+				Define.SIZEY-GfxManager.imgButtonFlagCastleRelease.getHeight()/2){
 			@Override
 			public void onButtonPressDown(){}
 			
 			@Override
 			public void onButtonPressUp(){
-				setTouching(false);
+				reset();
+				
 			}
 		};
+		
 		
 		battleBox = new BattleBox(){
 			@Override
@@ -168,7 +174,7 @@ public class GameManager {
 		managementBox = new SimpleBox(){
 			@Override
 			public void onButtonPressUp(){
-				nextState();
+				changeState(STATE_MANAGEMENT);
 			}
 		};
 		
@@ -181,38 +187,35 @@ public class GameManager {
 		switch(state){
 		case STATE_INCOME:
 			if(!updatePresentation(delta)){
-				//Calculo de cosas
-				nextState();
+				changeState(STATE_ECONOMY);
 			}
 			break;
 		case STATE_ECONOMY:
 			
-			managementBox.update(delta, UserInput.getInstance().getMultiTouchHandler());
+			managementBox.update(UserInput.getInstance().getMultiTouchHandler(), delta);
 			break;
 		case STATE_MANAGEMENT:
 			switch(subState){
 			case SUB_STATE_MANAGEMENT_PRESENTATION:
 				if(!updatePresentation(delta))
-					subState = SUB_STATE_MANAGEMENT_SELECT;
+					changeSubState(SUB_STATE_MANAGEMENT_SELECT);
 				break;
 				
 			case SUB_STATE_MANAGEMENT_SELECT:
-				btnNext.setDisabled(false);
+				
 				break;
 			}
 			break;
 		case STATE_ACTION:
+			
 			switch(subState){
 			case SUB_STATE_ACTION_PRESENTATION:
 				if(!updatePresentation(delta)){
-					subState = SUB_STATE_ACTION_WAIT;
-					cleanArmyAction();
+					changeSubState(SUB_STATE_ACTION_WAIT);
 				}
 				
 				break;
 			case SUB_STATE_ACTION_WAIT:
-				btnNext.setDisabled(false);
-				
 				//Atcualizar interacion terreno:
 				
 				//Actualizar animaciones
@@ -220,65 +223,12 @@ public class GameManager {
 				
 				for(Army army: playerList.get(currentPlayer).getArmyList()){
 					if(army.getState() == Army.STATE_ON && army.isSelect()){
-						subState = SUB_STATE_ACTION_ARMY_SELECT;
-						activeArmy = army;
-						btnNext.setDisabled(true);
-						
-						Log.i("Debug", "Seleccionado ejercito de: " + activeArmy.getKingdom().getName());
-						
-						for(Kingdom border : activeArmy.getKingdom() .getBorderList()){
-							for(Kingdom kingdom: map.getKingdomList()){
-								if(kingdom.getTarget()== -1 && kingdom.getId() == border.getId()){
-									
-									//Si tengo un ejercito en la zona me uno
-									if(
-										playerList.get(currentPlayer).getArmy(kingdom) != null){
-										kingdom.setTarget(Kingdom.TARGET_AGGREGATION);
-										kingdom.setTouchX(kingdom.getAbsoluteX());
-										kingdom.setTouchY(kingdom.getAbsoluteY());
-									}else{
-										//Si el territorio es mio
-										if(playerList.get(currentPlayer).hasKingom(kingdom)){
-											//Busco ejercitos enemigos
-											if(getEnemyAtKingdom(playerList.get(currentPlayer), kingdom) != null){
-												kingdom.setTarget(Kingdom.TARGET_BATTLE);
-												kingdom.setTouchX(kingdom.getAbsoluteX());
-												kingdom.setTouchY(kingdom.getAbsoluteY());
-											}else{
-												kingdom.setTarget(Kingdom.TARGET_DOMAIN);
-												kingdom.setTouchX(kingdom.getAbsoluteX());
-												kingdom.setTouchY(kingdom.getAbsoluteY());
-											}
-										}else{
-											kingdom.setTarget(Kingdom.TARGET_BATTLE);
-											//Busco ejercitos enemigos
-											if(getEnemyAtKingdom(playerList.get(currentPlayer), kingdom) != null){
-												kingdom.setTouchX(kingdom.getAbsoluteX());
-												kingdom.setTouchY(kingdom.getAbsoluteY());
-											}else{
-												kingdom.setTouchX(kingdom.getTerrainList().get(0).getAbsoluteX());
-												kingdom.setTouchY(kingdom.getTerrainList().get(0).getAbsoluteY());
-											}
-										}
-									}
-								}
-							}
-						}
-						//Si estoy en territorio hostil(A midad de una conquista), lo añado a los seleccionables
-						if(!playerList.get(currentPlayer).hasKingom(activeArmy.getKingdom())){
-							activeArmy.getKingdom().setTarget(Kingdom.TARGET_BATTLE);
-							activeArmy.getKingdom().setTouchX(activeArmy.getKingdom().
-									getTerrainList().get(activeArmy.getKingdom().getState()).getAbsoluteX());
-							activeArmy.getKingdom().setTouchY(activeArmy.getKingdom().
-									getTerrainList().get(activeArmy.getKingdom().getState()).getAbsoluteY());
-						}
+						setDataTarget(army);
 					}
 				}
-				
 				break;
 				
 			case SUB_STATE_ACTION_ARMY_SELECT:
-				btnCancel.setDisabled(false);
 				for(Kingdom kingdom: map.getKingdomList()){
 					if(kingdom.getTarget()!= -1 && kingdom.isSelect()){
 						
@@ -293,7 +243,7 @@ public class GameManager {
 						
 						activeArmy.changeState(Army.STATE_MOVE);
 						
-						subState = SUB_STATE_ACTION_ARMY_MOVE;
+						changeSubState(SUB_STATE_ACTION_ARMY_MOVE);
 						
 						
 						
@@ -333,27 +283,23 @@ public class GameManager {
 						aggregation(activeArmy, playerList.get(currentPlayer).getArmy(activeArmy.getKingdom()));
 						activeArmy.getKingdom().setTarget(-1);
 						activeArmy.changeState(Army.STATE_OFF);
-						subState = SUB_STATE_ACTION_WAIT;
-						cleanArmyAction();
-						btnNext.setDisabled(false);
+						changeSubState(SUB_STATE_ACTION_WAIT);
 						
 					}else{
 						//Si el territorio es mio
 						if(playerList.get(currentPlayer).hasKingom(activeArmy.getKingdom())){
 							//Si hay un ejercito enemigo
 							if(getEnemyAtKingdom(playerList.get(currentPlayer), activeArmy.getKingdom()) != null){
-								subState = SUB_STATE_ACTION_COMBAT;
+								changeSubState(SUB_STATE_ACTION_COMBAT);
 								battleBox.start(BattleBox.TYPE_BATTLE_ARMY);
 							}else{
 								activeArmy.getKingdom().setTarget(-1);
 								activeArmy.changeState(Army.STATE_OFF);
-								subState = SUB_STATE_ACTION_WAIT;
-								cleanArmyAction();
-								btnNext.setDisabled(false);
+								changeSubState(SUB_STATE_ACTION_WAIT);
 							}
 						}else{
 							
-							subState = SUB_STATE_ACTION_COMBAT;
+							changeSubState(SUB_STATE_ACTION_COMBAT);
 							//Si hay un ejercito enemigo
 							if(getEnemyAtKingdom(playerList.get(currentPlayer), activeArmy.getKingdom()) != null){
 								battleBox.start(BattleBox.TYPE_BATTLE_ARMY);
@@ -376,11 +322,11 @@ public class GameManager {
 				break;
 			case SUB_STATE_ACTION_COMBAT:
 				activeArmy.changeState(Army.STATE_OFF);
-				battleBox.update(delta, UserInput.getInstance().getMultiTouchHandler());
+				battleBox.update(UserInput.getInstance().getMultiTouchHandler(), delta);
 				break;
 				
 			case SUB_STATE_ACTION_RESULT:
-				resultBox.update(delta, UserInput.getInstance().getMultiTouchHandler());
+				resultBox.update(UserInput.getInstance().getMultiTouchHandler(), delta);
 				break;
 			case SUB_STATE_ACTION_ESCAPE:
 				
@@ -397,8 +343,7 @@ public class GameManager {
 				h2 = GfxManager.imgTargetDomain.getHeight()/4;
 					
 				if(x1+w1/2>x2-w2/2 && x1-w1/2<x2+w2 && y1+h1/2>y2-h2/2 && y1-h1/2<y2+h2){
-					cleanArmyAction();
-						
+					
 					//Si hay un ejercito amigo, se unen
 						
 					defeat.setX(defeat.getKingdom().getX());
@@ -406,8 +351,7 @@ public class GameManager {
 					defeat.getKingdom().setTarget(-1);
 					defeat.changeState(Army.STATE_ON);
 						
-					subState = SUB_STATE_ACTION_WAIT;
-					btnNext.setDisabled(false);
+					changeSubState(SUB_STATE_ACTION_WAIT);
 					}
 				break;
 			}
@@ -415,7 +359,7 @@ public class GameManager {
 		}
 		
 		
-		updateGUI();
+		updateGUI(delta);
 		
 		map.update(delta);
 		
@@ -445,11 +389,13 @@ public class GameManager {
 		
 		//Army
 		for(Player player : playerList){
-			for(Army army: player.getArmyList())
+			for(Army army: player.getArmyList()){
 				army.draw(g);
+			}
 		}
 		
-		map.drawTarget(g);
+		if(subState == SUB_STATE_ACTION_ARMY_SELECT)
+			map.drawTarget(g);
 		
 		
 		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
@@ -479,20 +425,93 @@ public class GameManager {
 		drawPresentation(g);
 	}
 	
-	private void updateGUI(){
+	private void updateGUI(float delta){
 		btnCancel.update(UserInput.getInstance().getMultiTouchHandler());
 		btnNext.update(UserInput.getInstance().getMultiTouchHandler());
-		btnChest.update(UserInput.getInstance().getMultiTouchHandler());
-		btnHelmet.update(UserInput.getInstance().getMultiTouchHandler());
+		btnFlagHelmet.update(UserInput.getInstance().getMultiTouchHandler(), delta);
+		btnFlagCastle.update(UserInput.getInstance().getMultiTouchHandler(), delta);
 	}
 	
 	private void drawGUI(Graphics g) {
 		g.drawImage(GfxManager.imgGameHud, 0, Define.SIZEY, Graphics.BOTTOM | Graphics.LEFT);
 		btnCancel.draw(g, 0, 0);
 		btnNext.draw(g, 0, 0);
-		btnChest.draw(g, 0, 0);
-		btnHelmet.draw(g, 0, 0);
+		btnFlagHelmet.draw(g);
+		btnFlagCastle.draw(g);
 		
+	}
+	
+	private void cleanArmyAction(){
+		for(Player player:playerList){
+			for(Army army : player.getArmyList()){
+				army.setController(false);
+				army.setDefeat(false);
+			}
+		}
+	}
+	
+	public void setDataTarget(Army army){
+		
+		//Quito todos lo indicadores de target
+		for(Kingdom k: map.getKingdomList()){
+			k.setTarget(-1);
+		}
+		cleanArmyAction();
+		
+		//subState = SUB_STATE_ACTION_ARMY_SELECT;
+		btnFlagHelmet.start();
+		btnFlagCastle.start();
+		activeArmy = army;
+		activeArmy.setController(true);
+		
+		Log.i("Debug", "Seleccionado ejercito de: " + activeArmy.getKingdom().getName());
+		
+		for(Kingdom border : activeArmy.getKingdom() .getBorderList()){
+			for(Kingdom kingdom: map.getKingdomList()){
+				if(kingdom.getTarget()== -1 && kingdom.getId() == border.getId()){
+					
+					//Si tengo un ejercito en la zona me uno
+					if(
+						playerList.get(currentPlayer).getArmy(kingdom) != null){
+						kingdom.setTarget(Kingdom.TARGET_AGGREGATION);
+						kingdom.setTouchX(kingdom.getAbsoluteX());
+						kingdom.setTouchY(kingdom.getAbsoluteY());
+					}else{
+						//Si el territorio es mio
+						if(playerList.get(currentPlayer).hasKingom(kingdom)){
+							//Busco ejercitos enemigos
+							if(getEnemyAtKingdom(playerList.get(currentPlayer), kingdom) != null){
+								kingdom.setTarget(Kingdom.TARGET_BATTLE);
+								kingdom.setTouchX(kingdom.getAbsoluteX());
+								kingdom.setTouchY(kingdom.getAbsoluteY());
+							}else{
+								kingdom.setTarget(Kingdom.TARGET_DOMAIN);
+								kingdom.setTouchX(kingdom.getAbsoluteX());
+								kingdom.setTouchY(kingdom.getAbsoluteY());
+							}
+						}else{
+							kingdom.setTarget(Kingdom.TARGET_BATTLE);
+							//Busco ejercitos enemigos
+							if(getEnemyAtKingdom(playerList.get(currentPlayer), kingdom) != null){
+								kingdom.setTouchX(kingdom.getAbsoluteX());
+								kingdom.setTouchY(kingdom.getAbsoluteY());
+							}else{
+								kingdom.setTouchX(kingdom.getTerrainList().get(0).getAbsoluteX());
+								kingdom.setTouchY(kingdom.getTerrainList().get(0).getAbsoluteY());
+							}
+						}
+					}
+				}
+			}
+		}
+		//Si estoy en territorio hostil(A midad de una conquista), lo añado a los seleccionables
+		if(!playerList.get(currentPlayer).hasKingom(activeArmy.getKingdom())){
+			activeArmy.getKingdom().setTarget(Kingdom.TARGET_BATTLE);
+			activeArmy.getKingdom().setTouchX(activeArmy.getKingdom().
+					getTerrainList().get(activeArmy.getKingdom().getState()).getAbsoluteX());
+			activeArmy.getKingdom().setTouchY(activeArmy.getKingdom().
+					getTerrainList().get(activeArmy.getKingdom().getState()).getAbsoluteY());
+		}
 	}
 
 	public void cancelAction(){
@@ -510,27 +529,31 @@ public class GameManager {
 		case STATE_ACTION:
 			
 			switch(subState){
+			case SUB_STATE_ACTION_WAIT:
 			case SUB_STATE_ACTION_ARMY_SELECT:
-				
+				btnFlagHelmet.hide();
+				btnFlagCastle.hide();
 				//Quito todos lo indicadores de target
 				for(Kingdom k: map.getKingdomList()){
 					k.setTarget(-1);
 				}
 				
-				subState = SUB_STATE_ACTION_WAIT;
+				changeSubState(SUB_STATE_ACTION_WAIT);
 				break;
 			}
 			break;
 		}
 		
 	}
-	public void nextState(){
+	public void changeState(int newState){
 		UserInput.getInstance().getMultiTouchHandler().resetTouch();
 		cleanArmyAction();
-		btnCancel.setDisabled(true);
 		btnNext.setDisabled(true);
+		btnCancel.setDisabled(true);
+		btnFlagHelmet.hide();
+		btnFlagCastle.hide();
 		subState = 0;
-		state++;
+		state = newState;
 		switch(state){
 		case STATE_INCOME:
 			break;
@@ -558,6 +581,7 @@ public class GameManager {
 			break;
 		case STATE_MANAGEMENT:
 			startPresentation(Font.FONT_MEDIUM, "MANAGEMENT");
+			btnNext.setDisabled(false);
 			break;
 		case STATE_ACTION:
 			startPresentation(Font.FONT_MEDIUM, "ACTION");
@@ -567,6 +591,56 @@ public class GameManager {
 			currentPlayer = (currentPlayer+1)%playerList.size();
 			startPresentation(Font.FONT_BIG, "PLAYER " + (currentPlayer+1));
 			state = STATE_INCOME;
+			break;
+		}
+	}
+	
+	private void changeSubState(int newSubState){
+		
+		btnNext.setDisabled(true);
+		btnCancel.setDisabled(true);
+		btnFlagHelmet.hide();
+		btnFlagCastle.hide();
+		cleanArmyAction();
+		
+		subState = newSubState;
+		switch(state){
+		case STATE_INCOME:
+			break;
+		case STATE_ECONOMY:
+			break;
+		case STATE_MANAGEMENT:
+			btnNext.setDisabled(false);
+			break;
+		case STATE_ACTION:
+			
+			btnNext.setDisabled(true);
+			btnCancel.setDisabled(true);
+			
+			switch(subState){
+				
+			case SUB_STATE_ACTION_PRESENTATION:
+				break;
+			case SUB_STATE_ACTION_WAIT:
+				btnNext.setDisabled(false);
+				btnCancel.setDisabled(true);
+				break;
+			case SUB_STATE_ACTION_ARMY_SELECT:
+				btnNext.setDisabled(true);
+				btnCancel.setDisabled(false);
+				break;
+			case SUB_STATE_ACTION_ARMY_MOVE:
+				break;
+			case SUB_STATE_ACTION_COMBAT:
+				break;
+			case SUB_STATE_ACTION_RESULT:
+				break;
+			case SUB_STATE_ACTION_ESCAPE:
+				break;
+			}
+			
+			break;
+		case STATE_END:
 			break;
 		}
 	}
@@ -722,23 +796,15 @@ public class GameManager {
 		}
 	}
 	
-	private void cleanArmyAction(){
-		for(Player player:playerList){
-			for(Army army : player.getArmyList()){
-				army.setController(false);
-				army.setDefeat(false);
-			}
-		}
-	}
 	
 	private void startEscape(){
 		
 		Army defeat = getDefeatEnemy();
 		if(defeat != null){
 			defeat.changeState(Army.STATE_MOVE);
-			subState = SUB_STATE_ACTION_ESCAPE;
+			changeSubState(SUB_STATE_ACTION_ESCAPE);
 		}else{
-			subState = SUB_STATE_ACTION_WAIT;
+			changeSubState(SUB_STATE_ACTION_WAIT);
 			btnNext.setDisabled(false);
 		}
 		
@@ -833,7 +899,7 @@ public class GameManager {
 			}
 		}
 		
-		subState = SUB_STATE_ACTION_RESULT;
+		changeSubState(SUB_STATE_ACTION_RESULT);
 	}
 	
 	public int getState() {
@@ -868,9 +934,4 @@ public class GameManager {
 	public void setCurrentPlayer(int currentPlayer) {
 		this.currentPlayer = currentPlayer;
 	}
-
-	
-	
-	
-
 }

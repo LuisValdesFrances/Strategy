@@ -30,6 +30,11 @@ public class GfxManager {
 	   public static Image imgButtonFocus;
 	   
 	   //Game images:
+	   
+	   public static Image imgPadUp;
+	   public static Image imgPadRight;
+	   public static Image imgPadDown;
+	   public static Image imgPadLeft;
 	   public static Image imgGameHud;
 	   public static Image imgButtonPauseRelease;
 	   public static Image imgButtonPauseFocus;
@@ -46,10 +51,10 @@ public class GfxManager {
 	   public static Image imgButtonCardFocus;
 	   public static Image imgButtonOkRelease;
 	   public static Image imgButtonOkFocus;
-	   public static Image imgButtonHelmetRelease;
-	   public static Image imgButtonHelmetFocus;
-	   public static Image imgButtonChestRelease;
-	   public static Image imgButtonChestFocus;
+	   public static Image imgButtonFlagHelmetRelease;
+	   public static Image imgButtonFlagHelmetFocus;
+	   public static Image imgButtonFlagCastleRelease;
+	   public static Image imgButtonFlagCastleFocus;
 	   
 	   public static Image imgMap;
 	   public static Image imgTerrainOk;
@@ -62,6 +67,7 @@ public class GfxManager {
 	   public static Image imgTargetDomain;
 	   public static Image imgTargetBattle;
 	   public static Image imgTargetAggregation;
+	   public static Image imgMapSelect;
 	   
 	   public static Image imgArmyIdle;
 	   public static Image imgArmyRun;
@@ -134,6 +140,11 @@ public class GfxManager {
 	            		break;
 	            	}
 	            	
+	            	imgPadUp = Image.createImage("/pad_up.png");
+	            	imgPadRight = Image.createImage("/pad_right.png");
+	            	imgPadDown = Image.createImage("/pad_down.png");
+	            	imgPadLeft = Image.createImage("/pad_left.png");
+	            	
 	            	imgTerrainOk = Image.createImage("/terrain_ok.png");
 	            	imgPlain = Image.createImage("/plain.png");
 	            	imgForest = Image.createImage("/forest.png");
@@ -144,6 +155,8 @@ public class GfxManager {
 	            	imgTargetDomain = Image.createImage("/target_domain.png");
 	            	imgTargetAggregation = Image.createImage("/target_aggregation.png");
 	            	imgTargetBattle = Image.createImage("/target_battle.png");
+	            	
+	            	imgMapSelect = Image.createImage("/map_select.png");
 	            	
 	            	imgArmyIdle = Image.createImage("/army_idle.png");
 	            	imgArmyRun = Image.createImage("/army_run.png");
@@ -165,10 +178,10 @@ public class GfxManager {
 	            	imgButtonCombatFocus = Image.createImage("/combat_focus.png");
 	            	imgButtonCardRelease = Image.createImage("/card_release.png");
 	            	imgButtonCardFocus = Image.createImage("/card_focus.png");
-	            	imgButtonHelmetRelease = Image.createImage("/helmet_release.png");
-	            	imgButtonHelmetFocus = Image.createImage("/helmet_focus.png");
-	            	imgButtonChestRelease = Image.createImage("/chest_release.png");
-	            	imgButtonChestFocus = Image.createImage("/chest_focus.png");
+	            	imgButtonFlagHelmetRelease = Image.createImage("/flag_helmet_release.png");
+	            	imgButtonFlagHelmetFocus = Image.createImage("/flag_helmet_focus.png");
+	            	imgButtonFlagCastleRelease = Image.createImage("/flag_castle_release.png");
+	            	imgButtonFlagCastleFocus = Image.createImage("/flag_castle_focus.png");
 	            	
 	            	imgFlagList = new ArrayList<Image>();
 	            	imgFlagSmallList = new ArrayList<Image>();

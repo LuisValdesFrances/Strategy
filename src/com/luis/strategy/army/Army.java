@@ -12,6 +12,7 @@ import com.luis.strategy.GfxManager;
 import com.luis.strategy.Main;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.map.Kingdom;
+import com.luis.strategy.map.Map;
 import com.luis.strategy.map.MapObject;
 
 public class Army extends MapObject{
@@ -45,10 +46,10 @@ public class Army extends MapObject{
 	
 	private int flag;
 	
-	public Army (WorldConver worldConver, GameCamera gameCamera,
+	public Army (WorldConver worldConver, GameCamera gameCamera, Map map,
 			Kingdom kingdom, int flag, float mapX, float mapY, int mapWidth, int mapHeight) {
 		
-		super(worldConver, gameCamera,
+		super(worldConver, gameCamera, map,
 			kingdom.getX(), kingdom.getY(),
 			GfxManager.imgArmyIdle.getWidth()/9, GfxManager.imgArmyIdle.getHeight(), 
 			mapX, mapY, mapWidth, mapHeight);
@@ -96,6 +97,20 @@ public class Army extends MapObject{
 	}
 	
 	public void draw(Graphics g){
+		
+		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+		
+		if(isController()){
+			g.setAlpha((int)map.getAlpha());
+			g.drawImage(GfxManager.imgMapSelect, 
+					worldConver.getConversionDrawX(gameCamera.getPosX(), getAbsoluteX()),
+					worldConver.getConversionDrawY(gameCamera.getPosY(), getAbsoluteY())+height/3,
+					
+					Graphics.VCENTER | Graphics.HCENTER);
+			g.setAlpha(255);
+		}
+		
+		
 		
 		if(state == STATE_OFF){
 			g.setAlpha(140);

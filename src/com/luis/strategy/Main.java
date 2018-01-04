@@ -111,7 +111,7 @@ public class Main extends MyCanvas implements Runnable {
 		// iLanguage = 0;
 		// ModeGame.iRecordPoints = 0;
 		// }
-		targetFPS = 30;//GamePerformance.getInstance().getOptimalFrames();
+		targetFPS = GamePerformance.getInstance().getOptimalFrames();//30;
 		minDurationFrame = 1000 / targetFPS;
 		changeState(Define.ST_MENU_LOGO,true);
 	}

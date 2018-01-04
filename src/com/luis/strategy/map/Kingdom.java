@@ -26,10 +26,11 @@ public class Kingdom extends MapObject{
 	
 	
 	public Kingdom(
-		WorldConver worldConver, GameCamera gameCamera,
+		WorldConver worldConver, GameCamera gameCamera, Map map,
 		float x, float y, float mapX, float mapY, int mapWidth, int mapHeight) {
 		super(
-			worldConver, gameCamera, x, y, 
+			worldConver, gameCamera, map, 
+			x, y, 
 			GfxManager.imgTargetDomain.getWidth(), GfxManager.imgTargetDomain.getHeight(), 
 			mapX, mapY, mapWidth, mapHeight);
 		this.mapX = mapX;
