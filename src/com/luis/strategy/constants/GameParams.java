@@ -31,5 +31,6 @@ public class GameParams {
 	
 	//GAME CONFIG:
 	public static float CAMERA_SPEED = 180f;//Pixeles por segundo
+	public static int BG_BLACK_ALPHA = 80;//Pixeles por segundo
 
 }

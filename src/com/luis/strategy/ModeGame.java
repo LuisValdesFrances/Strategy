@@ -3,8 +3,6 @@ package com.luis.strategy;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
-
 import com.luis.lgameengine.menu.Button;
 import com.luis.lgameengine.menu.GamePad;
 import com.luis.lgameengine.menu.MenuBox;
@@ -17,7 +15,6 @@ import com.luis.lgameengine.gameutils.gameworld.ParticleManager;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.input.KeyData;
-import com.luis.lgameengine.implementation.input.TouchData;
 import com.luis.strategy.army.Army;
 import com.luis.strategy.connection.Download;
 import com.luis.strategy.constants.Define;
@@ -106,34 +103,64 @@ public class ModeGame {
 			gameFrame = 0;
 			
 			worldConver = new WorldConver(
-					Define.SIZEX, Define.SIZEY-GfxManager.imgGameHud.getHeight(),
-					0, 0, 0, 0, GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
+					Define.SIZEX, Define.SIZEY,
+					0,//GfxManager.imgGameHud.getHeight()*2, 
+					GfxManager.imgGameHud.getHeight(),
+					0,//GfxManager.imgGameHud.getHeight()*2, 
+					0,//GfxManager.imgGameHud.getHeight(),
+					GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
 			
-			cameraTargetX=worldConver.getCentlayoutX();
-			cameraTargetY=worldConver.getCentlayoutY();
+			cameraTargetX=0;//worldConver.getCentlayoutX();
+			cameraTargetY=0;//=worldConver.getCentlayoutY();
 			gameCamera = new GameCamera(worldConver, cameraTargetX, cameraTargetY, 
 					GamePerformance.getInstance().getFrameMult(Main.targetFPS));
 			
-			gamePad = new GamePad(GfxManager.imgPadUp, GfxManager.imgPadLeft, GfxManager.imgPadDown, GfxManager.imgPadRight, 
-					GfxManager.imgPadUp.getWidth()*2, Define.SIZEY-GfxManager.imgGameHud.getHeight()*2){
+			gamePad = new GamePad(
+					GfxManager.imgPadNorth, GfxManager.imgPadAux, GfxManager.imgPadAux, 
+					GfxManager.imgPadEast, 
+					GfxManager.imgPadSouth, GfxManager.imgPadAux, GfxManager.imgPadAux,
+					GfxManager.imgPadWest, 
+					(int)(GfxManager.imgPadNorth.getWidth()*2.5f), 
+					(int)(Define.SIZEY-GfxManager.imgButtonFlagHelmetFocus.getHeight()-GfxManager.imgPadNorth.getWidth()*2.5f)){
 				@Override
 				public void onButtonNorthPress(){
 					cameraTargetY -=(GameParams.CAMERA_SPEED * Main.getDeltaSec());}
 				@Override
+				public void onButtonNorthEastPress(){
+					cameraTargetY -=(GameParams.CAMERA_SPEED * Main.getDeltaSec());
+					cameraTargetX +=(GameParams.CAMERA_SPEED * Main.getDeltaSec());
+				}
+				@Override
+				public void onButtonNorthWestPress(){
+					cameraTargetY -=(GameParams.CAMERA_SPEED * Main.getDeltaSec());
+					cameraTargetX -=(GameParams.CAMERA_SPEED * Main.getDeltaSec());
+				}
+				@Override
 				public void onButtonEastPress(){
-					cameraTargetX -=(GameParams.CAMERA_SPEED * Main.getDeltaSec());}
+					cameraTargetX +=(GameParams.CAMERA_SPEED * Main.getDeltaSec());}
 				@Override
 				public void onButtonSouthPress(){
 					cameraTargetY +=(GameParams.CAMERA_SPEED * Main.getDeltaSec());}
 				@Override
-				public void onButtonWestPress(){
+				public void onButtonSouthEastPress(){
+					cameraTargetY +=(GameParams.CAMERA_SPEED * Main.getDeltaSec());
 					cameraTargetX +=(GameParams.CAMERA_SPEED * Main.getDeltaSec());
+				}
+				@Override
+				public void onButtonSouthWestPress(){
+					cameraTargetY +=(GameParams.CAMERA_SPEED * Main.getDeltaSec());
+					cameraTargetX -=(GameParams.CAMERA_SPEED * Main.getDeltaSec());
+				}
+				@Override
+				public void onButtonWestPress(){
+					cameraTargetX -=(GameParams.CAMERA_SPEED * Main.getDeltaSec());
 					}
 			};
 			
 			map = new Map(
 					worldConver, gameCamera, 
-					GfxManager.imgMap.getWidth()/2, GfxManager.imgMap.getHeight()/2,
+					0,//GfxManager.imgMap.getWidth()/2, 
+					0,//GfxManager.imgMap.getHeight()/2,
 					GfxManager.imgMap,
 					GfxManager.imgSmallCity, GfxManager.imgMediumCity, GfxManager.imgBigCity, 
 					GfxManager.imgPlain, GfxManager.imgForest, GfxManager.imgMontain, null);
@@ -236,9 +263,6 @@ public class ModeGame {
 			gameFrame++;
 			btnPause.update(UserInput.getInstance().getMultiTouchHandler());
 			
-			
-			
-			
 			float cameraSpeed = GameParams.CAMERA_SPEED * Main.getDeltaSec();
 			gamePad.update(UserInput.getInstance().getMultiTouchHandler());
 			if(UserInput.getInstance().getKeyboardHandler().getPressedKeys(UserInput.KEYCODE_LEFT).getAction() == KeyData.KEY_DOWN
@@ -261,20 +285,21 @@ public class ModeGame {
 				UserInput.getInstance().getKeyboardHandler().getPressedKeys(UserInput.KEYCODE_DOWN).getAction() == KeyData.KEY_PRESS){
 					cameraTargetY +=cameraSpeed;
 			}
-			
+			///*
 			cameraTargetX = Math.max(cameraTargetX, worldConver.getLayoutX() / 2f);
 			cameraTargetX = Math.min(cameraTargetX, worldConver.getWorldWidth() - worldConver.getLayoutX() / 2f);
 			cameraTargetY = Math.max(cameraTargetY, worldConver.getLayoutY() / 2f);
 			cameraTargetY = Math.min(cameraTargetY, worldConver.getWorldHeight() - worldConver.getLayoutY() / 2f);
-			
+			//*/
 			
 			
 			particleManager.update(Main.getDeltaSec());
 			gfxEffects.update(Main.getDeltaSec());
 			//gameCamera.setPosX(cameraTargetX);
 			//gameCamera.setPosY(cameraTargetY);
-			//gameCamera.updateCamera(worldConver.getConversionDrawX(gameCamera.getPosX(), (int)cameraTargetX), worldConver.getConversionDrawY(gameCamera.getPosY(), (int)cameraTargetY));
-			gameCamera.updateCamera((int)cameraTargetX, (int)cameraTargetY);
+			gameCamera.updateCamera(
+					(int)cameraTargetX-worldConver.getLayoutX()/2, 
+					(int)cameraTargetY-worldConver.getLayoutY()/2);
 			gameManager.update(Main.getDeltaSec());
 			updateDebugButton();
 			break;
@@ -326,8 +351,8 @@ public class ModeGame {
 				_g.fillRect(0, 0, Define.SIZEX, _g.getTextHeight() * 3);
 				_g.setAlpha(255);
 				
-				_g.drawText("CameraX: " + cameraTargetX, 0, _g.getTextHeight(), Main.COLOR_WHITE);
-				_g.drawText("CameraY: " + cameraTargetY, (int)(Define.SIZEX*0.33), _g.getTextHeight(), Main.COLOR_WHITE);
+				_g.drawText("CameraX: " + gameCamera.getPosX(), 0, _g.getTextHeight(), Main.COLOR_WHITE);
+				_g.drawText("CameraY: " + gameCamera.getPosY(), (int)(Define.SIZEX*0.33), _g.getTextHeight(), Main.COLOR_WHITE);
 				_g.drawText("State: " + gameManager.getState(), 0, _g.getTextHeight()*2, Main.COLOR_WHITE);
 				_g.drawText("Sub-State: " + gameManager.getSubState(), (int)(Define.SIZEX*0.33), _g.getTextHeight()*2, Main.COLOR_WHITE);
 				_g.drawText("Player: " + (gameManager.getCurrentPlayer()+1), (int)(Define.SIZEX*0.66), _g.getTextHeight()*2, Main.COLOR_WHITE);
@@ -366,8 +391,8 @@ public class ModeGame {
 	public static boolean showDebugInfo;
 	public static final int DEBUG_BUTTON_W = Define.SIZEX32;
 	public static final int DEBUG_BUTTON_H = Define.SIZEX32;
-	public static final int DEBUG_BUTTON_X = DEBUG_BUTTON_W+Define.SIZEX-DEBUG_BUTTON_W;
-	public static final int DEBUG_BUTTON_Y = DEBUG_BUTTON_H+Define.SIZEX16;
+	public static final int DEBUG_BUTTON_X = Define.SIZEX-DEBUG_BUTTON_W-DEBUG_BUTTON_W/2;
+	public static final int DEBUG_BUTTON_Y = Define.SIZEX8;
 	private static void drawDebugButton(Graphics _g){
 		_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 		if(!showDebugInfo){

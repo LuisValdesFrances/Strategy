@@ -71,18 +71,11 @@ public abstract class MapObject implements Selectable{
 		return false;
 	}
 	
-	public int getRelativeX() {
+	public int getAbsoluteX() {
 		return (int)((x*mapWidth)/100f);
 	}
-	public int getRelativeY() {
-		return (int)((y*mapHeight)/100f);
-	}
-	
-	public int getAbsoluteX() {
-		return (int)(mapX-mapWidth/2f + getRelativeX());
-	}
 	public int getAbsoluteY() {
-		return (int)(mapY-mapHeight/2f + getRelativeY());
+		return (int)((y*mapHeight)/100f);
 	}
 	
 	public float getX() {

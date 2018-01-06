@@ -70,7 +70,7 @@ public class Main extends MyCanvas implements Runnable {
 	public static final boolean IS_DEBUG = false;
 	public static final boolean IS_TOUCH_INPUT_DEBUG = false;
 	public static final boolean IS_KEY_INPUT_DEBUG = false;
-	public static final boolean IS_GAME_DEBUG = true;
+	public static final boolean IS_GAME_DEBUG = false;
 
 	// Nombre del fichero donde se guardaran y cargaran los datos:
 	public static final String DATA_NAME = "angryufodata";

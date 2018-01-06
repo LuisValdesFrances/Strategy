@@ -63,11 +63,12 @@ public class Map extends MapObject{
 		alpha = Math.min(200f, alpha);
 	}
 	public void drawMap(Graphics g){
-		
+		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 		g.drawImage(imgMap, 
 				worldConver.getConversionDrawX(gameCamera.getPosX(), x),
 				worldConver.getConversionDrawY(gameCamera.getPosY(), y),
-				Graphics.VCENTER | Graphics.HCENTER);
+				Graphics.TOP | Graphics.LEFT
+				);
 		
 		for(Kingdom k : kingdomList){
 			

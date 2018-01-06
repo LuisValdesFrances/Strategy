@@ -16,6 +16,8 @@ import com.luis.lgameengine.implementation.graphics.Image;
 import com.luis.lgameengine.implementation.input.KeyData;
 import com.luis.lgameengine.implementation.input.TouchData;
 import com.luis.lgameengine.menu.Button;
+import com.luis.lgameengine.menu.MenuBox;
+import com.luis.lgameengine.menu.MenuElement;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.Main;
 import com.luis.strategy.ModeGame;
@@ -70,7 +72,7 @@ public class GameManager {
 	private static FlagButton btnFlagHelmet;
 	private static FlagButton btnFlagCastle;
 	private BattleBox battleBox;
-	private SimpleBox managementBox;
+	private SimpleBox economyBox;
 	private SimpleBox resultBox;
 	
 	
@@ -79,6 +81,9 @@ public class GameManager {
 		this.gameCamera = gameCamera;
 		this.map = map;
 		this.playerList = playerList;
+		
+		MenuElement.imgBG = GfxManager.imgBlackBG;
+		MenuElement.bgAlpha = GameParams.BG_BLACK_ALPHA;
 		
 		
 		btnNext = new Button(
@@ -126,8 +131,9 @@ public class GameManager {
 			public void onButtonPressUp(){
 				reset();
 				if(subState == SUB_STATE_ACTION_WAIT){
-					hide();
+					setDataTarget(activeArmy);
 					changeSubState(SUB_STATE_ACTION_ARMY_SELECT);
+					hide();
 				}
 			}
 		};
@@ -171,15 +177,16 @@ public class GameManager {
 			}
 		};
 		
-		managementBox = new SimpleBox(){
+		economyBox = new SimpleBox(){
 			@Override
 			public void onButtonPressUp(){
-				changeState(STATE_MANAGEMENT);
+				//Si hay acciones obligatorias, como descartarse de tropas, se accede al estado de management
+				changeState(STATE_ACTION);
 			}
 		};
 		
 		turnCount = 1;
-		startPresentation(Font.FONT_BIG, "PLAYER " + (currentPlayer+1));
+		changeState(STATE_INCOME);
 	}
 	
 	public void update(float delta){
@@ -192,7 +199,7 @@ public class GameManager {
 			break;
 		case STATE_ECONOMY:
 			
-			managementBox.update(UserInput.getInstance().getMultiTouchHandler(), delta);
+			economyBox.update(UserInput.getInstance().getMultiTouchHandler(), delta);
 			break;
 		case STATE_MANAGEMENT:
 			switch(subState){
@@ -223,7 +230,11 @@ public class GameManager {
 				
 				for(Army army: playerList.get(currentPlayer).getArmyList()){
 					if(army.getState() == Army.STATE_ON && army.isSelect()){
-						setDataTarget(army);
+						cleanArmyAction();
+						btnFlagHelmet.start();
+						btnFlagCastle.start();
+						activeArmy = army;
+						activeArmy.setController(true);
 					}
 				}
 				break;
@@ -417,9 +428,26 @@ public class GameManager {
 					worldConver.getConversionDrawX(gameCamera.getPosX(), a.getAbsoluteX()-GfxManager.imgArmyOff.getWidth()/4),
 					worldConver.getConversionDrawY(gameCamera.getPosY(), a.getAbsoluteY()-GfxManager.imgArmyOff.getHeight()/4),
 					Graphics.BOTTOM | Graphics.RIGHT);
+			
+			//Margenes
+			g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+			g.setColor(Main.COLOR_PURPLE_GALAXY);
+			g.fillRect(0, 0, Define.SIZEX, worldConver.getMarginN());
+			g.fillRect(0, Define.SIZEY-worldConver.getMarginS(), Define.SIZEX, worldConver.getMarginS());
+			g.fillRect(0, 0, worldConver.getMarginW(), Define.SIZEY);
+			g.fillRect(Define.SIZEX-worldConver.getMarginE(), 0, worldConver.getMarginE(), Define.SIZEY);
+			
+			g.fillRect((int)worldConver.getCentGameLayoutX()-2, 0, 4, Define.SIZEY);
+			g.fillRect(0, (int)worldConver.getCentGameLayoutY()-2, Define.SIZEX, 4);
+			g.setColor(Main.COLOR_BLUE);
+			int cameraR = ((Define.SIZEX+Define.SIZEY)/2)/22;
+			g.fillCircle(
+					(int) gameCamera.getPosX()+worldConver.getMarginW(),
+					(int) gameCamera.getPosY()+worldConver.getMarginN(),
+					cameraR);
 		}
 		
-		managementBox.draw(g);
+		economyBox.draw(g);
 		battleBox.draw(g);
 		resultBox.draw(g);
 		drawPresentation(g);
@@ -457,14 +485,6 @@ public class GameManager {
 			k.setTarget(-1);
 		}
 		cleanArmyAction();
-		
-		//subState = SUB_STATE_ACTION_ARMY_SELECT;
-		btnFlagHelmet.start();
-		btnFlagCastle.start();
-		activeArmy = army;
-		activeArmy.setController(true);
-		
-		Log.i("Debug", "Seleccionado ejercito de: " + activeArmy.getKingdom().getName());
 		
 		for(Kingdom border : activeArmy.getKingdom() .getBorderList()){
 			for(Kingdom kingdom: map.getKingdomList()){
@@ -556,6 +576,7 @@ public class GameManager {
 		state = newState;
 		switch(state){
 		case STATE_INCOME:
+			startPresentation(Font.FONT_BIG, "PLAYER " + (currentPlayer+1));
 			break;
 		case STATE_ECONOMY:
 			
@@ -576,7 +597,7 @@ public class GameManager {
 			}
 			playerList.get(currentPlayer).setGold(tax);
 			
-			managementBox.start("ECONOMY", "EARNING: +" +tax + " SALARY: -" + 0);
+			economyBox.start("ECONOMY", "EARNING: +" +tax + " SALARY: -" + 0);
 			
 			break;
 		case STATE_MANAGEMENT:
@@ -589,8 +610,7 @@ public class GameManager {
 		case STATE_END:
 			turnCount++;
 			currentPlayer = (currentPlayer+1)%playerList.size();
-			startPresentation(Font.FONT_BIG, "PLAYER " + (currentPlayer+1));
-			state = STATE_INCOME;
+			changeState(STATE_INCOME);
 			break;
 		}
 	}
@@ -601,7 +621,6 @@ public class GameManager {
 		btnCancel.setDisabled(true);
 		btnFlagHelmet.hide();
 		btnFlagCastle.hide();
-		cleanArmyAction();
 		
 		subState = newSubState;
 		switch(state){
@@ -669,6 +688,7 @@ public class GameManager {
 			if(presentationModX < 0){
 				presentationModX -= (presentationModX*4f-Define.SIZEX8) * delta; 
 			}else{
+				presentationModX = 0;
 				presentationState = STATE_PRESENTATION_SHOW;
 			}
 			return true;
@@ -693,6 +713,12 @@ public class GameManager {
 	
 	public void drawPresentation(Graphics g){
 		if(presentationState != -1){
+			g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+			g.setAlpha(GameParams.BG_BLACK_ALPHA);
+			g.setImageSize(1f, 1f-(Math.abs(presentationModX)/Define.SIZEX));
+			g.drawImage(GfxManager.imgTextBG, Define.SIZEX2, Define.SIZEY2, Graphics.VCENTER | Graphics.HCENTER);
+			g.setImageSize(1f, 1f);
+			g.setAlpha(255);
 			TextManager.drawSimpleText(g, presentationFont, presentationText, 
 				(int) (Define.SIZEX2+presentationModX), 
 				Define.SIZEY2, Graphics.VCENTER | Graphics.HCENTER);
@@ -822,6 +848,7 @@ public class GameManager {
 		army.setTouchX(newKingdom.getAbsoluteX());
 		army.setTouchY(newKingdom.getAbsoluteY());
 	}
+	
 	private void addNewConquest(Player player, Kingdom kingdom){
 		//Elimino el territorio del domino de cualquier jugador
 		for(Player p : playerList){

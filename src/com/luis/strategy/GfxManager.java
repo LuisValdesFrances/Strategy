@@ -30,11 +30,13 @@ public class GfxManager {
 	   public static Image imgButtonFocus;
 	   
 	   //Game images:
-	   
-	   public static Image imgPadUp;
-	   public static Image imgPadRight;
-	   public static Image imgPadDown;
-	   public static Image imgPadLeft;
+	   public static Image imgBlackBG;
+	   public static Image imgTextBG;
+	   public static Image imgPadNorth;
+	   public static Image imgPadWest;
+	   public static Image imgPadSouth;
+	   public static Image imgPadEast;
+	   public static Image imgPadAux;
 	   public static Image imgGameHud;
 	   public static Image imgButtonPauseRelease;
 	   public static Image imgButtonPauseFocus;
@@ -140,10 +142,14 @@ public class GfxManager {
 	            		break;
 	            	}
 	            	
-	            	imgPadUp = Image.createImage("/pad_up.png");
-	            	imgPadRight = Image.createImage("/pad_right.png");
-	            	imgPadDown = Image.createImage("/pad_down.png");
-	            	imgPadLeft = Image.createImage("/pad_left.png");
+	            	imgTextBG = Image.createImage("/text_bg.png");
+	            	imgBlackBG = Image.createImage("/black_bg.png");
+	            	
+	            	imgPadNorth = Image.createImage("/pad_up.png");
+	            	imgPadWest = Image.createImage("/pad_left.png");
+	            	imgPadSouth = Image.createImage("/pad_down.png");
+	            	imgPadEast = Image.createImage("/pad_right.png");
+	            	imgPadAux = Image.createImage("/pad_aux.png");
 	            	
 	            	imgTerrainOk = Image.createImage("/terrain_ok.png");
 	            	imgPlain = Image.createImage("/plain.png");
