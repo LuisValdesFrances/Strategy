@@ -20,7 +20,7 @@ public class Army extends MapObject{
 	private static int idCount;
 	private int id;
 	
-	public boolean controller;
+	public boolean selected;
 	public boolean defeat;
 	
 	private List<Troop> troopList;
@@ -96,13 +96,14 @@ public class Army extends MapObject{
 		}
 	}
 	
-	public void draw(Graphics g){
+	public void draw(Graphics g, boolean isSelected, boolean isCurrentPlayer){
 		
 		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 		
-		if(isController()){
+		if(isSelected){
 			g.setAlpha((int)map.getAlpha());
-			g.drawImage(GfxManager.imgMapSelect, 
+			g.drawImage(
+					isCurrentPlayer?GfxManager.imgMapSelectGreen:GfxManager.imgMapSelectRed, 
 					worldConver.getConversionDrawX(gameCamera.getPosX(), getAbsoluteX()),
 					worldConver.getConversionDrawY(gameCamera.getPosY(), getAbsoluteY())+height/3,
 					
@@ -229,12 +230,12 @@ public class Army extends MapObject{
 		this.id = id;
 	}
 
-	public boolean isController() {
-		return controller;
+	public boolean isSelected() {
+		return selected;
 	}
 
-	public void setController(boolean controller) {
-		this.controller = controller;
+	public void setSelected(boolean selected) {
+		this.selected = selected;
 	}
 
 	public boolean isDefeat() {

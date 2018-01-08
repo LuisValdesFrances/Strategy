@@ -228,13 +228,18 @@ public class GameManager {
 				//Actualizar animaciones
 				playerList.get(currentPlayer).updateAnimations(delta);
 				
-				for(Army army: playerList.get(currentPlayer).getArmyList()){
-					if(army.getState() == Army.STATE_ON && army.isSelect()){
-						cleanArmyAction();
-						btnFlagHelmet.start();
-						btnFlagCastle.start();
-						activeArmy = army;
-						activeArmy.setController(true);
+				for(int i = 0; i < playerList.size(); i++){
+					for(Army army: playerList.get(i).getArmyList()){
+						if(army.getState() == Army.STATE_ON && army.isSelect()){
+							activeArmy = army;
+							activeArmy.setSelected(true);
+							btnFlagCastle.start();
+							if(i == currentPlayer){
+								btnFlagHelmet.start();
+							}else{
+								btnFlagHelmet.hide();
+							}
+						}
 					}
 				}
 				break;
@@ -399,9 +404,9 @@ public class GameManager {
 		}
 		
 		//Army
-		for(Player player : playerList){
-			for(Army army: player.getArmyList()){
-				army.draw(g);
+		for(int i = 0; i < playerList.size(); i++){
+			for(Army army: playerList.get(i).getArmyList()){
+				army.draw(g, activeArmy!= null && activeArmy.getId() == army.getId(), i == currentPlayer);
 			}
 		}
 		
@@ -472,7 +477,7 @@ public class GameManager {
 	private void cleanArmyAction(){
 		for(Player player:playerList){
 			for(Army army : player.getArmyList()){
-				army.setController(false);
+				army.setSelected(false);
 				army.setDefeat(false);
 			}
 		}

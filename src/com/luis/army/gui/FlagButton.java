@@ -43,7 +43,6 @@ public class FlagButton extends Button{
 			modPosY += (modPosY*8f)*delta + 1f;
 			if(modPosY >= height+getWidth()/2){
 				state = STATE_UNACTIVE;
-				onButtonPressUp();
 			}
 			break;
 		}

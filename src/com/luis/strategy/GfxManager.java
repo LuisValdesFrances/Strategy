@@ -69,7 +69,8 @@ public class GfxManager {
 	   public static Image imgTargetDomain;
 	   public static Image imgTargetBattle;
 	   public static Image imgTargetAggregation;
-	   public static Image imgMapSelect;
+	   public static Image imgMapSelectGreen;
+	   public static Image imgMapSelectRed;
 	   
 	   public static Image imgArmyIdle;
 	   public static Image imgArmyRun;
@@ -162,7 +163,8 @@ public class GfxManager {
 	            	imgTargetAggregation = Image.createImage("/target_aggregation.png");
 	            	imgTargetBattle = Image.createImage("/target_battle.png");
 	            	
-	            	imgMapSelect = Image.createImage("/map_select.png");
+	            	imgMapSelectGreen = Image.createImage("/map_select_green.png");
+	            	imgMapSelectRed = Image.createImage("/map_select_red.png");
 	            	
 	            	imgArmyIdle = Image.createImage("/army_idle.png");
 	            	imgArmyRun = Image.createImage("/army_run.png");
