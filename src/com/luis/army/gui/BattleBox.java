@@ -24,23 +24,23 @@ public class BattleBox extends MenuBox{
 	
 	public BattleBox() {
 		
-		super(Define.SIZEX, Define.SIZEY, GfxManager.imgBigBox, null, null, 
+		super(Define.SIZEX, Define.SIZEY, GfxManager.imgMediumBox, null, null, 
 				"COMBAT",
 				null, Font.FONT_MEDIUM, Font.FONT_SMALL);
 		
 		btnList.add(new Button(
 				GfxManager.imgButtonCombatRelease, 
 				GfxManager.imgButtonCombatFocus, 
-				screenWidth/2 + GfxManager.imgBigBox.getWidth()/2, 
-				screenHeight/2 + GfxManager.imgBigBox.getHeight()/2, 
+				screenWidth/2 + GfxManager.imgMediumBox.getWidth()/2, 
+				screenHeight/2 + GfxManager.imgMediumBox.getHeight()/2, 
 				null, 
 				-1){});
 		
 		btnList.add(new Button(
 				GfxManager.imgButtonCardRelease, 
 				GfxManager.imgButtonCardFocus, 
-				screenWidth/2 - GfxManager.imgBigBox.getWidth()/2, 
-				screenHeight/2 + GfxManager.imgBigBox.getHeight()/2, 
+				screenWidth/2 - GfxManager.imgMediumBox.getWidth()/2, 
+				screenHeight/2 + GfxManager.imgMediumBox.getHeight()/2, 
 				null, 
 				-1){});
 	}

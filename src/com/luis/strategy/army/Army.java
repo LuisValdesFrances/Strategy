@@ -53,7 +53,7 @@ public class Army extends MapObject{
 			kingdom.getX(), kingdom.getY(),
 			GfxManager.imgArmyIdle.getWidth()/9, GfxManager.imgArmyIdle.getHeight(), 
 			mapX, mapY, mapWidth, mapHeight);
-		
+		this.troopList = new ArrayList<Troop>();
 		this.id = idCount++;
 		this.kingdom = kingdom;
 		this.flag = flag;
@@ -244,6 +244,14 @@ public class Army extends MapObject{
 
 	public void setDefeat(boolean defeat) {
 		this.defeat = defeat;
+	}
+
+	public List<Troop> getTroopList() {
+		return troopList;
+	}
+
+	public void setTroopList(List<Troop> troopList) {
+		this.troopList = troopList;
 	}
 	
 	

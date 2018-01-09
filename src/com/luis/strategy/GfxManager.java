@@ -30,6 +30,7 @@ public class GfxManager {
 	   public static Image imgButtonFocus;
 	   
 	   //Game images:
+	   public static Image imgGameBG;
 	   public static Image imgBlackBG;
 	   public static Image imgTextBG;
 	   public static Image imgPadNorth;
@@ -46,6 +47,7 @@ public class GfxManager {
 	   public static Image imgButtonCancelFocus;
 	   
 	   public static Image imgBigBox;
+	   public static Image imgMediumBox;
 	   public static Image imgSmallBox;
 	   public static Image imgButtonCombatRelease;
 	   public static Image imgButtonCombatFocus;
@@ -71,6 +73,9 @@ public class GfxManager {
 	   public static Image imgTargetAggregation;
 	   public static Image imgMapSelectGreen;
 	   public static Image imgMapSelectRed;
+	   
+	   public static List<Image> imgBigTroop;
+	   public static List<Image> imgSmallTroop;
 	   
 	   public static Image imgArmyIdle;
 	   public static Image imgArmyRun;
@@ -180,7 +185,9 @@ public class GfxManager {
 	            	imgButtonOkRelease = Image.createImage("/ok_release.png");
 	            	imgButtonOkFocus = Image.createImage("/ok_focus.png");
 	            	
-	            	imgBigBox =  Image.createImage("/big_box.png");
+	            	
+	            	imgBigBox = Image.createImage("/big_box.png");
+	            	imgMediumBox =  Image.createImage("/medium_box.png");
 	            	imgSmallBox =  Image.createImage("/small_box.png");
 	            	imgButtonCombatRelease = Image.createImage("/combat_release.png");
 	            	imgButtonCombatFocus = Image.createImage("/combat_focus.png");
@@ -207,6 +214,15 @@ public class GfxManager {
 	            	imgFlagSmallList.add(Image.createImage("/flag_small4.png"));
 	            	imgFlagSmallList.add(Image.createImage("/flag_small5.png"));
 	            	imgFlagSmallList.add(Image.createImage("/flag_small6.png"));
+	            	
+	            	imgBigTroop = new ArrayList<Image>();
+	            	imgSmallTroop = new ArrayList<Image>();
+	            	imgBigTroop.add(Image.createImage("/infantry_big.png"));
+	            	imgBigTroop.add(Image.createImage("/knigths_big.png"));
+	            	imgBigTroop.add(Image.createImage("/harassers_big.png"));
+	            	imgSmallTroop.add(Image.createImage("/infantry_small.png"));
+	            	imgSmallTroop.add(Image.createImage("/knigths_small.png"));
+	            	imgSmallTroop.add(Image.createImage("/harassers_small.png"));
 	            	
 	               
 	            } catch (IOException ex) {

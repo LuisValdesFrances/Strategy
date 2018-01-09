@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.util.Log;
 
+import com.luis.army.gui.ArmyBox;
 import com.luis.army.gui.BattleBox;
 import com.luis.army.gui.FlagButton;
 import com.luis.army.gui.SimpleBox;
@@ -45,32 +46,30 @@ public class GameManager {
 	private Army activeArmy;
 	
 	private int state;
+	private int lastState;
 	public static final int STATE_INCOME = 0;
 	public static final int STATE_ECONOMY = 1;
-	public static final int STATE_MANAGEMENT = 2;
-	public static final int STATE_ACTION = 3;
-	public static final int STATE_END = 4;
+	public static final int STATE_ACTION = 2;
+	public static final int STATE_END = 3;
 	
-	
-	//SUB-STATE MANAGEMENT
-	public static final int SUB_STATE_MANAGEMENT_PRESENTATION = 0;
-	public static final int SUB_STATE_MANAGEMENT_SELECT= 1;
 	
 	//SUB-STATE ACTION
 	public int subState;
-	public static final int SUB_STATE_ACTION_PRESENTATION = 0;
-	public static final int SUB_STATE_ACTION_WAIT = 1;
-	public static final int SUB_STATE_ACTION_ARMY_SELECT = 2;
-	public static final int SUB_STATE_ACTION_ARMY_MOVE = 3;
-	public static final int SUB_STATE_ACTION_COMBAT = 4;
-	public static final int SUB_STATE_ACTION_RESULT = 5;
-	public static final int SUB_STATE_ACTION_ESCAPE = 6;
+	private int lastSubState;
+	public static final int SUB_STATE_ACTION_WAIT = 0;
+	public static final int SUB_STATE_ACTION_ARMY_SELECT = 1;
+	public static final int SUB_STATE_ACTION_ARMY_MOVE = 2;
+	public static final int SUB_STATE_ACTION_COMBAT = 3;
+	public static final int SUB_STATE_ACTION_RESULT = 4;
+	public static final int SUB_STATE_ACTION_ESCAPE = 5;
+	public static final int SUB_STATE_MANAGEMENT = 6;
 	
 	//GUI
 	private static Button btnNext;
 	private static Button btnCancel;
 	private static FlagButton btnFlagHelmet;
 	private static FlagButton btnFlagCastle;
+	private ArmyBox armyBox;
 	private BattleBox battleBox;
 	private SimpleBox economyBox;
 	private SimpleBox resultBox;
@@ -148,11 +147,24 @@ public class GameManager {
 			
 			@Override
 			public void onButtonPressUp(){
-				reset();
+				changeSubState(SUB_STATE_MANAGEMENT);
+				armyBox.start(activeArmy, isSelectedArmyFromCurrentPlayer(getSelectedArmy()));
+				hide();
 				
 			}
 		};
 		
+		
+		armyBox = new ArmyBox(){
+			@Override
+			public void onButtonPressUp(){
+				switch(this.getIndexPressed()){
+				case 0:
+					Log.i("Debug", "Opcion 0");
+					break;
+				}
+			}
+		};
 		
 		battleBox = new BattleBox(){
 			@Override
@@ -201,27 +213,10 @@ public class GameManager {
 			
 			economyBox.update(UserInput.getInstance().getMultiTouchHandler(), delta);
 			break;
-		case STATE_MANAGEMENT:
-			switch(subState){
-			case SUB_STATE_MANAGEMENT_PRESENTATION:
-				if(!updatePresentation(delta))
-					changeSubState(SUB_STATE_MANAGEMENT_SELECT);
-				break;
-				
-			case SUB_STATE_MANAGEMENT_SELECT:
-				
-				break;
-			}
-			break;
+		
 		case STATE_ACTION:
 			
 			switch(subState){
-			case SUB_STATE_ACTION_PRESENTATION:
-				if(!updatePresentation(delta)){
-					changeSubState(SUB_STATE_ACTION_WAIT);
-				}
-				
-				break;
 			case SUB_STATE_ACTION_WAIT:
 				//Atcualizar interacion terreno:
 				
@@ -231,6 +226,7 @@ public class GameManager {
 				for(int i = 0; i < playerList.size(); i++){
 					for(Army army: playerList.get(i).getArmyList()){
 						if(army.getState() == Army.STATE_ON && army.isSelect()){
+							cleanArmyAction();
 							activeArmy = army;
 							activeArmy.setSelected(true);
 							btnFlagCastle.start();
@@ -337,8 +333,11 @@ public class GameManager {
 
 				break;
 			case SUB_STATE_ACTION_COMBAT:
-				activeArmy.changeState(Army.STATE_OFF);
-				battleBox.update(UserInput.getInstance().getMultiTouchHandler(), delta);
+				
+				if(!battleBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
+					activeArmy.changeState(Army.STATE_OFF);
+				}
+				
 				break;
 				
 			case SUB_STATE_ACTION_RESULT:
@@ -370,12 +369,18 @@ public class GameManager {
 					changeSubState(SUB_STATE_ACTION_WAIT);
 					}
 				break;
+			case SUB_STATE_MANAGEMENT:
+				if(!armyBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
+					changeSubState(lastSubState);
+				}
+				break;
 			}
 		break;
 		}
 		
 		
 		updateGUI(delta);
+		
 		
 		map.update(delta);
 		
@@ -453,6 +458,7 @@ public class GameManager {
 		}
 		
 		economyBox.draw(g);
+		armyBox.draw(g);
 		battleBox.draw(g);
 		resultBox.draw(g);
 		drawPresentation(g);
@@ -475,6 +481,7 @@ public class GameManager {
 	}
 	
 	private void cleanArmyAction(){
+		activeArmy = null;
 		for(Player player:playerList){
 			for(Army army : player.getArmyList()){
 				army.setSelected(false);
@@ -489,7 +496,7 @@ public class GameManager {
 		for(Kingdom k: map.getKingdomList()){
 			k.setTarget(-1);
 		}
-		cleanArmyAction();
+		
 		
 		for(Kingdom border : activeArmy.getKingdom() .getBorderList()){
 			for(Kingdom kingdom: map.getKingdomList()){
@@ -548,9 +555,6 @@ public class GameManager {
 		case STATE_ECONOMY:
 			
 			break;
-		case STATE_MANAGEMENT:
-			
-			break;
 		case STATE_ACTION:
 			
 			switch(subState){
@@ -578,6 +582,8 @@ public class GameManager {
 		btnFlagHelmet.hide();
 		btnFlagCastle.hide();
 		subState = 0;
+		lastSubState = 0;
+		lastState = state;
 		state = newState;
 		switch(state){
 		case STATE_INCOME:
@@ -605,12 +611,9 @@ public class GameManager {
 			economyBox.start("ECONOMY", "EARNING: +" +tax + " SALARY: -" + 0);
 			
 			break;
-		case STATE_MANAGEMENT:
-			startPresentation(Font.FONT_MEDIUM, "MANAGEMENT");
-			btnNext.setDisabled(false);
-			break;
+		
 		case STATE_ACTION:
-			startPresentation(Font.FONT_MEDIUM, "ACTION");
+			changeSubState(SUB_STATE_ACTION_WAIT);
 			break;
 		case STATE_END:
 			turnCount++;
@@ -626,15 +629,12 @@ public class GameManager {
 		btnCancel.setDisabled(true);
 		btnFlagHelmet.hide();
 		btnFlagCastle.hide();
-		
+		lastSubState =subState;
 		subState = newSubState;
 		switch(state){
 		case STATE_INCOME:
 			break;
 		case STATE_ECONOMY:
-			break;
-		case STATE_MANAGEMENT:
-			btnNext.setDisabled(false);
 			break;
 		case STATE_ACTION:
 			
@@ -643,8 +643,6 @@ public class GameManager {
 			
 			switch(subState){
 				
-			case SUB_STATE_ACTION_PRESENTATION:
-				break;
 			case SUB_STATE_ACTION_WAIT:
 				btnNext.setDisabled(false);
 				btnCancel.setDisabled(true);
@@ -660,6 +658,8 @@ public class GameManager {
 			case SUB_STATE_ACTION_RESULT:
 				break;
 			case SUB_STATE_ACTION_ESCAPE:
+				break;
+			case SUB_STATE_MANAGEMENT:
 				break;
 			}
 			
@@ -730,8 +730,37 @@ public class GameManager {
 		}
 	}
 	
-	public Army getActiveArmy(){
-		return null;
+	/**
+	 * Devuelve el ejercito seleccionado
+	 * @return
+	 */
+	public Army getSelectedArmy(){
+		Army selected = null;
+		for(Player player : playerList){
+			for(Army army : player.getArmyList()){
+				if(army.isSelected()){
+					selected = army;
+					break;
+				}
+			}
+		}
+		return selected;
+	}
+	
+	/**
+	 * Devuelve true si el ejercito que se pasa por parametro pertenece al jugador en curso.
+	 * @param army
+	 * @return
+	 */
+	public boolean isSelectedArmyFromCurrentPlayer(Army army){
+		boolean current = false;
+		for(Army a : playerList.get(currentPlayer).getArmyList()){
+			if(a.getId() == army.getId()){
+				current = true;
+				break;
+			}
+		}
+		return current;
 	}
 	
 	public Army getDefeatEnemy(){
