@@ -3,10 +3,10 @@ package com.luis.strategy;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.luis.lgameengine.menu.Button;
-import com.luis.lgameengine.menu.GamePad;
-import com.luis.lgameengine.menu.MenuBox;
-import com.luis.lgameengine.menu.MenuManager;
+import com.luis.lgameengine.gui.Button;
+import com.luis.lgameengine.gui.GamePad;
+import com.luis.lgameengine.gui.MenuBox;
+import com.luis.lgameengine.gui.MenuManager;
 import com.luis.lgameengine.gameutils.GamePerformance;
 import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gameutils.gameworld.GameCamera;
@@ -173,21 +173,18 @@ public class ModeGame {
 			player1.getKingdomList().add(map.getKingdom(1));
 			player1.getKingdomList().add(map.getKingdom(2));
 			player1.getKingdomList().add(map.getKingdom(3));
-			Army army1 = new Army(worldConver, gameCamera, map, map.getKingdom(1),player1.getFlag(), 
+			Army army = new Army(worldConver, gameCamera, map, map.getKingdom(1),player1.getFlag(), 
 					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
-			army1.getTroopList().add(new Troop(GameParams.INFANTRY));
-			army1.getTroopList().add(new Troop(GameParams.INFANTRY));
-			army1.getTroopList().add(new Troop(GameParams.INFANTRY));
-			army1.getTroopList().add(new Troop(GameParams.INFANTRY));
-			army1.getTroopList().add(new Troop(GameParams.INFANTRY));
-			army1.getTroopList().add(new Troop(GameParams.INFANTRY));
-			army1.getTroopList().add(new Troop(GameParams.INFANTRY));
-			army1.getTroopList().add(new Troop(GameParams.INFANTRY));
-			army1.getTroopList().add(new Troop(GameParams.KNIGHT));
-			army1.getTroopList().add(new Troop(GameParams.KNIGHT));
-			army1.getTroopList().add(new Troop(GameParams.KNIGHT));
-			army1.getTroopList().add(new Troop(GameParams.HARASSERES));
-			player1.getArmyList().add(army1);
+			army.getTroopList().add(new Troop(GameParams.INFANTRY));
+			army.getTroopList().add(new Troop(GameParams.INFANTRY));
+			army.getTroopList().add(new Troop(GameParams.INFANTRY));
+			player1.getArmyList().add(army);
+			
+			army = new Army(worldConver, gameCamera, map, map.getKingdom(3),player1.getFlag(), 
+					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
+			army.getTroopList().add(new Troop(GameParams.KNIGHT));
+			army.getTroopList().add(new Troop(GameParams.KNIGHT));
+			player1.getArmyList().add(army);
 			
 			
 			Player player2 = new Player(2);
@@ -195,17 +192,15 @@ public class ModeGame {
 			player2.getKingdomList().add(map.getKingdom(8));
 			player2.getKingdomList().add(map.getKingdom(6));
 			
-			Army army2 = new Army(worldConver, gameCamera, map, map.getKingdom(7),player2.getFlag(), 
+			army = new Army(worldConver, gameCamera, map, map.getKingdom(7),player2.getFlag(), 
 					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
-			army2.getTroopList().add(new Troop(GameParams.KNIGHT));
-			army2.getTroopList().add(new Troop(GameParams.KNIGHT));
-			army2.getTroopList().add(new Troop(GameParams.KNIGHT));
-			army2.getTroopList().add(new Troop(GameParams.INFANTRY));
-			army2.getTroopList().add(new Troop(GameParams.INFANTRY));
-			army2.getTroopList().add(new Troop(GameParams.INFANTRY));
-			army2.getTroopList().add(new Troop(GameParams.INFANTRY));
-			army2.getTroopList().add(new Troop(GameParams.INFANTRY));
-			player2.getArmyList().add(army2);
+			army.getTroopList().add(new Troop(GameParams.KNIGHT));
+			army.getTroopList().add(new Troop(GameParams.KNIGHT));
+			army.getTroopList().add(new Troop(GameParams.KNIGHT));
+			army.getTroopList().add(new Troop(GameParams.INFANTRY));
+			army.getTroopList().add(new Troop(GameParams.INFANTRY));
+			army.getTroopList().add(new Troop(GameParams.INFANTRY));
+			player2.getArmyList().add(army);
 			
 			
 			List<Player> playerList = new ArrayList<Player>();

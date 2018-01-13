@@ -3,7 +3,7 @@ package com.luis.army.gui;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.graphics.Image;
 import com.luis.lgameengine.implementation.input.MultiTouchHandler;
-import com.luis.lgameengine.menu.Button;
+import com.luis.lgameengine.gui.Button;
 import com.luis.strategy.constants.Define;
 
 public class FlagButton extends Button{

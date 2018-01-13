@@ -16,14 +16,15 @@ import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.graphics.Image;
 import com.luis.lgameengine.implementation.input.KeyData;
 import com.luis.lgameengine.implementation.input.TouchData;
-import com.luis.lgameengine.menu.Button;
-import com.luis.lgameengine.menu.MenuBox;
-import com.luis.lgameengine.menu.MenuElement;
+import com.luis.lgameengine.gui.Button;
+import com.luis.lgameengine.gui.MenuBox;
+import com.luis.lgameengine.gui.MenuElement;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.Main;
 import com.luis.strategy.ModeGame;
 import com.luis.strategy.UserInput;
 import com.luis.strategy.army.Army;
+import com.luis.strategy.army.Troop;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.map.Kingdom;
@@ -154,7 +155,6 @@ public class GameManager {
 			}
 		};
 		
-		
 		armyBox = new ArmyBox(){
 			@Override
 			public void onButtonPressUp(){
@@ -225,12 +225,12 @@ public class GameManager {
 				
 				for(int i = 0; i < playerList.size(); i++){
 					for(Army army: playerList.get(i).getArmyList()){
-						if(army.getState() == Army.STATE_ON && army.isSelect()){
+						if(army.isSelect()){
 							cleanArmyAction();
 							activeArmy = army;
 							activeArmy.setSelected(true);
 							btnFlagCastle.start();
-							if(i == currentPlayer){
+							if(i == currentPlayer && army.getState() == Army.STATE_ON){
 								btnFlagHelmet.start();
 							}else{
 								btnFlagHelmet.hide();
@@ -329,20 +329,16 @@ public class GameManager {
 						}
 					}
 				}
-				
-
 				break;
+				
 			case SUB_STATE_ACTION_COMBAT:
-				
-				if(!battleBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
-					activeArmy.changeState(Army.STATE_OFF);
-				}
-				
+				battleBox.update(UserInput.getInstance().getMultiTouchHandler(), delta);
 				break;
 				
 			case SUB_STATE_ACTION_RESULT:
 				resultBox.update(UserInput.getInstance().getMultiTouchHandler(), delta);
 				break;
+				
 			case SUB_STATE_ACTION_ESCAPE:
 				
 				Army defeat = getDefeatEnemy();
@@ -411,7 +407,9 @@ public class GameManager {
 		//Army
 		for(int i = 0; i < playerList.size(); i++){
 			for(Army army: playerList.get(i).getArmyList()){
-				army.draw(g, activeArmy!= null && activeArmy.getId() == army.getId(), i == currentPlayer);
+				boolean isSelected =  subState == SUB_STATE_ACTION_WAIT && 
+						getSelectedArmy() != null && getSelectedArmy().getId() == army.getId();
+				army.draw(g, getSelectedArmy()!= null && isSelected, i == currentPlayer && army.getState() == Army.STATE_ON);
 			}
 		}
 		
@@ -481,7 +479,6 @@ public class GameManager {
 	}
 	
 	private void cleanArmyAction(){
-		activeArmy = null;
 		for(Player player:playerList){
 			for(Army army : player.getArmyList()){
 				army.setSelected(false);
@@ -566,7 +563,6 @@ public class GameManager {
 				for(Kingdom k: map.getKingdomList()){
 					k.setTarget(-1);
 				}
-				
 				changeSubState(SUB_STATE_ACTION_WAIT);
 				break;
 			}
@@ -646,6 +642,7 @@ public class GameManager {
 			case SUB_STATE_ACTION_WAIT:
 				btnNext.setDisabled(false);
 				btnCancel.setDisabled(true);
+				cleanArmyAction();
 				break;
 			case SUB_STATE_ACTION_ARMY_SELECT:
 				btnNext.setDisabled(true);
@@ -654,6 +651,7 @@ public class GameManager {
 			case SUB_STATE_ACTION_ARMY_MOVE:
 				break;
 			case SUB_STATE_ACTION_COMBAT:
+				getSelectedArmy().changeState(Army.STATE_OFF);
 				break;
 			case SUB_STATE_ACTION_RESULT:
 				break;
@@ -786,16 +784,6 @@ public class GameManager {
 		return army;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	private Army getEnemyArmyFromKingdom(Kingdom kingdom) {
 		Army enemy = null;
 		for(Player player:playerList){
@@ -810,9 +798,6 @@ public class GameManager {
 		}
 		return enemy;
 	}
-	
-	
-	
 	
 	private Army getEnemyAtKingdom(Player player, Kingdom kingdom){
 		Army enemy = null;
@@ -867,12 +852,13 @@ public class GameManager {
 			changeSubState(SUB_STATE_ACTION_WAIT);
 			btnNext.setDisabled(false);
 		}
-		
 	}
 	
 	private void aggregation(Army army1, Army army2){
-
-		Log.i("Debug", "Aggregation");
+		for(Troop troop : army2.getTroopList()){
+			army1.getTroopList().add(troop);
+		}
+		removeArmy(army2);
 	}
 	
 	private void putArmyAtKingdom(Army army, Kingdom lastKingdom, Kingdom newKingdom){
@@ -896,6 +882,7 @@ public class GameManager {
 		
 		//combate contra otro ejercito
 		if(getEnemyAtKingdom(playerList.get(currentPlayer), activeArmy.getKingdom()) != null){
+			
 			//Resolucion del combate
 			
 			Army enemy = getEnemyAtKingdom(playerList.get(currentPlayer), activeArmy.getKingdom());
@@ -935,7 +922,6 @@ public class GameManager {
 			
 			activeArmy.getKingdom().setState(0);
 			activeArmy.getKingdom().setTarget(-1);
-			activeArmy.changeState(Army.STATE_OFF);
 			
 			
 			
@@ -946,7 +932,6 @@ public class GameManager {
 			if(state < totalStates){
 				activeArmy.getKingdom().setState(state);
 				activeArmy.getKingdom().setTarget(-1);
-				activeArmy.changeState(Army.STATE_OFF);
 				resultBox.start("RESULT", "VICTORY");
 				
 			}
@@ -954,7 +939,6 @@ public class GameManager {
 			else{
 				activeArmy.getKingdom().setState(0);
 				activeArmy.getKingdom().setTarget(-1);
-				activeArmy.changeState(Army.STATE_OFF);
 				addNewConquest(playerList.get(currentPlayer), activeArmy.getKingdom());
 				resultBox.start("RESULT", "CONQUEST");
 			}

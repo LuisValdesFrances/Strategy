@@ -2,8 +2,8 @@ package com.luis.army.gui;
 
 import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.implementation.graphics.Graphics;
-import com.luis.lgameengine.menu.Button;
-import com.luis.lgameengine.menu.MenuBox;
+import com.luis.lgameengine.gui.Button;
+import com.luis.lgameengine.gui.MenuBox;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.army.Army;
 import com.luis.strategy.constants.Define;

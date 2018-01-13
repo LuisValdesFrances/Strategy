@@ -96,14 +96,14 @@ public class Army extends MapObject{
 		}
 	}
 	
-	public void draw(Graphics g, boolean isSelected, boolean isCurrentPlayer){
+	public void draw(Graphics g, boolean isSelected, boolean isActive){
 		
 		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 		
 		if(isSelected){
 			g.setAlpha((int)map.getAlpha());
 			g.drawImage(
-					isCurrentPlayer?GfxManager.imgMapSelectGreen:GfxManager.imgMapSelectRed, 
+					isActive?GfxManager.imgMapSelectGreen:GfxManager.imgMapSelectRed, 
 					worldConver.getConversionDrawX(gameCamera.getPosX(), getAbsoluteX()),
 					worldConver.getConversionDrawY(gameCamera.getPosY(), getAbsoluteY())+height/3,
 					
