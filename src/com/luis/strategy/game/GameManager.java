@@ -50,8 +50,9 @@ public class GameManager {
 	private int lastState;
 	public static final int STATE_INCOME = 0;
 	public static final int STATE_ECONOMY = 1;
-	public static final int STATE_ACTION = 2;
-	public static final int STATE_END = 3;
+	public static final int STATE_DISCARD = 2;
+	public static final int STATE_ACTION = 3;
+	public static final int STATE_END = 4;
 	
 	
 	//SUB-STATE ACTION

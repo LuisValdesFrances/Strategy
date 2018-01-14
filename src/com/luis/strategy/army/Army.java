@@ -254,7 +254,17 @@ public class Army extends MapObject{
 		this.troopList = troopList;
 	}
 	
-	
+	public boolean discardTroop(Troop troop){
+		boolean discard = false;
+		for(int i = 0; i < troopList.size(); i++){
+			if(troop.getId() == troopList.get(i).getId()){
+				troopList.remove(i);
+				discard = true;
+				break;
+			}
+		}
+		return discard;
+	}
 	
 	
 
