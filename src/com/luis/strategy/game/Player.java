@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.luis.strategy.army.Army;
+import com.luis.strategy.army.Troop;
+import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.map.Kingdom;
+import com.luis.strategy.map.Terrain;
 
 public class Player {
 	
@@ -62,6 +65,25 @@ public class Player {
 	}
 	
 
+	public int getTaxes() {
+		int tax = 0;
+		for(Kingdom kingdom : getKingdomList()){
+			for(Terrain terrain : kingdom.getTerrainList()){
+				tax += GameParams.TERRAIN_TAX[terrain.getType()];
+			}
+		}
+		return tax;
+	}
+	
+	public int getSalaries() {
+		int salaries = 0;
+		for(Army army : getArmyList()){
+			for(Troop troop : army.getTroopList()){
+				salaries += GameParams.TROOP_COST[troop.getType()];
+			}
+		}
+		return salaries;
+	}
 	public String getName() {
 		return name;
 	}

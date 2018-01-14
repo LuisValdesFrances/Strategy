@@ -49,7 +49,7 @@ public class FlagButton extends Button{
 	}
 	
 	public void hide(){
-		if(state == STATE_INCOME|| state == STATE_ACTIVE)
+		if(state == STATE_INCOME || state == STATE_ACTIVE)
 			state = STATE_END;
 	}
 	

@@ -75,13 +75,14 @@ public class GameManager {
 	private BattleBox battleBox;
 	private SimpleBox economyBox;
 	private SimpleBox resultBox;
+	private SimpleBox discardBox;
 	
 	
-	public GameManager(WorldConver worldConver, GameCamera gameCamera, Map map, List<Player> playerList){
+	public GameManager(WorldConver worldConver, GameCamera gameCamera, Map map, List<Player> pList){
 		this.worldConver = worldConver;
 		this.gameCamera = gameCamera;
 		this.map = map;
-		this.playerList = playerList;
+		this.playerList = pList;
 		
 		MenuElement.imgBG = GfxManager.imgBlackBG;
 		MenuElement.bgAlpha = GameParams.BG_BLACK_ALPHA;
@@ -119,7 +120,6 @@ public class GameManager {
 			}
 		};
 		
-		
 		btnFlagHelmet = new FlagButton(
 				GfxManager.imgButtonFlagHelmetRelease, 
 				GfxManager.imgButtonFlagHelmetFocus, 
@@ -152,7 +152,6 @@ public class GameManager {
 				changeSubState(SUB_STATE_MANAGEMENT);
 				armyBox.start(activeArmy, isSelectedArmyFromCurrentPlayer(getSelectedArmy()));
 				hide();
-				
 			}
 		};
 		
@@ -163,6 +162,17 @@ public class GameManager {
 				case 0:
 					Log.i("Debug", "Opcion 0");
 					break;
+				}
+			}
+			@Override
+			public void check(){
+				if(state == STATE_DISCARD){
+					int dif = playerList.get(currentPlayer).getTaxes() - playerList.get(currentPlayer).getSalaries();
+					//discardBox.start(null, "SALARY OT TROOPS EXCEEDS THEIR TREASURE (" + dif + ")." + "DISCARD TROOPS.");
+					discardBox.setTextBody("SALARY OT TROOPS EXCEEDS THEIR TREASURE (" + dif + ")." + "DISCARD TROOPS.");
+					if(dif >= 0){
+						discardBox.cancel();
+					}
 				}
 			}
 		};
@@ -183,20 +193,29 @@ public class GameManager {
 			}
 		};
 		
-		resultBox = new SimpleBox(){
+		resultBox = new SimpleBox(GfxManager.imgSmallBox, true){
 			@Override
 			public void onButtonPressUp(){
 				startEscape();
 			}
 		};
 		
-		economyBox = new SimpleBox(){
+		economyBox = new SimpleBox(GfxManager.imgSmallBox, true){
 			@Override
 			public void onButtonPressUp(){
 				//Si hay acciones obligatorias, como descartarse de tropas, se accede al estado de management
-				changeState(STATE_ACTION);
+				int dif = playerList.get(currentPlayer).getGold() - playerList.get(currentPlayer).getSalaries();
+				if(dif >= 0){
+					changeState(STATE_ACTION);
+				}else{
+					changeState(STATE_DISCARD);
+				}
 			}
 		};
+		
+		discardBox = new SimpleBox(GfxManager.imgNotificationBox, false);
+		discardBox.setModY(-Define.SIZEY2 + GfxManager.imgNotificationBox.getHeight()/2);
+		
 		
 		turnCount = 1;
 		changeState(STATE_INCOME);
@@ -211,12 +230,31 @@ public class GameManager {
 			}
 			break;
 		case STATE_ECONOMY:
-			
 			economyBox.update(UserInput.getInstance().getMultiTouchHandler(), delta);
+			break;
+		case STATE_DISCARD:
+			discardBox.update(UserInput.getInstance().getMultiTouchHandler(), delta);
+			if(!armyBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
+				int dif = playerList.get(currentPlayer).getTaxes() - playerList.get(currentPlayer).getSalaries();
+				if(dif >= 0){
+					changeState(STATE_ACTION);
+				}
+			}
+			
+			for(int i = 0; i < playerList.size(); i++){
+				for(Army army: playerList.get(i).getArmyList()){
+					if(army.isSelect()){
+						cleanArmyAction();
+						activeArmy = army;
+						activeArmy.setSelected(true);
+						btnFlagCastle.start();
+					}
+				}
+			}
 			break;
 		
 		case STATE_ACTION:
-			
+			discardBox.update(UserInput.getInstance().getMultiTouchHandler(), delta);
 			switch(subState){
 			case SUB_STATE_ACTION_WAIT:
 				//Atcualizar interacion terreno:
@@ -456,10 +494,11 @@ public class GameManager {
 					cameraR);
 		}
 		
-		economyBox.draw(g);
-		armyBox.draw(g);
-		battleBox.draw(g);
-		resultBox.draw(g);
+		economyBox.draw(g, true);
+		armyBox.draw(g, true);
+		discardBox.draw(g, false);
+		battleBox.draw(g, true);
+		resultBox.draw(g, true);
 		drawPresentation(g);
 	}
 	
@@ -595,20 +634,21 @@ public class GameManager {
 					army.changeState(Army.STATE_ON);
 			
 			//Calculo de ganancias:
-			int tax = 0;
-			for(Player player : playerList){
-				for(Kingdom kingdom : player.getKingdomList()){
-					for(Terrain terrain : kingdom.getTerrainList()){
-						tax += GameParams.TERRAIN_TAX[terrain.getType()];
-					}
-				}
-			}
+			int tax = playerList.get(currentPlayer).getTaxes();
+			int salary = playerList.get(currentPlayer).getSalaries();
+			
+			//Calculo los salarios
 			playerList.get(currentPlayer).setGold(tax);
 			
-			economyBox.start("ECONOMY", "EARNING: +" +tax + " SALARY: -" + 0);
+			economyBox.start("ECONOMY", "EARNING: +" +tax + " SALARY: -" + salary);
 			
 			break;
-		
+		case STATE_DISCARD:
+			int dif = playerList.get(currentPlayer).getTaxes() - playerList.get(currentPlayer).getSalaries();
+			
+			discardBox.start(null, "SALARY OT TROOPS EXCEEDS THEIR TREASURE (" + dif + ")." + "DISCARD TROOPS.");
+			
+			break;
 		case STATE_ACTION:
 			changeSubState(SUB_STATE_ACTION_WAIT);
 			break;

@@ -49,6 +49,7 @@ public class GfxManager {
 	   public static Image imgBigBox;
 	   public static Image imgMediumBox;
 	   public static Image imgSmallBox;
+	   public static Image imgNotificationBox;
 	   public static Image imgButtonCombatRelease;
 	   public static Image imgButtonCombatFocus;
 	   public static Image imgButtonCardRelease;
@@ -189,6 +190,7 @@ public class GfxManager {
 	            	imgBigBox = Image.createImage("/big_box.png");
 	            	imgMediumBox =  Image.createImage("/medium_box.png");
 	            	imgSmallBox =  Image.createImage("/small_box.png");
+	            	imgNotificationBox =  Image.createImage("/game_notification_box.png");
 	            	imgButtonCombatRelease = Image.createImage("/combat_release.png");
 	            	imgButtonCombatFocus = Image.createImage("/combat_focus.png");
 	            	imgButtonCardRelease = Image.createImage("/card_release.png");

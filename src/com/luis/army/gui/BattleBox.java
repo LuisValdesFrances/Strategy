@@ -52,8 +52,8 @@ public class BattleBox extends MenuBox{
 	}
 	
 	@Override
-	public void draw(Graphics g){
-		super.draw(g);
+	public void draw(Graphics g, boolean drawBG){
+		super.draw(g, drawBG);
 		if(state != STATE_UNACTIVE){
 			String text="";
 			switch(type){

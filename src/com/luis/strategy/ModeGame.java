@@ -178,6 +178,12 @@ public class ModeGame {
 			army.getTroopList().add(new Troop(GameParams.INFANTRY));
 			army.getTroopList().add(new Troop(GameParams.INFANTRY));
 			army.getTroopList().add(new Troop(GameParams.INFANTRY));
+			army.getTroopList().add(new Troop(GameParams.INFANTRY));
+			army.getTroopList().add(new Troop(GameParams.INFANTRY));
+			army.getTroopList().add(new Troop(GameParams.INFANTRY));
+			army.getTroopList().add(new Troop(GameParams.INFANTRY));
+			army.getTroopList().add(new Troop(GameParams.INFANTRY));
+			army.getTroopList().add(new Troop(GameParams.INFANTRY));
 			player1.getArmyList().add(army);
 			
 			army = new Army(worldConver, gameCamera, map, map.getKingdom(3),player1.getFlag(), 
@@ -400,7 +406,7 @@ public class ModeGame {
 			MenuManager.drawButtonsAndTextY(_g, 2, new String[]{"CONTINUAR", "SALIR"},
 				    Font.FONT_BIG, optionSelect, null, GfxManager.vImgMenuButtons, Main.iFrame);
 			
-			confirmationQuit.draw(_g);
+			confirmationQuit.draw(_g, false);
 			break;
 		}
 	}

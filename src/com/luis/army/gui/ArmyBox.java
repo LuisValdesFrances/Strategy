@@ -60,8 +60,8 @@ public class ArmyBox extends MenuBox{
 		columnHeight = imageH * totalFiles + (marginH * (totalFiles-1));
 		
 		discardButtonList = new ArrayList<Button>();
-		int initX = getX() - fileWidth/2 + imageW/2;
-		int initY = getY() - columnHeight/2 + imageH/2;
+		int initX = x - fileWidth/2 + imageW/2;
+		int initY = y - columnHeight/2 + imageH/2;
 		
 		int countColumns = 0;
 		int countFiles = 0;
@@ -111,6 +111,7 @@ public class ArmyBox extends MenuBox{
 				if(discardButtonList.get(i).update(touchHandler)){
 					Log.i("Debug", "Descartado tropa: " + army.getTroopList().get(i).getId() + " - " + army.getTroopList().get(i).getType());
 					army.getTroopList().remove(army.getTroopList().get(i));
+					check();
 					break;
 				}
 			}
@@ -119,14 +120,14 @@ public class ArmyBox extends MenuBox{
 	}
 	
 	@Override
-	public void draw(Graphics g){
-		super.draw(g);
+	public void draw(Graphics g, boolean drawBG){
+		super.draw(g, drawBG);
 		if(state != STATE_UNACTIVE){
 			
 			int countColumns = 0;
 			int countFiles = 0;
-			int initX = getX() - fileWidth/2 + GfxManager.imgSmallTroop.get(0).getWidth()/2;
-			int initY = getY() - columnHeight/2 + GfxManager.imgSmallTroop.get(0).getHeight()/2;
+			int initX = x - fileWidth/2 + GfxManager.imgSmallTroop.get(0).getWidth()/2;
+			int initY = y - columnHeight/2 + GfxManager.imgSmallTroop.get(0).getHeight()/2;
 			g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 			for(int i = 0; i < army.getTroopList().size(); i++){
 				
@@ -152,5 +153,7 @@ public class ArmyBox extends MenuBox{
 			}
 		}
 	}
+	
+	public void check(){};
 
 }
