@@ -117,7 +117,7 @@ public class ModeGame {
 			lastTouchX = UserInput.getInstance().getMultiTouchHandler().getTouchX(0);
 			lastTouchY = UserInput.getInstance().getMultiTouchHandler().getTouchY(0);
 			gameCamera = new GameCamera(worldConver, cameraTargetX, cameraTargetY, 
-					GamePerformance.getInstance().getFrameMult(Main.targetFPS)*2);
+					GamePerformance.getInstance().getFrameMult(Main.targetFPS));
 			/*
 			gamePad = new GamePad(
 					GfxManager.imgPadNorth, GfxManager.imgPadAux, GfxManager.imgPadAux, 
