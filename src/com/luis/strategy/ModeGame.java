@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.luis.lgameengine.gui.Button;
-import com.luis.lgameengine.gui.GamePad;
 import com.luis.lgameengine.gui.MenuBox;
 import com.luis.lgameengine.gui.MenuManager;
 import com.luis.lgameengine.gameutils.GamePerformance;
@@ -14,7 +13,7 @@ import com.luis.lgameengine.gameutils.gameworld.GfxEffects;
 import com.luis.lgameengine.gameutils.gameworld.ParticleManager;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.implementation.graphics.Graphics;
-import com.luis.lgameengine.implementation.input.KeyData;
+import com.luis.lgameengine.implementation.input.TouchData;
 import com.luis.strategy.army.Army;
 import com.luis.strategy.army.Troop;
 import com.luis.strategy.connection.Download;
@@ -37,7 +36,9 @@ public class ModeGame {
 	private static int gameFrame;
 	
 	//Pad
-	private static GamePad gamePad;
+	private static int lastTouchX;
+	private static int lastTouchY;
+	//private static GamePad gamePad;
 	
 	public static float worldWidth;
 	public static float worldHeight;
@@ -113,9 +114,11 @@ public class ModeGame {
 			
 			cameraTargetX=0;//worldConver.getCentlayoutX();
 			cameraTargetY=0;//=worldConver.getCentlayoutY();
+			lastTouchX = UserInput.getInstance().getMultiTouchHandler().getTouchX(0);
+			lastTouchY = UserInput.getInstance().getMultiTouchHandler().getTouchY(0);
 			gameCamera = new GameCamera(worldConver, cameraTargetX, cameraTargetY, 
-					GamePerformance.getInstance().getFrameMult(Main.targetFPS));
-			
+					GamePerformance.getInstance().getFrameMult(Main.targetFPS)*2);
+			/*
 			gamePad = new GamePad(
 					GfxManager.imgPadNorth, GfxManager.imgPadAux, GfxManager.imgPadAux, 
 					GfxManager.imgPadEast, 
@@ -157,7 +160,7 @@ public class ModeGame {
 					cameraTargetX -=(GameParams.CAMERA_SPEED * Main.getDeltaSec());
 					}
 			};
-			
+			*/
 			map = new Map(
 					worldConver, gameCamera, 
 					0,//GfxManager.imgMap.getWidth()/2, 
@@ -286,6 +289,8 @@ public class ModeGame {
 			gameFrame++;
 			btnPause.update(UserInput.getInstance().getMultiTouchHandler());
 			
+			
+			/*
 			float cameraSpeed = GameParams.CAMERA_SPEED * Main.getDeltaSec();
 			gamePad.update(UserInput.getInstance().getMultiTouchHandler());
 			if(UserInput.getInstance().getKeyboardHandler().getPressedKeys(UserInput.KEYCODE_LEFT).getAction() == KeyData.KEY_DOWN
@@ -308,21 +313,34 @@ public class ModeGame {
 				UserInput.getInstance().getKeyboardHandler().getPressedKeys(UserInput.KEYCODE_DOWN).getAction() == KeyData.KEY_PRESS){
 					cameraTargetY +=cameraSpeed;
 			}
-			///*
+			*/
+			
+			if(UserInput.getInstance().getMultiTouchHandler().getTouchAction(0) == TouchData.ACTION_MOVE){
+				if(lastTouchX != UserInput.getInstance().getMultiTouchHandler().getTouchX(0)){
+					cameraTargetX = cameraTargetX + lastTouchX - UserInput.getInstance().getMultiTouchHandler().getTouchX(0);
+				}
+				if(lastTouchY != UserInput.getInstance().getMultiTouchHandler().getTouchY(0)){
+					cameraTargetY = cameraTargetY + lastTouchY - UserInput.getInstance().getMultiTouchHandler().getTouchY(0);
+				}
+			}
+			lastTouchX = UserInput.getInstance().getMultiTouchHandler().getTouchX(0);
+			lastTouchY = UserInput.getInstance().getMultiTouchHandler().getTouchY(0);
+			
 			cameraTargetX = Math.max(cameraTargetX, worldConver.getLayoutX() / 2f);
 			cameraTargetX = Math.min(cameraTargetX, worldConver.getWorldWidth() - worldConver.getLayoutX() / 2f);
 			cameraTargetY = Math.max(cameraTargetY, worldConver.getLayoutY() / 2f);
 			cameraTargetY = Math.min(cameraTargetY, worldConver.getWorldHeight() - worldConver.getLayoutY() / 2f);
-			//*/
+			/*
+			gameCamera.setPosX(cameraTargetX);
+			gameCamera.setPosY(cameraTargetY);
+			*/
+			gameCamera.updateCamera(
+					(int)cameraTargetX-worldConver.getLayoutX()/2, 
+					(int)cameraTargetY-worldConver.getLayoutY()/2);
 			
 			
 			particleManager.update(Main.getDeltaSec());
 			gfxEffects.update(Main.getDeltaSec());
-			//gameCamera.setPosX(cameraTargetX);
-			//gameCamera.setPosY(cameraTargetY);
-			gameCamera.updateCamera(
-					(int)cameraTargetX-worldConver.getLayoutX()/2, 
-					(int)cameraTargetY-worldConver.getLayoutY()/2);
 			gameManager.update(Main.getDeltaSec());
 			updateDebugButton();
 			break;
@@ -364,7 +382,7 @@ public class ModeGame {
 			
 			gameManager.draw(_g);
 			btnPause.draw(_g, 0, 0);
-			gamePad.draw(_g);
+			//gamePad.draw(_g);
 			
 			if (showDebugInfo) {
 				_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);

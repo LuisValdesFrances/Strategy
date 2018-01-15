@@ -33,11 +33,13 @@ public class GfxManager {
 	   public static Image imgGameBG;
 	   public static Image imgBlackBG;
 	   public static Image imgTextBG;
+	   /*
 	   public static Image imgPadNorth;
 	   public static Image imgPadWest;
 	   public static Image imgPadSouth;
 	   public static Image imgPadEast;
 	   public static Image imgPadAux;
+	   */
 	   public static Image imgGameHud;
 	   public static Image imgButtonPauseRelease;
 	   public static Image imgButtonPauseFocus;
@@ -151,13 +153,13 @@ public class GfxManager {
 	            	
 	            	imgTextBG = Image.createImage("/text_bg.png");
 	            	imgBlackBG = Image.createImage("/black_bg.png");
-	            	
+	            	/*
 	            	imgPadNorth = Image.createImage("/pad_up.png");
 	            	imgPadWest = Image.createImage("/pad_left.png");
 	            	imgPadSouth = Image.createImage("/pad_down.png");
 	            	imgPadEast = Image.createImage("/pad_right.png");
 	            	imgPadAux = Image.createImage("/pad_aux.png");
-	            	
+	            	*/
 	            	imgTerrainOk = Image.createImage("/terrain_ok.png");
 	            	imgPlain = Image.createImage("/plain.png");
 	            	imgForest = Image.createImage("/forest.png");
