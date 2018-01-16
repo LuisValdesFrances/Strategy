@@ -13,7 +13,6 @@ import com.luis.lgameengine.gameutils.gameworld.GfxEffects;
 import com.luis.lgameengine.gameutils.gameworld.ParticleManager;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.implementation.graphics.Graphics;
-import com.luis.lgameengine.implementation.input.TouchData;
 import com.luis.strategy.army.Army;
 import com.luis.strategy.army.Troop;
 import com.luis.strategy.connection.Download;
@@ -35,18 +34,12 @@ public class ModeGame {
 	public static boolean isGamePaused;
 	private static int gameFrame;
 	
-	//Pad
-	private static int lastTouchX;
-	private static int lastTouchY;
-	//private static GamePad gamePad;
-	
 	public static float worldWidth;
 	public static float worldHeight;
 	
 	private static GameCamera gameCamera;
 	private static WorldConver worldConver;
-	private static float cameraTargetX;
-	private static float cameraTargetY;
+	
 	
 	private static ParticleManager particleManager;
 	private static GfxEffects gfxEffects;
@@ -112,55 +105,9 @@ public class ModeGame {
 					0,//GfxManager.imgGameHud.getHeight(),
 					GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
 			
-			cameraTargetX=0;//worldConver.getCentlayoutX();
-			cameraTargetY=0;//=worldConver.getCentlayoutY();
-			lastTouchX = UserInput.getInstance().getMultiTouchHandler().getTouchX(0);
-			lastTouchY = UserInput.getInstance().getMultiTouchHandler().getTouchY(0);
-			gameCamera = new GameCamera(worldConver, cameraTargetX, cameraTargetY, 
+			gameCamera = new GameCamera(worldConver, 0, 0, 
 					GamePerformance.getInstance().getFrameMult(Main.targetFPS));
-			/*
-			gamePad = new GamePad(
-					GfxManager.imgPadNorth, GfxManager.imgPadAux, GfxManager.imgPadAux, 
-					GfxManager.imgPadEast, 
-					GfxManager.imgPadSouth, GfxManager.imgPadAux, GfxManager.imgPadAux,
-					GfxManager.imgPadWest, 
-					(int)(GfxManager.imgPadNorth.getWidth()*2.5f), 
-					(int)(Define.SIZEY-GfxManager.imgButtonFlagHelmetFocus.getHeight()-GfxManager.imgPadNorth.getWidth()*2.5f)){
-				@Override
-				public void onButtonNorthPress(){
-					cameraTargetY -=(GameParams.CAMERA_SPEED * Main.getDeltaSec());}
-				@Override
-				public void onButtonNorthEastPress(){
-					cameraTargetY -=(GameParams.CAMERA_SPEED * Main.getDeltaSec());
-					cameraTargetX +=(GameParams.CAMERA_SPEED * Main.getDeltaSec());
-				}
-				@Override
-				public void onButtonNorthWestPress(){
-					cameraTargetY -=(GameParams.CAMERA_SPEED * Main.getDeltaSec());
-					cameraTargetX -=(GameParams.CAMERA_SPEED * Main.getDeltaSec());
-				}
-				@Override
-				public void onButtonEastPress(){
-					cameraTargetX +=(GameParams.CAMERA_SPEED * Main.getDeltaSec());}
-				@Override
-				public void onButtonSouthPress(){
-					cameraTargetY +=(GameParams.CAMERA_SPEED * Main.getDeltaSec());}
-				@Override
-				public void onButtonSouthEastPress(){
-					cameraTargetY +=(GameParams.CAMERA_SPEED * Main.getDeltaSec());
-					cameraTargetX +=(GameParams.CAMERA_SPEED * Main.getDeltaSec());
-				}
-				@Override
-				public void onButtonSouthWestPress(){
-					cameraTargetY +=(GameParams.CAMERA_SPEED * Main.getDeltaSec());
-					cameraTargetX -=(GameParams.CAMERA_SPEED * Main.getDeltaSec());
-				}
-				@Override
-				public void onButtonWestPress(){
-					cameraTargetX -=(GameParams.CAMERA_SPEED * Main.getDeltaSec());
-					}
-			};
-			*/
+			
 			map = new Map(
 					worldConver, gameCamera, 
 					0,//GfxManager.imgMap.getWidth()/2, 
@@ -314,30 +261,6 @@ public class ModeGame {
 					cameraTargetY +=cameraSpeed;
 			}
 			*/
-			
-			if(UserInput.getInstance().getMultiTouchHandler().getTouchAction(0) == TouchData.ACTION_MOVE){
-				if(lastTouchX != UserInput.getInstance().getMultiTouchHandler().getTouchX(0)){
-					cameraTargetX = cameraTargetX + lastTouchX - UserInput.getInstance().getMultiTouchHandler().getTouchX(0);
-				}
-				if(lastTouchY != UserInput.getInstance().getMultiTouchHandler().getTouchY(0)){
-					cameraTargetY = cameraTargetY + lastTouchY - UserInput.getInstance().getMultiTouchHandler().getTouchY(0);
-				}
-			}
-			lastTouchX = UserInput.getInstance().getMultiTouchHandler().getTouchX(0);
-			lastTouchY = UserInput.getInstance().getMultiTouchHandler().getTouchY(0);
-			
-			cameraTargetX = Math.max(cameraTargetX, worldConver.getLayoutX() / 2f);
-			cameraTargetX = Math.min(cameraTargetX, worldConver.getWorldWidth() - worldConver.getLayoutX() / 2f);
-			cameraTargetY = Math.max(cameraTargetY, worldConver.getLayoutY() / 2f);
-			cameraTargetY = Math.min(cameraTargetY, worldConver.getWorldHeight() - worldConver.getLayoutY() / 2f);
-			/*
-			gameCamera.setPosX(cameraTargetX);
-			gameCamera.setPosY(cameraTargetY);
-			*/
-			gameCamera.updateCamera(
-					(int)cameraTargetX-worldConver.getLayoutX()/2, 
-					(int)cameraTargetY-worldConver.getLayoutY()/2);
-			
 			
 			particleManager.update(Main.getDeltaSec());
 			gfxEffects.update(Main.getDeltaSec());

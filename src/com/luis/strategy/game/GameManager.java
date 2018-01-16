@@ -1,5 +1,6 @@
 package com.luis.strategy.game;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.util.Log;
@@ -33,12 +34,18 @@ import com.luis.strategy.map.Terrain;
 
 public class GameManager {
 	
-	private int turnCount = 0;
+	//Pad
+	private int lastTouchX;
+	private int lastTouchY;
+	private float cameraTargetX;
+	private float cameraTargetY;
 	
-	public static GameCamera gameCamera;
-	public static WorldConver worldConver;
+	
+	public GameCamera gameCamera;
+	public WorldConver worldConver;
 	
 	
+	private int turnCount;
 	private Map map;
 	
 	private int currentPlayer;
@@ -76,11 +83,18 @@ public class GameManager {
 	private SimpleBox economyBox;
 	private SimpleBox resultBox;
 	private SimpleBox discardBox;
+	private SimpleBox infoBox;
 	
 	
 	public GameManager(WorldConver worldConver, GameCamera gameCamera, Map map, List<Player> pList){
 		this.worldConver = worldConver;
 		this.gameCamera = gameCamera;
+		this.lastTouchX = UserInput.getInstance().getMultiTouchHandler().getTouchX(0);
+		this.lastTouchY = UserInput.getInstance().getMultiTouchHandler().getTouchY(0);
+		
+		this.cameraTargetX=0;//worldConver.getCentlayoutX();
+		this.cameraTargetY=0;//=worldConver.getCentlayoutY();
+		
 		this.map = map;
 		this.playerList = pList;
 		
@@ -213,6 +227,7 @@ public class GameManager {
 			}
 		};
 		
+		infoBox = new SimpleBox(GfxManager.imgSmallBox, true);
 		discardBox = new SimpleBox(GfxManager.imgNotificationBox, false);
 		discardBox.setModY(-Define.SIZEY2 + GfxManager.imgNotificationBox.getHeight()/2);
 		
@@ -326,15 +341,23 @@ public class GameManager {
 					activeArmy.setX(activeArmy.getKingdom().getX());
 					activeArmy.setY(activeArmy.getKingdom().getY());
 					
+					
+					
 					//Si tengo un ejercito en la zona y no soy yo ese ejercito me uno
-					if(playerList.get(currentPlayer).getArmy(activeArmy.getKingdom()) != null
-						&&
-						playerList.get(currentPlayer).getArmy(activeArmy.getKingdom()).getId() != activeArmy.getId()){
-						
-						aggregation(activeArmy, playerList.get(currentPlayer).getArmy(activeArmy.getKingdom()));
+					List <Army> armyList = new ArrayList<Army>();
+					for(int i = 0; i < playerList.get(currentPlayer).getArmyList().size(); i++){
+						if(playerList.get(currentPlayer).getArmyList().get(i).getKingdom().getId() == getSelectedArmy().getKingdom().getId()){
+							armyList.add(playerList.get(currentPlayer).getArmyList().get(i));
+						}
+					}
+					
+					if(armyList.size() > 1){
+						infoBox.start("AGGREGATION", "THESE ARMIES HAVE JOINED FORCES");
+						aggregation(armyList.get(0), armyList.get(1));
+						activeArmy = armyList.get(0);
 						activeArmy.getKingdom().setTarget(-1);
 						activeArmy.changeState(Army.STATE_OFF);
-						changeSubState(SUB_STATE_ACTION_WAIT);
+						changeSubState(SUB_STATE_MANAGEMENT);
 						
 					}else{
 						//Si el territorio es mio
@@ -405,14 +428,31 @@ public class GameManager {
 					}
 				break;
 			case SUB_STATE_MANAGEMENT:
-				if(!armyBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
-					changeSubState(lastSubState);
+				//Si no queda ninguna caja en primer plano
+				if(!armyBox.update(UserInput.getInstance().getMultiTouchHandler(), delta) && 
+						!infoBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
+					changeSubState(SUB_STATE_ACTION_WAIT);
 				}
 				break;
 			}
 		break;
 		}
 		
+		/*
+		private ArmyBox armyBox;
+		private BattleBox battleBox;
+		private SimpleBox economyBox;
+		private SimpleBox resultBox;
+		private SimpleBox discardBox;
+		 */
+		if(
+			!armyBox.isActive() && 
+			!battleBox.isActive() && 
+			!economyBox.isActive() &&
+			!resultBox.isActive() &&
+			!infoBox.isActive()){
+			updateCamera();
+		}
 		
 		updateGUI(delta);
 		
@@ -499,6 +539,7 @@ public class GameManager {
 		discardBox.draw(g, false);
 		battleBox.draw(g, true);
 		resultBox.draw(g, true);
+		infoBox.draw(g, true);
 		drawPresentation(g);
 	}
 	
@@ -986,6 +1027,28 @@ public class GameManager {
 		}
 		
 		changeSubState(SUB_STATE_ACTION_RESULT);
+	}
+	
+	private void updateCamera(){
+		if(UserInput.getInstance().getMultiTouchHandler().getTouchAction(0) == TouchData.ACTION_MOVE){
+			if(lastTouchX != UserInput.getInstance().getMultiTouchHandler().getTouchX(0)){
+				cameraTargetX = cameraTargetX + lastTouchX - UserInput.getInstance().getMultiTouchHandler().getTouchX(0);
+			}
+			if(lastTouchY != UserInput.getInstance().getMultiTouchHandler().getTouchY(0)){
+				cameraTargetY = cameraTargetY + lastTouchY - UserInput.getInstance().getMultiTouchHandler().getTouchY(0);
+			}
+		}
+		lastTouchX = UserInput.getInstance().getMultiTouchHandler().getTouchX(0);
+		lastTouchY = UserInput.getInstance().getMultiTouchHandler().getTouchY(0);
+		
+		cameraTargetX = Math.max(cameraTargetX, worldConver.getLayoutX() / 2f);
+		cameraTargetX = Math.min(cameraTargetX, worldConver.getWorldWidth() - worldConver.getLayoutX() / 2f);
+		cameraTargetY = Math.max(cameraTargetY, worldConver.getLayoutY() / 2f);
+		cameraTargetY = Math.min(cameraTargetY, worldConver.getWorldHeight() - worldConver.getLayoutY() / 2f);
+		
+		gameCamera.updateCamera(
+				(int)cameraTargetX-worldConver.getLayoutX()/2, 
+				(int)cameraTargetY-worldConver.getLayoutY()/2);
 	}
 	
 	public int getState() {
