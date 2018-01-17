@@ -71,7 +71,8 @@ public class GameManager {
 	public static final int SUB_STATE_ACTION_COMBAT = 3;
 	public static final int SUB_STATE_ACTION_RESULT = 4;
 	public static final int SUB_STATE_ACTION_ESCAPE = 5;
-	public static final int SUB_STATE_MANAGEMENT = 6;
+	public static final int SUB_STATE_MANAGEMENT_ARMY = 6;
+	public static final int SUB_STATE_MANAGEMENT = 7;
 	
 	//GUI
 	private static Button btnNext;
@@ -163,7 +164,7 @@ public class GameManager {
 			
 			@Override
 			public void onButtonPressUp(){
-				changeSubState(SUB_STATE_MANAGEMENT);
+				changeSubState(SUB_STATE_MANAGEMENT_ARMY);
 				armyBox.start(activeArmy, isSelectedArmyFromCurrentPlayer(getSelectedArmy()));
 				hide();
 			}
@@ -427,10 +428,15 @@ public class GameManager {
 					changeSubState(SUB_STATE_ACTION_WAIT);
 					}
 				break;
+			case SUB_STATE_MANAGEMENT_ARMY:
+				//Si no queda ninguna caja en primer plano
+				if(!armyBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
+					changeSubState(SUB_STATE_ACTION_WAIT);
+				}
+				break;
 			case SUB_STATE_MANAGEMENT:
 				//Si no queda ninguna caja en primer plano
-				if(!armyBox.update(UserInput.getInstance().getMultiTouchHandler(), delta) && 
-						!infoBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
+				if(!infoBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
 					changeSubState(SUB_STATE_ACTION_WAIT);
 				}
 				break;
@@ -738,6 +744,8 @@ public class GameManager {
 			case SUB_STATE_ACTION_RESULT:
 				break;
 			case SUB_STATE_ACTION_ESCAPE:
+				break;
+			case SUB_STATE_MANAGEMENT_ARMY:
 				break;
 			case SUB_STATE_MANAGEMENT:
 				break;
