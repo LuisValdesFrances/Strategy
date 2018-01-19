@@ -123,7 +123,7 @@ public class ModeGame {
 			player1.getKingdomList().add(map.getKingdom(1));
 			player1.getKingdomList().add(map.getKingdom(2));
 			player1.getKingdomList().add(map.getKingdom(3));
-			Army army = new Army(worldConver, gameCamera, map, map.getKingdom(1),player1.getFlag(), 
+			Army army = new Army(worldConver, gameCamera, map, player1, map.getKingdom(1),player1.getFlag(), 
 					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
 			army.getTroopList().add(new Troop(GameParams.INFANTRY));
 			army.getTroopList().add(new Troop(GameParams.INFANTRY));
@@ -136,7 +136,7 @@ public class ModeGame {
 			army.getTroopList().add(new Troop(GameParams.INFANTRY));
 			player1.getArmyList().add(army);
 			
-			army = new Army(worldConver, gameCamera, map, map.getKingdom(3),player1.getFlag(), 
+			army = new Army(worldConver, gameCamera, map, player1, map.getKingdom(3),player1.getFlag(), 
 					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
 			army.getTroopList().add(new Troop(GameParams.KNIGHT));
 			army.getTroopList().add(new Troop(GameParams.KNIGHT));
@@ -148,7 +148,7 @@ public class ModeGame {
 			player2.getKingdomList().add(map.getKingdom(8));
 			player2.getKingdomList().add(map.getKingdom(6));
 			
-			army = new Army(worldConver, gameCamera, map, map.getKingdom(7),player2.getFlag(), 
+			army = new Army(worldConver, gameCamera, map, player2, map.getKingdom(7),player2.getFlag(), 
 					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
 			army.getTroopList().add(new Troop(GameParams.KNIGHT));
 			army.getTroopList().add(new Troop(GameParams.KNIGHT));

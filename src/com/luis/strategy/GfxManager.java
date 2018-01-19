@@ -33,14 +33,16 @@ public class GfxManager {
 	   public static Image imgGameBG;
 	   public static Image imgBlackBG;
 	   public static Image imgTextBG;
+	   
+	   public static Image imgPadWest;
+	   public static Image imgPadEast;
 	   /*
 	   public static Image imgPadNorth;
-	   public static Image imgPadWest;
 	   public static Image imgPadSouth;
-	   public static Image imgPadEast;
 	   public static Image imgPadAux;
 	   */
 	   public static Image imgGameHud;
+	   public static Image imgChest;
 	   public static Image imgButtonPauseRelease;
 	   public static Image imgButtonPauseFocus;
 	   public static Image imgButtonNextRelease;
@@ -48,6 +50,7 @@ public class GfxManager {
 	   public static Image imgButtonCancelRelease;
 	   public static Image imgButtonCancelFocus;
 	   
+	   public static Image imgTextBox;
 	   public static Image imgBigBox;
 	   public static Image imgMediumBox;
 	   public static Image imgSmallBox;
@@ -58,6 +61,10 @@ public class GfxManager {
 	   public static Image imgButtonCardFocus;
 	   public static Image imgButtonOkRelease;
 	   public static Image imgButtonOkFocus;
+	   public static Image imgButtonCrossRelease;
+	   public static Image imgButtonCrossFocus;
+	   public static Image imgButtonCrossBigRelease;
+	   public static Image imgButtonCrossBigFocus;
 	   public static Image imgButtonFlagHelmetRelease;
 	   public static Image imgButtonFlagHelmetFocus;
 	   public static Image imgButtonFlagCastleRelease;
@@ -76,6 +83,8 @@ public class GfxManager {
 	   public static Image imgTargetAggregation;
 	   public static Image imgMapSelectGreen;
 	   public static Image imgMapSelectRed;
+	   
+	   
 	   
 	   public static List<Image> imgBigTroop;
 	   public static List<Image> imgSmallTroop;
@@ -153,11 +162,12 @@ public class GfxManager {
 	            	
 	            	imgTextBG = Image.createImage("/text_bg.png");
 	            	imgBlackBG = Image.createImage("/black_bg.png");
+	            	
+	            	imgPadWest = Image.createImage("/pad_left.png");
+	            	imgPadEast = Image.createImage("/pad_right.png");
 	            	/*
 	            	imgPadNorth = Image.createImage("/pad_up.png");
-	            	imgPadWest = Image.createImage("/pad_left.png");
 	            	imgPadSouth = Image.createImage("/pad_down.png");
-	            	imgPadEast = Image.createImage("/pad_right.png");
 	            	imgPadAux = Image.createImage("/pad_aux.png");
 	            	*/
 	            	imgTerrainOk = Image.createImage("/terrain_ok.png");
@@ -179,6 +189,7 @@ public class GfxManager {
 	            	imgArmyOff = Image.createImage("/army_off.png");
 	            	
 	            	imgGameHud = Image.createImage("/game_hud.png");
+	            	imgChest = Image.createImage("/chest.png");
 	            	imgButtonPauseRelease = Image.createImage("/pause_release.png");
 	            	imgButtonPauseFocus = Image.createImage("/pause_focus.png");
 	            	imgButtonCancelRelease = Image.createImage("/cancel_release.png");
@@ -187,8 +198,12 @@ public class GfxManager {
 	            	imgButtonNextFocus = Image.createImage("/next_focus.png");
 	            	imgButtonOkRelease = Image.createImage("/ok_release.png");
 	            	imgButtonOkFocus = Image.createImage("/ok_focus.png");
+	            	imgButtonCrossRelease = Image.createImage("/cross_release.png");
+	            	imgButtonCrossFocus = Image.createImage("/cross_focus.png");
+	            	imgButtonCrossBigRelease = Image.createImage("/cross_big_release.png");
+	            	imgButtonCrossBigFocus = Image.createImage("/cross_big_focus.png");
 	            	
-	            	
+	            	imgTextBox = Image.createImage("/text_box.png");
 	            	imgBigBox = Image.createImage("/big_box.png");
 	            	imgMediumBox =  Image.createImage("/medium_box.png");
 	            	imgSmallBox =  Image.createImage("/small_box.png");

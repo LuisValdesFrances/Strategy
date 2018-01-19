@@ -30,6 +30,16 @@ public class Player {
 		this.kingdomList = new ArrayList<Kingdom>();
 	}
 	
+	public Army getSelectedArmy(){
+		Army selected = null;
+		for(Army army : getArmyList()){
+			if(army.isSelected()){
+				selected = army;
+				break;
+			}
+		}
+		return selected;
+	}
 	
 	public void updateAnimations(float delta){
 		for(Army army : armyList){

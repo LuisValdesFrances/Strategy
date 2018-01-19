@@ -11,12 +11,14 @@ import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.Main;
 import com.luis.strategy.constants.Define;
+import com.luis.strategy.game.Player;
 import com.luis.strategy.map.Kingdom;
 import com.luis.strategy.map.Map;
 import com.luis.strategy.map.MapObject;
 
 public class Army extends MapObject{
 	
+	public Player player;
 	private static int idCount;
 	private int id;
 	
@@ -47,14 +49,16 @@ public class Army extends MapObject{
 	private int flag;
 	
 	public Army (WorldConver worldConver, GameCamera gameCamera, Map map,
+			Player player,
 			Kingdom kingdom, int flag, float mapX, float mapY, int mapWidth, int mapHeight) {
 		
 		super(worldConver, gameCamera, map,
 			kingdom.getX(), kingdom.getY(),
 			GfxManager.imgArmyIdle.getWidth()/9, GfxManager.imgArmyIdle.getHeight(), 
 			mapX, mapY, mapWidth, mapHeight);
-		this.troopList = new ArrayList<Troop>();
 		this.id = idCount++;
+		this.player = player;
+		this.troopList = new ArrayList<Troop>();
 		this.kingdom = kingdom;
 		this.flag = flag;
 		this.state = STATE_ON;
@@ -254,6 +258,14 @@ public class Army extends MapObject{
 		this.troopList = troopList;
 	}
 	
+	public Player getPlayer() {
+		return player;
+	}
+
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
+
 	public boolean discardTroop(Troop troop){
 		boolean discard = false;
 		for(int i = 0; i < troopList.size(); i++){

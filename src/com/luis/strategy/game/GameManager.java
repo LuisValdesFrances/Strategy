@@ -155,7 +155,7 @@ public class GameManager {
 		};
 		
 		btnFlagCastle = new FlagButton(
-				GfxManager.imgButtonFlagCastleRelease, 
+				GfxManager.imgButtonFlagCastleRelease,
 				GfxManager.imgButtonFlagCastleFocus, 
 				Define.SIZEX-GfxManager.imgButtonFlagCastleRelease.getWidth()/2, 
 				Define.SIZEY-GfxManager.imgButtonFlagCastleRelease.getHeight()/2){
@@ -165,7 +165,10 @@ public class GameManager {
 			@Override
 			public void onButtonPressUp(){
 				changeSubState(SUB_STATE_MANAGEMENT_ARMY);
-				armyBox.start(activeArmy, isSelectedArmyFromCurrentPlayer(getSelectedArmy()));
+				armyBox.start(
+						getSelectedArmy(), 
+						isSelectedArmyFromCurrentPlayer(getSelectedArmy()),
+						state==STATE_DISCARD);
 				hide();
 			}
 		};
@@ -218,12 +221,12 @@ public class GameManager {
 		economyBox = new SimpleBox(GfxManager.imgSmallBox, true){
 			@Override
 			public void onButtonPressUp(){
-				//Si hay acciones obligatorias, como descartarse de tropas, se accede al estado de management
-				int dif = playerList.get(currentPlayer).getGold() - playerList.get(currentPlayer).getSalaries();
-				if(dif >= 0){
-					changeState(STATE_ACTION);
-				}else{
+				
+				//Compruebo si estoy en saldo negativo
+				if(playerList.get(currentPlayer).getGold() < 0){
 					changeState(STATE_DISCARD);
+				}else{
+					changeState(STATE_ACTION);
 				}
 			}
 		};
@@ -311,7 +314,6 @@ public class GameManager {
 						activeArmy.changeState(Army.STATE_MOVE);
 						
 						changeSubState(SUB_STATE_ACTION_ARMY_MOVE);
-						
 						
 						
 						//Quito todos los otros indicadores de target
@@ -558,6 +560,13 @@ public class GameManager {
 	
 	private void drawGUI(Graphics g) {
 		g.drawImage(GfxManager.imgGameHud, 0, Define.SIZEY, Graphics.BOTTOM | Graphics.LEFT);
+		int margin = Define.SIZEY64;
+		g.drawImage(GfxManager.imgChest, margin, margin, Graphics.TOP | Graphics.LEFT);
+		String text = "" + playerList.get(currentPlayer).getGold();
+		TextManager.drawSimpleText(g, Font.FONT_MEDIUM, text, 
+			margin*2  + GfxManager.imgChest.getWidth() + Font.getFontWidth(Font.FONT_MEDIUM)*text.length()/2,
+			margin  + GfxManager.imgChest.getHeight()/2, 
+			Graphics.VCENTER | Graphics.HCENTER);
 		btnCancel.draw(g, 0, 0);
 		btnNext.draw(g, 0, 0);
 		btnFlagHelmet.draw(g);
@@ -684,14 +693,16 @@ public class GameManager {
 			int tax = playerList.get(currentPlayer).getTaxes();
 			int salary = playerList.get(currentPlayer).getSalaries();
 			
-			//Calculo los salarios
-			playerList.get(currentPlayer).setGold(tax);
+			playerList.get(currentPlayer).setGold(playerList.get(currentPlayer).getGold()+tax-salary);
+			
+			int dif = tax- salary;
 			
 			economyBox.start("ECONOMY", "EARNING: +" +tax + " SALARY: -" + salary);
 			
 			break;
 		case STATE_DISCARD:
-			int dif = playerList.get(currentPlayer).getTaxes() - playerList.get(currentPlayer).getSalaries();
+			
+			dif = playerList.get(currentPlayer).getTaxes() - playerList.get(currentPlayer).getSalaries();
 			
 			discardBox.start(null, "SALARY OT TROOPS EXCEEDS THEIR TREASURE (" + dif + ")." + "DISCARD TROOPS.");
 			

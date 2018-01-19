@@ -13,14 +13,20 @@ import com.luis.lgameengine.gui.MenuBox;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.army.Army;
 import com.luis.strategy.constants.Define;
+import com.luis.strategy.constants.GameParams;
 
 
 public class ArmyBox extends MenuBox{
+	
+	private BuyBox buyBox;
 	
 	private Army army;
 	private boolean isCurrentPlayer;
 	
 	private List<Button>discardButtonList;
+	private Button crossButton;
+	
+	private boolean discardMode;
 	
 	public ArmyBox() {
 		super(Define.SIZEX, Define.SIZEY, GfxManager.imgBigBox, null, null, 
@@ -28,12 +34,14 @@ public class ArmyBox extends MenuBox{
 				null, Font.FONT_MEDIUM, Font.FONT_SMALL);
 		
 		btnList.add(new Button(
-				GfxManager.imgButtonOkRelease,
-				GfxManager.imgButtonOkFocus,
-				screenWidth/2, 
-				screenHeight/2 + GfxManager.imgBigBox.getHeight()/2, 
+				GfxManager.imgButtonCancelRelease,
+				GfxManager.imgButtonCancelFocus,
+				screenWidth/2 - GfxManager.imgBigBox.getWidth()/2, 
+				screenHeight/2 - GfxManager.imgBigBox.getHeight()/2, 
 				null, 
 				-1){});
+		
+		buyBox = new BuyBox();
 	}
 	
 	private int fileWidth;
@@ -43,10 +51,11 @@ public class ArmyBox extends MenuBox{
 	private int marginW;
 	private int marginH;
 	
-	public void start(Army a, boolean isCurrentPlayer){
+	public void start(Army a, boolean isCurrentPlayer, boolean discardMode){
 		super.start();
 		this.army = a;
 		this.isCurrentPlayer = isCurrentPlayer;
+		this.discardMode = discardMode;
 		
 		int imageW = GfxManager.imgSmallTroop.get(0).getWidth();
 		int imageH = GfxManager.imgSmallTroop.get(0).getHeight();
@@ -59,13 +68,33 @@ public class ArmyBox extends MenuBox{
 		fileWidth = imageW * totalColums + (marginW * (totalColums-1));
 		columnHeight = imageH * totalFiles + (marginH * (totalFiles-1));
 		
-		discardButtonList = new ArrayList<Button>();
-		int initX = x - fileWidth/2 + imageW/2;
-		int initY = y - columnHeight/2 + imageH/2;
+		updateTroops();
+		
+		if(isCurrentPlayer && !discardMode){
+			crossButton = new Button(
+					GfxManager.imgButtonCrossBigRelease, 
+					GfxManager.imgButtonCrossBigFocus, 
+					x+GfxManager.imgBigBox.getWidth()/2-GfxManager.imgButtonCrossBigRelease.getWidth()/4, 
+					y+GfxManager.imgBigBox.getHeight()/2-GfxManager.imgButtonCrossBigRelease.getHeight()/4, 
+					null, -1){
+				@Override
+				public void onButtonPressUp() {
+					reset();
+					buyBox.start();
+				}
+			};
+		}
+	}
+	
+	public void updateTroops(){
+		
+		int initX = x - fileWidth/2 + GfxManager.imgSmallTroop.get(0).getWidth()/2;
+		int initY = y - columnHeight/2 + GfxManager.imgSmallTroop.get(0).getHeight()/2;
 		
 		int countColumns = 0;
 		int countFiles = 0;
 		
+		discardButtonList = new ArrayList<Button>();
 		for(int i = 0; i < army.getTroopList().size(); i++){
 				
 			if(countColumns == totalColums){
@@ -106,17 +135,27 @@ public class ArmyBox extends MenuBox{
 	
 	@Override
 	public boolean update(MultiTouchHandler touchHandler, float delta){
-		if(isCurrentPlayer && state == STATE_ACTIVE){
-			for(int i = 0; i < army.getTroopList().size(); i++){
-				if(discardButtonList.get(i).update(touchHandler)){
-					Log.i("Debug", "Descartado tropa: " + army.getTroopList().get(i).getId() + " - " + army.getTroopList().get(i).getType());
-					army.getTroopList().remove(army.getTroopList().get(i));
-					check();
-					break;
+		if(!buyBox.update(touchHandler, delta)){
+			if(isCurrentPlayer && state == STATE_ACTIVE){
+				for(int i = 0; i < army.getTroopList().size(); i++){
+					if(discardButtonList.get(i).update(touchHandler)){
+						Log.i("Debug", "Descartado tropa: " + army.getTroopList().get(i).getId() + " - " + army.getTroopList().get(i).getType());
+						army.getPlayer().setGold(army.getPlayer().getGold() + 
+								(discardMode?
+										GameParams.TROOP_COST[army.getTroopList().get(i).getType()]:
+										GameParams.TROOP_COST[army.getTroopList().get(i).getType()]/2));
+						army.getTroopList().remove(army.getTroopList().get(i));
+						check();
+						break;
+					}
 				}
+				
+				if(crossButton != null)
+					crossButton.update(touchHandler);
 			}
-		}
-		return super.update(touchHandler, delta);
+			return super.update(touchHandler, delta);
+			}
+		return true;
 	}
 	
 	@Override
@@ -151,6 +190,11 @@ public class ArmyBox extends MenuBox{
 					discardButtonList.get(i).draw(g, (int)modPosX, 0);
 				}
 			}
+			
+			if(crossButton != null)
+				crossButton.draw(g, (int)modPosX, 0);
+			
+			buyBox.draw(g);
 		}
 	}
 	
