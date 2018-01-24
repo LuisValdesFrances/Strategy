@@ -21,11 +21,14 @@ public class Player {
 	private List<Army> armyList;
 	private List<Kingdom> kingdomList;
 	
+	private int capitalKingdom;
+	
 	private int flag;
 	
-	public Player(int flag){
+	public Player(int flag, int capitalKingdom){
 		this.id = idCount++;
 		this.flag = flag;
+		this.capitalKingdom = capitalKingdom;
 		this.armyList = new ArrayList<Army>();
 		this.kingdomList = new ArrayList<Kingdom>();
 	}
@@ -144,6 +147,20 @@ public class Player {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public Kingdom getCapital() {
+		Kingdom kingdom = null;
+		for(int i = 0; i < kingdomList.size() && kingdom == null; i++){
+			if(kingdomList.get(i).getId() == capitalKingdom){
+				kingdom = kingdomList.get(i);
+			}
+		}
+		return kingdom;
+	}
+
+	public void setCapitalKingdom(int capitalKingdom) {
+		this.capitalKingdom = capitalKingdom;
 	}
 	
 	

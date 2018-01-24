@@ -57,7 +57,7 @@ public class FlagButton extends Button{
 		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 		if(state != STATE_UNACTIVE)
 			g.drawImage(isTouching() || isDisabled() ? getImgFocus():getImgRelese(), 
-					x, y+(int)modPosY, Graphics.VCENTER | Graphics.HCENTER);
+					getX(), getY()+(int)modPosY, Graphics.VCENTER | Graphics.HCENTER);
 		
 	}
 

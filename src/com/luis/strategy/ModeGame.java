@@ -119,31 +119,27 @@ public class ModeGame {
 			map.setKingdomList(DataKingdom.getGenterex(worldConver, gameCamera, map));
 			
 			
-			Player player1 = new Player(1);
+			Player player1 = new Player(1, 1);
+			player1.setGold(10);
 			player1.getKingdomList().add(map.getKingdom(1));
 			player1.getKingdomList().add(map.getKingdom(2));
 			player1.getKingdomList().add(map.getKingdom(3));
+			player1.getKingdomList().add(map.getKingdom(5));
 			Army army = new Army(worldConver, gameCamera, map, player1, map.getKingdom(1),player1.getFlag(), 
 					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
 			army.getTroopList().add(new Troop(GameParams.INFANTRY));
 			army.getTroopList().add(new Troop(GameParams.INFANTRY));
-			army.getTroopList().add(new Troop(GameParams.INFANTRY));
-			army.getTroopList().add(new Troop(GameParams.INFANTRY));
-			army.getTroopList().add(new Troop(GameParams.INFANTRY));
-			army.getTroopList().add(new Troop(GameParams.INFANTRY));
-			army.getTroopList().add(new Troop(GameParams.INFANTRY));
-			army.getTroopList().add(new Troop(GameParams.INFANTRY));
-			army.getTroopList().add(new Troop(GameParams.INFANTRY));
 			player1.getArmyList().add(army);
 			
-			army = new Army(worldConver, gameCamera, map, player1, map.getKingdom(3),player1.getFlag(), 
+			army = new Army(worldConver, gameCamera, map, player1, map.getKingdom(5),player1.getFlag(), 
 					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
 			army.getTroopList().add(new Troop(GameParams.KNIGHT));
 			army.getTroopList().add(new Troop(GameParams.KNIGHT));
 			player1.getArmyList().add(army);
 			
 			
-			Player player2 = new Player(2);
+			Player player2 = new Player(2, 7);
+			player2.setGold(10);
 			player2.getKingdomList().add(map.getKingdom(7));
 			player2.getKingdomList().add(map.getKingdom(8));
 			player2.getKingdomList().add(map.getKingdom(6));
@@ -152,10 +148,6 @@ public class ModeGame {
 					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
 			army.getTroopList().add(new Troop(GameParams.KNIGHT));
 			army.getTroopList().add(new Troop(GameParams.KNIGHT));
-			army.getTroopList().add(new Troop(GameParams.KNIGHT));
-			army.getTroopList().add(new Troop(GameParams.INFANTRY));
-			army.getTroopList().add(new Troop(GameParams.INFANTRY));
-			army.getTroopList().add(new Troop(GameParams.INFANTRY));
 			player2.getArmyList().add(army);
 			
 			
@@ -204,6 +196,7 @@ public class ModeGame {
 					Define.SIZEX, Define.SIZEY, 
 					GfxManager.imgMenuBox, 
 					GfxManager.imgButtonRelease, GfxManager.imgButtonFocus, 
+					Define.SIZEX2, Define.SIZEY2,
 					RscManager.sAllTexts[RscManager.TXT_RETURN_MENU],
 					new String[]{RscManager.sAllTexts[RscManager.TXT_NO], RscManager.sAllTexts[RscManager.TXT_YES]},
 					Font.FONT_MEDIUM, Font.FONT_MEDIUM){

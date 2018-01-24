@@ -15,7 +15,10 @@ public class SimpleBox extends MenuBox{
 	
 	public SimpleBox(Image imgBox, boolean includeButton) {
 		
-		super(Define.SIZEX, Define.SIZEY, imgBox, null, null, null,null, Font.FONT_MEDIUM, Font.FONT_SMALL);
+		super(
+			Define.SIZEX, Define.SIZEY, imgBox, null, null, 
+			Define.SIZEX2, Define.SIZEY2,
+			null,null, Font.FONT_MEDIUM, Font.FONT_SMALL);
 		
 		if(includeButton)
 			btnList.add(new Button(
@@ -39,8 +42,8 @@ public class SimpleBox extends MenuBox{
 		super.draw(g, drawBG);
 		if(state != STATE_UNACTIVE){
 			TextManager.draw(g, Font.FONT_SMALL, textBody, 
-					x+(int)modPosX, 
-					y + (textHeader != null ?Font.getFontHeight(Font.FONT_MEDIUM)/2:0), 
+					getX() + (int)modPosX, 
+					getY() + (textHeader != null ?Font.getFontHeight(Font.FONT_MEDIUM)/2:0), 
 					imgBox.getWidth()-imgBox.getWidth()/8,
 					TextManager.ALING_CENTER, -1);
 		}

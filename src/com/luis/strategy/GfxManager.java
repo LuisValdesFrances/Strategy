@@ -43,12 +43,15 @@ public class GfxManager {
 	   */
 	   public static Image imgGameHud;
 	   public static Image imgChest;
+	   public static Image imgCoin;
 	   public static Image imgButtonPauseRelease;
 	   public static Image imgButtonPauseFocus;
 	   public static Image imgButtonNextRelease;
 	   public static Image imgButtonNextFocus;
 	   public static Image imgButtonCancelRelease;
 	   public static Image imgButtonCancelFocus;
+	   public static Image imgButtonDeleteRelease;
+	   public static Image imgButtonDeleteFocus;
 	   
 	   public static Image imgTextBox;
 	   public static Image imgBigBox;
@@ -190,6 +193,7 @@ public class GfxManager {
 	            	
 	            	imgGameHud = Image.createImage("/game_hud.png");
 	            	imgChest = Image.createImage("/chest.png");
+	            	imgCoin = Image.createImage("/coin.png");
 	            	imgButtonPauseRelease = Image.createImage("/pause_release.png");
 	            	imgButtonPauseFocus = Image.createImage("/pause_focus.png");
 	            	imgButtonCancelRelease = Image.createImage("/cancel_release.png");
@@ -202,6 +206,9 @@ public class GfxManager {
 	            	imgButtonCrossFocus = Image.createImage("/cross_focus.png");
 	            	imgButtonCrossBigRelease = Image.createImage("/cross_big_release.png");
 	            	imgButtonCrossBigFocus = Image.createImage("/cross_big_focus.png");
+	            	
+	            	imgButtonDeleteFocus = Image.createImage("/delete_focus.png");
+	            	imgButtonDeleteRelease = Image.createImage("/delete_release.png");
 	            	
 	            	imgTextBox = Image.createImage("/text_box.png");
 	            	imgBigBox = Image.createImage("/big_box.png");

@@ -12,9 +12,14 @@ import com.luis.lgameengine.gui.MenuElement;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 import com.luis.strategy.GfxManager;
+import com.luis.strategy.army.Army;
+import com.luis.strategy.army.Troop;
 import com.luis.strategy.constants.Define;
+import com.luis.strategy.constants.GameParams;
 
 public class BuyBox {
+	
+	private Army army;
 	
 	public static final int STATE_UNACTIVE = 0;
 	public static final int STATE_START = 1;
@@ -35,13 +40,12 @@ public class BuyBox {
 	private int textX;
 	private int textY;
 	
+	private List<String>nameTroopList;
 	private List<String>descTroopList;
 	
-	private int modPosX;
 	private int modPosY;
 	
 	public BuyBox(){
-		
 		
 		int imageW = 
 				GfxManager.imgBigTroop.get(0).getWidth() + 
@@ -52,14 +56,20 @@ public class BuyBox {
 		troopX = Define.SIZEX2- (boxW-imageW)/2 - imageW / 2;
 		textX = Define.SIZEX2- (boxW-imageW)/2 + boxW / 2;
 		
-		troopY = Define.SIZEY2;
-		textY = Define.SIZEY2;
+		troopY =Define.SIZEY2-GfxManager.imgGameHud.getHeight()/2;
+		textY = Define.SIZEY2-GfxManager.imgGameHud.getHeight()/2;
 		
 		
 		descTroopList = new ArrayList<String>();
 		
 		for(int i = 0; i < GfxManager.imgBigTroop.size(); i++){
 			descTroopList.add("DESCRIPTION TEXT LARGE EXPLAIN COMBAT HABILITIES AND SKILLS FOR TROOP WITH INDEX " + i);
+		}
+		
+		nameTroopList = new ArrayList<String>();
+		
+		for(int i = 0; i < GfxManager.imgBigTroop.size(); i++){
+			nameTroopList.add("NAME TROOP " + i);
 		}
 		
 		buttonCancel = new Button(
@@ -80,6 +90,8 @@ public class BuyBox {
 			public void onButtonPressUp() {
 				Log.i("Debug", "Comprado: " + index);
 				onBuy();
+				buttonBuy.setDisabled(army.getPlayer().getGold() < GameParams.TROOP_COST[index]);
+				buttonBuy.reset();
 			};
 		};
 		
@@ -91,6 +103,7 @@ public class BuyBox {
 				reset();
 				index = index+1%(descTroopList.size()-1);
 				index = index > descTroopList.size()-1 ? 0 : index;
+				buttonBuy.setDisabled(army.getPlayer().getGold() < GameParams.TROOP_COST[index]);
 			};
 		};
 		
@@ -102,13 +115,16 @@ public class BuyBox {
 				reset();
 				index = index-1;
 				index = index < 0 ? descTroopList.size()-1 : index;
+				buttonBuy.setDisabled(army.getPlayer().getGold() < GameParams.TROOP_COST[index]);
 			};
 		};
 	}
 	
-	public void start(){
-		state = STATE_START;
-		modPosY = -Define.SIZEY2-GfxManager.imgBigTroop.get(0).getHeight()/2;
+	public void start(Army army){
+		this.army = army;
+		this.state = STATE_START;
+		this.modPosY = -Define.SIZEY2-GfxManager.imgBigTroop.get(0).getHeight()/2;
+		buttonBuy.setDisabled(army.getPlayer().getGold() < GameParams.TROOP_COST[index]);
 	}
 	
 	public boolean update(MultiTouchHandler touchHandler, float delta){
@@ -156,33 +172,61 @@ public class BuyBox {
 			g.drawImage(MenuElement.imgBG, Define.SIZEX2, Define.SIZEY2, Graphics.VCENTER | Graphics.HCENTER);
 			g.setAlpha(255);
 			
-			
-			
 			int modY = state==STATE_END?modPosY*-1:modPosY;
 			
 			g.drawImage(GfxManager.imgBigTroop.get(index), 
-					troopX + modPosX, 
+					troopX, 
 					troopY + modY, 
 					Graphics.VCENTER | Graphics.HCENTER);
 			
 			g.drawImage(GfxManager.imgTextBox, 
-					textX + modPosX, 
+					textX, 
 					textY + modY, 
 					Graphics.VCENTER | Graphics.HCENTER);
 			
-			TextManager.draw(g, Font.FONT_SMALL, descTroopList.get(index), 
-					textX + modPosX, 
-					textY + modY, 
-					GfxManager.imgTextBox.getWidth()-GfxManager.imgTextBox.getWidth()/6, 
+			TextManager.drawSimpleText(g, Font.FONT_MEDIUM, nameTroopList.get(index), 
+					textX, 
+					textY + modY - GfxManager.imgTextBox.getHeight()/8,
+					Graphics.VCENTER | Graphics.HCENTER);
+			TextManager.draw(g, Font.FONT_SMALL, descTroopList.get(index),
+					textX, 
+					textY + modY + GfxManager.imgTextBox.getHeight()/8, 
+					GfxManager.imgTextBox.getWidth()-GfxManager.imgTextBox.getWidth()/4, 
 					TextManager.ALING_CENTER, -1);
 			
-			buttonLeft.draw(g, 0, 0);
-			buttonRight.draw(g, 0, 0);
+			String cost = ""+GameParams.TROOP_COST[index];
+			
+			g.drawImage(GfxManager.imgCoin, 
+					troopX + GfxManager.imgBigTroop.get(index).getWidth()/2 - (Font.getFontWidth(Font.FONT_BIG)*cost.length())/2-
+					Font.getFontWidth(Font.FONT_BIG)/2-GfxManager.imgCoin.getWidth(), 
+					troopY - GfxManager.imgBigTroop.get(index).getHeight()/2 + GfxManager.imgCoin.getHeight()/2+
+					Font.getFontWidth(Font.FONT_BIG)/2 + modY,
+					Graphics.VCENTER | Graphics.HCENTER);
+			TextManager.drawSimpleText(g, Font.FONT_BIG, cost, 
+					troopX + GfxManager.imgBigTroop.get(index).getWidth()/2 - (Font.getFontWidth(Font.FONT_BIG)*cost.length())/2-
+					Font.getFontWidth(Font.FONT_BIG)/2, 
+					troopY - GfxManager.imgBigTroop.get(index).getHeight()/2 + GfxManager.imgCoin.getHeight()/2+
+					Font.getFontWidth(Font.FONT_BIG)/2 + modY,
+					Graphics.VCENTER | Graphics.HCENTER);
+			buttonLeft.draw(g, 0, modY);
+			buttonRight.draw(g, 0, modY);
 			buttonBuy.draw(g, 0, modY);
 			buttonCancel.draw(g, 0, modY);
 		}
 	}
 	
 	public void onBuy(){}
+
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
+	}
+	
+	
+	
+	
 
 }

@@ -168,7 +168,14 @@ public class GameManager {
 				armyBox.start(
 						getSelectedArmy(), 
 						isSelectedArmyFromCurrentPlayer(getSelectedArmy()),
-						state==STATE_DISCARD);
+						state==STATE_DISCARD,
+						
+						(getSelectedArmy().getKingdom().hasTerrain(GameParams.SMALL_CITY)) ||
+						(getSelectedArmy().getKingdom().hasTerrain(GameParams.MEDIUM_CITY)) ||
+						(getSelectedArmy().getKingdom().hasTerrain(GameParams.BIG_CITY)) ||
+						(getSelectedArmy().getKingdom().hasTerrain(GameParams.CASTLE))
+								
+				);
 				hide();
 			}
 		};
@@ -233,7 +240,7 @@ public class GameManager {
 		
 		infoBox = new SimpleBox(GfxManager.imgSmallBox, true);
 		discardBox = new SimpleBox(GfxManager.imgNotificationBox, false);
-		discardBox.setModY(-Define.SIZEY2 + GfxManager.imgNotificationBox.getHeight()/2);
+		discardBox.setY(GfxManager.imgNotificationBox.getHeight()/2);
 		
 		
 		turnCount = 1;
@@ -541,13 +548,6 @@ public class GameManager {
 					(int) gameCamera.getPosY()+worldConver.getMarginN(),
 					cameraR);
 		}
-		
-		economyBox.draw(g, true);
-		armyBox.draw(g, true);
-		discardBox.draw(g, false);
-		battleBox.draw(g, true);
-		resultBox.draw(g, true);
-		infoBox.draw(g, true);
 		drawPresentation(g);
 	}
 	
@@ -559,19 +559,32 @@ public class GameManager {
 	}
 	
 	private void drawGUI(Graphics g) {
+		economyBox.draw(g, true);
+		discardBox.draw(g, false);
+		armyBox.draw(g, true);
+		battleBox.draw(g, true);
+		resultBox.draw(g, true);
+		infoBox.draw(g, true);
+		
 		g.drawImage(GfxManager.imgGameHud, 0, Define.SIZEY, Graphics.BOTTOM | Graphics.LEFT);
-		int margin = Define.SIZEY64;
-		g.drawImage(GfxManager.imgChest, margin, margin, Graphics.TOP | Graphics.LEFT);
-		String text = "" + playerList.get(currentPlayer).getGold();
-		TextManager.drawSimpleText(g, Font.FONT_MEDIUM, text, 
-			margin*2  + GfxManager.imgChest.getWidth() + Font.getFontWidth(Font.FONT_MEDIUM)*text.length()/2,
-			margin  + GfxManager.imgChest.getHeight()/2, 
-			Graphics.VCENTER | Graphics.HCENTER);
 		btnCancel.draw(g, 0, 0);
 		btnNext.draw(g, 0, 0);
 		btnFlagHelmet.draw(g);
 		btnFlagCastle.draw(g);
-		
+		drawGold(g);
+	}
+	
+	private void drawGold(Graphics g){
+		int margin = Define.SIZEY64;
+		String text = "" + playerList.get(currentPlayer).getGold();
+		int totalWidth = GfxManager.imgChest.getWidth() + margin + Font.getFontWidth(Font.FONT_MEDIUM)*text.length();
+		int x = Define.SIZEX - Define.SIZEX4 - totalWidth/2; 
+		int y = Define.SIZEY - GfxManager.imgGameHud.getHeight()/2 + GfxManager.imgChest.getHeight()/4; 
+		g.drawImage(GfxManager.imgChest, x, y, Graphics.VCENTER | Graphics.HCENTER);
+		TextManager.drawSimpleText(g, Font.FONT_MEDIUM, text, 
+			x+margin + GfxManager.imgChest.getWidth()/2 + Font.getFontWidth(Font.FONT_MEDIUM)*text.length()/2,
+			y, 
+			Graphics.VCENTER | Graphics.HCENTER);
 	}
 	
 	private void cleanArmyAction(){
@@ -680,6 +693,10 @@ public class GameManager {
 		switch(state){
 		case STATE_INCOME:
 			startPresentation(Font.FONT_BIG, "PLAYER " + (currentPlayer+1));
+			cameraTargetX = worldConver.getConversionDrawX(gameCamera.getPosX(), 
+					playerList.get(currentPlayer).getCapital().getAbsoluteX());
+			cameraTargetY = worldConver.getConversionDrawY(gameCamera.getPosY(), 
+					playerList.get(currentPlayer).getCapital().getAbsoluteY());
 			break;
 		case STATE_ECONOMY:
 			
@@ -930,7 +947,6 @@ public class GameManager {
 		return enemy;
 	}
 	
-	
 	private void removeArmy(Army army){
 		for(Player player:playerList){
 			for(int i = 0; i < player.getArmyList().size(); i++){
@@ -941,7 +957,6 @@ public class GameManager {
 			}
 		}
 	}
-	
 	
 	private void startEscape(){
 		
@@ -1049,17 +1064,18 @@ public class GameManager {
 	}
 	
 	private void updateCamera(){
-		if(UserInput.getInstance().getMultiTouchHandler().getTouchAction(0) == TouchData.ACTION_MOVE){
-			if(lastTouchX != UserInput.getInstance().getMultiTouchHandler().getTouchX(0)){
-				cameraTargetX = cameraTargetX + lastTouchX - UserInput.getInstance().getMultiTouchHandler().getTouchX(0);
-			}
-			if(lastTouchY != UserInput.getInstance().getMultiTouchHandler().getTouchY(0)){
-				cameraTargetY = cameraTargetY + lastTouchY - UserInput.getInstance().getMultiTouchHandler().getTouchY(0);
+		if(state == STATE_ACTION){
+			if(UserInput.getInstance().getMultiTouchHandler().getTouchAction(0) == TouchData.ACTION_MOVE){
+				if(lastTouchX != UserInput.getInstance().getMultiTouchHandler().getTouchX(0)){
+					cameraTargetX = cameraTargetX + lastTouchX - UserInput.getInstance().getMultiTouchHandler().getTouchX(0);
+				}
+				if(lastTouchY != UserInput.getInstance().getMultiTouchHandler().getTouchY(0)){
+					cameraTargetY = cameraTargetY + lastTouchY - UserInput.getInstance().getMultiTouchHandler().getTouchY(0);
+				}
 			}
 		}
 		lastTouchX = UserInput.getInstance().getMultiTouchHandler().getTouchX(0);
 		lastTouchY = UserInput.getInstance().getMultiTouchHandler().getTouchY(0);
-		
 		cameraTargetX = Math.max(cameraTargetX, worldConver.getLayoutX() / 2f);
 		cameraTargetX = Math.min(cameraTargetX, worldConver.getWorldWidth() - worldConver.getLayoutX() / 2f);
 		cameraTargetY = Math.max(cameraTargetY, worldConver.getLayoutY() / 2f);

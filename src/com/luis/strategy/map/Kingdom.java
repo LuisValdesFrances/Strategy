@@ -47,16 +47,15 @@ public class Kingdom extends MapObject{
 		target = -1;
 	}
 	
-	public int getGold(){
-		int gold;
-		return 0;
+	public boolean hasTerrain(int type){
+		boolean hasTerrain = false;
+		for(int i = 0; i < terrainList.size() && !hasTerrain; i++){
+			if(terrainList.get(i).getType()==type){
+				hasTerrain = true;
+			}
+		}
+		return hasTerrain;
 	}
-	
-	public int getDificult(){
-		int dificult;
-		return 0;
-	}
-	
 	
 	public int getId() {
 		return id;

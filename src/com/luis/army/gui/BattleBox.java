@@ -24,23 +24,24 @@ public class BattleBox extends MenuBox{
 	
 	public BattleBox() {
 		
-		super(Define.SIZEX, Define.SIZEY, GfxManager.imgMediumBox, null, null, 
+		super(Define.SIZEX, Define.SIZEY, GfxManager.imgMediumBox, null, null,
+				Define.SIZEX2, Define.SIZEY2-GfxManager.imgGameHud.getHeight()/2,
 				"COMBAT",
 				null, Font.FONT_MEDIUM, Font.FONT_SMALL);
 		
 		btnList.add(new Button(
 				GfxManager.imgButtonCombatRelease, 
 				GfxManager.imgButtonCombatFocus, 
-				screenWidth/2 + GfxManager.imgMediumBox.getWidth()/2, 
-				screenHeight/2 + GfxManager.imgMediumBox.getHeight()/2, 
+				getX() + GfxManager.imgMediumBox.getWidth()/2, 
+				getY() + GfxManager.imgMediumBox.getHeight()/2, 
 				null, 
 				-1){});
 		
 		btnList.add(new Button(
 				GfxManager.imgButtonCardRelease, 
 				GfxManager.imgButtonCardFocus, 
-				screenWidth/2 - GfxManager.imgMediumBox.getWidth()/2, 
-				screenHeight/2 + GfxManager.imgMediumBox.getHeight()/2, 
+				getX() - GfxManager.imgMediumBox.getWidth()/2, 
+				getY() + GfxManager.imgMediumBox.getHeight()/2, 
 				null, 
 				-1){});
 	}
@@ -82,7 +83,8 @@ public class BattleBox extends MenuBox{
 			TextManager.drawSimpleText(g, 
 					Font.FONT_SMALL,
 					text,
-					x+(int)modPosX, y - Font.getFontHeight(Font.FONT_SMALL),
+					getX()+(int)modPosX, 
+					getY() - Font.getFontHeight(Font.FONT_SMALL),
 					Graphics.VCENTER|Graphics.HCENTER);
 		}
 	}
