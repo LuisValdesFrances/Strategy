@@ -13,7 +13,6 @@ import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.army.Army;
-import com.luis.strategy.army.Troop;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 

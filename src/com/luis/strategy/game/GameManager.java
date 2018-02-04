@@ -375,7 +375,12 @@ public class GameManager {
 							//Si hay un ejercito enemigo
 							if(getEnemyAtKingdom(playerList.get(currentPlayer), activeArmy.getKingdom()) != null){
 								changeSubState(SUB_STATE_ACTION_COMBAT);
-								battleBox.start(BattleBox.TYPE_BATTLE_ARMY);
+								
+								//Para batallas, el tipo de box es el primer elemento del territorio
+								battleBox.start(
+										getSelectedArmy().getKingdom().getTerrainList().get(0).getType(), 
+										getSelectedArmy(),
+										getEnemyAtKingdom(playerList.get(currentPlayer), activeArmy.getKingdom()));
 							}else{
 								activeArmy.getKingdom().setTarget(-1);
 								activeArmy.changeState(Army.STATE_OFF);
@@ -386,17 +391,20 @@ public class GameManager {
 							changeSubState(SUB_STATE_ACTION_COMBAT);
 							//Si hay un ejercito enemigo
 							if(getEnemyAtKingdom(playerList.get(currentPlayer), activeArmy.getKingdom()) != null){
-								battleBox.start(BattleBox.TYPE_BATTLE_ARMY);
+								
+								//Para batallas, el tipo de box es el primer elemento del territorio
+								battleBox.start(
+										getSelectedArmy().getKingdom().getTerrainList().get(0).getType(), 
+										getSelectedArmy(),
+										getEnemyAtKingdom(playerList.get(currentPlayer), activeArmy.getKingdom()));
+								
 							}else{
-								int kingdomState = activeArmy.getKingdom().getState();
-								switch(activeArmy.getKingdom().getTerrainList().get(kingdomState).getType()){
-								case GameParams.PLAIN:battleBox.start(BattleBox.TYPE_BATTLE_PLAIN);break;
-								case GameParams.FOREST:battleBox.start(BattleBox.TYPE_BATTLE_FOREST);break;
-								case GameParams.MONTAIN:battleBox.start(BattleBox.TYPE_BATTLE_MONTAIN);break;
-								case GameParams.SMALL_CITY:battleBox.start(BattleBox.TYPE_BATTLE_SMALL_CITY);break;
-								case GameParams.MEDIUM_CITY:battleBox.start(BattleBox.TYPE_BATTLE_MEDIUM_CITY);break;
-								case GameParams.BIG_CITY:battleBox.start(BattleBox.TYPE_BATTLE_BIG_CITY);break;
-								}
+								int kingdomState = getSelectedArmy().getKingdom().getState();
+								battleBox.start(
+										getSelectedArmy().getKingdom().getTerrainList().get(kingdomState).getType(), 
+										getSelectedArmy(),
+										null);
+								
 							}
 						}
 					}
@@ -490,9 +498,11 @@ public class GameManager {
 				g.setClip(0, 0, Define.SIZEX, Define.SIZEX);
 				g.drawImage(GfxManager.imgFlagList.get(player.getFlag()), 
 						worldConver.getConversionDrawX(
-						gameCamera.getPosX(), kingdom.getTerrainList().get(kingdom.getTerrainList().size()-1).getAbsoluteX())+GfxManager.imgPlain.getWidth()/2,
+						gameCamera.getPosX(), kingdom.getTerrainList().get(kingdom.getTerrainList().size()-1).getAbsoluteX())+
+							GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth()/2,
 						worldConver.getConversionDrawY(
-						gameCamera.getPosY(), kingdom.getTerrainList().get(kingdom.getTerrainList().size()-1).getAbsoluteY())+GfxManager.imgPlain.getHeight()/2,
+						gameCamera.getPosY(), kingdom.getTerrainList().get(kingdom.getTerrainList().size()-1).getAbsoluteY())+
+							GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight()/2,
 						
 						Graphics.BOTTOM | Graphics.HCENTER);
 			}

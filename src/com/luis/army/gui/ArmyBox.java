@@ -81,11 +81,9 @@ public class ArmyBox extends MenuBox{
 		fileWidth = imageW * totalColums + (marginW * (totalColums-1));
 		columnHeight = imageH * totalFiles + (marginH * (totalFiles-1));
 		
-		enableCrossButton = isCurrentPlayer && !discardMode && isInCity;
-		
 		updateTroops();
 		
-		if(enableCrossButton){
+		if(isCurrentPlayer){
 			crossButton = new Button(
 					GfxManager.imgButtonCrossBigRelease, 
 					GfxManager.imgButtonCrossBigFocus, 
@@ -98,7 +96,12 @@ public class ArmyBox extends MenuBox{
 					buyBox.start(army);
 				}
 			};
+			enableCrossButton = !discardMode && isInCity;
+			crossButton.setDisabled(!enableCrossButton);
+		}else{
+			crossButton = null;
 		}
+		
 	}
 	
 	public void updateTroops(){
@@ -165,7 +168,7 @@ public class ArmyBox extends MenuBox{
 					}
 				}
 				
-				if(enableCrossButton)
+				if(crossButton != null & enableCrossButton)
 					crossButton.update(touchHandler);
 			}
 			return super.update(touchHandler, delta);

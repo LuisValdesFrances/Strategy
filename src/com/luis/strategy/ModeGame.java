@@ -113,8 +113,12 @@ public class ModeGame {
 					0,//GfxManager.imgMap.getWidth()/2, 
 					0,//GfxManager.imgMap.getHeight()/2,
 					GfxManager.imgMap,
-					GfxManager.imgSmallCity, GfxManager.imgMediumCity, GfxManager.imgBigCity, 
-					GfxManager.imgPlain, GfxManager.imgForest, GfxManager.imgMontain, null);
+					GfxManager.imgTerrain.get(GameParams.SMALL_CITY), 
+					GfxManager.imgTerrain.get(GameParams.MEDIUM_CITY), 
+					GfxManager.imgTerrain.get(GameParams.BIG_CITY), 
+					GfxManager.imgTerrain.get(GameParams.PLAIN), 
+					GfxManager.imgTerrain.get(GameParams.FOREST), 
+					GfxManager.imgTerrain.get(GameParams.MONTAIN), null);
 			
 			map.setKingdomList(DataKingdom.getGenterex(worldConver, gameCamera, map));
 			

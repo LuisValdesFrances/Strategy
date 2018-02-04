@@ -103,8 +103,10 @@ public class Map extends MapObject{
 			//OK
 			for(int i = 0; i < k.getState(); i++){
 				g.drawImage(GfxManager.imgTerrainOk,
-					worldConver.getConversionDrawX(gameCamera.getPosX(), (k.getTerrainList().get(i).getAbsoluteX()+GfxManager.imgPlain.getWidth()*0.30f)),
-					worldConver.getConversionDrawY(gameCamera.getPosY(), (k.getTerrainList().get(i).getAbsoluteY()+GfxManager.imgPlain.getHeight()*0.30f)),
+					worldConver.getConversionDrawX(gameCamera.getPosX(), (k.getTerrainList().get(i).getAbsoluteX()+
+							GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth()*0.30f)),
+					worldConver.getConversionDrawY(gameCamera.getPosY(), (k.getTerrainList().get(i).getAbsoluteY()+
+							GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight()*0.30f)),
 					Graphics.VCENTER | Graphics.HCENTER);
 			}
 		}

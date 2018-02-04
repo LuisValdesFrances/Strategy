@@ -3,6 +3,7 @@ package com.luis.strategy.army;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.luis.lgameengine.gameutils.controls.GameControl;
 import com.luis.lgameengine.gameutils.gameworld.GameCamera;
 import com.luis.lgameengine.gameutils.gameworld.Math2D;
 import com.luis.lgameengine.gameutils.gameworld.SpriteImage;
@@ -11,6 +12,7 @@ import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.Main;
 import com.luis.strategy.constants.Define;
+import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.game.Player;
 import com.luis.strategy.map.Kingdom;
 import com.luis.strategy.map.Map;
@@ -191,6 +193,36 @@ public class Army extends MapObject{
 		}
 		state = newState;
 		
+	}
+	
+	public int getNumberTroops(int type){
+		int n = 0;
+		for(int i = 0; i < troopList.size(); i++){
+			if(troopList.get(i).getType() == type)
+				n++;
+		}
+		return n;
+	}
+	
+	public int getPower(int terrain){
+		int power = 0;
+		for(int i = 0; i < troopList.size(); i++){
+			switch(troopList.get(i).getType()){
+			case GameParams.INFANTRY:
+				power += GameParams.INFANTRY_COMBAT[terrain];
+				break;
+			case GameParams.KNIGHT:
+				power += GameParams.KNIGHTS_COMBAT[terrain];
+				break;
+			case GameParams.HARASSERES:
+				power += GameParams.HARASSERS_COMBAT[terrain];
+				break;
+			case GameParams.SIEGE:
+				power += GameParams.SIEGE_COMBAT[terrain];
+				break;
+			}
+		}
+		return power;
 	}
 
 	public int getState() {

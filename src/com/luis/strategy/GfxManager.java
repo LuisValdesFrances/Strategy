@@ -75,22 +75,21 @@ public class GfxManager {
 	   
 	   public static Image imgMap;
 	   public static Image imgTerrainOk;
-	   public static Image imgPlain;
-	   public static Image imgForest;
-	   public static Image imgMontain;
-	   public static Image imgBigCity;
-	   public static Image imgMediumCity;
-	   public static Image imgSmallCity;
+	   
 	   public static Image imgTargetDomain;
 	   public static Image imgTargetBattle;
 	   public static Image imgTargetAggregation;
 	   public static Image imgMapSelectGreen;
 	   public static Image imgMapSelectRed;
 	   
-	   
+	   public static List<Image> imgTerrain;
+	   public static List<Image> imgTerrainBox;
 	   
 	   public static List<Image> imgBigTroop;
 	   public static List<Image> imgSmallTroop;
+	   public static List<Image> imgIconTroop;
+	   public static Image imgBigVillagers;
+	   public static Image imgIconVillagers;
 	   
 	   public static Image imgArmyIdle;
 	   public static Image imgArmyRun;
@@ -98,6 +97,7 @@ public class GfxManager {
 	   
 	   public static List<Image> imgFlagList;
 	   public static List<Image> imgFlagSmallList;
+	   public static List<Image> imgFlagBigList;
 	   
 	  
 
@@ -174,12 +174,7 @@ public class GfxManager {
 	            	imgPadAux = Image.createImage("/pad_aux.png");
 	            	*/
 	            	imgTerrainOk = Image.createImage("/terrain_ok.png");
-	            	imgPlain = Image.createImage("/plain.png");
-	            	imgForest = Image.createImage("/forest.png");
-	            	imgMontain = Image.createImage("/montain.png");
-	            	imgBigCity = Image.createImage("/big_city.png");
-	            	imgMediumCity = Image.createImage("/medium_city.png");
-	            	imgSmallCity = Image.createImage("/small_city.png");
+	            	
 	            	imgTargetDomain = Image.createImage("/target_domain.png");
 	            	imgTargetAggregation = Image.createImage("/target_aggregation.png");
 	            	imgTargetBattle = Image.createImage("/target_battle.png");
@@ -226,6 +221,26 @@ public class GfxManager {
 	            	
 	            	imgFlagList = new ArrayList<Image>();
 	            	imgFlagSmallList = new ArrayList<Image>();
+	            	imgFlagBigList = new ArrayList<Image>();
+	            	
+	            	imgTerrain = new ArrayList<Image>();
+	            	imgTerrainBox = new ArrayList<Image>();
+	            	
+	            	imgTerrain.add(Image.createImage("/plain.png"));
+	            	imgTerrain.add(Image.createImage("/forest.png"));
+	            	imgTerrain.add(Image.createImage("/montain.png"));
+	            	imgTerrain.add(Image.createImage("/big_city.png"));
+	            	imgTerrain.add(Image.createImage("/medium_city.png"));
+	            	imgTerrain.add(Image.createImage("/small_city.png"));
+	            	
+	            	imgTerrainBox.add(Image.createImage("/plain_box.png"));
+	            	imgTerrainBox.add(Image.createImage("/forest_box.png"));
+	            	imgTerrainBox.add(Image.createImage("/montain_box.png"));
+	            	imgTerrainBox.add(Image.createImage("/city_box.png"));
+	            	imgTerrainBox.add(imgTerrainBox.get(3));
+	            	imgTerrainBox.add(imgTerrainBox.get(3));
+	            	
+	            	
 	            	
 	            	imgFlagList.add(Image.createImage("/flag1.png"));
 	            	imgFlagList.add(Image.createImage("/flag2.png"));
@@ -241,14 +256,31 @@ public class GfxManager {
 	            	imgFlagSmallList.add(Image.createImage("/flag_small5.png"));
 	            	imgFlagSmallList.add(Image.createImage("/flag_small6.png"));
 	            	
+	            	imgFlagBigList.add(Image.createImage("/flag_big1.png"));
+	            	imgFlagBigList.add(Image.createImage("/flag_big2.png"));
+	            	imgFlagBigList.add(Image.createImage("/flag_big3.png"));
+	            	imgFlagBigList.add(Image.createImage("/flag_big4.png"));
+	            	imgFlagBigList.add(Image.createImage("/flag_big5.png"));
+	            	imgFlagBigList.add(Image.createImage("/flag_big6.png"));
+	            	
 	            	imgBigTroop = new ArrayList<Image>();
 	            	imgSmallTroop = new ArrayList<Image>();
+	            	imgIconTroop = new ArrayList<Image>();
 	            	imgBigTroop.add(Image.createImage("/infantry_big.png"));
 	            	imgBigTroop.add(Image.createImage("/knigths_big.png"));
 	            	imgBigTroop.add(Image.createImage("/harassers_big.png"));
+	            	imgBigTroop.add(Image.createImage("/siege_big.png"));
 	            	imgSmallTroop.add(Image.createImage("/infantry_small.png"));
 	            	imgSmallTroop.add(Image.createImage("/knigths_small.png"));
 	            	imgSmallTroop.add(Image.createImage("/harassers_small.png"));
+	            	imgSmallTroop.add(Image.createImage("/siege_small.png"));
+	            	imgIconTroop.add(Image.createImage("/infantry_icon.png"));
+	            	imgIconTroop.add(Image.createImage("/knigths_icon.png"));
+	            	imgIconTroop.add(Image.createImage("/harassers_icon.png"));
+	            	imgIconTroop.add(Image.createImage("/siege_icon.png"));
+	            	
+	            	imgIconVillagers = Image.createImage("/villagers_icon.png");
+	            	imgBigVillagers = Image.createImage("/villagers_big.png");
 	            	
 	               
 	            } catch (IOException ex) {

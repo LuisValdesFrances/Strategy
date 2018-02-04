@@ -24,9 +24,9 @@ public class DataKingdom {
 		//La posicion del terreno se expresa en porcentajes respecto al ancho y alto del mapa
 		List<Terrain> terrainList = new ArrayList<Terrain>();
 		terrainList.add(new Terrain(worldConver, gameCamera, map,
-			(560f/map.getWidth()*120), (210f/map.getHeight()*120), GfxManager.imgPlain.getWidth(), GfxManager.imgPlain.getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.PLAIN, false));
+			(560f/map.getWidth()*120), (210f/map.getHeight()*120), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.PLAIN, false));
 		terrainList.add(new Terrain(worldConver, gameCamera, map,
-			(560f/map.getWidth()*120), (124f/map.getHeight()*120), GfxManager.imgBigCity.getWidth(), GfxManager.imgBigCity.getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.BIG_CITY, false));
+			(560f/map.getWidth()*120), (124f/map.getHeight()*120), GfxManager.imgTerrain.get(GameParams.BIG_CITY).getWidth(), GfxManager.imgTerrain.get(GameParams.BIG_CITY).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.BIG_CITY, false));
 		k1.setTerrainList(terrainList);
 		
 		Kingdom k2 = new Kingdom(worldConver, gameCamera, map,
@@ -36,9 +36,9 @@ public class DataKingdom {
 		//La posicion del terreno se expresa en porcentajes respecto al ancho y alto del mapa
 		terrainList = new ArrayList<Terrain>();
 		terrainList.add(new Terrain(worldConver, gameCamera, map,
-			(485f/(float)map.getWidth()*120f), (355f/(float)map.getHeight()*120f), GfxManager.imgPlain.getWidth(), GfxManager.imgPlain.getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.FOREST, false));
+			(485f/(float)map.getWidth()*120f), (355f/(float)map.getHeight()*120f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.FOREST, false));
 		terrainList.add(new Terrain(worldConver, gameCamera, map,
-			(440f/(float)map.getWidth()*120f), (270f/(float)map.getHeight()*120f), GfxManager.imgMediumCity.getWidth(), GfxManager.imgMediumCity.getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.MEDIUM_CITY, false));
+			(440f/(float)map.getWidth()*120f), (270f/(float)map.getHeight()*120f), GfxManager.imgTerrain.get(GameParams.MEDIUM_CITY).getWidth(), GfxManager.imgTerrain.get(GameParams.MEDIUM_CITY).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.MEDIUM_CITY, false));
 		k2.setTerrainList(terrainList);
 		
 		Kingdom k3 = new Kingdom(worldConver, gameCamera, map,
@@ -48,9 +48,9 @@ public class DataKingdom {
 		//La posicion del terreno se expresa en porcentajes respecto al ancho y alto del mapa
 		terrainList = new ArrayList<Terrain>();
 		terrainList.add(new Terrain(worldConver, gameCamera, map,
-			(575f/(float)map.getWidth()*120f), (590f/(float)map.getHeight()*120f), GfxManager.imgPlain.getWidth(), GfxManager.imgPlain.getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.PLAIN, false));
+			(575f/(float)map.getWidth()*120f), (590f/(float)map.getHeight()*120f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.PLAIN, false));
 		terrainList.add(new Terrain(worldConver, gameCamera, map,
-			(520f/(float)map.getWidth()*120f), (515f/(float)map.getHeight()*120f), GfxManager.imgMediumCity.getWidth(), GfxManager.imgMediumCity.getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.MEDIUM_CITY, false));
+			(520f/(float)map.getWidth()*120f), (515f/(float)map.getHeight()*120f), GfxManager.imgTerrain.get(GameParams.MEDIUM_CITY).getWidth(), GfxManager.imgTerrain.get(GameParams.MEDIUM_CITY).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.MEDIUM_CITY, false));
 		k3.setTerrainList(terrainList);
 		
 		Kingdom k4 = new Kingdom(worldConver, gameCamera, map,
@@ -60,7 +60,7 @@ public class DataKingdom {
 		//La posicion del terreno se expresa en porcentajes respecto al ancho y alto del mapa
 		terrainList = new ArrayList<Terrain>();
 		terrainList.add(new Terrain(worldConver, gameCamera, map,
-			(875f/(float)map.getWidth()*120f), (235f/(float)map.getHeight()*120f), GfxManager.imgPlain.getWidth(), GfxManager.imgPlain.getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.MONTAIN, false));
+			(875f/(float)map.getWidth()*120f), (235f/(float)map.getHeight()*120f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.MONTAIN, false));
 		k4.setTerrainList(terrainList);
 		
 		Kingdom k5 = new Kingdom(worldConver, gameCamera, map,
@@ -70,9 +70,9 @@ public class DataKingdom {
 		//La posicion del terreno se expresa en porcentajes respecto al ancho y alto del mapa
 		terrainList = new ArrayList<Terrain>();
 		terrainList.add(new Terrain(worldConver, gameCamera, map,
-			(608f/(float)map.getWidth()*120f), (380f/(float)map.getHeight()*120f), GfxManager.imgPlain.getWidth(), GfxManager.imgPlain.getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.MONTAIN, false));
+			(608f/(float)map.getWidth()*120f), (380f/(float)map.getHeight()*120f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.MONTAIN, false));
 		terrainList.add(new Terrain(worldConver, gameCamera, map,
-			(668f/(float)map.getWidth()*120f), (380f/(float)map.getHeight()*120f), GfxManager.imgPlain.getWidth(), GfxManager.imgPlain.getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.FOREST, false));
+			(668f/(float)map.getWidth()*120f), (380f/(float)map.getHeight()*120f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.FOREST, false));
 		k5.setTerrainList(terrainList);
 		
 		Kingdom k6 = new Kingdom(worldConver, gameCamera, map,
@@ -82,9 +82,9 @@ public class DataKingdom {
 		//La posicion del terreno se expresa en porcentajes respecto al ancho y alto del mapa
 		terrainList = new ArrayList<Terrain>();
 		terrainList.add(new Terrain(worldConver, gameCamera, map,
-			(764f/(float)map.getWidth()*120f), (340f/(float)map.getHeight()*120f), GfxManager.imgPlain.getWidth(), GfxManager.imgPlain.getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.MONTAIN, false));
+			(764f/(float)map.getWidth()*120f), (340f/(float)map.getHeight()*120f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.MONTAIN, false));
 		terrainList.add(new Terrain(worldConver, gameCamera, map,
-			(821f/(float)map.getWidth()*120f), (340f/(float)map.getHeight()*120f), GfxManager.imgPlain.getWidth(), GfxManager.imgPlain.getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.FOREST, false));
+			(821f/(float)map.getWidth()*120f), (340f/(float)map.getHeight()*120f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.FOREST, false));
 		k6.setTerrainList(terrainList);
 		
 		Kingdom k7 = new Kingdom(worldConver, gameCamera, map,
@@ -94,11 +94,11 @@ public class DataKingdom {
 		//La posicion del terreno se expresa en porcentajes respecto al ancho y alto del mapa
 		terrainList = new ArrayList<Terrain>();
 		terrainList.add(new Terrain(worldConver, gameCamera, map,
-			(827f/(float)map.getWidth()*120f), (485f/(float)map.getHeight()*120f), GfxManager.imgPlain.getWidth(), GfxManager.imgPlain.getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.FOREST, false));
+			(827f/(float)map.getWidth()*120f), (485f/(float)map.getHeight()*120f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.FOREST, false));
 		terrainList.add(new Terrain(worldConver, gameCamera, map,
-			(882f/(float)map.getWidth()*120f), (485f/(float)map.getHeight()*120f), GfxManager.imgPlain.getWidth(), GfxManager.imgPlain.getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.PLAIN, false));
+			(882f/(float)map.getWidth()*120f), (485f/(float)map.getHeight()*120f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.PLAIN, false));
 		terrainList.add(new Terrain(worldConver, gameCamera, map,
-			(745f/(float)map.getWidth()*120f), (430f/(float)map.getHeight()*120f), GfxManager.imgPlain.getWidth(), GfxManager.imgPlain.getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.MEDIUM_CITY, false));
+			(745f/(float)map.getWidth()*120f), (430f/(float)map.getHeight()*120f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.MEDIUM_CITY, false));
 		k7.setTerrainList(terrainList);
 		
 		Kingdom k8 = new Kingdom(worldConver, gameCamera, map,
@@ -108,7 +108,7 @@ public class DataKingdom {
 		//La posicion del terreno se expresa en porcentajes respecto al ancho y alto del mapa
 		terrainList = new ArrayList<Terrain>();
 		terrainList.add(new Terrain(worldConver, gameCamera, map,
-			(790f/(float)map.getWidth()*120f), (595f/(float)map.getHeight()*120f), GfxManager.imgPlain.getWidth(), GfxManager.imgPlain.getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.PLAIN, false));
+			(790f/(float)map.getWidth()*120f), (595f/(float)map.getHeight()*120f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.PLAIN, false));
 		k8.setTerrainList(terrainList);
 		
 		k1.getBorderList().add(k2);
