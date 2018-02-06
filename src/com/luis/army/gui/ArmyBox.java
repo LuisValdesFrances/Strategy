@@ -19,7 +19,7 @@ import com.luis.strategy.constants.GameParams;
 
 public class ArmyBox extends MenuBox{
 	
-	private BuyBox buyBox;
+	private ArmyBuyBox armyBuyBox;
 	
 	private Army army;
 	private boolean isCurrentPlayer;
@@ -45,7 +45,7 @@ public class ArmyBox extends MenuBox{
 				null, 
 				-1){});
 		
-		buyBox = new BuyBox(){
+		armyBuyBox = new ArmyBuyBox(){
 			@Override
 			public void onBuy() {
 				if(army.getPlayer().getGold() >= GameParams.TROOP_COST[this.getIndex()]){
@@ -93,7 +93,7 @@ public class ArmyBox extends MenuBox{
 				@Override
 				public void onButtonPressUp() {
 					reset();
-					buyBox.start(army);
+					armyBuyBox.start(army);
 				}
 			};
 			enableCrossButton = !discardMode && isInCity;
@@ -153,7 +153,7 @@ public class ArmyBox extends MenuBox{
 	
 	@Override
 	public boolean update(MultiTouchHandler touchHandler, float delta){
-		if(!buyBox.update(touchHandler, delta)){
+		if(!armyBuyBox.update(touchHandler, delta)){
 			if(isCurrentPlayer && state == STATE_ACTIVE){
 				for(int i = 0; i < army.getTroopList().size(); i++){
 					if(deleteButtonList.get(i).update(touchHandler)){
@@ -212,7 +212,7 @@ public class ArmyBox extends MenuBox{
 			if(crossButton != null)
 				crossButton.draw(g, (int)modPosX, 0);
 			
-			buyBox.draw(g);
+			armyBuyBox.draw(g);
 		}
 	}
 	

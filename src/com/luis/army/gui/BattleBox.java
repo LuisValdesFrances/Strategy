@@ -3,22 +3,22 @@ package com.luis.army.gui;
 import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gameutils.fonts.TextManager;
 import com.luis.lgameengine.implementation.graphics.Graphics;
+import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 import com.luis.lgameengine.gui.Button;
 import com.luis.lgameengine.gui.MenuBox;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.Main;
 import com.luis.strategy.army.Army;
+import com.luis.strategy.army.Troop;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 
 public class BattleBox extends MenuBox{
 	
+	private BattleRollsBox battleRollsBox;
+	
 	private Army armyAtack;
 	private Army armyDefense;
-	
-	private int combatState;
-	public static final int STATE_VS = 0;
-	public static final int STATE_COMBAT = 1;
 	
 	private int terrain;
 	
@@ -42,7 +42,8 @@ public class BattleBox extends MenuBox{
 				-1){
 			@Override
 			public void onButtonPressUp(){
-				state = STATE_COMBAT;
+				reset();
+				battleRollsBox.start(armyAtack, armyDefense);
 			}
 		});
 		
@@ -60,12 +61,17 @@ public class BattleBox extends MenuBox{
 				separation*2 +
 				Font.getFontHeight(Font.FONT_MEDIUM);
 		centerY = getY() - totalHeight/2;
+		
+		battleRollsBox = new BattleRollsBox(){
+			@Override
+			public void onResult() {
+				
+			}
+		};
 	}
-	
 	
 	public void start(int type, Army armyAtack, Army armyDefense){
 		super.start();
-		this.combatState = STATE_VS;
 		this.terrain = type;
 		this.armyAtack = armyAtack;
 		this.armyDefense = armyDefense;
@@ -73,11 +79,17 @@ public class BattleBox extends MenuBox{
 	}
 	
 	@Override
+	public boolean update(MultiTouchHandler touchHandler, float delta){
+		if(!battleRollsBox.update(touchHandler, delta)){
+			return super.update(touchHandler, delta);
+		}
+		return true;
+	}
+	
+	@Override
 	public void draw(Graphics g, boolean drawBG){
 		super.draw(g, drawBG);
 		if(state != STATE_UNACTIVE){
-			
-			
 			for(int i = 0; i < GfxManager.imgIconTroop.size(); i++){
 				g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 				//Left
@@ -277,7 +289,7 @@ public class BattleBox extends MenuBox{
 					separation-barHeight,
 					defenseWidth, barHeight);
 			
-			
+			battleRollsBox.draw(g);
 		}
 	}
 

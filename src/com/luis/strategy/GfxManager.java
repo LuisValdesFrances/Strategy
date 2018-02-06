@@ -99,8 +99,12 @@ public class GfxManager {
 	   public static List<Image> imgFlagSmallList;
 	   public static List<Image> imgFlagBigList;
 	   
-	  
-
+	   public static Image imgShieldIcon;
+	   public static Image imgCrossIcon;
+	   public static Image imgOkIcon;
+	   public static Image imgShield;
+	   public static List<Image> imgRollList;
+	   
 	   public static void loadGFX(int _iNewState) {
 
 	      switch (_iNewState) {
@@ -282,6 +286,17 @@ public class GfxManager {
 	            	imgIconVillagers = Image.createImage("/villagers_icon.png");
 	            	imgBigVillagers = Image.createImage("/villagers_big.png");
 	            	
+	            	imgShieldIcon = Image.createImage("/shield_icon.png");
+	         	    imgCrossIcon = Image.createImage("/cross_icon.png");
+	         	    imgOkIcon = Image.createImage("/ok_icon.png");
+	         	    imgShield = Image.createImage("/shield.png");
+	         	    imgRollList = new ArrayList<Image>();
+	         	    imgRollList.add(Image.createImage("/r_1.png"));
+	         	    imgRollList.add(Image.createImage("/r_2.png"));
+	         	    imgRollList.add(Image.createImage("/r_3.png"));
+	         	    imgRollList.add(Image.createImage("/r_4.png"));
+	         	    imgRollList.add(Image.createImage("/r_5.png"));
+	         	    imgRollList.add(Image.createImage("/r_6.png"));	            	
 	               
 	            } catch (IOException ex) {
 	               ex.printStackTrace();

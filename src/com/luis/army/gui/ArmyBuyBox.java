@@ -16,7 +16,7 @@ import com.luis.strategy.army.Army;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 
-public class BuyBox {
+public class ArmyBuyBox {
 	
 	private Army army;
 	
@@ -44,7 +44,7 @@ public class BuyBox {
 	
 	private int modPosY;
 	
-	public BuyBox(){
+	public ArmyBuyBox(){
 		
 		int imageW = 
 				GfxManager.imgBigTroop.get(0).getWidth() + 
