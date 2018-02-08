@@ -12,6 +12,7 @@ import com.luis.strategy.army.Army;
 import com.luis.strategy.army.Troop;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
+import com.luis.strategy.map.Terrain;
 
 public class BattleBox extends MenuBox{
 	
@@ -20,7 +21,7 @@ public class BattleBox extends MenuBox{
 	private Army armyAtack;
 	private Army armyDefense;
 	
-	private int terrain;
+	private Terrain terrain;
 	
 	private int troopY;
 	private int centerY;
@@ -43,7 +44,7 @@ public class BattleBox extends MenuBox{
 			@Override
 			public void onButtonPressUp(){
 				reset();
-				battleRollsBox.start(armyAtack, armyDefense);
+				battleRollsBox.start(terrain, armyAtack, armyDefense);
 			}
 		});
 		
@@ -70,9 +71,9 @@ public class BattleBox extends MenuBox{
 		};
 	}
 	
-	public void start(int type, Army armyAtack, Army armyDefense){
+	public void start(Terrain terrain, Army armyAtack, Army armyDefense){
 		super.start();
-		this.terrain = type;
+		this.terrain = terrain;
 		this.armyAtack = armyAtack;
 		this.armyDefense = armyDefense;
 		start();
@@ -170,7 +171,7 @@ public class BattleBox extends MenuBox{
 						Graphics.VCENTER | Graphics.HCENTER);
 			}
 					
-			int relativeFlagX = GfxManager.imgTerrainBox.get(terrain).getWidth()/3;
+			int relativeFlagX = GfxManager.imgTerrainBox.get(terrain.getType()).getWidth()/3;
 			
 			//Left
 			TextManager.drawSimpleText(g, 
@@ -184,7 +185,7 @@ public class BattleBox extends MenuBox{
 			
 			g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 			g.drawImage(GfxManager.imgFlagBigList.get(armyAtack.getPlayer().getFlag()), 
-					getX()-GfxManager.imgTerrainBox.get(terrain).getWidth()/3 +
+					getX()-GfxManager.imgTerrainBox.get(terrain.getType()).getWidth()/3 +
 					(int)modPosX, 
 					centerY +
 					Font.getFontHeight(Font.FONT_BIG)/2 + 
@@ -197,8 +198,8 @@ public class BattleBox extends MenuBox{
 					Font.FONT_SMALL,
 					""+
 					(armyDefense != null?
-						armyDefense.getPower(terrain):GameParams.TERRAIN_DEFENSE[terrain]),
-						getX()+GfxManager.imgTerrainBox.get(terrain).getWidth()/3 +
+						armyDefense.getPower(terrain):GameParams.TERRAIN_DEFENSE[terrain.getType()]),
+						getX()+GfxManager.imgTerrainBox.get(terrain.getType()).getWidth()/3 +
 					(int)modPosX, 
 					centerY +
 					Font.getFontHeight(Font.FONT_SMALL)/2,
@@ -221,7 +222,7 @@ public class BattleBox extends MenuBox{
 			
 			
 			g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-			g.drawImage(GfxManager.imgTerrainBox.get(terrain), 
+			g.drawImage(GfxManager.imgTerrainBox.get(terrain.getType()), 
 					getX()+(int)modPosX, 
 					centerY +
 					Font.getFontHeight(Font.FONT_BIG)/2 + 
@@ -229,11 +230,11 @@ public class BattleBox extends MenuBox{
 					(armyDefense != null?
 						GfxManager.imgFlagBigList.get(armyDefense.getPlayer().getFlag()).getHeight() :
 						GfxManager.imgFlagBigList.get(GfxManager.imgFlagBigList.size()-1).getHeight())+
-					GfxManager.imgTerrainBox.get(terrain).getHeight()/2, 
+					GfxManager.imgTerrainBox.get(terrain.getType()).getHeight()/2, 
 					Graphics.VCENTER|Graphics.HCENTER);
 			
 			String terrainText="";
-			switch(terrain){
+			switch(terrain.getType()){
 				case GameParams.PLAIN: terrainText = "BATTLE PLAIN"; break;
 				case GameParams.FOREST: terrainText = "BATTLE FOREST"; break;
 				case GameParams.MONTAIN: terrainText = "BATTLE MONTAIN"; break;
@@ -252,20 +253,20 @@ public class BattleBox extends MenuBox{
 					(armyDefense != null ?
 							GfxManager.imgFlagBigList.get(armyDefense.getPlayer().getFlag()).getHeight():
 							GfxManager.imgFlagBigList.get(GfxManager.imgFlagBigList.size()-1).getHeight()) +
-							GfxManager.imgTerrainBox.get(terrain).getHeight(),
+							GfxManager.imgTerrainBox.get(terrain.getType()).getHeight(),
 					Graphics.VCENTER|Graphics.HCENTER);
 			
 			//Equilibrio de poder
 			
 			//Distancia total
 			int barWidth = 
-			GfxManager.imgTerrainBox.get(terrain).getWidth() -
+			GfxManager.imgTerrainBox.get(terrain.getType()).getWidth() -
 			relativeFlagX - 
 			GfxManager.imgFlagBigList.get(GfxManager.imgFlagBigList.size()-1).getWidth();
 			int barHeight = GfxManager.imgFlagBigList.get(armyAtack.getPlayer().getFlag()).getHeight()/10;
 			
 			int atackForces = armyAtack.getPower(terrain);
-			int defenseForces = armyDefense != null? armyDefense.getPower(terrain):GameParams.TERRAIN_DEFENSE[terrain];
+			int defenseForces = armyDefense != null? armyDefense.getPower(terrain):GameParams.TERRAIN_DEFENSE[terrain.getType()];
 			int totalForces = atackForces+defenseForces;
 			int atackWidth = (atackForces*barWidth)/totalForces;
 			int defenseWidth = (defenseForces*barWidth)/totalForces;

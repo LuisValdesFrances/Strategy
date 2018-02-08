@@ -4,28 +4,35 @@ import java.util.List;
 
 import android.util.Log;
 
+import com.luis.lgameengine.gameutils.fonts.Font;
+import com.luis.lgameengine.gameutils.fonts.TextManager;
 import com.luis.lgameengine.gui.Button;
 import com.luis.lgameengine.gui.MenuElement;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.graphics.Image;
 import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 import com.luis.strategy.GfxManager;
+import com.luis.strategy.Main;
 import com.luis.strategy.army.Army;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
+import com.luis.strategy.map.Terrain;
 
 public class BattleRollsBox {
 	
+	private Terrain terrain;
 	private Army armyAtack;
 	private Army armyDefense;
 	
 	private int state;
+	private int stateCombat = 0;
 	public static final int STATE_UNACTIVE = 0;
 	public static final int STATE_START = 1;
-	public static final int STATE_SHOW_1 = 2;
-	public static final int STATE_SHOW_2 = 3;
-	public static final int STATE_SHOW_3 = 4;
+	public static final int STATE_COMBAT_1 = 2;
+	public static final int STATE_COMBAT_2 = 3;
+	public static final int STATE_COMBAT_3 = 4;
 	public static final int STATE_END = 5;
+	
 	
 	private Button buttonCombat;
 	
@@ -37,6 +44,12 @@ public class BattleRollsBox {
 	private int[] shieldIconY;
 	
 	private int modPosY;
+	
+	private int modPosRoll;
+	
+	private int rollValue;
+	private int rollDifficult;
+	private boolean[] result;
 
 	public BattleRollsBox() {
 		
@@ -69,16 +82,40 @@ public class BattleRollsBox {
 				state++;
 				onCombat();
 				buttonCombat.reset();
-				Log.i("debug", "state " + state);
+				if(state >= STATE_COMBAT_1 && state <= STATE_COMBAT_3){
+					modPosRoll = -Define.SIZEX;
+					rollValue = Main.getRandom(1, GameParams.ROLL_SYSTEM);
+					result[stateCombat] = rollValue >= rollDifficult;
+					stateCombat++;
+				}
+				Log.i("debug", "rollValue: " + rollValue);
+				for(int i = 0; i < result.length; i++){
+					Log.i("Debug", "result " + i + " " + result[i]);
+				}
 			};
 		};
+		
+		result = new boolean[3];
 	}
 	
-	public void start(Army armyAtack, Army armyDefense){
+	public void start(Terrain terrain, Army armyAtack, Army armyDefense){
+		this.terrain = terrain;
 		this.armyAtack = armyAtack;
 		this.armyDefense = armyDefense;
 		this.state = STATE_START;
 		this.modPosY = -Define.SIZEY;
+		this.modPosRoll = -Define.SIZEX;
+		this.rollDifficult = calculateDifficult();
+		this.stateCombat = 0;
+		
+		this.rollValue = Main.getRandom(1, GameParams.ROLL_SYSTEM);
+		result[stateCombat] = rollValue >= rollDifficult;
+		stateCombat++;
+		
+		Log.i("debug", "rollValue: " + rollValue);
+		for(int i = 0; i < result.length; i++){
+			Log.i("Debug", "result " + i + " " + result[i]);
+		}
 	}
 	
 	public boolean update(MultiTouchHandler touchHandler, float delta){
@@ -88,17 +125,17 @@ public class BattleRollsBox {
 				modPosY -= (modPosY*8f)*delta - 1f;
 				if(modPosY >= 0){
 					modPosY = 0;
-					state = STATE_SHOW_1;
+					state = STATE_COMBAT_1;
 				}
 				break;
-			case STATE_SHOW_1:
-				buttonCombat.update(touchHandler);
-				break;
-			case STATE_SHOW_2:
-				buttonCombat.update(touchHandler);
-				break;
-			case STATE_SHOW_3:
-				buttonCombat.update(touchHandler);
+			case STATE_COMBAT_1:
+			case STATE_COMBAT_2:
+			case STATE_COMBAT_3:
+				if(modPosRoll < 0){
+					modPosRoll -= (modPosRoll*8f)*delta - 1f;
+				}else{
+					buttonCombat.update(touchHandler);
+				}
 				break;
 			case STATE_END:
 				modPosY += (modPosY*16f)*delta + 1f;
@@ -130,8 +167,17 @@ public class BattleRollsBox {
 					parchmentY + modY, 
 					Graphics.VCENTER | Graphics.HCENTER);
 			
+			TextManager.drawSimpleText(g, Font.FONT_BIG, "DIFFICULT: "+ rollDifficult, 
+					parchmentX, parchmentY + modY, Graphics.VCENTER | Graphics.HCENTER);
+			g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+			
 			g.drawImage(GfxManager.imgShield, 
 					shieldX, 
+					shieldY + modY, 
+					Graphics.VCENTER | Graphics.HCENTER);
+			
+			g.drawImage(GfxManager.imgRollList.get(rollValue-1), 
+					shieldX + modPosRoll, 
 					shieldY + modY, 
 					Graphics.VCENTER | Graphics.HCENTER);
 			
@@ -140,6 +186,16 @@ public class BattleRollsBox {
 						shieldIconX, 
 						shieldIconY[i] + modY, 
 						Graphics.VCENTER | Graphics.HCENTER);
+				
+				if(state >= STATE_COMBAT_1){
+					if(stateCombat > i){
+						g.drawImage(
+							result[i]?GfxManager.imgOkIcon:GfxManager.imgCrossIcon, 
+							shieldIconX, 
+							shieldIconY[i] + modY, 
+							Graphics.VCENTER | Graphics.HCENTER);
+					}
+				}
 			}
 			
 			buttonCombat.draw(g, 0, modY);
@@ -150,6 +206,18 @@ public class BattleRollsBox {
 	public void onCombat(){}
 	
 	public void onResult(){}
+	
+	public int calculateDifficult(){
+		int value=0;
+		
+		int pAtack = armyAtack.getPower(terrain);
+		int pDefense = armyDefense != null ? armyDefense.getPower(terrain):GameParams.TERRAIN_DEFENSE[terrain.getType()];
+		
+		
+		value = GameParams.ROLL_SYSTEM-((armyAtack.getPower(terrain) * GameParams.ROLL_SYSTEM)/(pAtack+pDefense));
+		
+		return value;
+	}
 	
 	
 	

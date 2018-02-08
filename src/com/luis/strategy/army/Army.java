@@ -17,6 +17,7 @@ import com.luis.strategy.game.Player;
 import com.luis.strategy.map.Kingdom;
 import com.luis.strategy.map.Map;
 import com.luis.strategy.map.MapObject;
+import com.luis.strategy.map.Terrain;
 
 public class Army extends MapObject{
 	
@@ -204,21 +205,21 @@ public class Army extends MapObject{
 		return n;
 	}
 	
-	public int getPower(int terrain){
+	public int getPower(Terrain terrain){
 		int power = 0;
 		for(int i = 0; i < troopList.size(); i++){
 			switch(troopList.get(i).getType()){
 			case GameParams.INFANTRY:
-				power += GameParams.INFANTRY_COMBAT[terrain];
+				power += GameParams.INFANTRY_COMBAT[terrain.getType()];
 				break;
 			case GameParams.KNIGHT:
-				power += GameParams.KNIGHTS_COMBAT[terrain];
+				power += GameParams.KNIGHTS_COMBAT[terrain.getType()];
 				break;
 			case GameParams.HARASSERES:
-				power += GameParams.HARASSERS_COMBAT[terrain];
+				power += GameParams.HARASSERS_COMBAT[terrain.getType()];
 				break;
 			case GameParams.SIEGE:
-				power += GameParams.SIEGE_COMBAT[terrain];
+				power += GameParams.SIEGE_COMBAT[terrain.getType()];
 				break;
 			}
 		}

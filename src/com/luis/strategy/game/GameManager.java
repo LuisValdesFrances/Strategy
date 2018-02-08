@@ -295,6 +295,11 @@ public class GameManager {
 							activeArmy = army;
 							activeArmy.setSelected(true);
 							btnFlagCastle.start();
+							//Camara se posiciona en el seleccionado
+							cameraTargetX = worldConver.getConversionDrawX(gameCamera.getPosX(), 
+									getSelectedArmy().getAbsoluteX());
+							cameraTargetY = worldConver.getConversionDrawY(gameCamera.getPosY(), 
+									getSelectedArmy().getAbsoluteY());
 							if(i == currentPlayer && army.getState() == Army.STATE_ON){
 								btnFlagHelmet.start();
 							}else{
@@ -378,7 +383,7 @@ public class GameManager {
 								
 								//Para batallas, el tipo de box es el primer elemento del territorio
 								battleBox.start(
-										getSelectedArmy().getKingdom().getTerrainList().get(0).getType(), 
+										getSelectedArmy().getKingdom().getTerrainList().get(0), 
 										getSelectedArmy(),
 										getEnemyAtKingdom(playerList.get(currentPlayer), activeArmy.getKingdom()));
 							}else{
@@ -394,14 +399,14 @@ public class GameManager {
 								
 								//Para batallas, el tipo de box es el primer elemento del territorio
 								battleBox.start(
-										getSelectedArmy().getKingdom().getTerrainList().get(0).getType(), 
+										getSelectedArmy().getKingdom().getTerrainList().get(0), 
 										getSelectedArmy(),
 										getEnemyAtKingdom(playerList.get(currentPlayer), activeArmy.getKingdom()));
 								
 							}else{
 								int kingdomState = getSelectedArmy().getKingdom().getState();
 								battleBox.start(
-										getSelectedArmy().getKingdom().getTerrainList().get(kingdomState).getType(), 
+										getSelectedArmy().getKingdom().getTerrainList().get(kingdomState), 
 										getSelectedArmy(),
 										null);
 								

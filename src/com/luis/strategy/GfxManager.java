@@ -291,12 +291,16 @@ public class GfxManager {
 	         	    imgOkIcon = Image.createImage("/ok_icon.png");
 	         	    imgShield = Image.createImage("/shield.png");
 	         	    imgRollList = new ArrayList<Image>();
-	         	    imgRollList.add(Image.createImage("/r_1.png"));
-	         	    imgRollList.add(Image.createImage("/r_2.png"));
-	         	    imgRollList.add(Image.createImage("/r_3.png"));
-	         	    imgRollList.add(Image.createImage("/r_4.png"));
-	         	    imgRollList.add(Image.createImage("/r_5.png"));
-	         	    imgRollList.add(Image.createImage("/r_6.png"));	            	
+	         	    imgRollList.add(Image.createImage("/roll1.png"));
+	         	    imgRollList.add(Image.createImage("/roll2.png"));
+	         	    imgRollList.add(Image.createImage("/roll3.png"));
+	         	    imgRollList.add(Image.createImage("/roll4.png"));
+	         	    imgRollList.add(Image.createImage("/roll5.png"));
+	         	    imgRollList.add(Image.createImage("/roll6.png"));
+	         	    imgRollList.add(Image.createImage("/roll7.png"));	           
+	         	    imgRollList.add(Image.createImage("/roll8.png"));	           
+	         	    imgRollList.add(Image.createImage("/roll9.png"));	           
+	         	    imgRollList.add(Image.createImage("/roll10.png"));	           
 	               
 	            } catch (IOException ex) {
 	               ex.printStackTrace();
