@@ -168,27 +168,12 @@ public class GameManager {
 				armyBox.start(
 						getSelectedArmy(), 
 						isSelectedArmyFromCurrentPlayer(getSelectedArmy()),
-						state==STATE_DISCARD,
-						
-						(getSelectedArmy().getKingdom().hasTerrain(GameParams.SMALL_CITY)) ||
-						(getSelectedArmy().getKingdom().hasTerrain(GameParams.MEDIUM_CITY)) ||
-						(getSelectedArmy().getKingdom().hasTerrain(GameParams.BIG_CITY)) ||
-						(getSelectedArmy().getKingdom().hasTerrain(GameParams.CASTLE))
-								
-				);
+						state==STATE_DISCARD);
 				hide();
 			}
 		};
 		
 		armyBox = new ArmyBox(){
-			@Override
-			public void onButtonPressUp(){
-				switch(this.getIndexPressed()){
-				case 0:
-					Log.i("Debug", "Opcion 0");
-					break;
-				}
-			}
 			@Override
 			public void check(){
 				if(state == STATE_DISCARD){
@@ -204,15 +189,13 @@ public class GameManager {
 		
 		battleBox = new BattleBox(){
 			@Override
-			public void onButtonPressUp(){
+			public void onFinish(){
 				switch(this.getIndexPressed()){
 				case 0:
-					Log.i("Debug", "Opcion 0");
-					combat();
+					resolveCombat();
 					break;
 				case 1:
-					Log.i("Debug", "Opcion 1");
-					combat();
+					changeSubState(SUB_STATE_ACTION_WAIT);
 					break;
 				}
 			}
@@ -220,15 +203,14 @@ public class GameManager {
 		
 		resultBox = new SimpleBox(GfxManager.imgSmallBox, true){
 			@Override
-			public void onButtonPressUp(){
+			public void onFinish(){
 				startEscape();
 			}
 		};
 		
 		economyBox = new SimpleBox(GfxManager.imgSmallBox, true){
 			@Override
-			public void onButtonPressUp(){
-				
+			public void onFinish(){
 				//Compruebo si estoy en saldo negativo
 				if(playerList.get(currentPlayer).getGold() < 0){
 					changeState(STATE_DISCARD);
@@ -296,10 +278,8 @@ public class GameManager {
 							activeArmy.setSelected(true);
 							btnFlagCastle.start();
 							//Camara se posiciona en el seleccionado
-							cameraTargetX = worldConver.getConversionDrawX(gameCamera.getPosX(), 
-									getSelectedArmy().getAbsoluteX());
-							cameraTargetY = worldConver.getConversionDrawY(gameCamera.getPosY(), 
-									getSelectedArmy().getAbsoluteY());
+							cameraTargetX = getSelectedArmy().getAbsoluteX();
+							cameraTargetY = getSelectedArmy().getAbsoluteY();
 							if(i == currentPlayer && army.getState() == Army.STATE_ON){
 								btnFlagHelmet.start();
 							}else{
@@ -708,10 +688,8 @@ public class GameManager {
 		switch(state){
 		case STATE_INCOME:
 			startPresentation(Font.FONT_BIG, "PLAYER " + (currentPlayer+1));
-			cameraTargetX = worldConver.getConversionDrawX(gameCamera.getPosX(), 
-					playerList.get(currentPlayer).getCapital().getAbsoluteX());
-			cameraTargetY = worldConver.getConversionDrawY(gameCamera.getPosY(), 
-					playerList.get(currentPlayer).getCapital().getAbsoluteY());
+			cameraTargetX = playerList.get(currentPlayer).getCapital().getAbsoluteX();
+			cameraTargetY = playerList.get(currentPlayer).getCapital().getAbsoluteY();
 			break;
 		case STATE_ECONOMY:
 			
@@ -1009,7 +987,7 @@ public class GameManager {
 		player.getKingdomList().add(kingdom);
 	}
 	
-	private void combat(){
+	private void resolveCombat(){
 		
 		//combate contra otro ejercito
 		if(getEnemyAtKingdom(playerList.get(currentPlayer), activeArmy.getKingdom()) != null){

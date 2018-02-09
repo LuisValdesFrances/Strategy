@@ -50,7 +50,9 @@ public class BattleRollsBox {
 	private int rollValue;
 	private int rollDifficult;
 	private boolean[] result;
-
+	
+	private ResultIconPropierties[] resultIcon;
+	
 	public BattleRollsBox() {
 		
 		int shieldSep = GfxManager.imgShieldIcon.getWidth()/2;
@@ -85,17 +87,11 @@ public class BattleRollsBox {
 				if(state >= STATE_COMBAT_1 && state <= STATE_COMBAT_3){
 					modPosRoll = -Define.SIZEX;
 					rollValue = Main.getRandom(1, GameParams.ROLL_SYSTEM);
-					result[stateCombat] = rollValue >= rollDifficult;
 					stateCombat++;
-				}
-				Log.i("debug", "rollValue: " + rollValue);
-				for(int i = 0; i < result.length; i++){
-					Log.i("Debug", "result " + i + " " + result[i]);
+					result[stateCombat] = rollValue >= rollDifficult;
 				}
 			};
 		};
-		
-		result = new boolean[3];
 	}
 	
 	public void start(Terrain terrain, Army armyAtack, Army armyDefense){
@@ -108,14 +104,14 @@ public class BattleRollsBox {
 		this.rollDifficult = calculateDifficult();
 		this.stateCombat = 0;
 		
+		result = new boolean[3];
+		resultIcon = new ResultIconPropierties[3];
+		for(int i = 0; i < resultIcon.length;i++){
+			resultIcon[i] = new ResultIconPropierties();
+		}
+		
 		this.rollValue = Main.getRandom(1, GameParams.ROLL_SYSTEM);
 		result[stateCombat] = rollValue >= rollDifficult;
-		stateCombat++;
-		
-		Log.i("debug", "rollValue: " + rollValue);
-		for(int i = 0; i < result.length; i++){
-			Log.i("Debug", "result " + i + " " + result[i]);
-		}
 	}
 	
 	public boolean update(MultiTouchHandler touchHandler, float delta){
@@ -134,6 +130,18 @@ public class BattleRollsBox {
 				if(modPosRoll < 0){
 					modPosRoll -= (modPosRoll*8f)*delta - 1f;
 				}else{
+					for(int i = 0; i < resultIcon.length; i++){
+						if(i <= stateCombat){
+							if(resultIcon[i].modSize > 0){
+								resultIcon[i].modSize -= (resultIcon[i].modSize*8f)*delta;
+								resultIcon[i].modAlpha = (int) ((resultIcon[i].modSize*255f)/ResultIconPropierties.MAX_SIZE);
+							}
+							if(resultIcon[i].modSize <= 0){
+								resultIcon[i].modAlpha = 0;
+								resultIcon[i].modSize = 0f;
+							}
+						}
+					}
 					buttonCombat.update(touchHandler);
 				}
 				break;
@@ -188,7 +196,11 @@ public class BattleRollsBox {
 						Graphics.VCENTER | Graphics.HCENTER);
 				
 				if(state >= STATE_COMBAT_1){
-					if(stateCombat > i){
+					if(i <= stateCombat){
+						g.setAlpha(255-resultIcon[i].modAlpha);
+						g.setImageSize(
+								1f+resultIcon[i].modSize, 
+								1f+resultIcon[i].modSize);
 						g.drawImage(
 							result[i]?GfxManager.imgOkIcon:GfxManager.imgCrossIcon, 
 							shieldIconX, 
@@ -196,6 +208,8 @@ public class BattleRollsBox {
 							Graphics.VCENTER | Graphics.HCENTER);
 					}
 				}
+				g.setAlpha(255);
+				g.setImageSize(1, 1);
 			}
 			
 			buttonCombat.draw(g, 0, modY);
@@ -220,6 +234,18 @@ public class BattleRollsBox {
 	}
 	
 	
+	class ResultIconPropierties{
+		
+		public static final float MAX_SIZE = 16f;
+		public float modSize;
+		public int modAlpha;
+		
+		public ResultIconPropierties(){
+			this.modSize = MAX_SIZE+1;
+			this.modAlpha = 255;
+		}
+		
+	}
 	
 
 }

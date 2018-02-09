@@ -205,7 +205,7 @@ public class ModeGame {
 					new String[]{RscManager.sAllTexts[RscManager.TXT_NO], RscManager.sAllTexts[RscManager.TXT_YES]},
 					Font.FONT_MEDIUM, Font.FONT_MEDIUM){
 				@Override
-				public void onButtonPressUp(){
+				public void onFinish(){
 					switch(this.getIndexPressed()){
 					case 0:
 						UserInput.getInstance().getMultiTouchHandler().resetTouch();

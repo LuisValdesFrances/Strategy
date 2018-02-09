@@ -26,6 +26,9 @@ public class BattleBox extends MenuBox{
 	private int troopY;
 	private int centerY;
 	private int separation;
+	
+	private Button cancelButton;
+	
 	public BattleBox(){
 		
 		super(Define.SIZEX, Define.SIZEY, GfxManager.imgBigBox, null, null,
@@ -37,7 +40,7 @@ public class BattleBox extends MenuBox{
 		btnList.add(new Button(
 				GfxManager.imgButtonCombatRelease,
 				GfxManager.imgButtonCombatFocus,
-				getX(), 
+				getX() + GfxManager.imgBigBox.getWidth()/2, 
 				getY() + GfxManager.imgBigBox.getHeight()/2, 
 				null, 
 				-1){
@@ -76,12 +79,36 @@ public class BattleBox extends MenuBox{
 		this.terrain = terrain;
 		this.armyAtack = armyAtack;
 		this.armyDefense = armyDefense;
+		
+		if(armyDefense == null){
+			cancelButton =  new Button(
+					GfxManager.imgButtonCancelRelease,
+					GfxManager.imgButtonCancelFocus,
+					getX() - GfxManager.imgBigBox.getWidth()/2, 
+					getY() + GfxManager.imgBigBox.getHeight()/2, 
+					null, 
+					-1){
+				@Override
+				public void onButtonPressUp(){
+					indexPressed = 1;//Al controlador de juego le interesa saber que he cancelado el combate
+					reset();
+					cancel();
+				}
+			};
+		}else{
+			cancelButton = null;
+		}
+		
 		start();
 	}
 	
 	@Override
 	public boolean update(MultiTouchHandler touchHandler, float delta){
 		if(!battleRollsBox.update(touchHandler, delta)){
+			
+			if(cancelButton != null)
+				cancelButton.update(touchHandler);
+			
 			return super.update(touchHandler, delta);
 		}
 		return true;
@@ -93,6 +120,10 @@ public class BattleBox extends MenuBox{
 		if(state != STATE_UNACTIVE){
 			for(int i = 0; i < GfxManager.imgIconTroop.size(); i++){
 				g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+				
+				if(cancelButton != null)
+					cancelButton.draw(g, (int)modPosX, 0);
+				
 				//Left
 				g.drawImage(
 						GfxManager.imgIconTroop.get(i),

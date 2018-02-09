@@ -64,7 +64,7 @@ public class ArmyBox extends MenuBox{
 	private int marginW;
 	private int marginH;
 	
-	public void start(Army a, boolean isCurrentPlayer, boolean discardMode, boolean isInCity){
+	public void start(Army a, boolean isCurrentPlayer, boolean discardMode){
 		super.start();
 		this.army = a;
 		this.isCurrentPlayer = isCurrentPlayer;
@@ -96,7 +96,14 @@ public class ArmyBox extends MenuBox{
 					armyBuyBox.start(army);
 				}
 			};
-			enableCrossButton = !discardMode && isInCity;
+			
+			boolean isInCity = 
+					(army.getKingdom().hasTerrain(GameParams.SMALL_CITY)) ||
+					(army.getKingdom().hasTerrain(GameParams.MEDIUM_CITY)) ||
+					(army.getKingdom().hasTerrain(GameParams.BIG_CITY)) ||
+					(army.getKingdom().hasTerrain(GameParams.CASTLE));
+			
+			enableCrossButton = !discardMode && isInCity && army.getPlayer().hasKingom(army.getKingdom());
 			crossButton.setDisabled(!enableCrossButton);
 		}else{
 			crossButton = null;

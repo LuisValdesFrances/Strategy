@@ -233,9 +233,9 @@ public class GfxManager {
 	            	imgTerrain.add(Image.createImage("/plain.png"));
 	            	imgTerrain.add(Image.createImage("/forest.png"));
 	            	imgTerrain.add(Image.createImage("/montain.png"));
-	            	imgTerrain.add(Image.createImage("/big_city.png"));
-	            	imgTerrain.add(Image.createImage("/medium_city.png"));
 	            	imgTerrain.add(Image.createImage("/small_city.png"));
+	            	imgTerrain.add(Image.createImage("/medium_city.png"));
+	            	imgTerrain.add(Image.createImage("/big_city.png"));
 	            	
 	            	imgTerrainBox.add(Image.createImage("/plain_box.png"));
 	            	imgTerrainBox.add(Image.createImage("/forest_box.png"));
