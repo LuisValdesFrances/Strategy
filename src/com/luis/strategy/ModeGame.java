@@ -316,10 +316,10 @@ public class ModeGame {
 				_g.drawText("CameraY: " + gameCamera.getPosY(), (int)(Define.SIZEX*0.33), _g.getTextHeight(), Main.COLOR_WHITE);
 				_g.drawText("State: " + gameManager.getState(), 0, _g.getTextHeight()*2, Main.COLOR_WHITE);
 				_g.drawText("Sub-State: " + gameManager.getSubState(), (int)(Define.SIZEX*0.33), _g.getTextHeight()*2, Main.COLOR_WHITE);
-				_g.drawText("Player: " + (gameManager.getCurrentPlayer()+1), (int)(Define.SIZEX*0.66), _g.getTextHeight()*2, Main.COLOR_WHITE);
+				_g.drawText("Player: " + (gameManager.getCurrentPlayer().getId()+1), (int)(Define.SIZEX*0.66), _g.getTextHeight()*2, Main.COLOR_WHITE);
 				
 				String kingdomList = "";
-				for(Kingdom kingdom : gameManager.getPlayerList().get(gameManager.getCurrentPlayer()).getKingdomList()){
+				for(Kingdom kingdom : gameManager.getCurrentPlayer().getKingdomList()){
 					kingdomList += kingdom.getId() + ", ";
 				}
 				_g.drawText("Domains: " + kingdomList, 0, _g.getTextHeight()*3, Main.COLOR_WHITE);

@@ -1,15 +1,10 @@
 package com.luis.army.gui;
 
-import java.util.List;
-
-import android.util.Log;
-
 import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gameutils.fonts.TextManager;
 import com.luis.lgameengine.gui.Button;
 import com.luis.lgameengine.gui.MenuElement;
 import com.luis.lgameengine.implementation.graphics.Graphics;
-import com.luis.lgameengine.implementation.graphics.Image;
 import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.Main;
@@ -18,7 +13,7 @@ import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.map.Terrain;
 
-public class BattleRollsBox {
+public class BattleDiceBox {
 	
 	private Terrain terrain;
 	private Army armyAtack;
@@ -45,15 +40,15 @@ public class BattleRollsBox {
 	
 	private int modPosY;
 	
-	private int modPosRoll;
+	private int modPosDice;
 	
-	private int rollValue;
-	private int rollDifficult;
+	private int diceValue;
+	private int diceDifficult;
 	private boolean[] result;
 	
 	private ResultIconPropierties[] resultIcon;
 	
-	public BattleRollsBox() {
+	public BattleDiceBox() {
 		
 		int shieldSep = GfxManager.imgShieldIcon.getWidth()/2;
 		int parchmentSep = -GfxManager.imgNotificationBox.getHeight()/3;
@@ -85,10 +80,10 @@ public class BattleRollsBox {
 				onCombat();
 				buttonCombat.reset();
 				if(state >= STATE_COMBAT_1 && state <= STATE_COMBAT_3){
-					modPosRoll = -Define.SIZEX;
-					rollValue = Main.getRandom(1, GameParams.ROLL_SYSTEM);
+					modPosDice = -Define.SIZEX;
+					diceValue = Main.getRandom(1, GameParams.ROLL_SYSTEM);
 					stateCombat++;
-					result[stateCombat] = rollValue >= rollDifficult;
+					result[stateCombat] = diceValue >= diceDifficult;
 				}
 			};
 		};
@@ -100,8 +95,8 @@ public class BattleRollsBox {
 		this.armyDefense = armyDefense;
 		this.state = STATE_START;
 		this.modPosY = -Define.SIZEY;
-		this.modPosRoll = -Define.SIZEX;
-		this.rollDifficult = calculateDifficult();
+		this.modPosDice = -Define.SIZEX;
+		this.diceDifficult = calculateDifficult();
 		this.stateCombat = 0;
 		
 		result = new boolean[3];
@@ -110,8 +105,8 @@ public class BattleRollsBox {
 			resultIcon[i] = new ResultIconPropierties();
 		}
 		
-		this.rollValue = Main.getRandom(1, GameParams.ROLL_SYSTEM);
-		result[stateCombat] = rollValue >= rollDifficult;
+		this.diceValue = Main.getRandom(1, GameParams.ROLL_SYSTEM);
+		result[stateCombat] = diceValue >= diceDifficult;
 	}
 	
 	public boolean update(MultiTouchHandler touchHandler, float delta){
@@ -127,8 +122,9 @@ public class BattleRollsBox {
 			case STATE_COMBAT_1:
 			case STATE_COMBAT_2:
 			case STATE_COMBAT_3:
-				if(modPosRoll < 0){
-					modPosRoll -= (modPosRoll*8f)*delta - 1f;
+				
+				if(modPosDice < 0){
+					modPosDice -= (modPosDice*8f)*delta - 1f;
 				}else{
 					for(int i = 0; i < resultIcon.length; i++){
 						if(i <= stateCombat){
@@ -142,8 +138,9 @@ public class BattleRollsBox {
 							}
 						}
 					}
-					buttonCombat.update(touchHandler);
 				}
+				//buttonCombat.setDisabled(modPosDice < 0 || resultIcon[stateCombat].modSize > 0);
+				buttonCombat.update(touchHandler);
 				break;
 			case STATE_END:
 				modPosY += (modPosY*16f)*delta + 1f;
@@ -175,7 +172,7 @@ public class BattleRollsBox {
 					parchmentY + modY, 
 					Graphics.VCENTER | Graphics.HCENTER);
 			
-			TextManager.drawSimpleText(g, Font.FONT_BIG, "DIFFICULT: "+ rollDifficult, 
+			TextManager.drawSimpleText(g, Font.FONT_BIG, "DIFFICULT: "+ diceDifficult, 
 					parchmentX, parchmentY + modY, Graphics.VCENTER | Graphics.HCENTER);
 			g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 			
@@ -184,8 +181,8 @@ public class BattleRollsBox {
 					shieldY + modY, 
 					Graphics.VCENTER | Graphics.HCENTER);
 			
-			g.drawImage(GfxManager.imgRollList.get(rollValue-1), 
-					shieldX + modPosRoll, 
+			g.drawImage(GfxManager.imgRollList.get(diceValue-1), 
+					shieldX + modPosDice, 
 					shieldY + modY, 
 					Graphics.VCENTER | Graphics.HCENTER);
 			
@@ -244,7 +241,15 @@ public class BattleRollsBox {
 			this.modSize = MAX_SIZE+1;
 			this.modAlpha = 255;
 		}
-		
+	}
+	
+	public int getResult(){
+		int r = 0;
+		for(int i = 0; i < this.result.length; i++){
+			if(result[i])
+				r++;
+		}
+		return r;
 	}
 	
 

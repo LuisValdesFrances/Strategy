@@ -16,7 +16,7 @@ import com.luis.strategy.map.Terrain;
 
 public class BattleBox extends MenuBox{
 	
-	private BattleRollsBox battleRollsBox;
+	private BattleDiceBox battleDiceBox;
 	
 	private Army armyAtack;
 	private Army armyDefense;
@@ -47,7 +47,7 @@ public class BattleBox extends MenuBox{
 			@Override
 			public void onButtonPressUp(){
 				reset();
-				battleRollsBox.start(terrain, armyAtack, armyDefense);
+				battleDiceBox.start(terrain, armyAtack, armyDefense);
 			}
 		});
 		
@@ -66,7 +66,7 @@ public class BattleBox extends MenuBox{
 				Font.getFontHeight(Font.FONT_MEDIUM);
 		centerY = getY() - totalHeight/2;
 		
-		battleRollsBox = new BattleRollsBox(){
+		battleDiceBox = new BattleDiceBox(){
 			@Override
 			public void onResult() {
 				
@@ -104,7 +104,7 @@ public class BattleBox extends MenuBox{
 	
 	@Override
 	public boolean update(MultiTouchHandler touchHandler, float delta){
-		if(!battleRollsBox.update(touchHandler, delta)){
+		if(!battleDiceBox.update(touchHandler, delta)){
 			
 			if(cancelButton != null)
 				cancelButton.update(touchHandler);
@@ -180,25 +180,25 @@ public class BattleBox extends MenuBox{
 			if(armyDefense == null){
 				g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 				int initY = getY() -
-						((GfxManager.imgIconVillagers.getHeight() + Font.getFontHeight(Font.FONT_MEDIUM)+ separation)/2);
+						((GfxManager.imgVillagers.getHeight() + Font.getFontHeight(Font.FONT_MEDIUM)+ separation)/2);
 				String text = "X1";
 				
 				TextManager.drawSimpleText(g, 
 						Font.FONT_MEDIUM,
 						text,
 						getX()+GfxManager.imgBigBox.getWidth()/2 - 
-						separation*2 - GfxManager.imgIconVillagers.getWidth()/2 +
+						separation*2 - GfxManager.imgVillagers.getWidth()/2 +
 						(int)modPosX,
 						initY + Font.getFontHeight(Font.FONT_MEDIUM)/2,
 						Graphics.VCENTER|Graphics.HCENTER);
 				
 				g.drawImage(
-						GfxManager.imgIconVillagers,
+						GfxManager.imgVillagers,
 						getX()+GfxManager.imgBigBox.getWidth()/2 - 
-						separation*2 - GfxManager.imgIconVillagers.getWidth()/2 +
+						separation*2 - GfxManager.imgVillagers.getWidth()/2 +
 						(int)modPosX,
 						initY + Font.getFontHeight(Font.FONT_MEDIUM)/2 + separation +
-						GfxManager.imgIconVillagers.getHeight()/2,
+						GfxManager.imgVillagers.getHeight()/2,
 						Graphics.VCENTER | Graphics.HCENTER);
 			}
 					
@@ -321,8 +321,12 @@ public class BattleBox extends MenuBox{
 					separation-barHeight,
 					defenseWidth, barHeight);
 			
-			battleRollsBox.draw(g);
+			battleDiceBox.draw(g);
 		}
+	}
+
+	public int getResult() {
+		return battleDiceBox.getResult();
 	}
 
 }

@@ -88,8 +88,7 @@ public class GfxManager {
 	   public static List<Image> imgBigTroop;
 	   public static List<Image> imgSmallTroop;
 	   public static List<Image> imgIconTroop;
-	   public static Image imgBigVillagers;
-	   public static Image imgIconVillagers;
+	   public static Image imgVillagers;
 	   
 	   public static Image imgArmyIdle;
 	   public static Image imgArmyRun;
@@ -283,8 +282,7 @@ public class GfxManager {
 	            	imgIconTroop.add(Image.createImage("/harassers_icon.png"));
 	            	imgIconTroop.add(Image.createImage("/siege_icon.png"));
 	            	
-	            	imgIconVillagers = Image.createImage("/villagers_icon.png");
-	            	imgBigVillagers = Image.createImage("/villagers_big.png");
+	            	imgVillagers = Image.createImage("/villagers.png");
 	            	
 	            	imgShieldIcon = Image.createImage("/shield_icon.png");
 	         	    imgCrossIcon = Image.createImage("/cross_icon.png");
