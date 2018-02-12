@@ -33,7 +33,7 @@ public class BattleBox extends MenuBox{
 		
 		super(Define.SIZEX, Define.SIZEY, GfxManager.imgBigBox, null, null,
 				Define.SIZEX2, Define.SIZEY2-GfxManager.imgGameHud.getHeight()/2,
-				"BALANCE OF POWER",
+				"Balance of power",
 				null, Font.FONT_MEDIUM, Font.FONT_SMALL);
 		
 		
@@ -266,12 +266,12 @@ public class BattleBox extends MenuBox{
 			
 			String terrainText="";
 			switch(terrain.getType()){
-				case GameParams.PLAIN: terrainText = "BATTLE PLAIN"; break;
-				case GameParams.FOREST: terrainText = "BATTLE FOREST"; break;
-				case GameParams.MONTAIN: terrainText = "BATTLE MONTAIN"; break;
-				case GameParams.SMALL_CITY: terrainText = "BATTLE SMALL CITY"; break;
-				case GameParams.MEDIUM_CITY: terrainText = "BATTLE MEDIUM CITY"; break;
-				case GameParams.BIG_CITY: terrainText = "BATTLE BIG CITY"; break;
+				case GameParams.PLAIN: terrainText = "Battle plain"; break;
+				case GameParams.FOREST: terrainText = "Battle forest"; break;
+				case GameParams.MONTAIN: terrainText = "Battle montain"; break;
+				case GameParams.SMALL_CITY: terrainText = "battle small city"; break;
+				case GameParams.MEDIUM_CITY: terrainText = "battle medium city"; break;
+				case GameParams.BIG_CITY: terrainText = "battle big city"; break;
 			}
 			
 			TextManager.drawSimpleText(g, 

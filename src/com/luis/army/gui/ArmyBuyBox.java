@@ -62,13 +62,13 @@ public class ArmyBuyBox {
 		descTroopList = new ArrayList<String>();
 		
 		for(int i = 0; i < GfxManager.imgBigTroop.size(); i++){
-			descTroopList.add("DESCRIPTION TEXT LARGE EXPLAIN COMBAT HABILITIES AND SKILLS FOR TROOP WITH INDEX " + i);
+			descTroopList.add("Description text large explain combat habilities and skills for troop with index " + i);
 		}
 		
 		nameTroopList = new ArrayList<String>();
 		
 		for(int i = 0; i < GfxManager.imgBigTroop.size(); i++){
-			nameTroopList.add("NAME TROOP " + i);
+			nameTroopList.add("Name troop " + i);
 		}
 		
 		buttonCancel = new Button(
