@@ -15,6 +15,8 @@ public abstract class MapObject implements Selectable{
 	protected int width;
 	protected int height;
 	
+	protected boolean selected;
+	
 	//Si hay ejercito enemigo o es del dominio, estandarte
 	//En otro caso state
 	protected int touchX;
@@ -123,6 +125,14 @@ public abstract class MapObject implements Selectable{
 
 	public void setTouchY(int touchY) {
 		this.touchY = touchY;
+	}
+	
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
 	}
 
 }

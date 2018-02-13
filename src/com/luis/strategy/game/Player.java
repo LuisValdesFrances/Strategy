@@ -92,7 +92,9 @@ public class Player {
 		int salaries = 0;
 		for(Army army : getArmyList()){
 			for(Troop troop : army.getTroopList()){
-				salaries += GameParams.TROOP_COST[troop.getType()];
+				if(!troop.isSubject()){
+					salaries += GameParams.TROOP_SALARY[troop.getType()];
+				}
 			}
 		}
 		return salaries;

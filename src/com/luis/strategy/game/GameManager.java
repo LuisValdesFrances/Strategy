@@ -71,8 +71,9 @@ public class GameManager {
 	public static final int SUB_STATE_ACTION_COMBAT = 3;
 	public static final int SUB_STATE_ACTION_RESULT = 4;
 	public static final int SUB_STATE_ACTION_ESCAPE = 5;
-	public static final int SUB_STATE_MANAGEMENT_ARMY = 6;
-	public static final int SUB_STATE_MANAGEMENT = 7;
+	public static final int SUB_STATE_ARMY_MANAGEMENT = 6;
+	public static final int SUB_STATE_ARMY_JOINED = 7;
+	public static final int SUB_STATE_CITY_MANAGEMENT = 8;
 	
 	//GUI
 	private static Button btnNext;
@@ -164,7 +165,7 @@ public class GameManager {
 			
 			@Override
 			public void onButtonPressUp(){
-				changeSubState(SUB_STATE_MANAGEMENT_ARMY);
+				changeSubState(SUB_STATE_ARMY_MANAGEMENT);
 				armyBox.start(
 						getSelectedArmy(), 
 						isSelectedArmyFromCurrentPlayer(getSelectedArmy()),
@@ -266,6 +267,14 @@ public class GameManager {
 			switch(subState){
 			case SUB_STATE_ACTION_WAIT:
 				//Atcualizar interacion terreno:
+				for(Kingdom kingdom : map.getKingdomList()){
+					for(Terrain terrain : kingdom.getTerrainList()){
+						if(terrain.isSelect()){
+							Log.i("Debug", "Seleccionado: " + kingdom.getName());
+						}
+					}
+					
+				}
 				
 				//Actualizar animaciones
 				playerList.get(playerIndex).updateAnimations(delta);
@@ -347,12 +356,12 @@ public class GameManager {
 					}
 					
 					if(armyList.size() > 1){
-						infoBox.start("AGGREGATION", "THESE ARMIES HAVE JOINED FORCES");
+						infoBox.start("AGGREGATION", "These armies have joined forces.");
 						aggregation(armyList.get(0), armyList.get(1));
 						activeArmy = armyList.get(0);
 						activeArmy.getKingdom().setTarget(-1);
 						activeArmy.changeState(Army.STATE_OFF);
-						changeSubState(SUB_STATE_MANAGEMENT);
+						changeSubState(SUB_STATE_ARMY_JOINED);
 						
 					}else{
 						//Si el territorio es mio
@@ -434,17 +443,19 @@ public class GameManager {
 					changeSubState(SUB_STATE_ACTION_WAIT);
 					}
 				break;
-			case SUB_STATE_MANAGEMENT_ARMY:
+			case SUB_STATE_ARMY_MANAGEMENT:
 				//Si no queda ninguna caja en primer plano
 				if(!armyBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
 					changeSubState(SUB_STATE_ACTION_WAIT);
 				}
 				break;
-			case SUB_STATE_MANAGEMENT:
+			case SUB_STATE_ARMY_JOINED:
 				//Si no queda ninguna caja en primer plano
 				if(!infoBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
 					changeSubState(SUB_STATE_ACTION_WAIT);
 				}
+				break;
+			case SUB_STATE_CITY_MANAGEMENT:
 				break;
 			}
 		break;
@@ -559,8 +570,8 @@ public class GameManager {
 	
 	private void drawGUI(Graphics g) {
 		economyBox.draw(g, true);
-		discardBox.draw(g, false);
 		armyBox.draw(g, true);
+		discardBox.draw(g, false);
 		battleBox.draw(g, true);
 		resultBox.draw(g, true);
 		infoBox.draw(g, true);
@@ -770,9 +781,11 @@ public class GameManager {
 				break;
 			case SUB_STATE_ACTION_ESCAPE:
 				break;
-			case SUB_STATE_MANAGEMENT_ARMY:
+			case SUB_STATE_ARMY_MANAGEMENT:
 				break;
-			case SUB_STATE_MANAGEMENT:
+			case SUB_STATE_ARMY_JOINED:
+				break;
+			case SUB_STATE_CITY_MANAGEMENT:
 				break;
 			}
 			
@@ -969,6 +982,7 @@ public class GameManager {
 	
 	private void aggregation(Army army1, Army army2){
 		for(Troop troop : army2.getTroopList()){
+			troop.setSubject(false);
 			army1.getTroopList().add(troop);
 		}
 		removeArmy(army2);

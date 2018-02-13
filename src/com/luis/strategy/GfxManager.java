@@ -52,6 +52,10 @@ public class GfxManager {
 	   public static Image imgButtonCancelFocus;
 	   public static Image imgButtonDeleteRelease;
 	   public static Image imgButtonDeleteFocus;
+	   public static Image imgButtonNewArmyRelease;
+	   public static Image imgButtonNewArmyFocus;
+	   public static Image imgButtonInfoRelease;
+	   public static Image imgButtonInfoFocus;
 	   
 	   public static Image imgTextBox;
 	   public static Image imgBigBox;
@@ -207,6 +211,11 @@ public class GfxManager {
 	            	
 	            	imgButtonDeleteFocus = Image.createImage("/delete_focus.png");
 	            	imgButtonDeleteRelease = Image.createImage("/delete_release.png");
+	            	
+	            	imgButtonNewArmyFocus = Image.createImage("/new_army_focus.png");
+	            	imgButtonNewArmyRelease = Image.createImage("/new_army_release.png");
+	            	imgButtonInfoFocus = Image.createImage("/info_focus.png");
+	            	imgButtonInfoRelease = Image.createImage("/info_release.png");
 	            	
 	            	imgTextBox = Image.createImage("/text_box.png");
 	            	imgBigBox = Image.createImage("/big_box.png");

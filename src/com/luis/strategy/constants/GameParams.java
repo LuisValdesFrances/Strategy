@@ -21,6 +21,8 @@ public class GameParams {
 	public static final int[] TERRAIN_TAX =			new int[]{5, 3, 1, 2, 4, 8, 1};
 	
 	
+	
+	
 	//Id tropa
 	public static final int INFANTRY = 0;
 	public static final int KNIGHT = 1;
@@ -28,6 +30,10 @@ public class GameParams {
 	public static final int SIEGE = 3;
 	
 	public static final int[] TROOP_COST = 			new int[]{5, 8, 3, 7};
+	public static final int[] TROOP_SALARY =  		new int[]{20, 40, 10, 30};
+	
+	//Minino de tropas por ejercito (No se pagan)
+	public static final int[] TROOP_START = 		new int[]{3, 0, 0, 0, 0};
 	
 	//GAME CONFIG:
 	public static float CAMERA_SPEED = 180f;//Pixeles por segundo

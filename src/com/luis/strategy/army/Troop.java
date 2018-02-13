@@ -5,10 +5,13 @@ public class Troop {
 	private static int idCount;
 	private int id;
 	private int type;
+	//Subditos que no se pagan y no se pierden
+	private boolean subject;
 	
-	public Troop(int type){
+	public Troop(int type, boolean subject){
 		this.type = type;
 		this.id = idCount++;
+		this.subject = subject;
 	}
 
 	public int getType() {
@@ -25,6 +28,14 @@ public class Troop {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public boolean isSubject() {
+		return subject;
+	}
+
+	public void setSubject(boolean subject) {
+		this.subject = subject;
 	}
 	
 	

@@ -34,7 +34,7 @@ public class ArmyBox extends MenuBox{
 	public ArmyBox() {
 		super(Define.SIZEX, Define.SIZEY, GfxManager.imgBigBox, null, null,
 				Define.SIZEX2, Define.SIZEY2-GfxManager.imgGameHud.getHeight()/2,
-				"ARMY",
+				null,
 				null, Font.FONT_MEDIUM, Font.FONT_SMALL);
 		
 		btnList.add(new Button(
@@ -50,7 +50,7 @@ public class ArmyBox extends MenuBox{
 			public void onBuy() {
 				if(army.getPlayer().getGold() >= GameParams.TROOP_COST[this.getIndex()]){
 					army.getPlayer().setGold(army.getPlayer().getGold()-GameParams.TROOP_COST[this.getIndex()]);
-					army.getTroopList().add(new Troop(this.getIndex()));
+					army.getTroopList().add(new Troop(this.getIndex(), false));
 					updateTroops();
 				}
 			}
@@ -128,30 +128,33 @@ public class ArmyBox extends MenuBox{
 			}
 				
 			if(isCurrentPlayer){
-				Button discard = new Button(
-					GfxManager.imgButtonDeleteRelease,
-					GfxManager.imgButtonDeleteFocus,
+				Button discard = null;
+				if(!army.getTroopList().get(i).isSubject()){
+					discard = new Button(
+						GfxManager.imgButtonDeleteRelease,
+						GfxManager.imgButtonDeleteFocus,
+							
+						initX + 
+						(GfxManager.imgSmallTroop.get(0).getWidth()*countColumns + marginW*countColumns)-
+						GfxManager.imgSmallTroop.get(0).getWidth()/2+GfxManager.imgButtonDeleteRelease.getWidth()/2
+						-GfxManager.imgButtonDeleteRelease.getWidth()/4,
+							
+						initY + 
+						(GfxManager.imgSmallTroop.get(0).getHeight()*countFiles + marginH*countFiles) -
+						GfxManager.imgSmallTroop.get(0).getHeight()/2+GfxManager.imgButtonDeleteRelease.getHeight()/2
+						-GfxManager.imgButtonDeleteRelease.getHeight()/4,
+							
+						null, 0){
 						
-					initX + 
-					(GfxManager.imgSmallTroop.get(0).getWidth()*countColumns + marginW*countColumns)-
-					GfxManager.imgSmallTroop.get(0).getWidth()/2+GfxManager.imgButtonDeleteRelease.getWidth()/2
-					-GfxManager.imgButtonDeleteRelease.getWidth()/4,
-						
-					initY + 
-					(GfxManager.imgSmallTroop.get(0).getHeight()*countFiles + marginH*countFiles) -
-					GfxManager.imgSmallTroop.get(0).getHeight()/2+GfxManager.imgButtonDeleteRelease.getHeight()/2
-					-GfxManager.imgButtonDeleteRelease.getHeight()/4,
-						
-					null, 0){
-					
-				@Override
-				public void onButtonPressDown(){}
-					
-				@Override
-				public void onButtonPressUp(){
-					reset();
+						@Override
+						public void onButtonPressDown(){}
+							
+						@Override
+						public void onButtonPressUp(){
+							reset();
+						}
+					};
 				}
-				};
 				deleteButtonList.add(discard);
 				countColumns++;
 			}
@@ -163,15 +166,17 @@ public class ArmyBox extends MenuBox{
 		if(!armyBuyBox.update(touchHandler, delta)){
 			if(isCurrentPlayer && state == STATE_ACTIVE){
 				for(int i = 0; i < army.getTroopList().size(); i++){
-					if(deleteButtonList.get(i).update(touchHandler)){
-						Log.i("Debug", "Descartado tropa: " + army.getTroopList().get(i).getId() + " - " + army.getTroopList().get(i).getType());
-						army.getPlayer().setGold(army.getPlayer().getGold() + 
-								(discardMode?
-										GameParams.TROOP_COST[army.getTroopList().get(i).getType()]:
-										GameParams.TROOP_COST[army.getTroopList().get(i).getType()]/2));
-						army.getTroopList().remove(army.getTroopList().get(i));
-						check();
-						break;
+					if(!army.getTroopList().get(i).isSubject()){
+						if(deleteButtonList.get(i).update(touchHandler)){
+							Log.i("Debug", "Descartado tropa: " + army.getTroopList().get(i).getId() + " - " + army.getTroopList().get(i).getType());
+							army.getPlayer().setGold(army.getPlayer().getGold() + 
+									(discardMode?
+											GameParams.TROOP_COST[army.getTroopList().get(i).getType()]:
+											GameParams.TROOP_COST[army.getTroopList().get(i).getType()]/2));
+							army.getTroopList().remove(army.getTroopList().get(i));
+							check();
+							break;
+						}
 					}
 				}
 				
@@ -206,12 +211,18 @@ public class ArmyBox extends MenuBox{
 						(GfxManager.imgSmallTroop.get(0).getHeight()*countFiles + marginH*countFiles);
 				
 				countColumns++;
-				g.drawImage(GfxManager.imgSmallTroop.get(army.getTroopList().get(i).getType()), pX, pY, Graphics.VCENTER | Graphics.HCENTER);
+				if(army.getTroopList().get(i).isSubject())
+					g.setAlpha(120);
+				
+				g.drawImage(GfxManager.imgSmallTroop.get(army.getTroopList().get(i).getType()), pX, pY, 
+						Graphics.VCENTER | Graphics.HCENTER);
+				
+				g.setAlpha(255);
 				
 			}
 			
 			for(int i = 0; i < army.getTroopList().size(); i++){
-				if(isCurrentPlayer){
+				if(isCurrentPlayer && !army.getTroopList().get(i).isSubject()){
 					deleteButtonList.get(i).draw(g, (int)modPosX, 0);
 				}
 			}

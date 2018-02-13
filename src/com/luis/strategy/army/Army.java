@@ -25,7 +25,6 @@ public class Army extends MapObject{
 	private static int idCount;
 	private int id;
 	
-	public boolean selected;
 	public boolean defeat;
 	
 	private List<Troop> troopList;
@@ -68,6 +67,14 @@ public class Army extends MapObject{
 		spriteList = new ArrayList<SpriteImage>();
 		spriteList.add(new SpriteImage(GfxManager.imgArmyIdle.getWidth(), GfxManager.imgArmyIdle.getHeight(), 0.25f, 9));	
 		spriteList.add(new SpriteImage(GfxManager.imgArmyRun.getWidth(), GfxManager.imgArmyRun.getHeight(), 0.25f, 8));
+		
+		//Añado el minimo de tropas
+		for(int i = 0; i < GameParams.TROOP_START.length; i++){
+			for(int j = 0; j < GameParams.TROOP_START[i]; j++){
+				getTroopList().add(new Troop(i, true));
+			}
+		}
+		
 		anim = ANIN_IDLE;
 	}
 	
@@ -265,14 +272,6 @@ public class Army extends MapObject{
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public boolean isSelected() {
-		return selected;
-	}
-
-	public void setSelected(boolean selected) {
-		this.selected = selected;
 	}
 
 	public boolean isDefeat() {
