@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.luis.army.gui.ArmyBox;
 import com.luis.army.gui.BattleBox;
+import com.luis.army.gui.TerrainBox;
 import com.luis.army.gui.FlagButton;
 import com.luis.army.gui.SimpleBox;
 import com.luis.lgameengine.gameutils.fonts.Font;
@@ -82,22 +83,23 @@ public class GameManager {
 	private static FlagButton btnFlagCastle;
 	private ArmyBox armyBox;
 	private BattleBox battleBox;
+	private TerrainBox terrainBox;
 	private SimpleBox economyBox;
 	private SimpleBox resultBox;
 	private SimpleBox discardBox;
 	private SimpleBox infoBox;
 	
 	
-	public GameManager(WorldConver worldConver, GameCamera gameCamera, Map map, List<Player> pList){
-		this.worldConver = worldConver;
-		this.gameCamera = gameCamera;
+	public GameManager(WorldConver wc, GameCamera gc, Map m, List<Player> pList){
+		this.worldConver = wc;
+		this.gameCamera = gc;
+		this.map = m;
 		this.lastTouchX = UserInput.getInstance().getMultiTouchHandler().getTouchX(0);
 		this.lastTouchY = UserInput.getInstance().getMultiTouchHandler().getTouchY(0);
 		
 		this.cameraTargetX=0;//worldConver.getCentlayoutX();
 		this.cameraTargetY=0;//=worldConver.getCentlayoutY();
 		
-		this.map = map;
 		this.playerList = pList;
 		
 		MenuElement.imgBG = GfxManager.imgBlackBG;
@@ -188,6 +190,31 @@ public class GameManager {
 			}
 		};
 		
+		terrainBox = new TerrainBox(){
+			@Override
+			public void onBuy(){
+				super.onBuy();
+				getCurrentPlayer().setGold(getCurrentPlayer().getGold()-GameParams.ARMY_COST);
+				
+				Army army = new Army(
+						worldConver, 
+						gameCamera, 
+						map, 
+						getCurrentPlayer(), 
+						getKingdom(),
+						getCurrentPlayer().getFlag(), 
+						map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
+				
+				getCurrentPlayer().getArmyList().add(army);
+				cancel();
+			}
+			@Override
+			public void onFinish() {
+				if(isRecruited())
+					infoBox.start("NEW ARMY", "New recruited army.");
+			}
+		};
+		
 		battleBox = new BattleBox(){
 			@Override
 			public void onFinish(){
@@ -270,7 +297,13 @@ public class GameManager {
 				for(Kingdom kingdom : map.getKingdomList()){
 					for(Terrain terrain : kingdom.getTerrainList()){
 						if(terrain.isSelect()){
-							Log.i("Debug", "Seleccionado: " + kingdom.getName());
+							terrainBox.start(getCurrentPlayer(), kingdom,
+								terrain.getType() >= GameParams.SMALL_CITY &&
+								getArmyAtKingdom(kingdom)== null && 
+								getCurrentPlayer().hasKingom(kingdom), 
+								terrain.getType());
+							
+							changeSubState(SUB_STATE_CITY_MANAGEMENT);
 						}
 					}
 					
@@ -456,6 +489,10 @@ public class GameManager {
 				}
 				break;
 			case SUB_STATE_CITY_MANAGEMENT:
+				if(!terrainBox.update(UserInput.getInstance().getMultiTouchHandler(), delta) && 
+						!infoBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
+					changeSubState(SUB_STATE_ACTION_WAIT);
+				}
 				break;
 			}
 		break;
@@ -473,7 +510,8 @@ public class GameManager {
 			!battleBox.isActive() && 
 			!economyBox.isActive() &&
 			!resultBox.isActive() &&
-			!infoBox.isActive()){
+			!infoBox.isActive() &&
+			!terrainBox.isActive()){
 			updateCamera();
 		}
 		
@@ -574,6 +612,7 @@ public class GameManager {
 		discardBox.draw(g, false);
 		battleBox.draw(g, true);
 		resultBox.draw(g, true);
+		terrainBox.draw(g, true);
 		infoBox.draw(g, true);
 		
 		g.drawImage(GfxManager.imgGameHud, 0, Define.SIZEY, Graphics.BOTTOM | Graphics.LEFT);
@@ -902,7 +941,7 @@ public class GameManager {
 		return enemy;
 	}
 	
-	public Army getArmyFromKingdom(Kingdom kingdom){
+	public Army getArmyAtKingdom(Kingdom kingdom){
 		Army army = null;
 		for(Player player : playerList){
 			army = player.getArmy(kingdom);

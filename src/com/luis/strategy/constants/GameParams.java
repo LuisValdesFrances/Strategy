@@ -29,6 +29,7 @@ public class GameParams {
 	public static final int HARASSERES = 2;
 	public static final int SIEGE = 3;
 	
+	public static final int ARMY_COST = 20;
 	public static final int[] TROOP_COST = 			new int[]{5, 8, 3, 7};
 	public static final int[] TROOP_SALARY =  		new int[]{20, 40, 10, 30};
 	
