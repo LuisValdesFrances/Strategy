@@ -62,6 +62,7 @@ public class Map extends MapObject{
 		alpha = Math.max(100f, alpha);
 		alpha = Math.min(200f, alpha);
 	}
+	
 	public void drawMap(Graphics g){
 		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 		g.drawImage(imgMap, 

@@ -44,7 +44,7 @@ public class SimpleBox extends MenuBox{
 			TextManager.draw(g, Font.FONT_SMALL, textBody, 
 					getX() + (int)modPosX, 
 					getY() + (textHeader != null ?Font.getFontHeight(Font.FONT_MEDIUM)/2:0), 
-					imgBox.getWidth()-imgBox.getWidth()/8,
+					imgBox.getWidth()-imgBox.getWidth()/16,
 					TextManager.ALING_CENTER, -1);
 		}
 	}

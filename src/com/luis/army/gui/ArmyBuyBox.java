@@ -9,6 +9,7 @@ import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gameutils.fonts.TextManager;
 import com.luis.lgameengine.gui.Button;
 import com.luis.lgameengine.gui.MenuElement;
+import com.luis.lgameengine.gui.NotificationBox;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 import com.luis.strategy.GfxManager;
@@ -87,7 +88,8 @@ public class ArmyBuyBox {
 				troopY+GfxManager.imgBigTroop.get(0).getHeight()/2-GfxManager.imgButtonCrossBigRelease.getHeight()/4, 
 				null, -1){
 			public void onButtonPressUp() {
-				Log.i("Debug", "Comprado: " + index);
+				String text = "New troop has joined";
+				NotificationBox.getInstance().addMessage(text);
 				onBuy();
 				buttonBuy.setDisabled(army.getPlayer().getGold() < GameParams.TROOP_COST[index]);
 				buttonBuy.reset();

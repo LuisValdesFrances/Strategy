@@ -3,7 +3,6 @@ package com.luis.strategy.army;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.luis.lgameengine.gameutils.controls.GameControl;
 import com.luis.lgameengine.gameutils.gameworld.GameCamera;
 import com.luis.lgameengine.gameutils.gameworld.Math2D;
 import com.luis.lgameengine.gameutils.gameworld.SpriteImage;
@@ -235,6 +234,10 @@ public class Army extends MapObject{
 
 	public int getState() {
 		return state;
+	}
+	
+	public void setState(int state) {
+		this.state = state;
 	}
 
 	public Kingdom getKingdom() {

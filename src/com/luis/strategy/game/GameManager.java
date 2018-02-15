@@ -21,6 +21,7 @@ import com.luis.lgameengine.implementation.input.TouchData;
 import com.luis.lgameengine.gui.Button;
 import com.luis.lgameengine.gui.MenuBox;
 import com.luis.lgameengine.gui.MenuElement;
+import com.luis.lgameengine.gui.NotificationBox;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.Main;
 import com.luis.strategy.ModeGame;
@@ -41,10 +42,8 @@ public class GameManager {
 	private float cameraTargetX;
 	private float cameraTargetY;
 	
-	
 	public GameCamera gameCamera;
 	public WorldConver worldConver;
-	
 	
 	private int turnCount;
 	private Map map;
@@ -73,8 +72,7 @@ public class GameManager {
 	public static final int SUB_STATE_ACTION_RESULT = 4;
 	public static final int SUB_STATE_ACTION_ESCAPE = 5;
 	public static final int SUB_STATE_ARMY_MANAGEMENT = 6;
-	public static final int SUB_STATE_ARMY_JOINED = 7;
-	public static final int SUB_STATE_CITY_MANAGEMENT = 8;
+	public static final int SUB_STATE_CITY_MANAGEMENT = 7;
 	
 	//GUI
 	private static Button btnNext;
@@ -88,7 +86,6 @@ public class GameManager {
 	private SimpleBox resultBox;
 	private SimpleBox discardBox;
 	private SimpleBox infoBox;
-	
 	
 	public GameManager(WorldConver wc, GameCamera gc, Map m, List<Player> pList){
 		this.worldConver = wc;
@@ -181,8 +178,6 @@ public class GameManager {
 			public void check(){
 				if(state == STATE_DISCARD){
 					int dif = playerList.get(playerIndex).getTaxes() - playerList.get(playerIndex).getSalaries();
-					//discardBox.start(null, "SALARY OT TROOPS EXCEEDS THEIR TREASURE (" + dif + ")." + "DISCARD TROOPS.");
-					discardBox.setTextBody("SALARY OT TROOPS EXCEEDS THEIR TREASURE (" + dif + ")." + "DISCARD TROOPS.");
 					if(dif >= 0){
 						discardBox.cancel();
 					}
@@ -204,14 +199,14 @@ public class GameManager {
 						getKingdom(),
 						getCurrentPlayer().getFlag(), 
 						map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
-				
+				army.setState(Army.STATE_OFF);
 				getCurrentPlayer().getArmyList().add(army);
 				cancel();
 			}
 			@Override
 			public void onFinish() {
 				if(isRecruited())
-					infoBox.start("NEW ARMY", "New recruited army.");
+					NotificationBox.getInstance().addMessage("New army recruited");
 			}
 		};
 		
@@ -252,8 +247,11 @@ public class GameManager {
 		discardBox = new SimpleBox(GfxManager.imgNotificationBox, false);
 		discardBox.setY(GfxManager.imgNotificationBox.getHeight()/2);
 		
-		
 		turnCount = 1;
+		
+		NotificationBox.getInstance().init(
+				Define.SIZEX, Define.SIZEY, GfxManager.imgNotificationBox, NotificationBox.DURATION_MEDIUM);
+		
 		changeState(STATE_INCOME);
 	}
 	
@@ -389,12 +387,13 @@ public class GameManager {
 					}
 					
 					if(armyList.size() > 1){
-						infoBox.start("AGGREGATION", "These armies have joined forces.");
+						
 						aggregation(armyList.get(0), armyList.get(1));
 						activeArmy = armyList.get(0);
 						activeArmy.getKingdom().setTarget(-1);
 						activeArmy.changeState(Army.STATE_OFF);
-						changeSubState(SUB_STATE_ARMY_JOINED);
+						changeSubState(SUB_STATE_ACTION_WAIT);
+						NotificationBox.getInstance().addMessage("The armies have joined forces");
 						
 					}else{
 						//Si el territorio es mio
@@ -482,15 +481,8 @@ public class GameManager {
 					changeSubState(SUB_STATE_ACTION_WAIT);
 				}
 				break;
-			case SUB_STATE_ARMY_JOINED:
-				//Si no queda ninguna caja en primer plano
-				if(!infoBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
-					changeSubState(SUB_STATE_ACTION_WAIT);
-				}
-				break;
 			case SUB_STATE_CITY_MANAGEMENT:
-				if(!terrainBox.update(UserInput.getInstance().getMultiTouchHandler(), delta) && 
-						!infoBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
+				if(!terrainBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
 					changeSubState(SUB_STATE_ACTION_WAIT);
 				}
 				break;
@@ -604,6 +596,8 @@ public class GameManager {
 		btnNext.update(UserInput.getInstance().getMultiTouchHandler());
 		btnFlagHelmet.update(UserInput.getInstance().getMultiTouchHandler(), delta);
 		btnFlagCastle.update(UserInput.getInstance().getMultiTouchHandler(), delta);
+		
+		NotificationBox.getInstance().update(delta);
 	}
 	
 	private void drawGUI(Graphics g) {
@@ -621,6 +615,7 @@ public class GameManager {
 		btnFlagHelmet.draw(g);
 		btnFlagCastle.draw(g);
 		drawGold(g);
+		NotificationBox.getInstance().draw(g);
 	}
 	
 	private void drawGold(Graphics g){
@@ -768,7 +763,7 @@ public class GameManager {
 			
 			dif = playerList.get(playerIndex).getTaxes() - playerList.get(playerIndex).getSalaries();
 			
-			discardBox.start(null, "SALARY OT TROOPS EXCEEDS THEIR TREASURE (" + dif + ")." + "DISCARD TROOPS.");
+			discardBox.start(null, "Cost of troops exceedes your trasure. Discard troops.");
 			
 			break;
 		case STATE_ACTION:
@@ -821,8 +816,6 @@ public class GameManager {
 			case SUB_STATE_ACTION_ESCAPE:
 				break;
 			case SUB_STATE_ARMY_MANAGEMENT:
-				break;
-			case SUB_STATE_ARMY_JOINED:
 				break;
 			case SUB_STATE_CITY_MANAGEMENT:
 				break;
