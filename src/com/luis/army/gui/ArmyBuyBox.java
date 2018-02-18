@@ -166,10 +166,10 @@ public class ArmyBuyBox {
 	public void draw(Graphics g){
 		if(state != STATE_UNACTIVE){
 			g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-			
-			int modAlpha = (int) ((Math.abs(modPosY) * (MenuElement.bgAlpha*2)) / 
-					(Define.SIZEY2+GfxManager.imgBigTroop.get(0).getHeight()/2));
-			g.setAlpha(MenuElement.bgAlpha*2-modAlpha);
+			int menuHeight = GfxManager.imgTextBox.getHeight();
+			int modAlpha = (int) ((Math.abs(modPosY) * MenuElement.bgAlpha) / 
+					(Define.SIZEY2+menuHeight/2));
+			g.setAlpha(MenuElement.bgAlpha-modAlpha);
 			g.drawImage(MenuElement.imgBG, Define.SIZEX2, Define.SIZEY2, Graphics.VCENTER | Graphics.HCENTER);
 			g.setAlpha(255);
 			

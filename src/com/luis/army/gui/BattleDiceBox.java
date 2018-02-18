@@ -4,6 +4,7 @@ import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gameutils.fonts.TextManager;
 import com.luis.lgameengine.gui.Button;
 import com.luis.lgameengine.gui.MenuElement;
+import com.luis.lgameengine.gui.NotificationBox;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 import com.luis.strategy.GfxManager;
@@ -37,6 +38,7 @@ public class BattleDiceBox {
 	private int parchmentY;
 	private int shieldIconX;
 	private int[] shieldIconY;
+	private int totalHeight;
 	
 	private int modPosY;
 	
@@ -54,7 +56,7 @@ public class BattleDiceBox {
 		int parchmentSep = -GfxManager.imgNotificationBox.getHeight()/3;
 		int totalWidth = GfxManager.imgNotificationBox.getWidth() 
 				+ GfxManager.imgShieldIcon.getWidth() + shieldSep;
-		int totalHeight = GfxManager.imgShield.getHeight() + 
+		totalHeight = GfxManager.imgShield.getHeight() + 
 				GfxManager.imgNotificationBox.getHeight() + parchmentSep;
 		
 		shieldX = Define.SIZEX2-totalWidth/2+GfxManager.imgNotificationBox.getWidth()/2;
@@ -81,9 +83,18 @@ public class BattleDiceBox {
 				buttonCombat.reset();
 				if(state >= STATE_COMBAT_1 && state <= STATE_COMBAT_3){
 					modPosDice = -Define.SIZEX;
-					diceValue = Main.getRandom(1, GameParams.ROLL_SYSTEM);
 					stateCombat++;
-					result[stateCombat] = diceValue >= diceDifficult;
+					diceValue = Main.getRandom(1, GameParams.ROLL_SYSTEM);
+					
+					if(diceValue == GameParams.ROLL_SYSTEM){
+						NotificationBox.getInstance().addMessage("Critical!");
+						result[stateCombat] = true;
+					}else if(diceValue == 1){
+						NotificationBox.getInstance().addMessage("Blunder!");
+						result[stateCombat] = false;
+					}else{
+						result[stateCombat] = diceValue >= diceDifficult;
+					}
 				}
 			};
 		};
@@ -94,7 +105,7 @@ public class BattleDiceBox {
 		this.armyAtack = armyAtack;
 		this.armyDefense = armyDefense;
 		this.state = STATE_START;
-		this.modPosY = -Define.SIZEY;
+		this.modPosY = -totalHeight/2;
 		this.modPosDice = -Define.SIZEX;
 		this.diceDifficult = calculateDifficult();
 		this.stateCombat = 0;
@@ -106,6 +117,15 @@ public class BattleDiceBox {
 		}
 		
 		this.diceValue = Main.getRandom(1, GameParams.ROLL_SYSTEM);
+		if(diceValue == GameParams.ROLL_SYSTEM){
+			NotificationBox.getInstance().addMessage("Critical!");
+			result[stateCombat] = true;
+		}else if(diceValue == 1){
+			NotificationBox.getInstance().addMessage("Blunder!");
+			result[stateCombat] = false;
+		}else{
+			result[stateCombat] = diceValue >= diceDifficult;
+		}
 		result[stateCombat] = diceValue >= diceDifficult;
 	}
 	
@@ -158,10 +178,10 @@ public class BattleDiceBox {
 	public void draw(Graphics g){
 		if(state != STATE_UNACTIVE){
 			g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-			
-			int modAlpha = (int) ((Math.abs(modPosY) * (MenuElement.bgAlpha*2)) / 
-					(Define.SIZEY2+GfxManager.imgBigTroop.get(0).getHeight()/2));
-			g.setAlpha(MenuElement.bgAlpha*2-modAlpha);
+			int menuHeight = totalHeight;
+			int modAlpha = (int) ((Math.abs(modPosY) * MenuElement.bgAlpha) / 
+					(Define.SIZEY2+menuHeight/2));
+			g.setAlpha(MenuElement.bgAlpha-modAlpha);
 			g.drawImage(MenuElement.imgBG, Define.SIZEX2, Define.SIZEY2, Graphics.VCENTER | Graphics.HCENTER);
 			g.setAlpha(255);
 			

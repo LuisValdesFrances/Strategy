@@ -31,14 +31,13 @@ public class GameParams {
 	
 	public static final int ARMY_COST = 20;
 	public static final int[] TROOP_COST = 			new int[]{5, 8, 3, 7};
-	public static final int[] TROOP_SALARY =  		new int[]{20, 40, 10, 30};
 	
 	//Minino de tropas por ejercito (No se pagan)
 	public static final int[] TROOP_START = 		new int[]{3, 0, 0, 0, 0};
 	
 	//GAME CONFIG:
 	public static float CAMERA_SPEED = 180f;//Pixeles por segundo
-	public static int BG_BLACK_ALPHA = 80;//Pixeles por segundo
+	public static int BG_BLACK_ALPHA = 140;//Pixeles por segundo
 	
 	//ROLL CONFIG
 	public static final int ROLL_SYSTEM = 10;

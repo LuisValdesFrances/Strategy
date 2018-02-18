@@ -41,9 +41,10 @@ public class Army extends MapObject{
 	public static final int ANIN_IDLE=0;
 	public static final int ANIN_MOVE=1;
 	
-	private static final float SPEED = 10f;
+	private static final float SPEED = 5.5f;
 	
-	private int idleRepeatCount;
+	private float idleCount;
+	private float idleWait;
 	
 	private List<SpriteImage> spriteList;
 	
@@ -64,8 +65,8 @@ public class Army extends MapObject{
 		this.flag = flag;
 		this.state = STATE_ON;
 		spriteList = new ArrayList<SpriteImage>();
-		spriteList.add(new SpriteImage(GfxManager.imgArmyIdle.getWidth(), GfxManager.imgArmyIdle.getHeight(), 0.25f, 9));	
-		spriteList.add(new SpriteImage(GfxManager.imgArmyRun.getWidth(), GfxManager.imgArmyRun.getHeight(), 0.25f, 8));
+		spriteList.add(new SpriteImage(GfxManager.imgArmyIdle.getWidth(), GfxManager.imgArmyIdle.getHeight(), 0.20f, 7));	
+		spriteList.add(new SpriteImage(GfxManager.imgArmyRun.getWidth(), GfxManager.imgArmyRun.getHeight(), 0.30f, 8));
 		
 		//Añado el minimo de tropas
 		for(int i = 0; i < GameParams.TROOP_START.length; i++){
@@ -82,16 +83,18 @@ public class Army extends MapObject{
 		
 		switch(state){
 		case STATE_ON:
-		case STATE_OFF:
-			if(idleRepeatCount > 0){
-				if(spriteList.get(anim).isEndAnimation()){
-					spriteList.get(anim).setFrame(4);
-					idleRepeatCount--;
-				}
-			}else{
-				idleRepeatCount = Main.getRandom(6, 18);
+			if(idleCount < idleWait){
+				idleCount+= delta;
 				spriteList.get(anim).setFrame(0);
+			}else{
+				if(spriteList.get(anim).isEndAnimation()){
+					idleWait = Main.getRandom(1, 5);
+					idleCount = 0;
+				}
 			}
+			break;
+		case STATE_OFF:
+			spriteList.get(anim).setFrame(0);
 			break;
 		case STATE_MOVE:
 			
@@ -130,12 +133,23 @@ public class Army extends MapObject{
 			g.setAlpha(140);
 		}
 		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-		float flagX = getAbsoluteX() + 
-			(int)(flip?-GfxManager.imgFlagSmallList.get(flag).getWidth()*0.5:
-					   -GfxManager.imgFlagSmallList.get(flag).getWidth()*0.25);
+		
+		float flagX;
+		if(state != STATE_MOVE){
+			flagX = (float) (getAbsoluteX()
+				-GfxManager.imgFlagSmallList.get(flag).getWidth()*0.75);
+		}else{
+			flagX = getAbsoluteX()
+				+
+				(int)(flip?
+				-GfxManager.imgFlagSmallList.get(flag).getWidth()*0.25:
+				-GfxManager.imgFlagSmallList.get(flag).getWidth()*0.75);
+		}
+					  
 		float flagY = getAbsoluteY()-GfxManager.imgFlagSmallList.get(flag).getHeight();
 		
 		int angle = flip?15:-15;
+		
 		
 		g.drawRegion(GfxManager.imgFlagSmallList.get(flag), 
 				worldConver.getConversionDrawX(gameCamera.getPosX(), (int)flagX),
@@ -145,9 +159,12 @@ public class Army extends MapObject{
 				angle, 
 				worldConver.getConversionDrawX(gameCamera.getPosX(), (int)flagX+GfxManager.imgFlagSmallList.get(flag).getWidth()/2), 
 				worldConver.getConversionDrawY(gameCamera.getPosY(), (int)flagY+GfxManager.imgFlagSmallList.get(flag).getHeight()/2));
-		
-		//g.drawImage(GfxManager.imgFlagSmallList.get(flag), flagX, flagY, Graphics.HFLIP);
-		
+		/*
+		g.drawImage(GfxManager.imgFlagSmallList.get(flag), 
+				worldConver.getConversionDrawX(gameCamera.getPosX(), (int)flagX+GfxManager.imgFlagSmallList.get(flag).getWidth()/2), 
+				worldConver.getConversionDrawY(gameCamera.getPosY(), (int)flagY+GfxManager.imgFlagSmallList.get(flag).getHeight()/2), 
+				Graphics.VCENTER |Graphics.HCENTER);
+		*/
 		switch(anim){
 		case ANIN_IDLE:
 			spriteList.get(anim).drawFrame(g, GfxManager.imgArmyIdle, 
@@ -173,19 +190,12 @@ public class Army extends MapObject{
 		*/
 	}
 	
-	public int getCombat(int terrain){
-		return 0;
-	}
-	
-	public int getCost(){
-		return 0;
-	}
-	
 	public void changeState(int newState){
 		switch(newState){
 		case STATE_ON: 
 			anim = ANIN_IDLE;
 			spriteList.get(anim).resetAnimation(0);
+			flip = false;
 			break;
 		case STATE_MOVE: 
 			anim = ANIN_MOVE;
@@ -196,10 +206,10 @@ public class Army extends MapObject{
 		case STATE_OFF:
 			anim = ANIN_IDLE;
 			spriteList.get(anim).resetAnimation(0);
+			flip = false;
 			break;
 		}
 		state = newState;
-		
 	}
 	
 	public int getNumberTroops(int type){
@@ -230,6 +240,53 @@ public class Army extends MapObject{
 			}
 		}
 		return power;
+	}
+	
+	public int getCost(){
+		int cost = 0;
+		for(int i = 0; i < troopList.size(); i++){
+			cost +=  GameParams.TROOP_COST [troopList.get(i).getType()];
+		}
+		return cost;
+	}
+	
+	public void setDamage(int costTarget){
+		int costCount = 0;
+		for(int i = 0; i < troopList.size() && costCount < costTarget; i++){
+			//Maquinas de asedio
+			if(troopList.get(i).getType() == GameParams.SIEGE){
+				costCount+= GameParams.TROOP_COST[GameParams.SIEGE];
+				troopList.remove(i);
+				i--;
+			}
+		}
+		
+		for(int i = 0; i < troopList.size() && costCount < costTarget; i++){
+			//Maquinas de asedio
+			if(troopList.get(i).getType() == GameParams.HARASSERES){
+				costCount+= GameParams.TROOP_COST[GameParams.HARASSERES];
+				troopList.remove(i);
+				i--;
+			}
+		}
+		
+		for(int i = 0; i < troopList.size() && costCount < costTarget; i++){
+			//Maquinas de asedio
+			if(troopList.get(i).getType() == GameParams.KNIGHT){
+				costCount+= GameParams.TROOP_COST[GameParams.KNIGHT];
+				troopList.remove(i);
+				i--;
+			}
+		}
+		
+		for(int i = 0; i < troopList.size() && costCount < costTarget; i++){
+			//Maquinas de asedio
+			if(troopList.get(i).getType() == GameParams.INFANTRY){
+				costCount+= GameParams.TROOP_COST[GameParams.INFANTRY];
+				troopList.remove(i);
+				i--;
+			}
+		}
 	}
 
 	public int getState() {

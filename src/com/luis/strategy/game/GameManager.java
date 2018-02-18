@@ -146,11 +146,9 @@ public class GameManager {
 			@Override
 			public void onButtonPressUp(){
 				reset();
-				if(subState == SUB_STATE_ACTION_WAIT){
-					setDataTarget(activeArmy);
-					changeSubState(SUB_STATE_ACTION_ARMY_SELECT);
-					hide();
-				}
+				hide();
+				btnFlagCastle.hide();
+				
 			}
 		};
 		
@@ -169,6 +167,7 @@ public class GameManager {
 						getSelectedArmy(), 
 						isSelectedArmyFromCurrentPlayer(getSelectedArmy()),
 						state==STATE_DISCARD);
+				btnFlagHelmet.hide();
 				hide();
 			}
 		};
@@ -177,7 +176,7 @@ public class GameManager {
 			@Override
 			public void check(){
 				if(state == STATE_DISCARD){
-					int dif = playerList.get(playerIndex).getTaxes() - playerList.get(playerIndex).getSalaries();
+					int dif = playerList.get(playerIndex).getTaxes() - playerList.get(playerIndex).getCost();
 					if(dif >= 0){
 						discardBox.cancel();
 					}
@@ -195,7 +194,7 @@ public class GameManager {
 						worldConver, 
 						gameCamera, 
 						map, 
-						getCurrentPlayer(), 
+						getCurrentPlayer(),
 						getKingdom(),
 						getCurrentPlayer().getFlag(), 
 						map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
@@ -244,13 +243,20 @@ public class GameManager {
 		};
 		
 		infoBox = new SimpleBox(GfxManager.imgSmallBox, true);
-		discardBox = new SimpleBox(GfxManager.imgNotificationBox, false);
+		discardBox = new SimpleBox(GfxManager.imgNotificationBox, false){
+			@Override
+			public void onFinish() {
+				super.onFinish();
+				armyBox.cancel();
+			}
+		};
 		discardBox.setY(GfxManager.imgNotificationBox.getHeight()/2);
 		
 		turnCount = 1;
 		
 		NotificationBox.getInstance().init(
-				Define.SIZEX, Define.SIZEY, GfxManager.imgNotificationBox, NotificationBox.DURATION_MEDIUM);
+				Define.SIZEX, Define.SIZEY, 
+				null, NotificationBox.DURATION_MEDIUM);
 		
 		changeState(STATE_INCOME);
 	}
@@ -269,7 +275,7 @@ public class GameManager {
 		case STATE_DISCARD:
 			discardBox.update(UserInput.getInstance().getMultiTouchHandler(), delta);
 			if(!armyBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
-				int dif = playerList.get(playerIndex).getTaxes() - playerList.get(playerIndex).getSalaries();
+				int dif = playerList.get(playerIndex).getTaxes() - playerList.get(playerIndex).getCost();
 				if(dif >= 0){
 					changeState(STATE_ACTION);
 				}
@@ -304,7 +310,6 @@ public class GameManager {
 							changeSubState(SUB_STATE_CITY_MANAGEMENT);
 						}
 					}
-					
 				}
 				
 				//Actualizar animaciones
@@ -322,6 +327,9 @@ public class GameManager {
 							cameraTargetY = getSelectedArmy().getAbsoluteY();
 							if(i == playerIndex && army.getState() == Army.STATE_ON){
 								btnFlagHelmet.start();
+								setDataTarget(activeArmy);
+								changeSubState(SUB_STATE_ACTION_ARMY_SELECT);
+								
 							}else{
 								btnFlagHelmet.hide();
 							}
@@ -750,18 +758,14 @@ public class GameManager {
 			
 			//Calculo de ganancias:
 			int tax = playerList.get(playerIndex).getTaxes();
-			int salary = playerList.get(playerIndex).getSalaries();
+			int salary = playerList.get(playerIndex).getCost();
 			
 			playerList.get(playerIndex).setGold(playerList.get(playerIndex).getGold()+tax-salary);
-			
-			int dif = tax- salary;
 			
 			economyBox.start("ECONOMY", "EARNING: +" +tax + " SALARY: -" + salary);
 			
 			break;
 		case STATE_DISCARD:
-			
-			dif = playerList.get(playerIndex).getTaxes() - playerList.get(playerIndex).getSalaries();
 			
 			discardBox.start(null, "Cost of troops exceedes your trasure. Discard troops.");
 			
@@ -781,8 +785,7 @@ public class GameManager {
 		
 		btnNext.setDisabled(true);
 		btnCancel.setDisabled(true);
-		btnFlagHelmet.hide();
-		btnFlagCastle.hide();
+		
 		lastSubState =subState;
 		subState = newSubState;
 		switch(state){
@@ -798,6 +801,8 @@ public class GameManager {
 			switch(subState){
 				
 			case SUB_STATE_ACTION_WAIT:
+				btnFlagHelmet.hide();
+				btnFlagCastle.hide();
 				btnNext.setDisabled(false);
 				btnCancel.setDisabled(true);
 				cleanArmyAction();
@@ -810,6 +815,8 @@ public class GameManager {
 				break;
 			case SUB_STATE_ACTION_COMBAT:
 				getSelectedArmy().changeState(Army.STATE_OFF);
+				btnFlagHelmet.hide();
+				btnFlagCastle.hide();
 				break;
 			case SUB_STATE_ACTION_RESULT:
 				break;
@@ -944,21 +951,6 @@ public class GameManager {
 		return army;
 	}
 	
-	private Army getEnemyArmyFromKingdom(Kingdom kingdom) {
-		Army enemy = null;
-		for(Player player:playerList){
-			if(player.getId()!= playerList.get(playerIndex).getId()){
-				for(Army army : player.getArmyList()){
-					if(army.getKingdom().getId() == kingdom.getId()){
-						enemy = army;
-						break;
-					}
-				}
-			}
-		}
-		return enemy;
-	}
-	
 	private Army getEnemyAtKingdom(Player player, Kingdom kingdom){
 		Army enemy = null;
 		for(Player p : playerList){
@@ -1039,27 +1031,22 @@ public class GameManager {
 	
 	private void resolveCombat(int result){
 		
+		/*
+		 * El ejercito ganador genera la mitad de su valor en daño al ejercito perdedor
+		 * El ejercito perdedor genera la la cuarta parte de su daño al ejercito ganador
+		 */
+		
+		Army enemy = getEnemyAtKingdom(playerList.get(playerIndex), getSelectedArmy().getKingdom());
+		
 		switch(result){
-		case 0:
-			resultBox.start("RESULT", "BIG DEFEAT");
-		break;
-		
-		case 1:
-			resultBox.start("RESULT", "DEFEAT");
-		break;
-		
-		case 2:
-			resultBox.start("RESULT", "VICTORY");
-		break;
-		
-		case 3:
-			resultBox.start("RESULT", "BIG VICTORY");
-		break;
+		case 0: resultBox.start("RESULT", "BIG DEFEAT");break;
+		case 1: resultBox.start("RESULT", "DEFEAT");break;
+		case 2: resultBox.start("RESULT", "VICTORY");break;
+		case 3: resultBox.start("RESULT", "BIG VICTORY"); break;
 		}
 		
 		//combate contra otro ejercito
-		if(getEnemyAtKingdom(playerList.get(playerIndex), activeArmy.getKingdom()) != null){
-			
+		if(enemy != null){
 			//Resolucion del combate
 			Army defeated = null;
 			if(result > 1)
@@ -1086,9 +1073,31 @@ public class GameManager {
 			
 			if(defeatTarget == null || aniquilation){
 				removeArmy(defeated);
+				resultBox.start("BIG VICTORY", "The army from player " + defeated.getPlayer().getName() + " has been destroyed.");
 			}else{
 				defeated.setDefeat(true);
 				putArmyAtKingdom(defeated, defeated.getKingdom(), defeatTarget);
+				
+				//Daño
+				switch(result){
+				case 1:
+					int casualtiesFromArmy = (getSelectedArmy().getCost() * 25) / 100; 
+					int casualtiesFromEnemy = (enemy.getCost() * 50) / 100; 
+					
+					getSelectedArmy().setDamage(casualtiesFromEnemy);
+					enemy.setDamage(casualtiesFromArmy);
+					resultBox.start("DEFEAT", "Atacante pierde " + casualtiesFromEnemy + " bajas. Defensor pierde " + casualtiesFromArmy + "bajas");
+				break;
+				
+				case 2:
+					casualtiesFromArmy = (getSelectedArmy().getCost() * 50) / 100; 
+					casualtiesFromEnemy = (enemy.getCost() * 25) / 100;
+					
+					getSelectedArmy().setDamage(casualtiesFromEnemy);
+					enemy.setDamage(casualtiesFromArmy);
+					resultBox.start("VICTORY", "Atacante pierde " + casualtiesFromEnemy + " bajas. Defensor pierde " + casualtiesFromArmy + "bajas");
+				break;
+				}
 			}
 			
 			if(getSelectedArmy() != null){
