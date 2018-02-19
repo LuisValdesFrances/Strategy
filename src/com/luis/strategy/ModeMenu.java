@@ -380,7 +380,7 @@ public class ModeMenu {
 			_g.setColor(Main.COLOR_BLACK);
 			_g.fillRect(0, 0, Define.SIZEX, Define.SIZEY);
 			MenuManager.drawButtonsAndTextX(_g, MenuManager.BUTTON_CENTER,NUMBER_OPTS_LANGUAGE, RscManager.TXT_ENGLISH, 
-					RscManager.sAllTexts, Font.FONT_BIG,
+					RscManager.allText, Font.FONT_BIG,
 					optionSelect, GfxManager.vImgSoftkeys,GfxManager.vImgMenuButtons, GfxManager.vImgMenuArrows, Main.iFrame);
 			Main.drawSoftkey(_g, Main.SOFT_OK, false);
 			break;
@@ -391,7 +391,7 @@ public class ModeMenu {
 			_g.setColor(Main.COLOR_BLACK);
 			_g.fillRect(0, 0, Define.SIZEX, Define.SIZEY);
 			MenuManager.drawButtonsAndTextX(_g, MenuManager.BUTTON_CENTER,NUMBER_OPTS_SOUND, RscManager.TXT_SOUND_ON, 
-					RscManager.sAllTexts, Font.FONT_BIG,optionSelect, 
+					RscManager.allText, Font.FONT_BIG,optionSelect, 
 					GfxManager.vImgSoftkeys,GfxManager.vImgMenuButtons, GfxManager.vImgMenuArrows, Main.iFrame);
 			Main.drawSoftkey(_g, Main.SOFT_OK, false);
 			break;
@@ -401,7 +401,7 @@ public class ModeMenu {
 			//_g.drawImage(GfxManager.vImgBackground, 0, 0, 0);
 			_g.setColor(Main.COLOR_RED);
 			_g.fillRect(0, 0, Define.SIZEX, Define.SIZEY);
-			MenuManager.drawButtonsAndTextY(_g,NUMBER_OPTS_MAIN_MENU, RscManager.TXT_PLAY, RscManager.sAllTexts,
+			MenuManager.drawButtonsAndTextY(_g,NUMBER_OPTS_MAIN_MENU, RscManager.TXT_PLAY, RscManager.allText,
 				    Font.FONT_BIG, optionSelect, null, GfxManager.vImgMenuButtons, Main.iFrame);
 			break;
 			
@@ -412,11 +412,11 @@ public class ModeMenu {
 			_g.fillRect(0, 0, Define.SIZEX, Define.SIZEY);
 			
 			MenuManager.drawButtonsAndTextX(_g, MenuManager.BUTTON_UP,NUMBER_OPTS_LANGUAGE, RscManager.TXT_ENGLISH, 
-					RscManager.sAllTexts, Font.FONT_BIG, 
+					RscManager.allText, Font.FONT_BIG, 
 					iLanguageSelect, 
 					GfxManager.vImgSoftkeys,GfxManager.vImgMenuButtons, GfxManager.vImgMenuArrows, Main.iFrame);
 			MenuManager.drawButtonsAndTextX(_g, MenuManager.BUTTON_CENTER,NUMBER_OPTS_SOUND, RscManager.TXT_SOUND_ON, 
-					RscManager.sAllTexts, Font.FONT_BIG,
+					RscManager.allText, Font.FONT_BIG,
 					iSoundSelect, 
 					GfxManager.vImgSoftkeys,GfxManager.vImgMenuButtons, GfxManager.vImgMenuArrows, Main.iFrame);
 			Main.drawSoftkey(_g, Main.SOFT_OK, false);
@@ -427,7 +427,7 @@ public class ModeMenu {
 			//_g.drawImage(GfxManager.vImgBackground, 0, 0, 0);
 			_g.setColor(Main.COLOR_BLACK);
 			_g.fillRect(0, 0, Define.SIZEX, Define.SIZEY);
-			MenuManager.drawButtonsAndTextY(_g,NUMBER_OPTS_MORE_MENU, RscManager.TXT_HELP, RscManager.sAllTexts, Font.FONT_BIG, 
+			MenuManager.drawButtonsAndTextY(_g,NUMBER_OPTS_MORE_MENU, RscManager.TXT_HELP, RscManager.allText, Font.FONT_BIG, 
 					optionSelect, null, GfxManager.vImgMenuButtons, Main.iFrame);
 			
 			Main.drawSoftkey(_g, Main.SOFT_BACK, false);
@@ -447,7 +447,7 @@ public class ModeMenu {
 			_g.setAlpha(255);
        	 
 			TextManager.draw(_g, Font.FONT_MEDIUM, 
-					RscManager.sAllTexts[Main.iState==Define.ST_MENU_HELP? RscManager.TXT_HELP_DESCRIP:RscManager.TXT_ABOUT_DESCRIP], 
+					RscManager.allText[Main.iState==Define.ST_MENU_HELP? RscManager.TXT_HELP_DESCRIP:RscManager.TXT_ABOUT_DESCRIP], 
         			Define.SIZEX2, Define.SIZEY2, Define.SIZEX - Define.SIZEX32, TextManager.ALING_CENTER, -1);
 			
 			Main.drawSoftkey(_g, Main.SOFT_BACK, false);
@@ -470,19 +470,19 @@ public class ModeMenu {
 			_g.fillRect(0, 0, Define.SIZEX, Define.SIZEY);
         	
         	MenuManager.drawButtonsAndTextX(_g, MenuManager.BUTTON_CENTER,2, RscManager.TXT_NO, 
-        			RscManager.sAllTexts, Font.FONT_BIG,
+        			RscManager.allText, Font.FONT_BIG,
 					optionSelect, 
 					GfxManager.vImgSoftkeys,GfxManager.vImgMenuButtons, GfxManager.vImgMenuArrows, Main.iFrame);
         	
         	_g.setAlpha(120);
         	_g.setColor(Main.COLOR_LILA_BG);
-        	_g.fillRect(Define.SIZEX2 - (((RscManager.sAllTexts[RscManager.TXT_RETURN_MENU]).length()*Font.getFontWidth(Font.FONT_BIG))>>1), 
+        	_g.fillRect(Define.SIZEX2 - (((RscManager.allText[RscManager.TXT_RETURN_MENU]).length()*Font.getFontWidth(Font.FONT_BIG))>>1), 
         			    (Font.getFontHeight(Font.FONT_BIG)<<2) - (Font.getFontHeight(Font.FONT_MEDIUM)),
-                 	    (((RscManager.sAllTexts[RscManager.TXT_RETURN_MENU]).length()*Font.getFontWidth(Font.FONT_BIG))>>1),
+                 	    (((RscManager.allText[RscManager.TXT_RETURN_MENU]).length()*Font.getFontWidth(Font.FONT_BIG))>>1),
                  	     (Font.getFontHeight(Font.FONT_MEDIUM)));
         	_g.setAlpha(255);
         	
-        	TextManager.draw(_g, Font.FONT_MEDIUM, RscManager.sAllTexts[RscManager.TXT_WANT_EXIT_GAME], 
+        	TextManager.draw(_g, Font.FONT_MEDIUM, RscManager.allText[RscManager.TXT_WANT_EXIT_GAME], 
         			Define.SIZEX2,(Font.getFontHeight(Font.FONT_BIG)<<2),Define.SIZEX, TextManager.ALING_CENTER, -1);
         	Main.drawSoftkey(_g, Main.SOFT_OK, false);
         	break;

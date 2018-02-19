@@ -1,25 +1,52 @@
 ﻿
-ENGLISH
-ESPAÑOL
-CATALÀ
-PLAY
-OPTIONS
-MORE
-EXIT
-SOUND ON
-SOUND OFF
-VIBRATION ON
-VIBRATION OFF
-DO YOU WANT TO QUIT GAME?
-NO
-YES
-HELP
-ABOUT
-DESTROY ALL BLOCKS WITH THE BALL FOR GET POINTS. SLIDES FINGER AROUND THE SCREEN FOR MOVE THE BAR.
-DESING AND PROGRAMMING: LUIS VALDES FRANCES. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MUSIC AND FX: FRANCISCO HOYOS. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx ALL RIGHTS RESERVED.
-POINTS:
-RECORD:
-RETRY
-LEAVE
-NEW RECORD:
-DO YOU WANT TO RETURN TU MENU?
+English
+Español
+Català
+Play
+Options
+More
+Exit
+Sound On
+sound Off
+Vibration On
+Vibration Off
+Do you want exit?
+No
+Yes
+Help
+About
+Texto help.
+Desing and programer: Luis Valdes. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx Music and FX: Francisco Hoyos. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx All right reserved.
+Points:
+Record:
+Rertry
+Leave
+New record:
+Do you want return to menu?
+Plain
+Forest
+Montain
+Small village
+Medium village
+Big village
+Castle
+Infantry
+Knights
+Harassers
+Siege
+RESULT
+Player
+Big Defeat
+Defeat
+Victory
+Big Victory
+The army from player 
+ has been destroyed.
+Atacante pierde 
+Defensor pierde 
+ bajas.
+New army recruited.
+ECONOMY
+Earning
+Salary
+Cost of troops exceedes your tresaure. Discard troops.

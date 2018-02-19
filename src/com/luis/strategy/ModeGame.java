@@ -201,8 +201,8 @@ public class ModeGame {
 					GfxManager.imgMenuBox, 
 					GfxManager.imgButtonRelease, GfxManager.imgButtonFocus, 
 					Define.SIZEX2, Define.SIZEY2,
-					RscManager.sAllTexts[RscManager.TXT_RETURN_MENU],
-					new String[]{RscManager.sAllTexts[RscManager.TXT_NO], RscManager.sAllTexts[RscManager.TXT_YES]},
+					RscManager.allText[RscManager.TXT_RETURN_MENU],
+					new String[]{RscManager.allText[RscManager.TXT_NO], RscManager.allText[RscManager.TXT_YES]},
 					Font.FONT_MEDIUM, Font.FONT_MEDIUM){
 				@Override
 				public void onFinish(){

@@ -13,6 +13,7 @@ import com.luis.lgameengine.gui.NotificationBox;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 import com.luis.strategy.GfxManager;
+import com.luis.strategy.RscManager;
 import com.luis.strategy.army.Army;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
@@ -69,7 +70,7 @@ public class ArmyBuyBox {
 		nameTroopList = new ArrayList<String>();
 		
 		for(int i = 0; i < GfxManager.imgBigTroop.size(); i++){
-			nameTroopList.add("Name troop " + i);
+			nameTroopList.add(RscManager.allText[RscManager.TXT_GAME_INFANTRY + i]);
 		}
 		
 		buttonCancel = new Button(

@@ -88,11 +88,11 @@ public class Player {
 		return tax;
 	}
 	
-	public int getCost() {
+	public int getCost(boolean includeSubject) {
 		int salaries = 0;
 		for(Army army : getArmyList()){
 			for(Troop troop : army.getTroopList()){
-				if(!troop.isSubject()){
+				if(includeSubject){
 					salaries += GameParams.TROOP_COST[troop.getType()];
 				}
 			}

@@ -2,7 +2,7 @@ package com.luis.strategy;
 
 public class RscManager {
 	
-	public static String[] sAllTexts;
+	public static String[] allText;
 	
 	public static final byte ENGLISH = 0;
 	public static final byte SPANISH = 1;
@@ -34,10 +34,37 @@ public class RscManager {
 	public static final int TXT_NEW_RECORD= TXT_LEAVE+1;
 	public static final int TXT_RETURN_MENU= TXT_NEW_RECORD+1;
 	
+	public static final int TXT_GAME_PLAIN= TXT_RETURN_MENU+1;
+	public static final int TXT_GAME_FOREST= TXT_GAME_PLAIN+1;
+	public static final int TXT_GAME_MONTAIN= TXT_GAME_FOREST+1;
+	public static final int TXT_GAME_SMALL_CITY= TXT_GAME_MONTAIN+1;
+	public static final int TXT_GAME_MEDIUM_CITY= TXT_GAME_SMALL_CITY+1;
+	public static final int TXT_GAME_BIG_CITY= TXT_GAME_MEDIUM_CITY+1;
+	public static final int TXT_GAME_CASTLE= TXT_GAME_BIG_CITY+1;
+	public static final int TXT_GAME_INFANTRY= TXT_GAME_CASTLE+1;
+	public static final int TXT_GAME_KNIGHTS= TXT_GAME_INFANTRY+1;
+	public static final int TXT_GAME_HARASSERS= TXT_GAME_KNIGHTS+1;
+	public static final int TXT_GAME_SIEGE= TXT_GAME_HARASSERS+1;
+	
+	public static final int TXT_GAME_RESULT= TXT_GAME_SIEGE+1;
+	public static final int TXT_GAME_PLAYER= TXT_GAME_RESULT+1;
+	public static final int TXT_GAME_BIG_DEFEAT= TXT_GAME_PLAYER+1;
+	public static final int TXT_GAME_DEFEAT= TXT_GAME_BIG_DEFEAT+1;
+	public static final int TXT_GAME_VICTORY= TXT_GAME_DEFEAT+1;
+	public static final int TXT_GAME_BIG_VICTORY= TXT_GAME_VICTORY+1;
+	public static final int TXT_GAME_THE_ARMY_FROM_PLAYER= TXT_GAME_BIG_VICTORY+1;
+	public static final int TXT_GAME_HAS_BEEN_DESTROYED= TXT_GAME_THE_ARMY_FROM_PLAYER+1;
+	public static final int TXT_GAME_ATTACKER_LOST= TXT_GAME_HAS_BEEN_DESTROYED+1;
+	public static final int TXT_GAME_DEFENSER_LOST= TXT_GAME_ATTACKER_LOST+1;
+	public static final int TXT_GAME_LOSSES= TXT_GAME_DEFENSER_LOST+1;
+	public static final int TXT_GAME_NEW_ARMY= TXT_GAME_LOSSES+1;
+	public static final int TXT_GAME_ECONOMY= TXT_GAME_NEW_ARMY+1;
+	public static final int TXT_GAME_EARNING= TXT_GAME_ECONOMY+1;
+	public static final int TXT_GAME_SALARY= TXT_GAME_EARNING+1;
+	public static final int TXT_GAME_COST_OF_TROOPS= TXT_GAME_SALARY+1;
 	
 	
-	
-	public static final int TOTAL_LINES_TXT = TXT_RETURN_MENU;
+	public static final int TOTAL_LINES_TXT = TXT_GAME_COST_OF_TROOPS;
 	
 	
 	public static void loadLanguage(int language) {
@@ -56,7 +83,7 @@ public class RscManager {
 		try {
 			StreamReader reader;
 			reader = new StreamReader(lan, TOTAL_LINES_TXT + 1);
-			sAllTexts = reader.read();
+			allText = reader.read();
 //			for (int i = 0; i < ms_sAllTexts.length; i++) {
 //				System.out.println("Cargado " + ms_sAllTexts[i]);
 //			 }

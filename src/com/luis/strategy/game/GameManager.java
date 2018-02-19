@@ -25,6 +25,7 @@ import com.luis.lgameengine.gui.NotificationBox;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.Main;
 import com.luis.strategy.ModeGame;
+import com.luis.strategy.RscManager;
 import com.luis.strategy.UserInput;
 import com.luis.strategy.army.Army;
 import com.luis.strategy.army.Troop;
@@ -176,7 +177,7 @@ public class GameManager {
 			@Override
 			public void check(){
 				if(state == STATE_DISCARD){
-					int dif = playerList.get(playerIndex).getTaxes() - playerList.get(playerIndex).getCost();
+					int dif = playerList.get(playerIndex).getTaxes() - playerList.get(playerIndex).getCost(false);
 					if(dif >= 0){
 						discardBox.cancel();
 					}
@@ -275,7 +276,7 @@ public class GameManager {
 		case STATE_DISCARD:
 			discardBox.update(UserInput.getInstance().getMultiTouchHandler(), delta);
 			if(!armyBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
-				int dif = playerList.get(playerIndex).getTaxes() - playerList.get(playerIndex).getCost();
+				int dif = playerList.get(playerIndex).getTaxes() - playerList.get(playerIndex).getCost(false);
 				if(dif >= 0){
 					changeState(STATE_ACTION);
 				}
@@ -758,7 +759,8 @@ public class GameManager {
 			
 			//Calculo de ganancias:
 			int tax = playerList.get(playerIndex).getTaxes();
-			int salary = playerList.get(playerIndex).getCost();
+			//Calculo de salarios:
+			int salary = playerList.get(playerIndex).getCost(false);
 			
 			playerList.get(playerIndex).setGold(playerList.get(playerIndex).getGold()+tax-salary);
 			
@@ -1039,10 +1041,14 @@ public class GameManager {
 		Army enemy = getEnemyAtKingdom(playerList.get(playerIndex), getSelectedArmy().getKingdom());
 		
 		switch(result){
-		case 0: resultBox.start("RESULT", "BIG DEFEAT");break;
-		case 1: resultBox.start("RESULT", "DEFEAT");break;
-		case 2: resultBox.start("RESULT", "VICTORY");break;
-		case 3: resultBox.start("RESULT", "BIG VICTORY"); break;
+			case 0: resultBox.start(RscManager.allText[RscManager.TXT_GAME_RESULT], 
+					RscManager.allText[RscManager.TXT_GAME_BIG_DEFEAT]);break;
+			case 1: resultBox.start(RscManager.allText[RscManager.TXT_GAME_RESULT], 
+					RscManager.allText[RscManager.TXT_GAME_DEFEAT]);break;
+			case 2: resultBox.start(RscManager.allText[RscManager.TXT_GAME_RESULT], 
+					RscManager.allText[RscManager.TXT_GAME_VICTORY]);break;
+			case 3: resultBox.start(RscManager.allText[RscManager.TXT_GAME_RESULT], 
+					RscManager.allText[RscManager.TXT_GAME_BIG_VICTORY]); break;
 		}
 		
 		//combate contra otro ejercito
@@ -1073,7 +1079,8 @@ public class GameManager {
 			
 			if(defeatTarget == null || aniquilation){
 				removeArmy(defeated);
-				resultBox.start("BIG VICTORY", "The army from player " + defeated.getPlayer().getName() + " has been destroyed.");
+				resultBox.start(RscManager.allText[RscManager.TXT_GAME_BIG_VICTORY], 
+						RscManager.allText[RscManager.TXT_GAME_THE_ARMY_FROM_PLAYER] + defeated.getPlayer().getName() + RscManager.allText[RscManager.TXT_GAME_HAS_BEEN_DESTROYED]);
 			}else{
 				defeated.setDefeat(true);
 				putArmyAtKingdom(defeated, defeated.getKingdom(), defeatTarget);
@@ -1086,7 +1093,9 @@ public class GameManager {
 					
 					getSelectedArmy().setDamage(casualtiesFromEnemy);
 					enemy.setDamage(casualtiesFromArmy);
-					resultBox.start("DEFEAT", "Atacante pierde " + casualtiesFromEnemy + " bajas. Defensor pierde " + casualtiesFromArmy + "bajas");
+					resultBox.start(RscManager.allText[RscManager.TXT_GAME_DEFEAT], 
+							RscManager.allText[RscManager.TXT_GAME_ATTACKER_LOST] + casualtiesFromEnemy + 
+							RscManager.allText[RscManager.TXT_GAME_DEFENSER_LOST] + casualtiesFromArmy + RscManager.allText[RscManager.TXT_GAME_LOSSES]);
 				break;
 				
 				case 2:
@@ -1095,7 +1104,9 @@ public class GameManager {
 					
 					getSelectedArmy().setDamage(casualtiesFromEnemy);
 					enemy.setDamage(casualtiesFromArmy);
-					resultBox.start("VICTORY", "Atacante pierde " + casualtiesFromEnemy + " bajas. Defensor pierde " + casualtiesFromArmy + "bajas");
+					resultBox.start(RscManager.allText[RscManager.TXT_GAME_DEFEAT], 
+							RscManager.allText[RscManager.TXT_GAME_ATTACKER_LOST] + casualtiesFromEnemy + 
+							RscManager.allText[RscManager.TXT_GAME_DEFENSER_LOST] + casualtiesFromArmy + RscManager.allText[RscManager.TXT_GAME_LOSSES]);
 				break;
 				}
 			}
