@@ -73,7 +73,7 @@ public class ModeMenu {
 	}
 	
 	public static void update(){
-		switch (Main.iState) {
+		switch (Main.state) {
 		case Define.ST_MENU_LOGO:
 			runLogo();
 			break;
@@ -339,7 +339,7 @@ public class ModeMenu {
 			if (optionSelect == 0){
 				Main.changeState(Define.ST_MENU_MAIN,false);
 			}else{
-				Main.isGameHeart=false;
+				Main.isGameRun=false;
 			}
 			}
         	break;
@@ -364,7 +364,7 @@ public class ModeMenu {
 	}
 	
 	public static void draw(Graphics _g){
-		switch (Main.iState) {
+		switch (Main.state) {
 		case Define.ST_MENU_LOGO:
 			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 			_g.setColor(Main.COLOR_BLACK);
@@ -447,7 +447,7 @@ public class ModeMenu {
 			_g.setAlpha(255);
        	 
 			TextManager.draw(_g, Font.FONT_MEDIUM, 
-					RscManager.allText[Main.iState==Define.ST_MENU_HELP? RscManager.TXT_HELP_DESCRIP:RscManager.TXT_ABOUT_DESCRIP], 
+					RscManager.allText[Main.state==Define.ST_MENU_HELP? RscManager.TXT_HELP_DESCRIP:RscManager.TXT_ABOUT_DESCRIP], 
         			Define.SIZEX2, Define.SIZEY2, Define.SIZEX - Define.SIZEX32, TextManager.ALING_CENTER, -1);
 			
 			Main.drawSoftkey(_g, Main.SOFT_BACK, false);

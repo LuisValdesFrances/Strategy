@@ -61,6 +61,7 @@ public class GameManager {
 	public static final int STATE_DISCARD = 2;
 	public static final int STATE_ACTION = 3;
 	public static final int STATE_END = 4;
+	public static final int STATE_FINISH = 5;
 	
 	
 	//SUB-STATE ACTION
@@ -86,7 +87,7 @@ public class GameManager {
 	private SimpleBox economyBox;
 	private SimpleBox resultBox;
 	private SimpleBox discardBox;
-	private SimpleBox infoBox;
+	private SimpleBox endGameBox;
 	
 	public GameManager(WorldConver wc, GameCamera gc, Map m, List<Player> pList){
 		this.worldConver = wc;
@@ -177,7 +178,7 @@ public class GameManager {
 			@Override
 			public void check(){
 				if(state == STATE_DISCARD){
-					int dif = playerList.get(playerIndex).getTaxes() - playerList.get(playerIndex).getCost(false);
+					int dif = getCurrentPlayer().getTaxes() - getCurrentPlayer().getCost(false);
 					if(dif >= 0){
 						discardBox.cancel();
 					}
@@ -227,7 +228,11 @@ public class GameManager {
 		resultBox = new SimpleBox(GfxManager.imgSmallBox, true){
 			@Override
 			public void onFinish(){
-				startEscape();
+				if(isFinishGame()){
+					changeState(STATE_FINISH);
+				}else{
+					startEscape();
+				}
 			}
 		};
 		
@@ -235,7 +240,7 @@ public class GameManager {
 			@Override
 			public void onFinish(){
 				//Compruebo si estoy en saldo negativo
-				if(playerList.get(playerIndex).getGold() < 0){
+				if(getCurrentPlayer().getGold() < 0){
 					changeState(STATE_DISCARD);
 				}else{
 					changeState(STATE_ACTION);
@@ -243,7 +248,13 @@ public class GameManager {
 			}
 		};
 		
-		infoBox = new SimpleBox(GfxManager.imgSmallBox, true);
+		endGameBox = new SimpleBox(GfxManager.imgSmallBox, true){
+			@Override
+			public void onFinish() {
+				super.onFinish();
+				Main.changeState(Define.ST_MENU_SELECT_GAME, false);
+			}
+		};
 		discardBox = new SimpleBox(GfxManager.imgNotificationBox, false){
 			@Override
 			public void onFinish() {
@@ -276,7 +287,7 @@ public class GameManager {
 		case STATE_DISCARD:
 			discardBox.update(UserInput.getInstance().getMultiTouchHandler(), delta);
 			if(!armyBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
-				int dif = playerList.get(playerIndex).getTaxes() - playerList.get(playerIndex).getCost(false);
+				int dif = getCurrentPlayer().getTaxes() - getCurrentPlayer().getCost(false);
 				if(dif >= 0){
 					changeState(STATE_ACTION);
 				}
@@ -295,10 +306,9 @@ public class GameManager {
 			break;
 		
 		case STATE_ACTION:
-			discardBox.update(UserInput.getInstance().getMultiTouchHandler(), delta);
 			switch(subState){
 			case SUB_STATE_ACTION_WAIT:
-				//Atcualizar interacion terreno:
+				//Atcualizar iteracion terreno:
 				for(Kingdom kingdom : map.getKingdomList()){
 					for(Terrain terrain : kingdom.getTerrainList()){
 						if(terrain.isSelect()){
@@ -314,7 +324,7 @@ public class GameManager {
 				}
 				
 				//Actualizar animaciones
-				playerList.get(playerIndex).updateAnimations(delta);
+				getCurrentPlayer().updateAnimations(delta);
 				
 				for(int i = 0; i < playerList.size(); i++){
 					for(Army army: playerList.get(i).getArmyList()){
@@ -369,7 +379,7 @@ public class GameManager {
 				break;
 				
 			case SUB_STATE_ACTION_ARMY_MOVE:
-				playerList.get(playerIndex).updateAnimations(Main.getDeltaSec());
+				getCurrentPlayer().updateAnimations(Main.getDeltaSec());
 				
 				//Colision
 				int x1 = activeArmy.getAbsoluteX();
@@ -389,9 +399,9 @@ public class GameManager {
 					
 					//Si tengo un ejercito en la zona y no soy yo ese ejercito me uno
 					List <Army> armyList = new ArrayList<Army>();
-					for(int i = 0; i < playerList.get(playerIndex).getArmyList().size(); i++){
-						if(playerList.get(playerIndex).getArmyList().get(i).getKingdom().getId() == getSelectedArmy().getKingdom().getId()){
-							armyList.add(playerList.get(playerIndex).getArmyList().get(i));
+					for(int i = 0; i < getCurrentPlayer().getArmyList().size(); i++){
+						if(getCurrentPlayer().getArmyList().get(i).getKingdom().getId() == getSelectedArmy().getKingdom().getId()){
+							armyList.add(getCurrentPlayer().getArmyList().get(i));
 						}
 					}
 					
@@ -406,16 +416,16 @@ public class GameManager {
 						
 					}else{
 						//Si el territorio es mio
-						if(playerList.get(playerIndex).hasKingom(activeArmy.getKingdom())){
+						if(getCurrentPlayer().hasKingom(activeArmy.getKingdom())){
 							//Si hay un ejercito enemigo
-							if(getEnemyAtKingdom(playerList.get(playerIndex), activeArmy.getKingdom()) != null){
+							if(getEnemyAtKingdom(getCurrentPlayer(), activeArmy.getKingdom()) != null){
 								changeSubState(SUB_STATE_ACTION_COMBAT);
 								
 								//Para batallas, el tipo de box es el primer elemento del territorio
 								battleBox.start(
 										getSelectedArmy().getKingdom().getTerrainList().get(0), 
 										getSelectedArmy(),
-										getEnemyAtKingdom(playerList.get(playerIndex), activeArmy.getKingdom()));
+										getEnemyAtKingdom(getCurrentPlayer(), activeArmy.getKingdom()));
 							}else{
 								activeArmy.getKingdom().setTarget(-1);
 								activeArmy.changeState(Army.STATE_OFF);
@@ -425,13 +435,13 @@ public class GameManager {
 							
 							changeSubState(SUB_STATE_ACTION_COMBAT);
 							//Si hay un ejercito enemigo
-							if(getEnemyAtKingdom(playerList.get(playerIndex), activeArmy.getKingdom()) != null){
+							if(getEnemyAtKingdom(getCurrentPlayer(), activeArmy.getKingdom()) != null){
 								
 								//Para batallas, el tipo de box es el primer elemento del territorio
 								battleBox.start(
 										getSelectedArmy().getKingdom().getTerrainList().get(0), 
 										getSelectedArmy(),
-										getEnemyAtKingdom(playerList.get(playerIndex), activeArmy.getKingdom()));
+										getEnemyAtKingdom(getCurrentPlayer(), activeArmy.getKingdom()));
 								
 							}else{
 								int kingdomState = getSelectedArmy().getKingdom().getState();
@@ -497,6 +507,12 @@ public class GameManager {
 				break;
 			}
 		break;
+		
+		case STATE_FINISH:
+			if(!endGameBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
+				
+			}
+			break;
 		}
 		
 		/*
@@ -511,7 +527,7 @@ public class GameManager {
 			!battleBox.isActive() && 
 			!economyBox.isActive() &&
 			!resultBox.isActive() &&
-			!infoBox.isActive() &&
+			!endGameBox.isActive() &&
 			!terrainBox.isActive()){
 			updateCamera();
 		}
@@ -596,6 +612,25 @@ public class GameManager {
 					(int) gameCamera.getPosX()+worldConver.getMarginW(),
 					(int) gameCamera.getPosY()+worldConver.getMarginN(),
 					cameraR);
+			
+			
+			g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+			g.setTextSize(32);
+			g.setAlpha(160);
+			g.setColor(0x88000000);
+			g.fillRect(0, 0, Define.SIZEX, g.getTextHeight() * 3);
+			g.setAlpha(255);
+			
+			g.drawText("CameraX: " + gameCamera.getPosX(), 0, g.getTextHeight(), Main.COLOR_WHITE);
+			g.drawText("CameraY: " + gameCamera.getPosY(), (int)(Define.SIZEX*0.33), g.getTextHeight(), Main.COLOR_WHITE);
+			g.drawText("State: " + state, 0, g.getTextHeight()*2, Main.COLOR_WHITE);
+			g.drawText("Sub-State: " + subState, (int)(Define.SIZEX*0.33), g.getTextHeight()*2, Main.COLOR_WHITE);
+			
+			String kingdomList = "";
+			for(Kingdom kingdom : getCurrentPlayer().getKingdomList()){
+				kingdomList += kingdom.getId() + ", ";
+			}
+			g.drawText("Domains: " + kingdomList, 0, g.getTextHeight()*3, Main.COLOR_WHITE);
 		}
 		drawPresentation(g);
 	}
@@ -616,9 +651,11 @@ public class GameManager {
 		battleBox.draw(g, true);
 		resultBox.draw(g, true);
 		terrainBox.draw(g, true);
-		infoBox.draw(g, true);
+		endGameBox.draw(g, true);
 		
 		g.drawImage(GfxManager.imgGameHud, 0, Define.SIZEY, Graphics.BOTTOM | Graphics.LEFT);
+		TextManager.drawSimpleText(g, Font.FONT_SMALL, getCurrentPlayer().getName(), 
+				0, Define.SIZEY-GfxManager.imgGameHud.getHeight(), Graphics.BOTTOM | Graphics.LEFT);
 		btnCancel.draw(g, 0, 0);
 		btnNext.draw(g, 0, 0);
 		btnFlagHelmet.draw(g);
@@ -629,7 +666,7 @@ public class GameManager {
 	
 	private void drawGold(Graphics g){
 		int margin = Define.SIZEY64;
-		String text = "" + playerList.get(playerIndex).getGold();
+		String text = "" + getCurrentPlayer().getGold();
 		int totalWidth = GfxManager.imgChest.getWidth() + margin + Font.getFontWidth(Font.FONT_MEDIUM)*text.length();
 		int x = Define.SIZEX - Define.SIZEX4 - totalWidth/2; 
 		int y = Define.SIZEY - GfxManager.imgGameHud.getHeight()/2 + GfxManager.imgChest.getHeight()/4; 
@@ -649,7 +686,7 @@ public class GameManager {
 		}
 	}
 	
-	public void setDataTarget(Army army){
+	private void setDataTarget(Army army){
 		
 		//Quito todos lo indicadores de target
 		for(Kingdom k: map.getKingdomList()){
@@ -663,15 +700,15 @@ public class GameManager {
 					
 					//Si tengo un ejercito en la zona me uno
 					if(
-						playerList.get(playerIndex).getArmy(kingdom) != null){
+						getCurrentPlayer().getArmy(kingdom) != null){
 						kingdom.setTarget(Kingdom.TARGET_AGGREGATION);
 						kingdom.setTouchX(kingdom.getAbsoluteX());
 						kingdom.setTouchY(kingdom.getAbsoluteY());
 					}else{
 						//Si el territorio es mio
-						if(playerList.get(playerIndex).hasKingom(kingdom)){
+						if(getCurrentPlayer().hasKingom(kingdom)){
 							//Busco ejercitos enemigos
-							if(getEnemyAtKingdom(playerList.get(playerIndex), kingdom) != null){
+							if(getEnemyAtKingdom(getCurrentPlayer(), kingdom) != null){
 								kingdom.setTarget(Kingdom.TARGET_BATTLE);
 								kingdom.setTouchX(kingdom.getAbsoluteX());
 								kingdom.setTouchY(kingdom.getAbsoluteY());
@@ -683,7 +720,7 @@ public class GameManager {
 						}else{
 							kingdom.setTarget(Kingdom.TARGET_BATTLE);
 							//Busco ejercitos enemigos
-							if(getEnemyAtKingdom(playerList.get(playerIndex), kingdom) != null){
+							if(getEnemyAtKingdom(getCurrentPlayer(), kingdom) != null){
 								kingdom.setTouchX(kingdom.getAbsoluteX());
 								kingdom.setTouchY(kingdom.getAbsoluteY());
 							}else{
@@ -696,7 +733,7 @@ public class GameManager {
 			}
 		}
 		//Si estoy en territorio hostil(A midad de una conquista), lo añado a los seleccionables
-		if(!playerList.get(playerIndex).hasKingom(activeArmy.getKingdom())){
+		if(!getCurrentPlayer().hasKingom(activeArmy.getKingdom())){
 			activeArmy.getKingdom().setTarget(Kingdom.TARGET_BATTLE);
 			activeArmy.getKingdom().setTouchX(activeArmy.getKingdom().
 					getTerrainList().get(activeArmy.getKingdom().getState()).getAbsoluteX());
@@ -705,7 +742,7 @@ public class GameManager {
 		}
 	}
 
-	public void cancelAction(){
+	private void cancelAction(){
 		btnCancel.setDisabled(true);
 		switch(state){
 		case STATE_INCOME:
@@ -730,9 +767,9 @@ public class GameManager {
 			}
 			break;
 		}
-		
 	}
-	public void changeState(int newState){
+	
+	private void changeState(int newState){
 		UserInput.getInstance().getMultiTouchHandler().resetTouch();
 		cleanArmyAction();
 		btnNext.setDisabled(true);
@@ -745,9 +782,10 @@ public class GameManager {
 		state = newState;
 		switch(state){
 		case STATE_INCOME:
-			startPresentation(Font.FONT_BIG, "PLAYER " + (playerIndex+1));
-			cameraTargetX = playerList.get(playerIndex).getCapital().getAbsoluteX();
-			cameraTargetY = playerList.get(playerIndex).getCapital().getAbsoluteY();
+			startPresentation(Font.FONT_BIG, RscManager.allText[RscManager.TXT_GAME_PLAYER] + " " + 
+					getCurrentPlayer().getName());
+			cameraTargetX = getCurrentPlayer().getCapital().getAbsoluteX();
+			cameraTargetY = getCurrentPlayer().getCapital().getAbsoluteY();
 			break;
 		case STATE_ECONOMY:
 			
@@ -758,11 +796,11 @@ public class GameManager {
 					army.changeState(Army.STATE_ON);
 			
 			//Calculo de ganancias:
-			int tax = playerList.get(playerIndex).getTaxes();
+			int tax = getCurrentPlayer().getTaxes();
 			//Calculo de salarios:
-			int salary = playerList.get(playerIndex).getCost(false);
+			int salary = getCurrentPlayer().getCost(false);
 			
-			playerList.get(playerIndex).setGold(playerList.get(playerIndex).getGold()+tax-salary);
+			getCurrentPlayer().setGold(getCurrentPlayer().getGold()+tax-salary);
 			
 			economyBox.start("ECONOMY", "EARNING: +" +tax + " SALARY: -" + salary);
 			
@@ -777,8 +815,16 @@ public class GameManager {
 			break;
 		case STATE_END:
 			turnCount++;
-			playerIndex = (playerIndex+1)%playerList.size();
+			do{
+				playerIndex = (playerIndex+1)%playerList.size();
+			}while(getCurrentPlayer().isDefeat());
 			changeState(STATE_INCOME);
+			break;
+		case STATE_FINISH:
+			endGameBox.start(
+					RscManager.allText[RscManager.TXT_GAME_VICTORY], 
+					RscManager.allText[RscManager.TXT_GAME_PLAYER] + getWinner().getName() + " " +
+							RscManager.allText[RscManager.TXT_GAME_IS_WINNER]);
 			break;
 		}
 	}
@@ -845,7 +891,7 @@ public class GameManager {
 	private static final int STATE_PRESENTATION_SHOW = 2;
 	private static final int STATE_PRESENTATION_MOVE_2 = 3;
 	
-	public void startPresentation(int font, String text){
+	private void startPresentation(int font, String text){
 		presentationState = STATE_PRESENTATION_MOVE_1;
 		presentationFont = font;
 		presentationText = text;
@@ -853,7 +899,7 @@ public class GameManager {
 		presentationModX = -Define.SIZEX;
 	}
 	
-	public boolean updatePresentation(float delta){
+	private boolean updatePresentation(float delta){
 		
 		switch(presentationState){
 		case STATE_PRESENTATION_MOVE_1:
@@ -875,7 +921,7 @@ public class GameManager {
 			if(presentationModX < Define.SIZEX){
 				presentationModX += (presentationModX*4f+Define.SIZEX8) * delta;
 			}else{
-				presentationState = -1;
+				presentationState = 0;
 			}
 			return true;
 		}
@@ -883,8 +929,8 @@ public class GameManager {
 		return false;
 	}
 	
-	public void drawPresentation(Graphics g){
-		if(presentationState != -1){
+	private void drawPresentation(Graphics g){
+		if(presentationState != 0){
 			g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 			g.setAlpha(GameParams.BG_BLACK_ALPHA);
 			g.setImageSize(1f, 1f-(Math.abs(presentationModX)/Define.SIZEX));
@@ -901,7 +947,7 @@ public class GameManager {
 	 * Devuelve el ejercito seleccionado
 	 * @return
 	 */
-	public Army getSelectedArmy(){
+	private Army getSelectedArmy(){
 		Army selected = null;
 		for(Player player : playerList){
 			for(Army army : player.getArmyList()){
@@ -914,14 +960,50 @@ public class GameManager {
 		return selected;
 	}
 	
+	private Player getWinner(){
+		Player winner = null;
+		if(isFinishGame()){
+			for(int i = 0; i < playerList.size() && winner == null; i++){
+				if(!playerList.get(i).isDefeat()){
+					winner = playerList.get(i);
+				}
+			}
+		}
+		return winner;
+	}
+	
+	private Player getPlayerByKingdom(Kingdom kingdom){
+		Player player = null;
+		for(int i = 0; i < playerList.size() && player == null; i++){
+			for(int j = 0; j < playerList.get(i).getKingdomList().size() && player == null; j++){
+				if(playerList.get(i).getKingdomList().get(j).getId() == kingdom.getId()){
+					player = playerList.get(i);
+				}
+			}
+		}
+		return player;
+	}
+	
+	private boolean isFinishGame(){
+		boolean end = true;
+		for(int i = 0; i < playerList.size() && end; i++){
+			if(playerList.get(i).getId() != getCurrentPlayer().getId()){
+				if(!playerList.get(i).isDefeat()){
+					end = false;
+				}
+			}
+		}
+		return end;
+	}
+	
 	/**
 	 * Devuelve true si el ejercito que se pasa por parametro pertenece al jugador en curso.
 	 * @param army
 	 * @return
 	 */
-	public boolean isSelectedArmyFromCurrentPlayer(Army army){
+	private boolean isSelectedArmyFromCurrentPlayer(Army army){
 		boolean current = false;
-		for(Army a : playerList.get(playerIndex).getArmyList()){
+		for(Army a : getCurrentPlayer().getArmyList()){
 			if(a.getId() == army.getId()){
 				current = true;
 				break;
@@ -930,7 +1012,7 @@ public class GameManager {
 		return current;
 	}
 	
-	public Army getDefeatEnemy(){
+	private Army getDefeatEnemy(){
 		Army enemy = null;
 		for(Player player:playerList){
 			for(Army army : player.getArmyList()){
@@ -943,7 +1025,7 @@ public class GameManager {
 		return enemy;
 	}
 	
-	public Army getArmyAtKingdom(Kingdom kingdom){
+	private Army getArmyAtKingdom(Kingdom kingdom){
 		Army army = null;
 		for(Player player : playerList){
 			army = player.getArmy(kingdom);
@@ -1038,7 +1120,7 @@ public class GameManager {
 		 * El ejercito perdedor genera la la cuarta parte de su daño al ejercito ganador
 		 */
 		
-		Army enemy = getEnemyAtKingdom(playerList.get(playerIndex), getSelectedArmy().getKingdom());
+		Army enemy = getEnemyAtKingdom(getCurrentPlayer(), getSelectedArmy().getKingdom());
 		
 		switch(result){
 			case 0: resultBox.start(RscManager.allText[RscManager.TXT_GAME_RESULT], 
@@ -1056,7 +1138,7 @@ public class GameManager {
 			//Resolucion del combate
 			Army defeated = null;
 			if(result > 1)
-				defeated = getEnemyAtKingdom(playerList.get(playerIndex), activeArmy.getKingdom());
+				defeated = getEnemyAtKingdom(getCurrentPlayer(), activeArmy.getKingdom());
 			else
 				defeated = getSelectedArmy();
 			
@@ -1078,37 +1160,33 @@ public class GameManager {
 				(result == 0 && defeated.getPlayer().getId() == getCurrentPlayer().getId());
 			
 			if(defeatTarget == null || aniquilation){
+				
 				removeArmy(defeated);
+				
 				resultBox.start(RscManager.allText[RscManager.TXT_GAME_BIG_VICTORY], 
-						RscManager.allText[RscManager.TXT_GAME_THE_ARMY_FROM_PLAYER] + defeated.getPlayer().getName() + RscManager.allText[RscManager.TXT_GAME_HAS_BEEN_DESTROYED]);
+						RscManager.allText[RscManager.TXT_GAME_THE_ARMY_FROM_PLAYER] + 
+						defeated.getPlayer().getName() + 
+						RscManager.allText[RscManager.TXT_GAME_HAS_BEEN_DESTROYED]);
+				
 			}else{
 				defeated.setDefeat(true);
 				putArmyAtKingdom(defeated, defeated.getKingdom(), defeatTarget);
 				
 				//Daño
-				switch(result){
-				case 1:
-					int casualtiesFromArmy = (getSelectedArmy().getCost() * 25) / 100; 
-					int casualtiesFromEnemy = (enemy.getCost() * 50) / 100; 
-					
-					getSelectedArmy().setDamage(casualtiesFromEnemy);
-					enemy.setDamage(casualtiesFromArmy);
-					resultBox.start(RscManager.allText[RscManager.TXT_GAME_DEFEAT], 
-							RscManager.allText[RscManager.TXT_GAME_ATTACKER_LOST] + casualtiesFromEnemy + 
-							RscManager.allText[RscManager.TXT_GAME_DEFENSER_LOST] + casualtiesFromArmy + RscManager.allText[RscManager.TXT_GAME_LOSSES]);
-				break;
-				
-				case 2:
+				int casualtiesFromArmy = 0;
+				int casualtiesFromEnemy = 0;
+				if(result == 1){
+					casualtiesFromArmy = (getSelectedArmy().getCost() * 25) / 100; 
+					casualtiesFromEnemy = (enemy.getCost() * 50) / 100; 
+				}else if(result == 2){
 					casualtiesFromArmy = (getSelectedArmy().getCost() * 50) / 100; 
 					casualtiesFromEnemy = (enemy.getCost() * 25) / 100;
-					
-					getSelectedArmy().setDamage(casualtiesFromEnemy);
-					enemy.setDamage(casualtiesFromArmy);
-					resultBox.start(RscManager.allText[RscManager.TXT_GAME_DEFEAT], 
-							RscManager.allText[RscManager.TXT_GAME_ATTACKER_LOST] + casualtiesFromEnemy + 
-							RscManager.allText[RscManager.TXT_GAME_DEFENSER_LOST] + casualtiesFromArmy + RscManager.allText[RscManager.TXT_GAME_LOSSES]);
-				break;
 				}
+				getSelectedArmy().setDamage(casualtiesFromEnemy);
+				enemy.setDamage(casualtiesFromArmy);
+				resultBox.start(RscManager.allText[RscManager.TXT_GAME_DEFEAT], 
+						RscManager.allText[RscManager.TXT_GAME_ATTACKER_LOST] + casualtiesFromEnemy + RscManager.allText[RscManager.TXT_GAME_LOSSES] + " " +
+								RscManager.allText[RscManager.TXT_GAME_DEFENSER_LOST] + casualtiesFromArmy + RscManager.allText[RscManager.TXT_GAME_LOSSES]);
 			}
 			
 			if(getSelectedArmy() != null){
@@ -1129,13 +1207,17 @@ public class GameManager {
 				}
 				//Conquista
 				else{
+					Player defeatPlayer = getPlayerByKingdom(getSelectedArmy().getKingdom());
 					activeArmy.getKingdom().setState(0);
 					activeArmy.getKingdom().setTarget(-1);
-					addNewConquest(playerList.get(playerIndex), activeArmy.getKingdom());
-				}
-			}else{
-				if(result == 0){
-					removeArmy(getSelectedArmy());
+					
+					addNewConquest(getCurrentPlayer(), getSelectedArmy().getKingdom());
+					//Eliminacion de algun jugador.
+					if(defeatPlayer != null && defeatPlayer.isDefeat()){
+						NotificationBox.getInstance().addMessage(
+								RscManager.allText[RscManager.TXT_GAME_PLAYER] + defeatPlayer.getName() +
+								RscManager.allText[RscManager.TXT_GAME_HAS_BEEN_DESTROYED]);
+					}
 				}
 			}
 		}
@@ -1144,7 +1226,7 @@ public class GameManager {
 	}
 	
 	private void updateCamera(){
-		if(state == STATE_ACTION){
+		if(state == STATE_ACTION || state == STATE_DISCARD){
 			if(UserInput.getInstance().getMultiTouchHandler().getTouchAction(0) == TouchData.ACTION_MOVE){
 				if(lastTouchX != UserInput.getInstance().getMultiTouchHandler().getTouchX(0)){
 					cameraTargetX = cameraTargetX + lastTouchX - UserInput.getInstance().getMultiTouchHandler().getTouchX(0);
@@ -1166,32 +1248,9 @@ public class GameManager {
 				(int)cameraTargetY-worldConver.getLayoutY()/2);
 	}
 	
-	public int getState() {
-		return state;
-	}
-
-	public void setState(int state) {
-		this.state = state;
-	}
-
-	public int getSubState() {
-		return subState;
-	}
-
-	public void setSubState(int state) {
-		this.subState = state;
-	}
-
-	
-	public List<Player> getPlayerList() {
-		return playerList;
-	}
-
-	public void setPlayerList(List<Player> playerList) {
-		this.playerList = playerList;
-	}
-
-	public Player getCurrentPlayer() {
+	private Player getCurrentPlayer() {
 		return playerList.get(playerIndex);
 	}
+	
+	
 }

@@ -62,9 +62,11 @@ public class RscManager {
 	public static final int TXT_GAME_EARNING= TXT_GAME_ECONOMY+1;
 	public static final int TXT_GAME_SALARY= TXT_GAME_EARNING+1;
 	public static final int TXT_GAME_COST_OF_TROOPS= TXT_GAME_SALARY+1;
+	public static final int TXT_GAME_COST_PLAYER= TXT_GAME_COST_OF_TROOPS+1;
+	public static final int TXT_GAME_IS_WINNER= TXT_GAME_COST_PLAYER+1;
 	
 	
-	public static final int TOTAL_LINES_TXT = TXT_GAME_COST_OF_TROOPS;
+	public static final int TOTAL_LINES_TXT = TXT_GAME_IS_WINNER;
 	
 	
 	public static void loadLanguage(int language) {

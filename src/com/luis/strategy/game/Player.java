@@ -25,8 +25,12 @@ public class Player {
 	
 	private int flag;
 	
-	public Player(int flag, int capitalKingdom){
+	private boolean isIA;
+	
+	public Player(String name, boolean isIA, int flag, int capitalKingdom){
 		this.id = idCount++;
+		this.name = name;
+		this.isIA = isIA;
 		this.flag = flag;
 		this.capitalKingdom = capitalKingdom;
 		this.armyList = new ArrayList<Army>();
@@ -92,7 +96,7 @@ public class Player {
 		int salaries = 0;
 		for(Army army : getArmyList()){
 			for(Troop troop : army.getTroopList()){
-				if(includeSubject){
+				if(!troop.isSubject() || includeSubject){
 					salaries += GameParams.TROOP_COST[troop.getType()];
 				}
 			}
@@ -149,6 +153,29 @@ public class Player {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public boolean isDefeat() {
+		boolean defeat = true;
+		for(int i = 0; i < getKingdomList().size() && defeat; i++){
+			for(int j = 0; j < getKingdomList().get(i).getTerrainList().size() && defeat; j++){
+				if(
+					getKingdomList().get(i).getTerrainList().get(j).getType() == GameParams.SMALL_CITY || 
+					getKingdomList().get(i).getTerrainList().get(j).getType() == GameParams.MEDIUM_CITY || 
+					getKingdomList().get(i).getTerrainList().get(j).getType() == GameParams.BIG_CITY){
+					defeat = false;
+				}
+			}
+		}
+		return defeat;
+	}
+
+	public boolean isIA() {
+		return isIA;
+	}
+
+	public void setIA(boolean isIA) {
+		this.isIA = isIA;
 	}
 
 	public Kingdom getCapital() {

@@ -35,22 +35,22 @@ public class Main extends MyCanvas implements Runnable {
 	private static long lAcumulativeTime;
 	public static int iFramesXSecond;
 
-	private static long lDeltaTime;
+	private static long deltaTime;
 	public static int getDeltaMilis(){
-		return (int)lDeltaTime;
+		return (int)deltaTime;
 	}
 	public static float getDeltaSec(){
-		return (float)lDeltaTime / 1000f;
+		return (float)deltaTime / 1000f;
 		//return 0.03f;//Para debug
 	}
-	public static long lLastTime;
+	public static long lastTime;
 
 	private static long minDurationFrame;
-	public static boolean isGameHeart;
+	public static boolean isGameRun;
 
 	private KeyboardHandler vKeyData;
 
-	public static int iState;
+	public static int state;
 	public static int iLastState;
 
 	public static final int COLOR_BLACK = 0x00000000;
@@ -92,7 +92,7 @@ public class Main extends MyCanvas implements Runnable {
 		
 		UserInput.getInstance().init(multiTouchHandler, keyboardHandler);
 		SndManager.inicialize(activity);
-		isGameHeart = true;
+		isGameRun = true;
 	}
 
 	private void initGame() {
@@ -122,70 +122,67 @@ public class Main extends MyCanvas implements Runnable {
 	@Override
 	public void run() {
 
-		Log.i("INFO", "Game thread execute");
+		Log.i("Debug", "Game thread start");
 		initGame();
 
-		while (isGameHeart) {
-			//if (!isPause) 
-			{
-				// Log.i("INFO", "FramesXSecond: " + iFramesXSecond);
+		while (isGameRun) {
 
-				lDeltaTime = System.currentTimeMillis() - lLastTime;
-				lLastTime = System.currentTimeMillis();
-				
-				switch (iState) {
-					 case Define.ST_MENU_LOGO:
-			         case Define.ST_MENU_ASK_LANGUAGE:
-			         case Define.ST_MENU_ASK_SOUND:
-			         case Define.ST_MENU_MAIN:
-			         case Define.ST_MENU_OPTIONS:
-			         case Define.ST_MENU_MORE:
-			         case Define.ST_MENU_EXIT:
-			         case Define.ST_MENU_HELP:
-			         case Define.ST_MENU_ABOUT:
-			         case Define.ST_MENU_SELECT_GAME:
-			             if (!isLoading) {
-			               ModeMenu.update();
-			            }
-			            break;
-			         
-			         case Define.ST_GAME_INIT:
-			         case Define.ST_GAME_RUN:
-			         case Define.ST_GAME_PAUSE:
-			             if (!isLoading) {
-			               ModeGame.update(iState);
-			            }
-			            break;
-		         }
-				repaint();
-				
-				multiTouchHandler.update();
-				keyboardHandler.update();
+			deltaTime = System.currentTimeMillis() - lastTime;
+			lastTime = System.currentTimeMillis();
 
-				while (System.currentTimeMillis() - lInitTime < minDurationFrame)
-					Thread.yield();
-
-				// New loop:
-				lAcumulativeTime += (System.currentTimeMillis() - lInitTime);
-				if (lAcumulativeTime < 1000) {
-					iAcumulativeTicks++;
-				} else {
-					iFramesXSecond = iAcumulativeTicks;
-					lAcumulativeTime = 0;
-					iAcumulativeTicks = 0;
+			switch (state) {
+			case Define.ST_MENU_LOGO:
+			case Define.ST_MENU_ASK_LANGUAGE:
+			case Define.ST_MENU_ASK_SOUND:
+			case Define.ST_MENU_MAIN:
+			case Define.ST_MENU_OPTIONS:
+			case Define.ST_MENU_MORE:
+			case Define.ST_MENU_EXIT:
+			case Define.ST_MENU_HELP:
+			case Define.ST_MENU_ABOUT:
+			case Define.ST_MENU_SELECT_GAME:
+				if (!isLoading) {
+					ModeMenu.update();
 				}
+				break;
 
-				lInitTime = System.currentTimeMillis();
-				iFrame++;
-
-				/*
-				 * if(!vHolder.getSurface().isValid()) continue;
-				 * paint(vGraphics); Canvas canvas = vHolder.lockCanvas();
-				 * canvas.getClipBounds(vDstRect);//Obtiene la totalidad de la
-				 * pantalla. canvas.drawBitmap(vGraphics.mFrameBuffer, null,
-				 * vDstRect, null); vHolder.unlockCanvasAndPost(canvas);
-				 */
+			case Define.ST_GAME_INIT:
+			case Define.ST_GAME_RUN:
+			case Define.ST_GAME_PAUSE:
+				if (!isLoading) {
+					ModeGame.update(state);
+				}
+				break;
 			}
+			repaint();
+
+			multiTouchHandler.update();
+			keyboardHandler.update();
+
+			while (System.currentTimeMillis() - lInitTime < minDurationFrame)
+				Thread.yield();
+
+			// New loop:
+			lAcumulativeTime += (System.currentTimeMillis() - lInitTime);
+			if (lAcumulativeTime < 1000) {
+				iAcumulativeTicks++;
+			} else {
+				iFramesXSecond = iAcumulativeTicks;
+				lAcumulativeTime = 0;
+				iAcumulativeTicks = 0;
+			}
+
+			lInitTime = System.currentTimeMillis();
+			iFrame++;
+
+			/*
+			 * if(!vHolder.getSurface().isValid()) continue; paint(vGraphics);
+			 * Canvas canvas = vHolder.lockCanvas();
+			 * canvas.getClipBounds(vDstRect);//Obtiene la totalidad de la
+			 * pantalla. canvas.drawBitmap(vGraphics.mFrameBuffer, null,
+			 * vDstRect, null); vHolder.unlockCanvasAndPost(canvas);
+			 */
+
 		}
 		stop();
 	}
@@ -193,7 +190,7 @@ public class Main extends MyCanvas implements Runnable {
 	@Override
 	protected void paint(Graphics _g) {
 		if (!isClock) {
-			switch (iState) {
+			switch (state) {
 				 case Define.ST_MENU_LOGO:
 		         case Define.ST_MENU_ASK_LANGUAGE:
 		         case Define.ST_MENU_ASK_SOUND:
@@ -209,7 +206,7 @@ public class Main extends MyCanvas implements Runnable {
 		         case Define.ST_GAME_INIT:
 		         case Define.ST_GAME_RUN:
 		         case Define.ST_GAME_PAUSE:
-		        	 ModeGame.draw(_g, iState);
+		        	 ModeGame.draw(_g, state);
 					break;
 			}
 			
@@ -222,7 +219,7 @@ public class Main extends MyCanvas implements Runnable {
 				_g.setAlpha(255);
 				_g.drawText("LGameEngine version: : " + Settings.LGAME_ENGINE_VERSION, 0, _g.getTextHeight(), COLOR_WHITE);
 				_g.drawText("FramesXSecond: " + targetFPS + "/" + iFramesXSecond, 0, _g.getTextHeight() * 2, COLOR_WHITE);
-				_g.drawText("DeltaTime: " + lDeltaTime, Define.SIZEX2, _g.getTextHeight() * 2, COLOR_WHITE);
+				_g.drawText("DeltaTime: " + deltaTime, Define.SIZEX2, _g.getTextHeight() * 2, COLOR_WHITE);
 				_g.drawText("SizeX: " + Define.SIZEX, 0, _g.getTextHeight() * 3,COLOR_WHITE);
 				_g.drawText("SizeY: " + Define.SIZEY, Define.SIZEX2, _g.getTextHeight() * 3, COLOR_WHITE);
 				_g.drawText("RealW: " + Settings.getInstance().getRealWidth(), 0, _g.getTextHeight() * 4, COLOR_WHITE);
@@ -426,8 +423,8 @@ public class Main extends MyCanvas implements Runnable {
 		UserInput.getInstance().getMultiTouchHandler().resetTouch();
 		UserInput.getInstance().getKeyboardHandler().resetKeys();
 
-		iLastState = iState;
-		iState = _iNewState;
+		iLastState = state;
+		state = _iNewState;
 		ModeMenu.optionSelect = 0;
 		
 		if(_isLoadGraphics){
@@ -438,9 +435,9 @@ public class Main extends MyCanvas implements Runnable {
 		Log.i("INFO", "Estado cambiado a: " + _iNewState);
 
 		if (_iNewState < Define.ST_GAME_INIT)
-			ModeMenu.init(iState);
+			ModeMenu.init(state);
 		else
-			 ModeGame.init(iState);
+			 ModeGame.init(state);
 		
 		main.stopClock();
 		isLoading = false;
