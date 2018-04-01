@@ -159,6 +159,7 @@ public class Player {
 		this.id = id;
 	}
 	
+	/*
 	public boolean isDefeat() {
 		boolean defeat = true;
 		for(int i = 0; i < getKingdomList().size() && defeat; i++){
@@ -172,6 +173,31 @@ public class Player {
 			}
 		}
 		return defeat;
+	}
+	*/
+	
+	public boolean changeCapital(){
+		if(getCapital() == null){
+			for(Kingdom k : kingdomList){
+				if(k.getTerrainList().get(k.getTerrainList().size()-1).getType() == GameParams.BIG_CITY){
+					setCapitalKingdom(k.getId());
+					return true;
+				}
+			}
+			for(Kingdom k : kingdomList){
+				if(k.getTerrainList().get(k.getTerrainList().size()-1).getType() == GameParams.MEDIUM_CITY){
+					setCapitalKingdom(k.getId());
+					return true;
+				}
+			}
+			for(Kingdom k : kingdomList){
+				if(k.getTerrainList().get(k.getTerrainList().size()-1).getType() == GameParams.SMALL_CITY){
+					setCapitalKingdom(k.getId());
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	

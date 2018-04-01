@@ -133,12 +133,7 @@ public class ModeGame {
 					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
 			player1.getArmyList().add(army);
 			
-			army = new Army(worldConver, gameCamera, map, player1, map.getKingdom(5),player1.getFlag(), 
-					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
-			player1.getArmyList().add(army);
-			
-			
-			Player player2 = new Player("Tiraslye", new ActionIA(), 2, 7);
+			Player player2 = new Player("Tiraslye", null, 2, 7);
 			player2.setGold(10);
 			player2.getKingdomList().add(map.getKingdom(7));
 			player2.getKingdomList().add(map.getKingdom(8));
@@ -148,7 +143,9 @@ public class ModeGame {
 					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
 			player2.getArmyList().add(army);
 			
-			/*
+			player2.setGold(999999);
+			
+			///*
 			Player player3 = new Player("Lyecee", null, 3, 3);
 			player3.setGold(10);
 			player3.getKingdomList().add(map.getKingdom(3));
@@ -156,13 +153,13 @@ public class ModeGame {
 			army = new Army(worldConver, gameCamera, map, player3, map.getKingdom(3),player3.getFlag(), 
 					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
 			player3.getArmyList().add(army);
-			*/
+			//*/
 			
 			
 			List<Player> playerList = new ArrayList<Player>();
 			playerList.add(player1);
 			playerList.add(player2);
-			//playerList.add(player3);
+			playerList.add(player3);
 			
 			gameManager = new GameManager(worldConver, gameCamera, map, playerList);
 			

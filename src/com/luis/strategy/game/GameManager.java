@@ -3,8 +3,6 @@ package com.luis.strategy.game;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
-
 import com.luis.army.gui.ArmyBox;
 import com.luis.army.gui.BattleBox;
 import com.luis.army.gui.TerrainBox;
@@ -15,11 +13,8 @@ import com.luis.lgameengine.gameutils.fonts.TextManager;
 import com.luis.lgameengine.gameutils.gameworld.GameCamera;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.implementation.graphics.Graphics;
-import com.luis.lgameengine.implementation.graphics.Image;
-import com.luis.lgameengine.implementation.input.KeyData;
 import com.luis.lgameengine.implementation.input.TouchData;
 import com.luis.lgameengine.gui.Button;
-import com.luis.lgameengine.gui.MenuBox;
 import com.luis.lgameengine.gui.MenuElement;
 import com.luis.lgameengine.gui.NotificationBox;
 import com.luis.strategy.GfxManager;
@@ -448,10 +443,10 @@ public class GameManager {
 							}
 						}else{
 							
-							changeSubState(SUB_STATE_ACTION_COMBAT);
+							boolean showCombatBox = true;
+							
 							//Si hay un ejercito enemigo
 							if(getEnemyAtKingdom(getCurrentPlayer(), activeArmy.getKingdom()) != null){
-								
 								//Para batallas, el tipo de box es el primer elemento del territorio
 								battleBox.start(
 										getSelectedArmy().getKingdom().getTerrainList().get(0), 
@@ -467,7 +462,18 @@ public class GameManager {
 										null,
 										getCurrentPlayer().getActionIA() != null);
 								
+								//Si es la IA, soloe muestra la ventana de combate si se va a producir un combate
+								if(getCurrentPlayer().getActionIA() != null){
+									showCombatBox = 
+											getSelectedArmy().getIaDecision().getDecision() == ActionIA.DECISION_ATACK
+											||
+											getSelectedArmy().getIaDecision().getDecision() == ActionIA.DECISION_MOVE_AND_ATACK;
+								}
+								
 							}
+							
+							if(getCurrentPlayer().getActionIA() == null || showCombatBox)
+							changeSubState(SUB_STATE_ACTION_COMBAT);
 						}
 					}
 				}
@@ -836,7 +842,7 @@ public class GameManager {
 			turnCount++;
 			do{
 				playerIndex = (playerIndex+1)%playerList.size();
-			}while(getCurrentPlayer().isDefeat());
+			}while(getCurrentPlayer().getCapital() == null);
 			changeState(STATE_INCOME);
 			break;
 		case STATE_FINISH:
@@ -878,9 +884,10 @@ public class GameManager {
 					getCurrentPlayer().getActionIA().management(worldConver, gameCamera, map, playerList);
 					
 					//Activo los ejercitos uno a uno
-					if(getCurrentPlayer().getActionIA().getActiveArmy() != null){
-						activeArmy = getCurrentPlayer().getActionIA().getActiveArmy();
-						getCurrentPlayer().getActionIA().getActiveArmy().setSelected(true);
+					Army iaArmy = getCurrentPlayer().getActionIA().getActiveArmy(playerList);
+					if(iaArmy != null){
+						iaArmy.setSelected(true);
+						activeArmy = iaArmy;
 						
 						//Camara se posiciona en el seleccionado
 						cameraTargetX = getSelectedArmy().getAbsoluteX();
@@ -1001,7 +1008,7 @@ public class GameManager {
 		Player winner = null;
 		if(isFinishGame()){
 			for(int i = 0; i < playerList.size() && winner == null; i++){
-				if(!playerList.get(i).isDefeat()){
+				if(playerList.get(i).getCapital() != null){
 					winner = playerList.get(i);
 				}
 			}
@@ -1025,7 +1032,7 @@ public class GameManager {
 		boolean end = true;
 		for(int i = 0; i < playerList.size() && end; i++){
 			if(playerList.get(i).getId() != getCurrentPlayer().getId()){
-				if(!playerList.get(i).isDefeat()){
+				if(playerList.get(i).getCapital() != null){
 					end = false;
 				}
 			}
@@ -1224,7 +1231,7 @@ public class GameManager {
 				enemy.setDamage(casualtiesFromArmy);
 				resultBox.start(RscManager.allText[RscManager.TXT_GAME_DEFEAT], 
 						RscManager.allText[RscManager.TXT_GAME_ATTACKER_LOST] + casualtiesFromEnemy + RscManager.allText[RscManager.TXT_GAME_LOSSES] + " " +
-								RscManager.allText[RscManager.TXT_GAME_DEFENSER_LOST] + casualtiesFromArmy + RscManager.allText[RscManager.TXT_GAME_LOSSES]);
+						RscManager.allText[RscManager.TXT_GAME_DEFENSER_LOST] + casualtiesFromArmy + RscManager.allText[RscManager.TXT_GAME_LOSSES]);
 			}
 			
 			if(getSelectedArmy() != null){
@@ -1251,7 +1258,14 @@ public class GameManager {
 					
 					addNewConquest(getCurrentPlayer(), getSelectedArmy().getKingdom());
 					//Eliminacion de algun jugador.
-					if(defeatPlayer != null && defeatPlayer.isDefeat()){
+					if(defeatPlayer.changeCapital()){
+						NotificationBox.getInstance().addMessage(
+								RscManager.allText[RscManager.TXT_GAME_PLAYER] + defeatPlayer.getName() +
+								" change his capital");
+						cameraTargetX = defeatPlayer.getCapital().getAbsoluteX();
+						cameraTargetY = defeatPlayer.getCapital().getAbsoluteY();
+					}
+					if(defeatPlayer != null && defeatPlayer.getCapital() == null){
 						NotificationBox.getInstance().addMessage(
 								RscManager.allText[RscManager.TXT_GAME_PLAYER] + defeatPlayer.getName() +
 								RscManager.allText[RscManager.TXT_GAME_HAS_BEEN_DESTROYED]);

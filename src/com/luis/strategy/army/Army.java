@@ -51,7 +51,7 @@ public class Army extends MapObject{
 	private int flag;
 	
 	//IA
-	private int decision;
+	private IADecision iaDecision;
 	
 	public Army (WorldConver worldConver, GameCamera gameCamera, Map map,
 			Player player,
@@ -70,6 +70,10 @@ public class Army extends MapObject{
 		spriteList = new ArrayList<SpriteImage>();
 		spriteList.add(new SpriteImage(GfxManager.imgArmyIdle.getWidth(), GfxManager.imgArmyIdle.getHeight(), 0.20f, 7));	
 		spriteList.add(new SpriteImage(GfxManager.imgArmyRun.getWidth(), GfxManager.imgArmyRun.getHeight(), 0.30f, 8));
+		
+		if(getPlayer().getActionIA() != null){
+			iaDecision = new IADecision();
+		}
 		
 		//Añado el minimo de tropas
 		for(int i = 0; i < GameParams.TROOP_START.length; i++){
@@ -360,14 +364,15 @@ public class Army extends MapObject{
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
-
 	
-	public int getDecision() {
-		return decision;
+	
+
+	public IADecision getIaDecision() {
+		return iaDecision;
 	}
 
-	public void setDecision(int decision) {
-		this.decision = decision;
+	public void setIaDecision(IADecision iaDecision) {
+		this.iaDecision = iaDecision;
 	}
 
 	public boolean discardTroop(Troop troop){
@@ -382,6 +387,25 @@ public class Army extends MapObject{
 		return discard;
 	}
 	
-	
 
+	public class IADecision{
+		private int decision;
+		private int kingdomDecision;
+		
+		public int getDecision() {
+			return decision;
+		}
+
+		public void setDecision(int decision) {
+			this.decision = decision;
+		}
+		
+		public int getKingdomDecision() {
+			return kingdomDecision;
+		}
+
+		public void setKingdomDecision(int kingdomDecision) {
+			this.kingdomDecision = kingdomDecision;
+		}
+	}
 }
