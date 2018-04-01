@@ -97,13 +97,7 @@ public class ArmyBox extends MenuBox{
 				}
 			};
 			
-			boolean isInCity = 
-					(army.getKingdom().hasTerrain(GameParams.SMALL_CITY)) ||
-					(army.getKingdom().hasTerrain(GameParams.MEDIUM_CITY)) ||
-					(army.getKingdom().hasTerrain(GameParams.BIG_CITY)) ||
-					(army.getKingdom().hasTerrain(GameParams.CASTLE));
-			
-			enableCrossButton = !discardMode && isInCity && army.getPlayer().hasKingom(army.getKingdom());
+			enableCrossButton = !discardMode && army.getKingdom().isACity() && army.getPlayer().hasKingom(army.getKingdom());
 			crossButton.setDisabled(!enableCrossButton);
 		}else{
 			crossButton = null;

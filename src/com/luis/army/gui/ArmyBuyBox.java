@@ -3,8 +3,6 @@ package com.luis.army.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
-
 import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gameutils.fonts.TextManager;
 import com.luis.lgameengine.gui.Button;
@@ -89,7 +87,7 @@ public class ArmyBuyBox {
 				troopY+GfxManager.imgBigTroop.get(0).getHeight()/2-GfxManager.imgButtonCrossBigRelease.getHeight()/4, 
 				null, -1){
 			public void onButtonPressUp() {
-				String text = "New troop has joined";
+				String text = "New troop has been acquired";
 				NotificationBox.getInstance().addMessage(text);
 				onBuy();
 				buttonBuy.setDisabled(army.getPlayer().getGold() < GameParams.TROOP_COST[index]);

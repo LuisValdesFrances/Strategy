@@ -73,13 +73,13 @@ public class BattleBox extends MenuBox{
 		};
 	}
 	
-	public void start(Terrain terrain, Army armyAtack, Army armyDefense){
+	public void start(Terrain terrain, Army armyAtack, Army armyDefense, boolean isIA){
 		super.start();
 		this.terrain = terrain;
 		this.armyAtack = armyAtack;
 		this.armyDefense = armyDefense;
 		
-		if(armyDefense == null){
+		if(armyDefense == null && !isIA){
 			cancelButton =  new Button(
 					GfxManager.imgButtonCancelRelease,
 					GfxManager.imgButtonCancelFocus,

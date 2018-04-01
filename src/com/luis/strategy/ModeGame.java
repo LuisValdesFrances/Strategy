@@ -19,6 +19,7 @@ import com.luis.strategy.connection.Download;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.data.DataKingdom;
+import com.luis.strategy.game.ActionIA;
 import com.luis.strategy.game.GameManager;
 import com.luis.strategy.game.Player;
 import com.luis.strategy.map.Kingdom;
@@ -123,7 +124,7 @@ public class ModeGame {
 			map.setKingdomList(DataKingdom.getGenterex(worldConver, gameCamera, map));
 			
 			
-			Player player1 = new Player("Genterex", false, 1, 1);
+			Player player1 = new Player("Genterex", null, 1, 1);
 			player1.setGold(10);
 			player1.getKingdomList().add(map.getKingdom(1));
 			player1.getKingdomList().add(map.getKingdom(2));
@@ -137,7 +138,7 @@ public class ModeGame {
 			player1.getArmyList().add(army);
 			
 			
-			Player player2 = new Player("Tiraslye", false, 2, 7);
+			Player player2 = new Player("Tiraslye", new ActionIA(), 2, 7);
 			player2.setGold(10);
 			player2.getKingdomList().add(map.getKingdom(7));
 			player2.getKingdomList().add(map.getKingdom(8));
@@ -147,20 +148,21 @@ public class ModeGame {
 					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
 			player2.getArmyList().add(army);
 			
-			Player player3 = new Player("Lyecee", false, 3, 3);
+			/*
+			Player player3 = new Player("Lyecee", null, 3, 3);
 			player3.setGold(10);
 			player3.getKingdomList().add(map.getKingdom(3));
 			
 			army = new Army(worldConver, gameCamera, map, player3, map.getKingdom(3),player3.getFlag(), 
 					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
 			player3.getArmyList().add(army);
+			*/
 			
 			
 			List<Player> playerList = new ArrayList<Player>();
-			
 			playerList.add(player1);
 			playerList.add(player2);
-			playerList.add(player3);
+			//playerList.add(player3);
 			
 			gameManager = new GameManager(worldConver, gameCamera, map, playerList);
 			

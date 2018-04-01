@@ -50,6 +50,9 @@ public class Army extends MapObject{
 	
 	private int flag;
 	
+	//IA
+	private int decision;
+	
 	public Army (WorldConver worldConver, GameCamera gameCamera, Map map,
 			Player player,
 			Kingdom kingdom, int flag, float mapX, float mapY, int mapWidth, int mapHeight) {
@@ -356,6 +359,15 @@ public class Army extends MapObject{
 
 	public void setPlayer(Player player) {
 		this.player = player;
+	}
+
+	
+	public int getDecision() {
+		return decision;
+	}
+
+	public void setDecision(int decision) {
+		this.decision = decision;
 	}
 
 	public boolean discardTroop(Troop troop){

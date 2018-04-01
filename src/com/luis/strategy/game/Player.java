@@ -25,16 +25,20 @@ public class Player {
 	
 	private int flag;
 	
-	private boolean isIA;
+	private ActionIA actionIA;
 	
-	public Player(String name, boolean isIA, int flag, int capitalKingdom){
+	public Player(String name, ActionIA actionIA, int flag, int capitalKingdom){
 		this.id = idCount++;
 		this.name = name;
-		this.isIA = isIA;
 		this.flag = flag;
 		this.capitalKingdom = capitalKingdom;
 		this.armyList = new ArrayList<Army>();
 		this.kingdomList = new ArrayList<Kingdom>();
+		this.actionIA = actionIA;
+		
+		if(actionIA!= null){
+			actionIA.setPlayer(this);
+		}
 	}
 	
 	public Army getSelectedArmy(){
@@ -170,12 +174,14 @@ public class Player {
 		return defeat;
 	}
 
-	public boolean isIA() {
-		return isIA;
+	
+
+	public ActionIA getActionIA() {
+		return actionIA;
 	}
 
-	public void setIA(boolean isIA) {
-		this.isIA = isIA;
+	public void setActionIA(ActionIA actionIA) {
+		this.actionIA = actionIA;
 	}
 
 	public Kingdom getCapital() {

@@ -6,6 +6,7 @@ import java.util.List;
 import com.luis.lgameengine.gameutils.gameworld.GameCamera;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.strategy.GfxManager;
+import com.luis.strategy.constants.GameParams;
 
 public class Kingdom extends MapObject{
 	
@@ -15,7 +16,7 @@ public class Kingdom extends MapObject{
 	private List<Terrain> terrainList;
 	private List<Kingdom> borderList;
 	
-	//Numero de combates por territorios = MONTANYA,BOSQUE, LLANO, CIUDAD
+	//Numero de combates por territorios = MONTANYA, BOSQUE, LLANO, CIUDAD
 	private int state;
 	private int totalStates;
 	
@@ -55,6 +56,14 @@ public class Kingdom extends MapObject{
 			}
 		}
 		return hasTerrain;
+	}
+	
+	public boolean isACity(){
+		return 
+				(hasTerrain(GameParams.SMALL_CITY)) ||
+				(hasTerrain(GameParams.MEDIUM_CITY)) ||
+				(hasTerrain(GameParams.BIG_CITY)) ||
+				(hasTerrain(GameParams.CASTLE));
 	}
 	
 	public int getId() {
