@@ -40,8 +40,8 @@ public class Main extends MyCanvas implements Runnable {
 		return (int)deltaTime;
 	}
 	public static float getDeltaSec(){
-		//return (float)deltaTime / 1000f;
-		return 0.03f;//Para debug
+		return (float)deltaTime / 1000f;
+		//return 0.03f;//Para debug
 	}
 	public static long lastTime;
 
@@ -217,9 +217,9 @@ public class Main extends MyCanvas implements Runnable {
 				_g.setColor(0x88000000);
 				_g.fillRect(0, 0, Define.SIZEX, _g.getTextHeight() * 4);
 				_g.setAlpha(255);
-				_g.drawText("LGameEngine version: : " + Settings.LGAME_ENGINE_VERSION, 0, _g.getTextHeight(), COLOR_WHITE);
-				_g.drawText("FramesXSecond: " + targetFPS + "/" + iFramesXSecond, 0, _g.getTextHeight() * 2, COLOR_WHITE);
-				_g.drawText("DeltaTime: " + deltaTime, Define.SIZEX2, _g.getTextHeight() * 2, COLOR_WHITE);
+				_g.drawText("LGameEngine v.: " + Settings.LGAME_ENGINE_VERSION, 0, _g.getTextHeight(), COLOR_WHITE);
+				_g.drawText("FPS: " + targetFPS + "/" + iFramesXSecond, 0, _g.getTextHeight() * 2, COLOR_WHITE);
+				_g.drawText("Delta: " + deltaTime, Define.SIZEX2, _g.getTextHeight() * 2, COLOR_WHITE);
 				_g.drawText("SizeX: " + Define.SIZEX, 0, _g.getTextHeight() * 3,COLOR_WHITE);
 				_g.drawText("SizeY: " + Define.SIZEY, Define.SIZEX2, _g.getTextHeight() * 3, COLOR_WHITE);
 				_g.drawText("RealW: " + Settings.getInstance().getRealWidth(), 0, _g.getTextHeight() * 4, COLOR_WHITE);
@@ -230,7 +230,7 @@ public class Main extends MyCanvas implements Runnable {
 				_g.fillRect(0, Define.SIZEY-Define.SCR_MIDLE/64, Define.SCR_MIDLE/64, Define.SCR_MIDLE/64);
 				_g.fillRect(Define.SIZEX-Define.SCR_MIDLE/64, 0, Define.SCR_MIDLE/64, Define.SCR_MIDLE/64);
 				_g.fillRect(Define.SIZEX-Define.SCR_MIDLE/64, Define.SIZEY-Define.SCR_MIDLE/64, Define.SCR_MIDLE/64, Define.SCR_MIDLE/64);
-				
+			
 			}else if (Main.IS_TOUCH_INPUT_DEBUG){
 				_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 				_g.setTextSize(Font.SYSTEM_SIZE[Settings.getInstance().getResolution()]);

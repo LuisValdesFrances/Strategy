@@ -36,8 +36,8 @@ public class GameParams {
 	public static final int[] TROOP_START = 		new int[]{3, 0, 0, 0, 0};
 	
 	//GAME CONFIG:
-	public static float CAMERA_SPEED = 180f;//Pixeles por segundo
-	public static int BG_BLACK_ALPHA = 140;//Pixeles por segundo
+	public static final float CAMERA_SPEED = 180f;//Pixeles por segundo
+	public static final int BG_BLACK_ALPHA = 140;//Pixeles por segundo
 	
 	//ROLL CONFIG
 	public static final int ROLL_SYSTEM = 10;

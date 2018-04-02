@@ -119,7 +119,9 @@ public class ModeGame {
 					GfxManager.imgTerrain.get(GameParams.BIG_CITY), 
 					GfxManager.imgTerrain.get(GameParams.PLAIN), 
 					GfxManager.imgTerrain.get(GameParams.FOREST), 
-					GfxManager.imgTerrain.get(GameParams.MONTAIN), null);
+					GfxManager.imgTerrain.get(GameParams.MONTAIN), 
+					null,
+					GfxManager.imgCrown);
 			
 			map.setKingdomList(DataKingdom.getGenterex(worldConver, gameCamera, map));
 			
@@ -133,7 +135,7 @@ public class ModeGame {
 					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
 			player1.getArmyList().add(army);
 			
-			Player player2 = new Player("Tiraslye", null, 2, 7);
+			Player player2 = new Player("Tiraslye", new ActionIA(), 2, 7);
 			player2.setGold(10);
 			player2.getKingdomList().add(map.getKingdom(7));
 			player2.getKingdomList().add(map.getKingdom(8));
@@ -143,10 +145,8 @@ public class ModeGame {
 					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
 			player2.getArmyList().add(army);
 			
-			player2.setGold(999999);
-			
 			///*
-			Player player3 = new Player("Lyecee", null, 3, 3);
+			Player player3 = new Player("Lyecee", new ActionIA(), 3, 3);
 			player3.setGold(10);
 			player3.getKingdomList().add(map.getKingdom(3));
 			

@@ -52,7 +52,7 @@ public class Player {
 		return selected;
 	}
 	
-	public void updateAnimations(float delta){
+	public void updateArmies(float delta){
 		for(Army army : armyList){
 			army.update(delta);
 		}

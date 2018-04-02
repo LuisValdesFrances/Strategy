@@ -315,10 +315,6 @@ public class GameManager {
 		case STATE_ACTION:
 			switch(subState){
 			case SUB_STATE_ACTION_WAIT:
-				//Actualizar animaciones
-				getCurrentPlayer().updateAnimations(delta);
-				
-				
 				//Atcualizar iteracion terreno:
 				for(Kingdom kingdom : map.getKingdomList()){
 					for(Terrain terrain : kingdom.getTerrainList()){
@@ -388,7 +384,7 @@ public class GameManager {
 				break;
 				
 			case SUB_STATE_ACTION_ARMY_MOVE:
-				getCurrentPlayer().updateAnimations(Main.getDeltaSec());
+				//getCurrentPlayer().updateAnimations(Main.getDeltaSec());
 				
 				//Colision
 				int x1 = getSelectedArmy().getAbsoluteX();
@@ -437,8 +433,8 @@ public class GameManager {
 										getEnemyAtKingdom(getCurrentPlayer(), activeArmy.getKingdom()),
 										getCurrentPlayer().getActionIA() != null);
 							}else{
-								activeArmy.getKingdom().setTarget(-1);
-								activeArmy.changeState(Army.STATE_OFF);
+								getSelectedArmy().getKingdom().setTarget(-1);
+								getSelectedArmy().changeState(Army.STATE_OFF);
 								changeSubState(SUB_STATE_ACTION_WAIT);
 							}
 						}else{
@@ -454,14 +450,9 @@ public class GameManager {
 										getEnemyAtKingdom(getCurrentPlayer(), activeArmy.getKingdom()),
 										getCurrentPlayer().getActionIA() != null);
 								
-							}else{
-								int kingdomState = getSelectedArmy().getKingdom().getState();
-								battleBox.start(
-										getSelectedArmy().getKingdom().getTerrainList().get(kingdomState), 
-										getSelectedArmy(),
-										null,
-										getCurrentPlayer().getActionIA() != null);
+								changeSubState(SUB_STATE_ACTION_COMBAT);
 								
+							}else{
 								//Si es la IA, soloe muestra la ventana de combate si se va a producir un combate
 								if(getCurrentPlayer().getActionIA() != null){
 									showCombatBox = 
@@ -470,11 +461,21 @@ public class GameManager {
 											getSelectedArmy().getIaDecision().getDecision() == ActionIA.DECISION_MOVE_AND_ATACK;
 								}
 								
+								if(getCurrentPlayer().getActionIA() == null || showCombatBox){
+									int kingdomState = getSelectedArmy().getKingdom().getState();
+									battleBox.start(
+											getSelectedArmy().getKingdom().getTerrainList().get(kingdomState), 
+											getSelectedArmy(),
+											null,
+											getCurrentPlayer().getActionIA() != null);
+									changeSubState(SUB_STATE_ACTION_COMBAT);
+								}else{
+									getSelectedArmy().getKingdom().setTarget(-1);
+									getSelectedArmy().changeState(Army.STATE_OFF);
+									changeSubState(SUB_STATE_ACTION_WAIT);
+								}
 							}
-							
-							if(getCurrentPlayer().getActionIA() == null || showCombatBox)
-							changeSubState(SUB_STATE_ACTION_COMBAT);
-						}
+						}///
 					}
 				}
 				break;
@@ -562,13 +563,13 @@ public class GameManager {
 		
 		//Actualizar animaciones
 		for(Player player : playerList)
-			player.updateAnimations(Main.getDeltaSec());
+			player.updateArmies(Main.getDeltaSec());
 		
 	}
 	
 	public void draw(Graphics g){
 		
-		map.drawMap(g);
+		map.drawMap(g, playerList);
 		
 		//Flags
 		for(Player player : playerList){
@@ -1258,7 +1259,7 @@ public class GameManager {
 					
 					addNewConquest(getCurrentPlayer(), getSelectedArmy().getKingdom());
 					//Eliminacion de algun jugador.
-					if(defeatPlayer.changeCapital()){
+					if(defeatPlayer != null && defeatPlayer.changeCapital()){
 						NotificationBox.getInstance().addMessage(
 								RscManager.allText[RscManager.TXT_GAME_PLAYER] + defeatPlayer.getName() +
 								" change his capital");

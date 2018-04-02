@@ -9,6 +9,7 @@ import com.luis.lgameengine.implementation.graphics.Image;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
+import com.luis.strategy.game.Player;
 
 
 
@@ -23,6 +24,7 @@ public class Map extends MapObject{
 	private Image imgForest;
 	private Image imgMontain;
 	private Image imgCastle;
+	private Image imgCrown;
 	
 	private boolean alphaFlag;
 	private float alpha = 255;
@@ -33,7 +35,8 @@ public class Map extends MapObject{
 			int x, int y,
 			Image imgMap, Image imgSmallCity,
 			Image imgMediumCity, Image imgBigCity, Image imgPlain,
-			Image imgForest, Image imgMontain, Image imgCastle) {
+			Image imgForest, Image imgMontain, Image imgCastle,
+			Image imgCrown) {
 		super(worldConver, gameCamera, null, x, y, imgMap.getWidth(), imgMap.getHeight(), x, y, imgMap.getWidth(), imgMap.getHeight());
 		
 		this.map = this;
@@ -48,6 +51,7 @@ public class Map extends MapObject{
 		this.imgForest = imgForest;
 		this.imgMontain = imgMontain;
 		this.imgCastle = imgCastle;
+		this.imgCrown = imgCrown;
 	}
 	
 	public void update(float delta){
@@ -63,7 +67,7 @@ public class Map extends MapObject{
 		alpha = Math.min(200f, alpha);
 	}
 	
-	public void drawMap(Graphics g){
+	public void drawMap(Graphics g, List<Player> playerList){
 		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 		g.drawImage(imgMap, 
 				worldConver.getConversionDrawX(gameCamera.getPosX(), x),
@@ -96,6 +100,22 @@ public class Map extends MapObject{
 					worldConver.getConversionDrawX(gameCamera.getPosX(), k.getTerrainList().get(i).getAbsoluteX()),
 					worldConver.getConversionDrawY(gameCamera.getPosY(), k.getTerrainList().get(i).getAbsoluteY()),
 					Graphics.VCENTER | Graphics.HCENTER);
+				
+				//Capitales
+				for(Player player : playerList){
+					if(player.getCapital() != null){
+						int modW = player.getCapital().getTerrainList().get(player.getCapital().getTerrainList().size()-1).getWidth()/2-imgCrown.getWidth()/3;
+						int modH = player.getCapital().getTerrainList().get(player.getCapital().getTerrainList().size()-1).getHeight()/2-imgCrown.getHeight()/3;
+						g.drawImage(imgCrown, 
+								worldConver.getConversionDrawX(gameCamera.getPosX(), 
+										player.getCapital().getTerrainList().get(player.getCapital().getTerrainList().size()-1).getAbsoluteX()-
+										modW),
+								worldConver.getConversionDrawY(gameCamera.getPosY(), 
+										player.getCapital().getTerrainList().get(player.getCapital().getTerrainList().size()-1).getAbsoluteY()-
+										modH),
+								Graphics.HCENTER | Graphics.VCENTER);
+					}
+				}
 				
 				g.setAlpha(255);
 				g.setImageSize(1f, 1f);

@@ -3,6 +3,8 @@ package com.luis.strategy.army;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
+
 import com.luis.lgameengine.gameutils.gameworld.GameCamera;
 import com.luis.lgameengine.gameutils.gameworld.Math2D;
 import com.luis.lgameengine.gameutils.gameworld.SpriteImage;
@@ -41,7 +43,7 @@ public class Army extends MapObject{
 	public static final int ANIN_IDLE=0;
 	public static final int ANIN_MOVE=1;
 	
-	private static final float SPEED = 5.5f;
+	private static final float SPEED = 10f;
 	
 	private float idleCount;
 	private float idleWait;
@@ -68,8 +70,8 @@ public class Army extends MapObject{
 		this.flag = flag;
 		this.state = STATE_ON;
 		spriteList = new ArrayList<SpriteImage>();
-		spriteList.add(new SpriteImage(GfxManager.imgArmyIdle.getWidth(), GfxManager.imgArmyIdle.getHeight(), 0.20f, 7));	
-		spriteList.add(new SpriteImage(GfxManager.imgArmyRun.getWidth(), GfxManager.imgArmyRun.getHeight(), 0.30f, 8));
+		spriteList.add(new SpriteImage(GfxManager.imgArmyIdle.getWidth(), GfxManager.imgArmyIdle.getHeight(), 0.10f, 7));	
+		spriteList.add(new SpriteImage(GfxManager.imgArmyRun.getWidth(), GfxManager.imgArmyRun.getHeight(), 0.12f, 8));
 		
 		if(getPlayer().getActionIA() != null){
 			iaDecision = new IADecision();

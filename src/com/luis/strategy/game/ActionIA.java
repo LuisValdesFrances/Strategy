@@ -121,7 +121,7 @@ public class ActionIA {
 		
 		if(army != null){
 			// Orden de prioridades
-	
+			
 			// Sigo con las conquistas a medias(Si procede)
 			if(army.getKingdom().getState() > 0 && !player.hasKingom(army.getKingdom())){
 				army.getIaDecision().setDecision(DECISION_ATACK);
