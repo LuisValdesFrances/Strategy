@@ -28,6 +28,8 @@ public class BattleBox extends MenuBox{
 	
 	private Button cancelButton;
 	
+	private boolean scape;
+	
 	public BattleBox(){
 		
 		super(Define.SIZEX, Define.SIZEY, GfxManager.imgBigBox, null, null,
@@ -73,13 +75,14 @@ public class BattleBox extends MenuBox{
 		};
 	}
 	
-	public void start(Terrain terrain, Army armyAtack, Army armyDefense, boolean isIA){
+	public void start(Terrain terrain, Army armyAtack, Army armyDefense, boolean isIA, boolean scape){
 		super.start();
 		this.terrain = terrain;
 		this.armyAtack = armyAtack;
 		this.armyDefense = armyDefense;
+		this.scape = scape;
 		
-		if(armyDefense == null && !isIA){
+		if((armyDefense == null && !isIA) || scape){
 			cancelButton =  new Button(
 					GfxManager.imgButtonCancelRelease,
 					GfxManager.imgButtonCancelFocus,
@@ -327,5 +330,15 @@ public class BattleBox extends MenuBox{
 	public int getResult() {
 		return battleDiceBox.getResult();
 	}
+
+	public boolean isScape() {
+		return scape;
+	}
+
+	public void setScape(boolean scape) {
+		this.scape = scape;
+	}
+	
+	
 
 }
