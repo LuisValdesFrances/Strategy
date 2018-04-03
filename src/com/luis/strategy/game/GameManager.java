@@ -220,7 +220,7 @@ public class GameManager {
 					break;
 				case 1:
 					if(isScape()){
-						Army defeated = getEnemyAtKingdom(getCurrentPlayer(), activeArmy.getKingdom());
+						Army defeated = getEnemyAtKingdom(getCurrentPlayer());
 						defeated.setDefeat(true);
 						NotificationBox.getInstance().addMessage(getCurrentPlayer().getName() + " scape!");
 						startEscape();
@@ -410,6 +410,15 @@ public class GameManager {
 					getSelectedArmy().changeState(Army.STATE_OFF);
 					
 					
+					//Para ver la opcion de escapar, debe de haber un defensor, territorio al que escapar y el defensor no debe de ser la IA
+					boolean scapeOption =
+							getEnemyAtKingdom(getCurrentPlayer()) != null  //Hay un defensor
+							&&
+							getBorderKingdom(getEnemyAtKingdom(getCurrentPlayer())) != null //Hay espacio para el defensor
+							&&
+							getEnemyAtKingdom(getCurrentPlayer()).getPlayer().getActionIA() == null; //El defensor NO es IA
+					
+					
 					
 					//Si tengo un ejercito en la zona y no soy yo ese ejercito me uno
 					List <Army> armyFiendList = new ArrayList<Army>();
@@ -428,15 +437,16 @@ public class GameManager {
 						//Si el territorio es mio
 						if(getCurrentPlayer().hasKingom(activeArmy.getKingdom())){
 							//Si hay un ejercito enemigo
-							if(getEnemyAtKingdom(getCurrentPlayer(), activeArmy.getKingdom()) != null){
+							if(getEnemyAtKingdom(getCurrentPlayer()) != null){
 								
 								//Si hay un efercito de la IA y decide huir
 								if(
-										getEnemyAtKingdom(getCurrentPlayer(), activeArmy.getKingdom()).getPlayer().getActionIA() != null //Es un ejercito de la IA
-										&& getBorderKingdom(getEnemyAtKingdom(getCurrentPlayer(), activeArmy.getKingdom())) != null //Tiene territorios adyancentes libres
-										&& getEnemyAtKingdom(getCurrentPlayer(), activeArmy.getKingdom()).getPlayer().getActionIA().scape(getSelectedArmy())){//Ha elegido huir
+										getEnemyAtKingdom(getCurrentPlayer()).getPlayer().getActionIA() != null //Es un ejercito de la IA
+										&& getBorderKingdom(getEnemyAtKingdom(getCurrentPlayer())) != null //Tiene territorios adyancentes libres
+										&& getEnemyAtKingdom(getCurrentPlayer()).getPlayer().getActionIA().
+										scape(getSelectedArmy(), getEnemyAtKingdom(getCurrentPlayer()))){//Ha elegido huir
 									
-									Army defeated = getEnemyAtKingdom(getCurrentPlayer(), activeArmy.getKingdom());
+									Army defeated = getEnemyAtKingdom(getCurrentPlayer());
 									defeated.setDefeat(true);
 									NotificationBox.getInstance().addMessage(getDefeatArmy().getPlayer().getName() + " scape!");
 									startEscape();
@@ -446,8 +456,8 @@ public class GameManager {
 									battleBox.start(
 											getSelectedArmy().getKingdom().getTerrainList().get(0), 
 											getSelectedArmy(),
-											getEnemyAtKingdom(getCurrentPlayer(), activeArmy.getKingdom()),
-											getCurrentPlayer().getActionIA() != null, false);
+											getEnemyAtKingdom(getCurrentPlayer()),
+											scapeOption);
 									changeSubState(SUB_STATE_ACTION_COMBAT);
 								}
 							}else{
@@ -460,27 +470,29 @@ public class GameManager {
 							boolean showCombatBox = true;
 							
 							//Si hay un ejercito enemigo
-							if(getEnemyAtKingdom(getCurrentPlayer(), activeArmy.getKingdom()) != null){
+							if(getEnemyAtKingdom(getCurrentPlayer()) != null){
 								
 								//Si hay el efercito es de la IA y decide huir
 								if(
-										getEnemyAtKingdom(getCurrentPlayer(), activeArmy.getKingdom()).getPlayer().getActionIA() != null //Es un ejercito de la IA
-										&& getBorderKingdom(getEnemyAtKingdom(getCurrentPlayer(), activeArmy.getKingdom())) != null //Tiene territorios adyancentes libres
-										&& getEnemyAtKingdom(getCurrentPlayer(), activeArmy.getKingdom()).getPlayer().getActionIA().scape(getSelectedArmy())){//Ha elegido huir
+										getEnemyAtKingdom(getCurrentPlayer()).getPlayer().getActionIA() != null //Es un ejercito de la IA
+										&& getBorderKingdom(getEnemyAtKingdom(getCurrentPlayer())) != null //Tiene territorios adyancentes libres
+										&& getEnemyAtKingdom(getCurrentPlayer()).getPlayer().getActionIA().
+										scape(getSelectedArmy(), getEnemyAtKingdom(getCurrentPlayer()))){//Ha elegido huir
 									
-									Army defeated = getEnemyAtKingdom(getCurrentPlayer(), activeArmy.getKingdom());
+									Army defeated = getEnemyAtKingdom(getCurrentPlayer());
 									defeated.setDefeat(true);
 									NotificationBox.getInstance().addMessage(getDefeatArmy().getPlayer().getName() + " scape!");
 									startEscape();
 									
 								}else{
 									//Para batallas, el tipo de box es el primer elemento del territorio
+									
+									//Si el que recibe ataque es la IA, ya ha decidido no huir, con lo que sehabilito esta opcion
 									battleBox.start(
 											getSelectedArmy().getKingdom().getTerrainList().get(0), 
 											getSelectedArmy(),
-											getEnemyAtKingdom(getCurrentPlayer(), activeArmy.getKingdom()),
-											getCurrentPlayer().getActionIA() != null, 
-											getBorderKingdom(getEnemyAtKingdom(getCurrentPlayer(), activeArmy.getKingdom())) != null);
+											getEnemyAtKingdom(getCurrentPlayer()),
+											scapeOption);
 									
 									changeSubState(SUB_STATE_ACTION_COMBAT);
 								}
@@ -499,7 +511,7 @@ public class GameManager {
 											getSelectedArmy().getKingdom().getTerrainList().get(kingdomState), 
 											getSelectedArmy(),
 											null,
-											getCurrentPlayer().getActionIA() != null, false);
+											scapeOption);
 									changeSubState(SUB_STATE_ACTION_COMBAT);
 								}else{
 									getSelectedArmy().getKingdom().setTarget(-1);
@@ -1134,6 +1146,9 @@ public class GameManager {
 		return army;
 	}
 	
+	/**
+	 * Devuelve true si el ejercito del reino que se pasa por parametro contiene un ejercito enemigo (Explorar fronteras)
+	 */
 	private Army getEnemyAtKingdom(Player player, Kingdom kingdom){
 		Army enemy = null;
 		for(Player p : playerList){
@@ -1147,6 +1162,14 @@ public class GameManager {
 			}
 		}
 		return enemy;
+	}
+	
+	/**
+	 * Devuelve true hay un ejercito enemigo en el reino donde se encuentra el ejercito seleccionado
+	 */
+	private Army getEnemyAtKingdom(Player player){
+		Kingdom kingdom = player.getSelectedArmy().getKingdom();
+		return getEnemyAtKingdom(player, kingdom);
 	}
 	
 	private Army getFriendAtKingdom(Player player, Kingdom kingdom){
@@ -1219,7 +1242,7 @@ public class GameManager {
 		 * El ejercito perdedor genera la la cuarta parte de su daño al ejercito ganador
 		 */
 		
-		Army enemy = getEnemyAtKingdom(getCurrentPlayer(), getSelectedArmy().getKingdom());
+		Army enemy = getEnemyAtKingdom(getCurrentPlayer());
 		
 		switch(result){
 			case 0: resultBox.start(RscManager.allText[RscManager.TXT_GAME_RESULT], 
@@ -1237,7 +1260,7 @@ public class GameManager {
 			//Resolucion del combate
 			Army defeated = null;
 			if(result > 1)
-				defeated = getEnemyAtKingdom(getCurrentPlayer(), activeArmy.getKingdom());
+				defeated = getEnemyAtKingdom(getCurrentPlayer());
 			else
 				defeated = getSelectedArmy();
 			

@@ -27,10 +27,25 @@ public class ActionIA {
 	public static final int DECISION_MOVE_AND_ATACK = 3;//Mueve y ataca
 	
 	
-	public boolean scape(Army army){
+	public boolean scape(Army attacker, Army defenser){
 		
-		return Main.getRandom(0, 100)>=50;
+		if(defenser.getPower(defenser.getKingdom().getTerrainList().get(0)) >= attacker.getPower(defenser.getKingdom().getTerrainList().get(0))){
+			
+			Log.i("Debug", defenser.getPlayer().getName() + " tiene un ejercito superior por lo que COMBATE batalla");
+			return false;
+		}else{
+			boolean scape = Main.getRandom(0, 100)>=50;
+			
+			if(scape){
+				Log.i("Debug", defenser.getPlayer().getName() + " tiene un ejercito inferior por lo que HUYE batalla");
+			}else{
+				Log.i("Debug", defenser.getPlayer().getName() + " tiene un ejercito inferior PERO COMBATE la batalla");
+			}
+			
+			return scape;
+		}
 	}
+	
 	/**
 	 * Crea ejercitos nuevos y compra tropas a los que se encuentren en ciudades
 	 */

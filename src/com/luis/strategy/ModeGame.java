@@ -130,7 +130,6 @@ public class ModeGame {
 			player1.setGold(10);
 			player1.getKingdomList().add(map.getKingdom(1));
 			player1.getKingdomList().add(map.getKingdom(2));
-			player1.getKingdomList().add(map.getKingdom(5));
 			Army army = new Army(worldConver, gameCamera, map, player1, map.getKingdom(1),player1.getFlag(), 
 					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
 			player1.getArmyList().add(army);
@@ -149,6 +148,7 @@ public class ModeGame {
 			Player player3 = new Player("Lyecee", new ActionIA(), 3, 3);
 			player3.setGold(10);
 			player3.getKingdomList().add(map.getKingdom(3));
+			player3.getKingdomList().add(map.getKingdom(5));
 			
 			army = new Army(worldConver, gameCamera, map, player3, map.getKingdom(3),player3.getFlag(), 
 					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
