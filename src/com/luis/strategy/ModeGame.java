@@ -13,6 +13,7 @@ import com.luis.lgameengine.gameutils.gameworld.GfxEffects;
 import com.luis.lgameengine.gameutils.gameworld.ParticleManager;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.implementation.graphics.Graphics;
+import com.luis.lgameengine.implementation.graphics.Image;
 import com.luis.strategy.army.Army;
 import com.luis.strategy.army.Troop;
 import com.luis.strategy.connection.Download;
@@ -123,8 +124,15 @@ public class ModeGame {
 					null,
 					GfxManager.imgCrown);
 			
-			map.setKingdomList(DataKingdom.getGenterex(worldConver, gameCamera, map));
 			
+			switch(GameState.getInstance().getLevel()){
+        	case 0:
+        		map.setKingdomList(DataKingdom.getCrom(worldConver, gameCamera, map));
+	            break;
+        	case 1:
+        		map.setKingdomList(DataKingdom.getGenterex(worldConver, gameCamera, map));
+        		break;
+        	}
 			
 			Player player1 = new Player("Genterex", null, 1, 1);
 			player1.setGold(10);

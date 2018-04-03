@@ -75,14 +75,15 @@ public class BattleBox extends MenuBox{
 		};
 	}
 	
-	public void start(Terrain terrain, Army armyAtack, Army armyDefense, boolean scapeOption){
+	public void start(Terrain terrain, Army armyAtack, Army armyDefense, 
+			boolean cancelOption, boolean scapeOption){
 		super.start();
 		this.terrain = terrain;
 		this.armyAtack = armyAtack;
 		this.armyDefense = armyDefense;
 		this.scape = scapeOption;
 		
-		if(armyDefense == null || scapeOption){
+		if(cancelOption || scapeOption){
 			cancelButton =  new Button(
 					GfxManager.imgButtonCancelRelease,
 					GfxManager.imgButtonCancelFocus,

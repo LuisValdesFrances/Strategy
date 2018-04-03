@@ -410,6 +410,8 @@ public class GameManager {
 					getSelectedArmy().changeState(Army.STATE_OFF);
 					
 					
+					//Ia ataca libre
+					
 					//Para ver la opcion de escapar, debe de haber un defensor, territorio al que escapar y el defensor no debe de ser la IA
 					boolean scapeOption =
 							getEnemyAtKingdom(getCurrentPlayer()) != null  //Hay un defensor
@@ -417,6 +419,8 @@ public class GameManager {
 							getBorderKingdom(getEnemyAtKingdom(getCurrentPlayer())) != null //Hay espacio para el defensor
 							&&
 							getEnemyAtKingdom(getCurrentPlayer()).getPlayer().getActionIA() == null; //El defensor NO es IA
+					
+					boolean cancelOption = getCurrentPlayer().getActionIA() == null && getEnemyAtKingdom(getCurrentPlayer()) == null;
 					
 					
 					
@@ -457,7 +461,7 @@ public class GameManager {
 											getSelectedArmy().getKingdom().getTerrainList().get(0), 
 											getSelectedArmy(),
 											getEnemyAtKingdom(getCurrentPlayer()),
-											scapeOption);
+											scapeOption, cancelOption);
 									changeSubState(SUB_STATE_ACTION_COMBAT);
 								}
 							}else{
@@ -492,7 +496,7 @@ public class GameManager {
 											getSelectedArmy().getKingdom().getTerrainList().get(0), 
 											getSelectedArmy(),
 											getEnemyAtKingdom(getCurrentPlayer()),
-											scapeOption);
+											scapeOption, cancelOption);
 									
 									changeSubState(SUB_STATE_ACTION_COMBAT);
 								}
@@ -511,7 +515,7 @@ public class GameManager {
 											getSelectedArmy().getKingdom().getTerrainList().get(kingdomState), 
 											getSelectedArmy(),
 											null,
-											scapeOption);
+											scapeOption, cancelOption);
 									changeSubState(SUB_STATE_ACTION_COMBAT);
 								}else{
 									getSelectedArmy().getKingdom().setTarget(-1);
