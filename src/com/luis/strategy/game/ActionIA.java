@@ -27,6 +27,10 @@ public class ActionIA {
 	public static final int DECISION_MOVE_AND_ATACK = 3;//Mueve y ataca
 	
 	
+	public boolean scape(Army army){
+		
+		return Main.getRandom(0, 100)>=50;
+	}
 	/**
 	 * Crea ejercitos nuevos y compra tropas a los que se encuentren en ciudades
 	 */

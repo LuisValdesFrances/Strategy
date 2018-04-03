@@ -158,8 +158,9 @@ public class BattleDiceBox {
 							}
 						}
 					}
+					//buttonCombat.setDisabled(modPosDice < 0 || resultIcon[stateCombat].modSize > 0);
 				}
-				//buttonCombat.setDisabled(modPosDice < 0 || resultIcon[stateCombat].modSize > 0);
+				buttonCombat.setDisabled(resultIcon[stateCombat].modAlpha != 0 || modPosDice != 0);
 				buttonCombat.update(touchHandler);
 				break;
 			case STATE_END:

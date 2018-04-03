@@ -40,8 +40,9 @@ public class Main extends MyCanvas implements Runnable {
 		return (int)deltaTime;
 	}
 	public static float getDeltaSec(){
-		return (float)deltaTime / 1000f;
+		//return (float)deltaTime / 1000f;
 		//return 0.03f;//Para debug
+		return Math.min(((float)deltaTime / 1000f), 0.1f);
 	}
 	public static long lastTime;
 
@@ -212,14 +213,14 @@ public class Main extends MyCanvas implements Runnable {
 			
 			if (Main.IS_DEBUG) {
 				_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-				_g.setTextSize(Font.SYSTEM_SIZE[Settings.getInstance().getResolution()]);
+				_g.setTextSize(Font.SYSTEM_SIZE[Settings.getInstance().getNativeResolution()]);
 				_g.setAlpha(160);
 				_g.setColor(0x88000000);
 				_g.fillRect(0, 0, Define.SIZEX, _g.getTextHeight() * 4);
 				_g.setAlpha(255);
 				_g.drawText("LGameEngine v.: " + Settings.LGAME_ENGINE_VERSION, 0, _g.getTextHeight(), COLOR_WHITE);
 				_g.drawText("FPS: " + targetFPS + "/" + iFramesXSecond, 0, _g.getTextHeight() * 2, COLOR_WHITE);
-				_g.drawText("Delta: " + deltaTime, Define.SIZEX2, _g.getTextHeight() * 2, COLOR_WHITE);
+				_g.drawText("DT Real/Trans: " + ((float)deltaTime / 1000f) + "/" + getDeltaSec(), Define.SIZEX4, _g.getTextHeight() * 2, COLOR_WHITE);
 				_g.drawText("SizeX: " + Define.SIZEX, 0, _g.getTextHeight() * 3,COLOR_WHITE);
 				_g.drawText("SizeY: " + Define.SIZEY, Define.SIZEX2, _g.getTextHeight() * 3, COLOR_WHITE);
 				_g.drawText("RealW: " + Settings.getInstance().getRealWidth(), 0, _g.getTextHeight() * 4, COLOR_WHITE);
@@ -233,7 +234,7 @@ public class Main extends MyCanvas implements Runnable {
 			
 			}else if (Main.IS_TOUCH_INPUT_DEBUG){
 				_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-				_g.setTextSize(Font.SYSTEM_SIZE[Settings.getInstance().getResolution()]);
+				_g.setTextSize(Font.SYSTEM_SIZE[Settings.getInstance().getNativeResolution()]);
 				_g.setAlpha(160);
 				_g.setColor(0x88000000);
 				_g.fillRect(0, 0, Define.SIZEX, _g.getTextHeight() * 7);
@@ -271,7 +272,7 @@ public class Main extends MyCanvas implements Runnable {
 
 			}else if (Main.IS_KEY_INPUT_DEBUG){
 				_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-				_g.setTextSize(Font.SYSTEM_SIZE[Settings.getInstance().getResolution()]);
+				_g.setTextSize(Font.SYSTEM_SIZE[Settings.getInstance().getNativeResolution()]);
 				_g.setAlpha(160);
 				_g.setColor(0x88000000);
 				_g.fillRect(0, 0, Define.SIZEX, _g.getTextHeight() * 3);
