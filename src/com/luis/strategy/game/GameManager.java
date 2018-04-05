@@ -461,7 +461,7 @@ public class GameManager {
 											getSelectedArmy().getKingdom().getTerrainList().get(0), 
 											getSelectedArmy(),
 											getEnemyAtKingdom(getCurrentPlayer()),
-											scapeOption, cancelOption);
+											cancelOption, scapeOption);
 									changeSubState(SUB_STATE_ACTION_COMBAT);
 								}
 							}else{
@@ -496,7 +496,7 @@ public class GameManager {
 											getSelectedArmy().getKingdom().getTerrainList().get(0), 
 											getSelectedArmy(),
 											getEnemyAtKingdom(getCurrentPlayer()),
-											scapeOption, cancelOption);
+											cancelOption, scapeOption);
 									
 									changeSubState(SUB_STATE_ACTION_COMBAT);
 								}
@@ -515,7 +515,7 @@ public class GameManager {
 											getSelectedArmy().getKingdom().getTerrainList().get(kingdomState), 
 											getSelectedArmy(),
 											null,
-											scapeOption, cancelOption);
+											cancelOption, scapeOption);
 									changeSubState(SUB_STATE_ACTION_COMBAT);
 								}else{
 									getSelectedArmy().getKingdom().setTarget(-1);
