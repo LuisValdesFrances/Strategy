@@ -434,11 +434,17 @@ public class Main extends MyCanvas implements Runnable {
 		}
 
 		Log.i("INFO", "Estado cambiado a: " + _iNewState);
-
+		
+		switch(state){
+		case Define.ST_MENU_SELECT_GAME:
+			GfxManager.deleteGameGFX();
+			break;
+		}
+		
 		if (_iNewState < Define.ST_GAME_INIT)
 			ModeMenu.init(state);
 		else
-			 ModeGame.init(state);
+			ModeGame.init(state);
 		
 		main.stopClock();
 		isLoading = false;

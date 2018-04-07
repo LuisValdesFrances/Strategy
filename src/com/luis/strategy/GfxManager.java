@@ -322,10 +322,88 @@ public class GfxManager {
 	        }
 	   }
 
-	    public static void deleteGFX() {
-	    	//vImgLogo = null;
-	        //vImgBackground = null;
-	        //Game images:
+	    public static void deleteGameGFX() {
+	    	
+	    	imgMap = null;
+        	
+        	imgTextBG = null;
+        	imgBlackBG = null;
+        	
+        	imgPadWest = null;
+        	imgPadEast = null;
+        	
+        	imgTerrainOk = null;
+        	
+        	imgTargetDomain = null;
+        	imgTargetAggregation = null;
+        	imgTargetBattle = null;
+        	
+        	imgMapSelectGreen = null;
+        	imgMapSelectRed  = null;
+        	
+        	imgArmyIdle = null;
+        	imgArmyRun = null;
+        	imgArmyOff = null;
+        	
+        	imgGameHud = null;
+        	imgChest = null;
+        	imgCoin = null;
+        	imgCrown = null;
+        	imgButtonPauseRelease = null;
+        	imgButtonPauseFocus  = null;
+        	imgButtonDebugPauseRelease = null;
+        	imgButtonDebugPauseFocus = null;
+        	imgButtonCancelRelease = null;
+        	imgButtonCancelFocus = null;
+        	imgButtonNextRelease = null;
+        	imgButtonNextFocus = null;
+        	imgButtonOkRelease = null;
+        	imgButtonOkFocus  = null;
+        	imgButtonCrossRelease = null;
+        	imgButtonCrossFocus = null;
+        	imgButtonCrossBigRelease = null;
+        	imgButtonCrossBigFocus  = null;
+        	
+        	imgButtonDeleteFocus = null;
+        	imgButtonDeleteRelease = null;
+        	
+        	imgButtonNewArmyFocus = null;
+        	imgButtonNewArmyRelease = null;
+        	imgButtonInfoFocus = null;
+        	imgButtonInfoRelease  = null;
+        	
+        	imgTextBox = null;
+        	imgBigBox = null;
+        	imgMediumBox = null;
+        	imgSmallBox = null;
+        	imgNotificationBox = null;
+        	imgButtonCombatRelease = null;
+        	imgButtonCombatFocus = null;
+        	imgButtonCardRelease = null;
+        	imgButtonCardFocus = null;
+        	imgButtonFlagHelmetRelease = null;
+        	imgButtonFlagHelmetFocus = null;
+        	imgButtonFlagCastleRelease = null;
+        	imgButtonFlagCastleFocus = null;
+        	
+        	imgFlagList = null;
+        	imgFlagSmallList = null;
+        	imgFlagBigList = null;
+        	
+        	imgTerrain = null;
+        	imgTerrainBox  = null;
+        	
+        	imgBigTroop = null;
+        	imgSmallTroop = null;
+        	imgIconTroop = null;
+        	
+        	imgVillagers = null;
+        	
+        	imgShieldIcon  = null;
+     	    imgCrossIcon = null;
+     	    imgOkIcon = null;
+     	    imgShield = null;
+     	    imgRollList  = null; 
 	        System.gc();
 	    }
     

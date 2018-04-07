@@ -10,6 +10,7 @@ import com.luis.lgameengine.gameutils.gameworld.Math2D;
 import com.luis.lgameengine.gameutils.gameworld.SpriteImage;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.implementation.graphics.Graphics;
+import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.Main;
 import com.luis.strategy.constants.Define;
@@ -87,11 +88,12 @@ public class Army extends MapObject{
 		anim = ANIN_IDLE;
 	}
 	
-	public void update(float delta){
+	public void update(MultiTouchHandler multiTouchHandler, float delta){
 		spriteList.get(anim).updateAnimation(delta);
 		
 		switch(state){
 		case STATE_ON:
+			super.update(multiTouchHandler);
 			if(idleCount < idleWait){
 				idleCount+= delta;
 				spriteList.get(anim).setFrame(0);
@@ -323,18 +325,6 @@ public class Army extends MapObject{
 		this.lastKingdom = lastKingdom;
 	}
 	
-	@Override
-	public boolean onFocus() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean onSelect() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 	public int getId() {
 		return id;
 	}

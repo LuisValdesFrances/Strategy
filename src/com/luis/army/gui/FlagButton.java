@@ -27,7 +27,7 @@ public class FlagButton extends Button{
 		state = STATE_INCOME;
 	}
 	
-	public void update(MultiTouchHandler touchHandler, Float delta){
+	public boolean update(MultiTouchHandler touchHandler, Float delta){
 		switch(state){
 		case STATE_INCOME:
 			modPosY -= (modPosY*4f)*delta + 1f;
@@ -35,17 +35,18 @@ public class FlagButton extends Button{
 				modPosY = 0;
 				state = STATE_ACTIVE;
 			}
-			break;
+			return true;
 		case STATE_ACTIVE:
 			super.update(touchHandler);
-			break;
+			return true;
 		case STATE_END:
 			modPosY += (modPosY*8f)*delta + 1f;
 			if(modPosY >= height+getWidth()/2){
 				state = STATE_UNACTIVE;
 			}
-			break;
+			return true;
 		}
+		return false;
 	}
 	
 	public void hide(){

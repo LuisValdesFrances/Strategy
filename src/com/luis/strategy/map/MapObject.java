@@ -2,10 +2,10 @@ package com.luis.strategy.map;
 
 import com.luis.lgameengine.gameutils.gameworld.GameCamera;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
-import com.luis.lgameengine.implementation.input.TouchData;
-import com.luis.strategy.UserInput;
+import com.luis.lgameengine.gui.Button;
+import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 
-public abstract class MapObject implements Selectable{
+public abstract class MapObject{
 	
 	protected WorldConver worldConver;
 	protected GameCamera gameCamera;
@@ -17,6 +17,8 @@ public abstract class MapObject implements Selectable{
 	
 	protected boolean selected;
 	
+	protected boolean select;
+	
 	//Si hay ejercito enemigo o es del dominio, estandarte
 	//En otro caso state
 	protected int touchX;
@@ -26,6 +28,8 @@ public abstract class MapObject implements Selectable{
 	protected float mapY;
 	protected int mapWidth;
 	protected int mapHeight;
+	
+	protected Button button;
 	
 	public MapObject(
 			WorldConver worldConver, GameCamera gameCamera,
@@ -46,31 +50,26 @@ public abstract class MapObject implements Selectable{
 		this.mapHeight = mapHeight;
 		this.touchX = getAbsoluteX();
 		this.touchY = getAbsoluteY();
+		
+		this.button = new Button(width, height, -1, -1){
+			@Override
+			public void onButtonPressUp() {
+				select = true;
+			};
+			@Override
+			public void onButtonPressDown(){};
+		};
 	}
 	
-	public boolean isFocus(){
-		if(UserInput.getInstance().getMultiTouchHandler().isTouchingScreen()){
-			return(UserInput.getInstance().
-					compareTouch(
-							getTouchX()-width/2, 
-							getTouchY()-height/2, 
-							getTouchX()+width/2, 
-							getTouchY()+height/2, 0));
-		}
-		return false;
+	public void process(){
+		select = false;
+		button.reset();
 	}
 	
-	public boolean isSelect(){
-		if(UserInput.getInstance().getMultiTouchHandler().getTouchAction(0) == TouchData.ACTION_DOWN
-			&& UserInput.getInstance().getMultiTouchHandler().getTouchFrames(0) == 1){
-			return(UserInput.getInstance().
-					compareTouch(
-							getTouchX()-width/2, 
-							getTouchY()-height/2, 
-							getTouchX()+width/2, 
-							getTouchY()+height/2, 0));
-		}
-		return false;
+	public void update(MultiTouchHandler multiTouchHandler){
+		button.setX(getTouchX());
+		button.setY(getTouchY());
+		button.update(multiTouchHandler);
 	}
 	
 	public int getAbsoluteX() {
@@ -130,9 +129,20 @@ public abstract class MapObject implements Selectable{
 	public boolean isSelected() {
 		return selected;
 	}
-
+	
+	public boolean isSelect() {
+		return select;
+	}
+	
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 	}
+
+	
+	public Button getButton() {
+		return button;
+	}
+	
+	
 
 }

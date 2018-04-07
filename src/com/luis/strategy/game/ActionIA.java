@@ -153,9 +153,13 @@ public class ActionIA {
 				if(enemy != null && enemy.getPlayer().getId() != player.getId()){
 					// Comparo fuerzas
 					if (army.getPower(k.getTerrainList().get(0)) > enemy.getPower(k.getTerrainList().get(0))) {
-						army.getIaDecision().setDecision(DECISION_MOVE_AND_ATACK);
-						army.getIaDecision().setKingdomDecision(k.getId());
+						//Si mi fuerza es mayor, hay un 70% de pos de atacar
+						int r = Main.getRandom(0, 100);
+						if(r >= 75){
+							army.getIaDecision().setDecision(DECISION_MOVE_AND_ATACK);
+							army.getIaDecision().setKingdomDecision(k.getId());
 						return;
+						}
 					} else if (army.getPower(k.getTerrainList().get(0)) == enemy.getPower(k.getTerrainList().get(0))) {
 						if (Main.getRandom(0, 100) >= 50) {
 							army.getIaDecision().setDecision(DECISION_MOVE_AND_ATACK);

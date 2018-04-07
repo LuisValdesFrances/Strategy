@@ -2,6 +2,7 @@ package com.luis.strategy.map;
 
 import com.luis.lgameengine.gameutils.gameworld.GameCamera;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
+import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 
 
 public class Terrain extends MapObject{
@@ -19,7 +20,9 @@ public class Terrain extends MapObject{
 		this.conquest = conquest;
 	}
 	
-	
+	public void update(MultiTouchHandler multiTouchHandler){
+		super.update(multiTouchHandler);
+	}
 	
 	public int getType() {
 		return type;
@@ -32,15 +35,6 @@ public class Terrain extends MapObject{
 	}
 	public void setConquest(boolean conquest) {
 		this.conquest = conquest;
-	}
-	
-	
-
-	@Override
-	public boolean onFocus() {return false;}
-
-	@Override
-	public boolean onSelect() {return false;
 	}
 	
 	

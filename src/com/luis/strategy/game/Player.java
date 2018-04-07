@@ -3,6 +3,7 @@ package com.luis.strategy.game;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 import com.luis.strategy.army.Army;
 import com.luis.strategy.army.Troop;
 import com.luis.strategy.constants.GameParams;
@@ -52,9 +53,9 @@ public class Player {
 		return selected;
 	}
 	
-	public void updateArmies(float delta){
+	public void updateArmies(MultiTouchHandler multiTouchHandler, float delta){
 		for(Army army : armyList){
-			army.update(delta);
+			army.update(multiTouchHandler, delta);
 		}
 	}
 	

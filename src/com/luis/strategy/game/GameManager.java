@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
 import com.luis.army.gui.ArmyBox;
 import com.luis.army.gui.BattleBox;
 import com.luis.army.gui.TerrainBox;
@@ -14,6 +15,7 @@ import com.luis.lgameengine.gameutils.fonts.TextManager;
 import com.luis.lgameengine.gameutils.gameworld.GameCamera;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.implementation.graphics.Graphics;
+import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 import com.luis.lgameengine.implementation.input.TouchData;
 import com.luis.lgameengine.gui.Button;
 import com.luis.lgameengine.gui.MenuElement;
@@ -350,6 +352,7 @@ public class GameManager {
 			for(int i = 0; i < playerList.size(); i++){
 				for(Army army: playerList.get(i).getArmyList()){
 					if(army.isSelect()){
+						army.process();
 						cleanArmyAction();
 						activeArmy = army;
 						activeArmy.setSelected(true);
@@ -367,6 +370,7 @@ public class GameManager {
 				for(Kingdom kingdom : map.getKingdomList()){
 					for(Terrain terrain : kingdom.getTerrainList()){
 						if(terrain.isSelect()){
+							terrain.process();
 							terrainBox.start(getCurrentPlayer(), kingdom,
 								terrain.getType() >= GameParams.SMALL_CITY &&
 								getArmyAtKingdom(kingdom)== null && 
@@ -381,6 +385,7 @@ public class GameManager {
 				for(int i = 0; i < playerList.size(); i++){
 					for(Army army: playerList.get(i).getArmyList()){
 						if(army.isSelect()){
+							army.process();
 							cleanArmyAction();
 							activeArmy = army;
 							activeArmy.setSelected(true);
@@ -410,7 +415,7 @@ public class GameManager {
 						(getCurrentPlayer().getActionIA() != null && getCurrentPlayer().getActionIA().isKingdomToMove(map, kingdom))
 							
 					){
-						
+						kingdom.process();
 						//Si abandono una conquista, se pierde el progreso
 						if(kingdom.getId() != getSelectedArmy().getKingdom().getId()){
 							getSelectedArmy().getKingdom().setState(0);
@@ -649,13 +654,6 @@ public class GameManager {
 			break;
 		}
 		
-		/*
-		private ArmyBox armyBox;
-		private BattleBox battleBox;
-		private SimpleBox economyBox;
-		private SimpleBox resultBox;
-		private SimpleBox discardBox;
-		 */
 		if(
 			!armyBox.isActive() && 
 			!battleBox.isActive() && 
@@ -664,16 +662,17 @@ public class GameManager {
 			!endGameBox.isActive() &&
 			!terrainBox.isActive()){
 			updateCamera();
+			if(getCurrentPlayer().getActionIA() == null && state == STATE_ACTION){
+				map.update(UserInput.getInstance().getMultiTouchHandler(), delta);
+			}
 		}
 		
-		updateGUI(delta);
+		updateGUI(UserInput.getInstance().getMultiTouchHandler(), delta);
 		
-		
-		map.update(delta);
 		
 		//Actualizar animaciones
 		for(Player player : playerList)
-			player.updateArmies(Main.getDeltaSec());
+			player.updateArmies(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
 		
 	}
 	
@@ -769,14 +768,15 @@ public class GameManager {
 		drawPresentation(g);
 	}
 	
-	private void updateGUI(float delta){
-		btnCancel.update(UserInput.getInstance().getMultiTouchHandler());
-		btnNext.update(UserInput.getInstance().getMultiTouchHandler());
-		btnFlagHelmet.update(UserInput.getInstance().getMultiTouchHandler(), delta);
-		btnFlagCastle.update(UserInput.getInstance().getMultiTouchHandler(), delta);
-		btnDebugPause.update(UserInput.getInstance().getMultiTouchHandler());
-		
+	private void updateGUI(MultiTouchHandler multiTouchHandler, float delta){
 		NotificationBox.getInstance().update(delta);
+		
+		btnCancel.update(multiTouchHandler);
+		btnNext.update(multiTouchHandler);
+		btnFlagHelmet.update(multiTouchHandler, delta);
+		btnFlagCastle.update(multiTouchHandler, delta);
+		btnDebugPause.update(multiTouchHandler);
+		
 	}
 	
 	private void drawGUI(Graphics g) {
@@ -914,6 +914,7 @@ public class GameManager {
 	private void changeState(int newState){
 		UserInput.getInstance().getMultiTouchHandler().resetTouch();
 		cleanArmyAction();
+		map.clean();
 		btnNext.setDisabled(true);
 		btnCancel.setDisabled(true);
 		btnFlagHelmet.hide();
@@ -990,6 +991,9 @@ public class GameManager {
 		
 		lastSubState =subState;
 		subState = newSubState;
+		
+		map.clean();
+		
 		switch(state){
 		case STATE_INCOME:
 			break;
@@ -1442,7 +1446,10 @@ public class GameManager {
 	}
 
 	private void updateCamera(){
-		if(state == STATE_ACTION || state == STATE_DISCARD || state == STATE_DEBUG){
+		if(
+				(getCurrentPlayer().getActionIA() == null && (state == STATE_ACTION || state == STATE_DISCARD))
+				||
+				state == STATE_DEBUG){
 			if(UserInput.getInstance().getMultiTouchHandler().getTouchAction(0) == TouchData.ACTION_MOVE){
 				if(lastTouchX != UserInput.getInstance().getMultiTouchHandler().getTouchX(0)){
 					cameraTargetX = cameraTargetX + lastTouchX - UserInput.getInstance().getMultiTouchHandler().getTouchX(0);

@@ -107,18 +107,6 @@ public class Kingdom extends MapObject{
 		this.target = target;
 	}
 
-	@Override
-	public boolean onFocus() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean onSelect() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 	public int getState() {
 		return state;
 	}

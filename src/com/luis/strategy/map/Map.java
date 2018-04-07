@@ -6,6 +6,7 @@ import com.luis.lgameengine.gameutils.gameworld.GameCamera;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.graphics.Image;
+import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
@@ -54,7 +55,7 @@ public class Map extends MapObject{
 		this.imgCrown = imgCrown;
 	}
 	
-	public void update(float delta){
+	public void update(MultiTouchHandler multiTouchHandler, float delta){
 		if(alphaFlag){
 			alpha-= 60f*delta;
 		}else{
@@ -65,6 +66,23 @@ public class Map extends MapObject{
 		
 		alpha = Math.max(100f, alpha);
 		alpha = Math.min(200f, alpha);
+		
+		//Evemtos touch que chocan contra los de la GUI
+		for (Kingdom k : kingdomList) {
+			k.update(multiTouchHandler);
+			for (Terrain t : k.getTerrainList()) {
+				t.update(multiTouchHandler);
+			}
+		}
+	}
+	
+	public void clean(){
+		for (Kingdom k : kingdomList) {
+			k.process();
+			for (Terrain t : k.getTerrainList()) {
+				t.process();
+			}
+		}
 	}
 	
 	public void drawMap(Graphics g, List<Player> playerList){
@@ -76,7 +94,6 @@ public class Map extends MapObject{
 				);
 		
 		for(Kingdom k : kingdomList){
-			
 			for(int i = 0; i < k.getTerrainList().size(); i++){
 				Image img = null;
 				switch(k.getTerrainList().get(i).getType()){
@@ -89,7 +106,7 @@ public class Map extends MapObject{
 				case GameParams.MONTAIN : img = imgMontain; break;
 				}
 				
-				if(k.getTerrainList().get(i).isFocus())
+				if(k.getTerrainList().get(i).getButton().isTouching())
 					g.setImageSize(1.25f, 1.25f);
 				
 				if(i < k.getState()){
@@ -203,17 +220,5 @@ public class Map extends MapObject{
 
 	public void setAlpha(float alpha) {
 		this.alpha = alpha;
-	}
-
-	@Override
-	public boolean onFocus() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean onSelect() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 }
