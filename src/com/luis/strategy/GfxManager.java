@@ -47,6 +47,8 @@ public class GfxManager {
 	   public static Image imgCrown;
 	   public static Image imgButtonPauseRelease;
 	   public static Image imgButtonPauseFocus;
+	   public static Image imgButtonDebugPauseRelease;
+	   public static Image imgButtonDebugPauseFocus;
 	   public static Image imgButtonNextRelease;
 	   public static Image imgButtonNextFocus;
 	   public static Image imgButtonCancelRelease;
@@ -200,6 +202,8 @@ public class GfxManager {
 	            	imgCrown = Image.createImage("/crown.png");
 	            	imgButtonPauseRelease = Image.createImage("/pause_release.png");
 	            	imgButtonPauseFocus = Image.createImage("/pause_focus.png");
+	            	imgButtonDebugPauseRelease = Image.createImage("/debug_pause_release.png");
+	            	imgButtonDebugPauseFocus = Image.createImage("/debug_pause_focus.png");
 	            	imgButtonCancelRelease = Image.createImage("/cancel_release.png");
 	            	imgButtonCancelFocus = Image.createImage("/cancel_focus.png");
 	            	imgButtonNextRelease = Image.createImage("/next_release.png");

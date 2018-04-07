@@ -134,7 +134,7 @@ public class ModeGame {
         		break;
         	}
 			
-			Player player1 = new Player("Genterex", null, 1, 1);
+			Player player1 = new Player("Genterex", new ActionIA(), 1, 1);
 			player1.setGold(10);
 			player1.getKingdomList().add(map.getKingdom(1));
 			player1.getKingdomList().add(map.getKingdom(2));
@@ -142,32 +142,41 @@ public class ModeGame {
 					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
 			player1.getArmyList().add(army);
 			
-			Player player2 = new Player("Tiraslye", null, 2, 7);
+			Player player2 = new Player("Daergonais", new ActionIA(), 2, 9);
 			player2.setGold(10);
-			player2.getKingdomList().add(map.getKingdom(7));
-			player2.getKingdomList().add(map.getKingdom(8));
-			player2.getKingdomList().add(map.getKingdom(6));
+			player2.getKingdomList().add(map.getKingdom(9));
+			player2.getKingdomList().add(map.getKingdom(10));
 			
-			army = new Army(worldConver, gameCamera, map, player2, map.getKingdom(7),player2.getFlag(), 
+			army = new Army(worldConver, gameCamera, map, player2, map.getKingdom(9),player2.getFlag(), 
 					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
 			player2.getArmyList().add(army);
 			
 			///*
-			Player player3 = new Player("Lyecee", null, 3, 3);
+			Player player3 = new Player("Quaca", new ActionIA(), 3, 14);
 			player3.setGold(10);
-			player3.getKingdomList().add(map.getKingdom(3));
-			player3.getKingdomList().add(map.getKingdom(5));
+			player3.getKingdomList().add(map.getKingdom(14));
+			player3.getKingdomList().add(map.getKingdom(15));
 			
-			army = new Army(worldConver, gameCamera, map, player3, map.getKingdom(3),player3.getFlag(), 
+			army = new Army(worldConver, gameCamera, map, player3, map.getKingdom(14),player3.getFlag(), 
 					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
 			player3.getArmyList().add(army);
 			//*/
+			
+			Player player4 = new Player("Lye", new ActionIA(), 4, 19);
+			player4.setGold(10);
+			player4.getKingdomList().add(map.getKingdom(19));
+			player4.getKingdomList().add(map.getKingdom(21));
+			
+			army = new Army(worldConver, gameCamera, map, player3, map.getKingdom(19),player4.getFlag(), 
+					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
+			player4.getArmyList().add(army);
 			
 			
 			List<Player> playerList = new ArrayList<Player>();
 			playerList.add(player1);
 			playerList.add(player2);
 			playerList.add(player3);
+			playerList.add(player4);
 			
 			gameManager = new GameManager(worldConver, gameCamera, map, playerList);
 			

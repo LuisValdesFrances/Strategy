@@ -346,6 +346,144 @@ public static List<Kingdom> getCrom(WorldConver worldConver, GameCamera gameCame
 		k13.setTerrainList(terrainList);
 		
 		
+		//Quaca
+		Kingdom k14 = new Kingdom(worldConver, gameCamera, map,
+		(400/(float)map.getWidth()*100f), (1070f/(float)map.getHeight()*100f), map.getX(), map.getY(), map.getWidth(), map.getHeight());
+		k14.setId(14);
+		k14.setName("Quaca");
+		//La posicion del terreno se expresa en porcentajes respecto al ancho y alto del mapa
+		terrainList = new ArrayList<Terrain>();
+		terrainList.add(new Terrain(worldConver, gameCamera, map,
+			(270f/(float)map.getWidth()*100f), (1025f/(float)map.getHeight()*100f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.FOREST, false));
+		k14.setTerrainList(terrainList);
+		terrainList.add(new Terrain(worldConver, gameCamera, map,
+			(340f/(float)map.getWidth()*100f), (1025/(float)map.getHeight()*100f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.MONTAIN, false));
+		k14.setTerrainList(terrainList);
+		terrainList.add(new Terrain(worldConver, gameCamera, map,
+			(300f/(float)map.getWidth()*100f), (1135f/(float)map.getHeight()*100f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.MEDIUM_CITY, false));
+		k14.setTerrainList(terrainList);
+		
+		Kingdom k15 = new Kingdom(worldConver, gameCamera, map,
+			(125/(float)map.getWidth()*100f), (1240f/(float)map.getHeight()*100f), map.getX(), map.getY(), map.getWidth(), map.getHeight());
+		k15.setId(15);
+		k15.setName("");
+		//La posicion del terreno se expresa en porcentajes respecto al ancho y alto del mapa
+		terrainList = new ArrayList<Terrain>();
+		terrainList.add(new Terrain(worldConver, gameCamera, map,
+			(200f/(float)map.getWidth()*100f), (1210f/(float)map.getHeight()*100f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.FOREST, false));
+		k15.setTerrainList(terrainList);
+		
+		Kingdom k16 = new Kingdom(worldConver, gameCamera, map,
+			(470/(float)map.getWidth()*100f), (1130f/(float)map.getHeight()*100f), map.getX(), map.getY(), map.getWidth(), map.getHeight());
+		k16.setId(16);
+		k16.setName("");
+		//La posicion del terreno se expresa en porcentajes respecto al ancho y alto del mapa
+		terrainList = new ArrayList<Terrain>();
+		terrainList.add(new Terrain(worldConver, gameCamera, map,
+			(485f/(float)map.getWidth()*100f), (1060f/(float)map.getHeight()*100f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.FOREST, false));
+		k16.setTerrainList(terrainList);
+		terrainList.add(new Terrain(worldConver, gameCamera, map,
+			(555f/(float)map.getWidth()*100f), (1060f/(float)map.getHeight()*100f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.MONTAIN, false));
+		k16.setTerrainList(terrainList);
+		
+		Kingdom k17 = new Kingdom(worldConver, gameCamera, map,
+			(480/(float)map.getWidth()*100f), (1235f/(float)map.getHeight()*100f), map.getX(), map.getY(), map.getWidth(), map.getHeight());
+		k17.setId(17);
+		k17.setName("");
+		//La posicion del terreno se expresa en porcentajes respecto al ancho y alto del mapa
+		terrainList = new ArrayList<Terrain>();
+		terrainList.add(new Terrain(worldConver, gameCamera, map,
+			(380f/(float)map.getWidth()*100f), (1240f/(float)map.getHeight()*100f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.MONTAIN, false));
+		k17.setTerrainList(terrainList);
+		
+		Kingdom k18 = new Kingdom(worldConver, gameCamera, map,
+			(575/(float)map.getWidth()*100f), (1340f/(float)map.getHeight()*100f), map.getX(), map.getY(), map.getWidth(), map.getHeight());
+		k18.setId(18);
+		k18.setName("");
+		//La posicion del terreno se expresa en porcentajes respecto al ancho y alto del mapa
+		terrainList = new ArrayList<Terrain>();
+		terrainList.add(new Terrain(worldConver, gameCamera, map,
+			(510f/(float)map.getWidth()*100f), (1380f/(float)map.getHeight()*100f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.FOREST, false));
+		k18.setTerrainList(terrainList);
+		
+		//Lye
+		Kingdom k19 = new Kingdom(worldConver, gameCamera, map,
+		(1030/(float)map.getWidth()*100f), (250f/(float)map.getHeight()*100f), map.getX(), map.getY(), map.getWidth(), map.getHeight());
+		k19.setId(19);
+		k19.setName("Lye");
+		//La posicion del terreno se expresa en porcentajes respecto al ancho y alto del mapa
+		terrainList = new ArrayList<Terrain>();
+		terrainList.add(new Terrain(worldConver, gameCamera, map,
+			(925f/(float)map.getWidth()*100f), (360f/(float)map.getHeight()*100f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.PLAIN, false));
+		k19.setTerrainList(terrainList);
+		terrainList.add(new Terrain(worldConver, gameCamera, map,
+			(995f/(float)map.getWidth()*100f), (360/(float)map.getHeight()*100f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.FOREST, false));
+		k19.setTerrainList(terrainList);
+		terrainList.add(new Terrain(worldConver, gameCamera, map,
+			(910f/(float)map.getWidth()*100f), (250f/(float)map.getHeight()*100f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.MEDIUM_CITY, false));
+		k19.setTerrainList(terrainList);
+		
+		Kingdom k20 = new Kingdom(worldConver, gameCamera, map,
+			(900/(float)map.getWidth()*100f), (70f/(float)map.getHeight()*100f), map.getX(), map.getY(), map.getWidth(), map.getHeight());
+		k20.setId(20);
+		k20.setName("");
+		//La posicion del terreno se expresa en porcentajes respecto al ancho y alto del mapa
+		terrainList = new ArrayList<Terrain>();
+		terrainList.add(new Terrain(worldConver, gameCamera, map,
+			(800f/(float)map.getWidth()*100f), (90f/(float)map.getHeight()*100f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.PLAIN, false));
+		k20.setTerrainList(terrainList);
+		
+		Kingdom k21 = new Kingdom(worldConver, gameCamera, map,
+			(1445/(float)map.getWidth()*100f), (160f/(float)map.getHeight()*100f), map.getX(), map.getY(), map.getWidth(), map.getHeight());
+		k21.setId(21);
+		k21.setName("");
+		//La posicion del terreno se expresa en porcentajes respecto al ancho y alto del mapa
+		terrainList = new ArrayList<Terrain>();
+		terrainList.add(new Terrain(worldConver, gameCamera, map,
+			(1150f/(float)map.getWidth()*100f), (225f/(float)map.getHeight()*100f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.PLAIN, false));
+		terrainList.add(new Terrain(worldConver, gameCamera, map,
+			(1220f/(float)map.getWidth()*100f), (225f/(float)map.getHeight()*100f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.PLAIN, false));
+		terrainList.add(new Terrain(worldConver, gameCamera, map,
+			(1285f/(float)map.getWidth()*100f), (160f/(float)map.getHeight()*100f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.SMALL_CITY, false));
+		k21.setTerrainList(terrainList);
+		
+		Kingdom k22 = new Kingdom(worldConver, gameCamera, map,
+			(1580/(float)map.getWidth()*100f), (180f/(float)map.getHeight()*100f), map.getX(), map.getY(), map.getWidth(), map.getHeight());
+		k22.setId(22);
+		k22.setName("");
+		//La posicion del terreno se expresa en porcentajes respecto al ancho y alto del mapa
+		terrainList = new ArrayList<Terrain>();
+		terrainList.add(new Terrain(worldConver, gameCamera, map,
+			(1690f/(float)map.getWidth()*100f), (255f/(float)map.getHeight()*100f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.PLAIN, false));
+		terrainList.add(new Terrain(worldConver, gameCamera, map,
+			(1760f/(float)map.getWidth()*100f), (225f/(float)map.getHeight()*100f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.SMALL_CITY).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.SMALL_CITY, false));
+		k22.setTerrainList(terrainList);
+		
+		Kingdom k23 = new Kingdom(worldConver, gameCamera, map,
+			(1270/(float)map.getWidth()*100f), (315f/(float)map.getHeight()*100f), map.getX(), map.getY(), map.getWidth(), map.getHeight());
+		k23.setId(23);
+		k23.setName("");
+		//La posicion del terreno se expresa en porcentajes respecto al ancho y alto del mapa
+		terrainList = new ArrayList<Terrain>();
+		terrainList.add(new Terrain(worldConver, gameCamera, map,
+			(1110f/(float)map.getWidth()*100f), (340f/(float)map.getHeight()*100f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.FOREST, false));
+		terrainList.add(new Terrain(worldConver, gameCamera, map,
+			(1180f/(float)map.getWidth()*100f), (340f/(float)map.getHeight()*100f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.MONTAIN, false));
+		k23.setTerrainList(terrainList);
+		
+		Kingdom k24 = new Kingdom(worldConver, gameCamera, map,
+			(1520/(float)map.getWidth()*100f), (260f/(float)map.getHeight()*100f), map.getX(), map.getY(), map.getWidth(), map.getHeight());
+		k24.setId(24);
+		k24.setName("");
+		//La posicion del terreno se expresa en porcentajes respecto al ancho y alto del mapa
+		terrainList = new ArrayList<Terrain>();
+		terrainList.add(new Terrain(worldConver, gameCamera, map,
+			(1360f/(float)map.getWidth()*100f), (300f/(float)map.getHeight()*100f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.PLAIN, false));
+		terrainList.add(new Terrain(worldConver, gameCamera, map,
+			(1430f/(float)map.getWidth()*100f), (300f/(float)map.getHeight()*100f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.FOREST, false));
+		k24.setTerrainList(terrainList);
+		
+		
 		//Genterex
 		k1.getBorderList().add(k2);
 		k1.getBorderList().add(k4);
@@ -365,6 +503,8 @@ public static List<Kingdom> getCrom(WorldConver worldConver, GameCamera gameCame
 		k3.getBorderList().add(k5);
 		k3.getBorderList().add(k7);
 		k3.getBorderList().add(k8);
+		k3.getBorderList().add(k14);
+		k3.getBorderList().add(k16);
 		
 		k4.getBorderList().add(k1);
 		k4.getBorderList().add(k6);
@@ -391,6 +531,7 @@ public static List<Kingdom> getCrom(WorldConver worldConver, GameCamera gameCame
 		
 		k8.getBorderList().add(k7);
 		k8.getBorderList().add(k3);
+		k8.getBorderList().add(k16);
 		
 		//Daergonais
 		k9.getBorderList().add(k10);
@@ -414,6 +555,54 @@ public static List<Kingdom> getCrom(WorldConver worldConver, GameCamera gameCame
 		k13.getBorderList().add(k13);
 		k13.getBorderList().add(k12);
 		k13.getBorderList().add(k4);
+		k13.getBorderList().add(k19);
+		
+		//Quaca
+		k14.getBorderList().add(k3);
+		k14.getBorderList().add(k16);
+		k14.getBorderList().add(k17);
+		k14.getBorderList().add(k15);
+		
+		k15.getBorderList().add(k14);
+		k15.getBorderList().add(k17);
+		
+		k16.getBorderList().add(k14);
+		k16.getBorderList().add(k3);
+		k16.getBorderList().add(k8);
+		k16.getBorderList().add(k17);
+		
+		k17.getBorderList().add(k15);
+		k17.getBorderList().add(k14);
+		k17.getBorderList().add(k16);
+		k17.getBorderList().add(k18);
+		
+		k18.getBorderList().add(k17);
+		
+		//Lye
+		k19.getBorderList().add(k13);
+		k19.getBorderList().add(k20);
+		k19.getBorderList().add(k21);
+		k19.getBorderList().add(k23);
+		
+		k20.getBorderList().add(k13);
+		k20.getBorderList().add(k19);
+		
+		k21.getBorderList().add(k19);
+		k21.getBorderList().add(k22);
+		k21.getBorderList().add(k23);
+		k21.getBorderList().add(k24);
+		
+		k22.getBorderList().add(k21);
+		k22.getBorderList().add(k24);
+		
+		k23.getBorderList().add(k19);
+		k23.getBorderList().add(k21);
+		k23.getBorderList().add(k24);
+		
+		k24.getBorderList().add(k21);
+		k24.getBorderList().add(k22);
+		k24.getBorderList().add(k24);
+		
 		
 		kingdomList.add(k1);
 		kingdomList.add(k2);
@@ -429,6 +618,19 @@ public static List<Kingdom> getCrom(WorldConver worldConver, GameCamera gameCame
 		kingdomList.add(k11);
 		kingdomList.add(k12);
 		kingdomList.add(k13);
+		
+		kingdomList.add(k14);
+		kingdomList.add(k15);
+		kingdomList.add(k16);
+		kingdomList.add(k17);
+		kingdomList.add(k18);
+		
+		kingdomList.add(k19);
+		kingdomList.add(k20);
+		kingdomList.add(k21);
+		kingdomList.add(k22);
+		kingdomList.add(k23);
+		kingdomList.add(k24);
 		
 		return kingdomList;
 	}

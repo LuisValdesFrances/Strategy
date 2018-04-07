@@ -100,7 +100,8 @@ public class BattleDiceBox {
 		};
 	}
 	
-	public void start(Terrain terrain, Army armyAtack, Army armyDefense){
+	private boolean autoPlay;
+	public void start(Terrain terrain, Army armyAtack, Army armyDefense, boolean autoPlay){
 		this.terrain = terrain;
 		this.armyAtack = armyAtack;
 		this.armyDefense = armyDefense;
@@ -109,6 +110,7 @@ public class BattleDiceBox {
 		this.modPosDice = -Define.SIZEX;
 		this.diceDifficult = calculateDifficult();
 		this.stateCombat = 0;
+		this.autoPlay = autoPlay;
 		
 		result = new boolean[3];
 		resultIcon = new ResultIconPropierties[3];
@@ -160,8 +162,14 @@ public class BattleDiceBox {
 					}
 					//buttonCombat.setDisabled(modPosDice < 0 || resultIcon[stateCombat].modSize > 0);
 				}
+				
+				if(autoPlay && resultIcon[stateCombat].modAlpha == 0 && modPosDice == 0){
+					buttonCombat.trigger();
+				}
+				
 				buttonCombat.setDisabled(resultIcon[stateCombat].modAlpha != 0 || modPosDice != 0);
 				buttonCombat.update(touchHandler);
+				
 				break;
 			case STATE_END:
 				modPosY += (modPosY*16f)*delta + 1f;

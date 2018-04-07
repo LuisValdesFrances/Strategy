@@ -48,7 +48,7 @@ public class BattleBox extends MenuBox{
 			@Override
 			public void onButtonPressUp(){
 				reset();
-				battleDiceBox.start(terrain, armyAtack, armyDefense);
+				battleDiceBox.start(terrain, armyAtack, armyDefense, autoPlay);
 			}
 		});
 		
@@ -75,13 +75,15 @@ public class BattleBox extends MenuBox{
 		};
 	}
 	
+	private boolean autoPlay;
 	public void start(Terrain terrain, Army armyAtack, Army armyDefense, 
-			boolean cancelOption, boolean scapeOption){
+			boolean cancelOption, boolean scapeOption, boolean autoPlay){
 		super.start();
 		this.terrain = terrain;
 		this.armyAtack = armyAtack;
 		this.armyDefense = armyDefense;
 		this.scape = scapeOption;
+		this.autoPlay = autoPlay;
 		
 		if(cancelOption || scapeOption){
 			cancelButton =  new Button(
@@ -101,16 +103,23 @@ public class BattleBox extends MenuBox{
 		}else{
 			cancelButton = null;
 		}
-		
-		start();
 	}
 	
 	@Override
 	public boolean update(MultiTouchHandler touchHandler, float delta){
 		if(!battleDiceBox.update(touchHandler, delta)){
 			
-			if(cancelButton != null)
+			if(cancelButton != null){
 				cancelButton.update(touchHandler);
+			}
+			
+			if(autoPlay){
+				if(cancelButton != null){
+					cancelButton.trigger();
+				}else{
+					btnList.get(0).trigger();
+				}
+			}
 			
 			return super.update(touchHandler, delta);
 		}

@@ -3,6 +3,7 @@ package com.luis.strategy.game;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import com.luis.army.gui.ArmyBox;
 import com.luis.army.gui.BattleBox;
 import com.luis.army.gui.TerrainBox;
@@ -32,6 +33,19 @@ import com.luis.strategy.map.Terrain;
 
 public class GameManager {
 	
+	//
+	private static final boolean AUTO_PLAY = true;
+	public boolean isAutoPlay(){
+		return 
+				AUTO_PLAY &&
+				getCurrentPlayer().getActionIA() != null &&
+				//Si la victima es el jugador, se desactivan los triggers automaticos
+				(getEnemyAtKingdom(getCurrentPlayer()) == null || (getEnemyAtKingdom(getCurrentPlayer()) != null && getEnemyAtKingdom(getCurrentPlayer()).getPlayer().getActionIA() != null));
+	}
+	
+	public static Button btnDebugPause;
+	private static boolean isDebugPaused;
+	
 	//Pad
 	private int lastTouchX;
 	private int lastTouchY;
@@ -57,6 +71,7 @@ public class GameManager {
 	public static final int STATE_ACTION = 3;
 	public static final int STATE_END = 4;
 	public static final int STATE_FINISH = 5;
+	public static final int STATE_DEBUG = 6;
 	
 	
 	//SUB-STATE ACTION
@@ -98,6 +113,27 @@ public class GameManager {
 		
 		MenuElement.imgBG = GfxManager.imgBlackBG;
 		MenuElement.bgAlpha = GameParams.BG_BLACK_ALPHA;
+		
+		btnDebugPause = new Button(
+				GfxManager.imgButtonDebugPauseRelease, 
+				GfxManager.imgButtonDebugPauseFocus, 
+				GfxManager.imgButtonDebugPauseRelease.getWidth(), 
+				GfxManager.imgButtonDebugPauseRelease.getHeight(),
+				null, 0){
+			@Override
+			public void onButtonPressDown(){}
+			
+			@Override
+			public void onButtonPressUp(){
+				
+				isDebugPaused = !isDebugPaused;
+				if(state == STATE_DEBUG){
+					changeState(STATE_END);
+				}else{
+					btnDebugPause.setDisabled(true);
+				}
+			}
+		};
 		
 		int modImageFrame = GfxManager.imgGameHud.getHeight()/8;
 		btnNext = new Button(
@@ -290,6 +326,11 @@ public class GameManager {
 			break;
 		case STATE_ECONOMY:
 			economyBox.update(UserInput.getInstance().getMultiTouchHandler(), delta);
+			if(isAutoPlay()){
+				if(economyBox.isActive()){
+					economyBox.getBtnList().get(0).trigger();
+				}
+			}
 			break;
 		case STATE_DISCARD:
 			discardBox.update(UserInput.getInstance().getMultiTouchHandler(), delta);
@@ -461,7 +502,7 @@ public class GameManager {
 											getSelectedArmy().getKingdom().getTerrainList().get(0), 
 											getSelectedArmy(),
 											getEnemyAtKingdom(getCurrentPlayer()),
-											cancelOption, scapeOption);
+											cancelOption, scapeOption, isAutoPlay());
 									changeSubState(SUB_STATE_ACTION_COMBAT);
 								}
 							}else{
@@ -496,7 +537,7 @@ public class GameManager {
 											getSelectedArmy().getKingdom().getTerrainList().get(0), 
 											getSelectedArmy(),
 											getEnemyAtKingdom(getCurrentPlayer()),
-											cancelOption, scapeOption);
+											cancelOption, scapeOption, isAutoPlay());
 									
 									changeSubState(SUB_STATE_ACTION_COMBAT);
 								}
@@ -515,7 +556,7 @@ public class GameManager {
 											getSelectedArmy().getKingdom().getTerrainList().get(kingdomState), 
 											getSelectedArmy(),
 											null,
-											cancelOption, scapeOption);
+											cancelOption, scapeOption, isAutoPlay());
 									changeSubState(SUB_STATE_ACTION_COMBAT);
 								}else{
 									getSelectedArmy().getKingdom().setTarget(-1);
@@ -534,6 +575,11 @@ public class GameManager {
 				
 			case SUB_STATE_ACTION_RESULT:
 				resultBox.update(UserInput.getInstance().getMultiTouchHandler(), delta);
+				if(isAutoPlay()){
+					if(resultBox.isActive()){
+						resultBox.getBtnList().get(0).trigger();
+					}
+				}
 				break;
 				
 			case SUB_STATE_ACTION_ESCAPE:
@@ -598,6 +644,8 @@ public class GameManager {
 			if(!endGameBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
 				
 			}
+			break;
+		case STATE_DEBUG:
 			break;
 		}
 		
@@ -726,11 +774,18 @@ public class GameManager {
 		btnNext.update(UserInput.getInstance().getMultiTouchHandler());
 		btnFlagHelmet.update(UserInput.getInstance().getMultiTouchHandler(), delta);
 		btnFlagCastle.update(UserInput.getInstance().getMultiTouchHandler(), delta);
+		btnDebugPause.update(UserInput.getInstance().getMultiTouchHandler());
 		
 		NotificationBox.getInstance().update(delta);
 	}
 	
 	private void drawGUI(Graphics g) {
+		if(state == STATE_DEBUG){
+			TextManager.drawSimpleText(g, Font.FONT_MEDIUM, "DEBUG PAUSE", 
+				GfxManager.imgButtonDebugPauseRelease.getWidth()*2, 
+				GfxManager.imgButtonDebugPauseRelease.getHeight(), 
+				Graphics.VCENTER | Graphics.LEFT);
+		}
 		economyBox.draw(g, true);
 		armyBox.draw(g, true);
 		discardBox.draw(g, false);
@@ -746,6 +801,7 @@ public class GameManager {
 		btnNext.draw(g, 0, 0);
 		btnFlagHelmet.draw(g);
 		btnFlagCastle.draw(g);
+		btnDebugPause.draw(g, 0, 0);
 		drawGold(g);
 		NotificationBox.getInstance().draw(g);
 	}
@@ -868,6 +924,8 @@ public class GameManager {
 		state = newState;
 		switch(state){
 		case STATE_INCOME:
+			btnDebugPause.setDisabled(getCurrentPlayer().getActionIA() == null);
+			
 			startPresentation(Font.FONT_BIG, RscManager.allText[RscManager.TXT_GAME_PLAYER] + " " + 
 					getCurrentPlayer().getName());
 			cameraTargetX = getCurrentPlayer().getCapital().getAbsoluteX();
@@ -902,17 +960,25 @@ public class GameManager {
 			changeSubState(SUB_STATE_ACTION_WAIT);
 			break;
 		case STATE_END:
-			turnCount++;
-			do{
-				playerIndex = (playerIndex+1)%playerList.size();
-			}while(getCurrentPlayer().getCapital() == null);
-			changeState(STATE_INCOME);
+			if(isDebugPaused){
+				changeState(STATE_DEBUG);
+			}else{
+				turnCount++;
+				do{
+					playerIndex = (playerIndex+1)%playerList.size();
+				}while(getCurrentPlayer().getCapital() == null);
+				changeState(STATE_INCOME);
+			}
+			
 			break;
 		case STATE_FINISH:
 			endGameBox.start(
 					RscManager.allText[RscManager.TXT_GAME_VICTORY], 
 					RscManager.allText[RscManager.TXT_GAME_PLAYER] + getWinner().getName() + " " +
 							RscManager.allText[RscManager.TXT_GAME_IS_WINNER]);
+			break;
+		case STATE_DEBUG:
+			btnDebugPause.setDisabled(false);
 			break;
 		}
 	}
@@ -942,6 +1008,10 @@ public class GameManager {
 				btnNext.setDisabled(false);
 				btnCancel.setDisabled(true);
 				cleanArmyAction();
+				//
+				if(getDefeatArmy() != null){
+					getDefeatArmy().setDefeat(false);
+				}
 				if(getCurrentPlayer().getActionIA() != null){
 					//Management
 					getCurrentPlayer().getActionIA().management(worldConver, gameCamera, map, playerList);
@@ -958,7 +1028,9 @@ public class GameManager {
 						setDataTarget(activeArmy);
 						changeSubState(SUB_STATE_ACTION_ARMY_SELECT);
 					}else{
-						changeState(STATE_END);
+						if(isAutoPlay()){
+							changeState(STATE_END);
+						}
 					}
 				}
 				break;
@@ -993,6 +1065,8 @@ public class GameManager {
 			
 			break;
 		case STATE_END:
+			break;
+		case STATE_DEBUG:
 			break;
 		}
 	}
@@ -1172,8 +1246,12 @@ public class GameManager {
 	 * Devuelve true hay un ejercito enemigo en el reino donde se encuentra el ejercito seleccionado
 	 */
 	private Army getEnemyAtKingdom(Player player){
-		Kingdom kingdom = player.getSelectedArmy().getKingdom();
-		return getEnemyAtKingdom(player, kingdom);
+		if(player.getSelectedArmy() != null){
+			Kingdom kingdom = player.getSelectedArmy().getKingdom();
+			return getEnemyAtKingdom(player, kingdom);
+		}else{
+			return null;
+		}
 	}
 	
 	private Army getFriendAtKingdom(Player player, Kingdom kingdom){
@@ -1209,7 +1287,7 @@ public class GameManager {
 			changeSubState(SUB_STATE_ACTION_ESCAPE);
 		}else{
 			changeSubState(SUB_STATE_ACTION_WAIT);
-			btnNext.setDisabled(false);
+			//btnNext.setDisabled(false);
 		}
 	}
 	
@@ -1364,7 +1442,7 @@ public class GameManager {
 	}
 
 	private void updateCamera(){
-		if(state == STATE_ACTION || state == STATE_DISCARD){
+		if(state == STATE_ACTION || state == STATE_DISCARD || state == STATE_DEBUG){
 			if(UserInput.getInstance().getMultiTouchHandler().getTouchAction(0) == TouchData.ACTION_MOVE){
 				if(lastTouchX != UserInput.getInstance().getMultiTouchHandler().getTouchX(0)){
 					cameraTargetX = cameraTargetX + lastTouchX - UserInput.getInstance().getMultiTouchHandler().getTouchX(0);
