@@ -265,7 +265,7 @@ public class Army extends MapObject{
 		int costCount = 0;
 		for(int i = 0; i < troopList.size() && costCount < costTarget; i++){
 			//Maquinas de asedio
-			if(troopList.get(i).getType() == GameParams.SIEGE){
+			if(!troopList.get(i).isSubject() && troopList.get(i).getType() == GameParams.SIEGE){
 				costCount+= GameParams.TROOP_COST[GameParams.SIEGE];
 				troopList.remove(i);
 				i--;
@@ -274,7 +274,7 @@ public class Army extends MapObject{
 		
 		for(int i = 0; i < troopList.size() && costCount < costTarget; i++){
 			//Maquinas de asedio
-			if(troopList.get(i).getType() == GameParams.HARASSERES){
+			if(!troopList.get(i).isSubject() && troopList.get(i).getType() == GameParams.HARASSERES){
 				costCount+= GameParams.TROOP_COST[GameParams.HARASSERES];
 				troopList.remove(i);
 				i--;
@@ -283,7 +283,7 @@ public class Army extends MapObject{
 		
 		for(int i = 0; i < troopList.size() && costCount < costTarget; i++){
 			//Maquinas de asedio
-			if(troopList.get(i).getType() == GameParams.KNIGHT){
+			if(!troopList.get(i).isSubject() && troopList.get(i).getType() == GameParams.KNIGHT){
 				costCount+= GameParams.TROOP_COST[GameParams.KNIGHT];
 				troopList.remove(i);
 				i--;
@@ -292,7 +292,7 @@ public class Army extends MapObject{
 		
 		for(int i = 0; i < troopList.size() && costCount < costTarget; i++){
 			//Maquinas de asedio
-			if(troopList.get(i).getType() == GameParams.INFANTRY){
+			if(!troopList.get(i).isSubject() && troopList.get(i).getType() == GameParams.INFANTRY){
 				costCount+= GameParams.TROOP_COST[GameParams.INFANTRY];
 				troopList.remove(i);
 				i--;
@@ -367,16 +367,23 @@ public class Army extends MapObject{
 		this.iaDecision = iaDecision;
 	}
 
-	public boolean discardTroop(Troop troop){
-		boolean discard = false;
-		for(int i = 0; i < troopList.size(); i++){
-			if(troop.getId() == troopList.get(i).getId()){
+	public void discardTroop(int discardNumber){
+		int discardCount = 0;
+		
+		//Obtengo el minimo de tropas
+		int min = 0;
+		for(int i = 0; i < GameParams.TROOP_START[i]; i++){
+			min+=GameParams.TROOP_START[i];
+		}
+		
+		for(int i = 0; 
+			troopList.size() > min && discardCount > discardNumber; i++){
+		
+				if(!troopList.get(i).isSubject()){
 				troopList.remove(i);
-				discard = true;
-				break;
+				discardCount++;
 			}
 		}
-		return discard;
 	}
 	
 

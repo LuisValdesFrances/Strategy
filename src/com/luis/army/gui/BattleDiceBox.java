@@ -174,6 +174,7 @@ public class BattleDiceBox {
 			case STATE_END:
 				modPosY += (modPosY*16f)*delta + 1f;
 				if(modPosY >= Define.SIZEY){
+					modPosY = Define.SIZEY;
 					state = STATE_UNACTIVE;
 				}
 				break;

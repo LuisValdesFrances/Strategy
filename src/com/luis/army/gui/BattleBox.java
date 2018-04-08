@@ -28,6 +28,8 @@ public class BattleBox extends MenuBox{
 	
 	private Button cancelButton;
 	
+	private int kingdomFlag;
+	
 	private boolean scape;
 	
 	public BattleBox(){
@@ -76,12 +78,13 @@ public class BattleBox extends MenuBox{
 	}
 	
 	private boolean autoPlay;
-	public void start(Terrain terrain, Army armyAtack, Army armyDefense, 
+	public void start(Terrain terrain, Army armyAtack, Army armyDefense, int kingdomFlag,
 			boolean cancelOption, boolean scapeOption, boolean autoPlay){
 		super.start();
 		this.terrain = terrain;
 		this.armyAtack = armyAtack;
 		this.armyDefense = armyDefense;
+		this.kingdomFlag = kingdomFlag;
 		this.scape = scapeOption;
 		this.autoPlay = autoPlay;
 		
@@ -252,7 +255,7 @@ public class BattleBox extends MenuBox{
 			g.drawImage(
 					(armyDefense != null?
 					GfxManager.imgFlagBigList.get(armyDefense.getPlayer().getFlag()):
-					GfxManager.imgFlagBigList.get(GfxManager.imgFlagBigList.size()-1)), 
+					GfxManager.imgFlagBigList.get(kingdomFlag)), 
 					getX()+relativeFlagX +
 					(int)modPosX, 
 					centerY +
@@ -260,7 +263,7 @@ public class BattleBox extends MenuBox{
 					separation +
 					(armyDefense != null?
 						GfxManager.imgFlagBigList.get(armyDefense.getPlayer().getFlag()).getHeight()/2:
-						GfxManager.imgFlagBigList.get(GfxManager.imgFlagBigList.size()-1).getHeight()/2),
+						GfxManager.imgFlagBigList.get(kingdomFlag).getHeight()/2),
 					Graphics.VCENTER|Graphics.HCENTER);
 			
 			
@@ -272,7 +275,7 @@ public class BattleBox extends MenuBox{
 					separation +
 					(armyDefense != null?
 						GfxManager.imgFlagBigList.get(armyDefense.getPlayer().getFlag()).getHeight() :
-						GfxManager.imgFlagBigList.get(GfxManager.imgFlagBigList.size()-1).getHeight())+
+						GfxManager.imgFlagBigList.get(kingdomFlag).getHeight())+
 					GfxManager.imgTerrainBox.get(terrain.getType()).getHeight()/2, 
 					Graphics.VCENTER|Graphics.HCENTER);
 			

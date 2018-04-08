@@ -58,12 +58,13 @@ public abstract class MapObject{
 			};
 			@Override
 			public void onButtonPressDown(){};
+			
+			@Override
+			public void reset(){
+				super.reset();
+				select = false;
+			}
 		};
-	}
-	
-	public void process(){
-		select = false;
-		button.reset();
 	}
 	
 	public void update(MultiTouchHandler multiTouchHandler){

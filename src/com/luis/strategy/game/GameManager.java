@@ -352,7 +352,7 @@ public class GameManager {
 			for(int i = 0; i < playerList.size(); i++){
 				for(Army army: playerList.get(i).getArmyList()){
 					if(army.isSelect()){
-						army.process();
+						army.getButton().reset();
 						cleanArmyAction();
 						activeArmy = army;
 						activeArmy.setSelected(true);
@@ -370,7 +370,7 @@ public class GameManager {
 				for(Kingdom kingdom : map.getKingdomList()){
 					for(Terrain terrain : kingdom.getTerrainList()){
 						if(terrain.isSelect()){
-							terrain.process();
+							terrain.getButton().reset();
 							terrainBox.start(getCurrentPlayer(), kingdom,
 								terrain.getType() >= GameParams.SMALL_CITY &&
 								getArmyAtKingdom(kingdom)== null && 
@@ -385,7 +385,7 @@ public class GameManager {
 				for(int i = 0; i < playerList.size(); i++){
 					for(Army army: playerList.get(i).getArmyList()){
 						if(army.isSelect()){
-							army.process();
+							army.getButton().reset();
 							cleanArmyAction();
 							activeArmy = army;
 							activeArmy.setSelected(true);
@@ -415,7 +415,7 @@ public class GameManager {
 						(getCurrentPlayer().getActionIA() != null && getCurrentPlayer().getActionIA().isKingdomToMove(map, kingdom))
 							
 					){
-						kingdom.process();
+						kingdom.getButton().reset();
 						//Si abandono una conquista, se pierde el progreso
 						if(kingdom.getId() != getSelectedArmy().getKingdom().getId()){
 							getSelectedArmy().getKingdom().setState(0);
@@ -507,6 +507,7 @@ public class GameManager {
 											getSelectedArmy().getKingdom().getTerrainList().get(0), 
 											getSelectedArmy(),
 											getEnemyAtKingdom(getCurrentPlayer()),
+											-1,
 											cancelOption, scapeOption, isAutoPlay());
 									changeSubState(SUB_STATE_ACTION_COMBAT);
 								}
@@ -542,6 +543,7 @@ public class GameManager {
 											getSelectedArmy().getKingdom().getTerrainList().get(0), 
 											getSelectedArmy(),
 											getEnemyAtKingdom(getCurrentPlayer()),
+											-1,
 											cancelOption, scapeOption, isAutoPlay());
 									
 									changeSubState(SUB_STATE_ACTION_COMBAT);
@@ -561,6 +563,8 @@ public class GameManager {
 											getSelectedArmy().getKingdom().getTerrainList().get(kingdomState), 
 											getSelectedArmy(),
 											null,
+											getPlayerByKingdom(getSelectedArmy().getKingdom()) != null?
+											getPlayerByKingdom(getSelectedArmy().getKingdom()).getFlag():GfxManager.imgFlagBigList.size()-1,
 											cancelOption, scapeOption, isAutoPlay());
 									changeSubState(SUB_STATE_ACTION_COMBAT);
 								}else{
@@ -795,7 +799,7 @@ public class GameManager {
 		endGameBox.draw(g, true);
 		
 		g.drawImage(GfxManager.imgGameHud, 0, Define.SIZEY, Graphics.BOTTOM | Graphics.LEFT);
-		TextManager.drawSimpleText(g, Font.FONT_SMALL, getCurrentPlayer().getName(), 
+		TextManager.drawSimpleText(g, Font.FONT_MEDIUM, getCurrentPlayer().getName(), 
 				0, Define.SIZEY-GfxManager.imgGameHud.getHeight(), Graphics.BOTTOM | Graphics.LEFT);
 		btnCancel.draw(g, 0, 0);
 		btnNext.draw(g, 0, 0);
@@ -803,6 +807,7 @@ public class GameManager {
 		btnFlagCastle.draw(g);
 		btnDebugPause.draw(g, 0, 0);
 		drawGold(g);
+		drawRanking(g);
 		NotificationBox.getInstance().draw(g);
 	}
 	
@@ -819,11 +824,48 @@ public class GameManager {
 			Graphics.VCENTER | Graphics.HCENTER);
 	}
 	
+	private void drawRanking(Graphics g){
+		int nPlayer = 0;
+		for(Player player : playerList){
+			if(player.getCapital() != null){
+				nPlayer++;
+			}
+		}
+		Player[] pList = new Player[nPlayer];
+		int index = 0;
+		for(int i = 0; i < playerList.size(); i++){
+			if(playerList.get(i).getCapital() != null){
+				pList[index++] = playerList.get(i);
+			}
+		}
+		
+		//Ordeno
+		for(int i = 0; i < pList.length-1; i++){
+			for(int j = 0; j < pList.length-1; j++){
+				if(pList[j].getTaxes() >  pList[j+1].getTaxes()){
+					Player aux = pList[j+1];
+					pList[j+1] = pList[j];
+					pList[j] = aux;
+				}
+			}
+		}
+		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+		for(int i = pList.length-1; i > -1; i--){
+			TextManager.drawSimpleText(g, Font.FONT_SMALL, 
+					pList[i].getName() + " " + pList[i].getTaxes(), 
+					Define.SIZEX-Define.SIZEX64, 
+					Define.SIZEY-GfxManager.imgGameHud.getHeight() - (i*Font.getFontHeight(Font.FONT_SMALL)), 
+					Graphics.BOTTOM | Graphics.RIGHT);
+		}
+		
+	}
+	
 	private void cleanArmyAction(){
 		for(Player player:playerList){
 			for(Army army : player.getArmyList()){
 				army.setSelected(false);
 				army.setDefeat(false);
+				army.getButton().reset();
 			}
 		}
 	}
@@ -1052,14 +1094,16 @@ public class GameManager {
 			case SUB_STATE_ACTION_RESULT:
 				break;
 			case SUB_STATE_ACTION_ESCAPE:
-				//Si el que huye no es el que ataca (Se da SOLO cuando huye la IA)
-				Army defeat = getDefeatArmy();
-				if(defeat.getId() != getSelectedArmy().getId()){
+				//Si el que huye no es el que ataca
+				if(getDefeatArmy().getId() != getSelectedArmy().getId()){
 					getSelectedArmy().changeState(Army.STATE_OFF);
+					
+					//Si abandono una conquista, se pierde el progreso
+					getSelectedArmy().getKingdom().setState(0);
 				}
-				Kingdom defeatTarget = getBorderKingdom(defeat);
-				putArmyAtKingdom(defeat, defeat.getKingdom(), defeatTarget);
-				defeat.changeState(Army.STATE_MOVE);
+				Kingdom defeatTarget = getBorderKingdom(getDefeatArmy());
+				putArmyAtKingdom(getDefeatArmy(), getDefeatArmy().getKingdom(), defeatTarget);
+				getDefeatArmy().changeState(Army.STATE_MOVE);
 				break;
 			case SUB_STATE_ARMY_MANAGEMENT:
 				break;

@@ -1,5 +1,6 @@
 package com.luis.strategy.game;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.util.Log;
@@ -171,46 +172,49 @@ public class ActionIA {
 			}
 			
 	
-			// Inicio una conquista si el territorio es mas debil(Si procede)
+			// Inicio una conquista si el territorio en el que estoy es mas debil(Si procede)
 			if(!player.hasKingom(army.getKingdom()) && comparePower(army, army.getKingdom())){
 				army.getIaDecision().setDecision(DECISION_ATACK);
 				return;
 			}
 	
 			// Muevo y ataco a un territorio VACIO mas debil(Si procede)
-			for (Kingdom k : army.getKingdom().getBorderList()) {
-				if(getArmyAtKingdom(playerList, k) == null && !player.hasKingom(k)){
-					if(comparePower(army, k)){
-						army.getIaDecision().setDecision(DECISION_MOVE_AND_ATACK);
-						army.getIaDecision().setKingdomDecision(k.getId());
-						return;
-					}
-				}
+			Kingdom target = getKingdomForeigner(playerList, army, false);
+			if(target != null){
+				army.getIaDecision().setDecision(DECISION_MOVE_AND_ATACK);
+				army.getIaDecision().setKingdomDecision(target.getId());
+				return;
+			}
+				
+			
+			
+			// Muevo a una de mis ciudades libres, si no estoy en una de mis ciudades(Si procede)
+			target = getKingdomDomainCity(playerList, army, false);
+			if(!army.getKingdom().isACity() && target != null){
+				army.getIaDecision().setDecision(DECISION_MOVE);
+				army.getIaDecision().setKingdomDecision(target.getId());
+				return;
 			}
 			
-			// Muevo a una de mis ciudades libres(Si procede)
-			for (Kingdom k : army.getKingdom().getBorderList()) {
-				if(getArmyAtKingdom(playerList, k) == null && player.hasKingom(k) && k.isACity()){
-					army.getIaDecision().setDecision(DECISION_MOVE);
-					army.getIaDecision().setKingdomDecision(k.getId());
-					return;
-				}
-			}
 			
 			// Muevo a uno de mis territorios(Si procede)
-			for (Kingdom k : army.getKingdom().getBorderList()) {
-				if(getArmyAtKingdom(playerList, k) == null && player.hasKingom(k)){
-					army.getIaDecision().setDecision(DECISION_MOVE);
-					army.getIaDecision().setKingdomDecision(k.getId());
-					return;
-				}
+			target = getKingdomDomain(playerList, army, false);
+			if(target != null){
+				army.getIaDecision().setDecision(DECISION_MOVE);
+				army.getIaDecision().setKingdomDecision(target.getId());
+				return;
 			}
 			
 			// Random
-			int r = Main.getRandom(0, army.getKingdom().getBorderList().size()-1);
 			army.getIaDecision().setDecision(-1);
-			army.getIaDecision().setKingdomDecision(army.getKingdom().getBorderList().get(r).getId());
-			return;
+			int r = Main.getRandom(0, 100);
+			if(r >= 25){//Me quedo donde estoy
+				army.getIaDecision().setKingdomDecision(army.getKingdom().getId());
+			}else{
+				r = Main.getRandom(0, army.getKingdom().getBorderList().size()-1);
+				army.getIaDecision().setKingdomDecision(army.getKingdom().getBorderList().get(r).getId());
+				return;
+			}
 		}
 	}
 	
@@ -296,6 +300,72 @@ public class ActionIA {
 				break;
 		}
 		return army;
+	}
+	
+	/**
+	 * Devuelve una ciudad adyacente del dominio aleatorio
+	 * @param army
+	 * @return
+	 */
+	private Kingdom getKingdomDomainCity(List<Player> playerList, Army army, boolean includeEnemyArmy){
+		
+		List <Kingdom> dTargetList = new ArrayList<Kingdom>();
+		for(Kingdom k : army.getKingdom().getBorderList()){
+			if(army.getPlayer().hasKingom(k) && k.isACity() && (getArmyAtKingdom(playerList, k) == null || includeEnemyArmy)){
+				dTargetList.add(k);
+			}
+		}
+		
+		if(dTargetList.isEmpty()){
+			return null;
+		}else{
+			int r = Main.getRandom(0, dTargetList.size()-1);
+			return dTargetList.get(r);
+		}
+	}
+	
+	/**
+	 * Devuelve un territorio del dominio aleatorio
+	 * @param army
+	 * @return
+	 */
+	private Kingdom getKingdomDomain(List<Player> playerList, Army army, boolean includeEnemyArmy){
+		List <Kingdom> dTargetList = new ArrayList<Kingdom>();
+		for(Kingdom k : army.getKingdom().getBorderList()){
+			if(army.getPlayer().hasKingom(k) && (getArmyAtKingdom(playerList, k) == null || includeEnemyArmy)){
+				dTargetList.add(k);
+			}
+		}
+		
+		if(dTargetList.isEmpty()){
+			return null;
+		}else{
+			int r = Main.getRandom(0, dTargetList.size()-1);
+			return dTargetList.get(r);
+		}
+	}
+	
+	/**
+	 * Devuelve un territorio que no es del dominio aleatorio mas debil
+	 * @param army
+	 * @return
+	 */
+	private Kingdom getKingdomForeigner(List<Player> playerList, Army army, boolean includeEnemyArmy){
+		List <Kingdom> dTargetList = new ArrayList<Kingdom>();
+		for(Kingdom k : army.getKingdom().getBorderList()){
+			if(!army.getPlayer().hasKingom(k) && (getArmyAtKingdom(playerList, k) == null || includeEnemyArmy)){
+				if(comparePower(army, k)){
+					dTargetList.add(k);
+				}
+			}
+		}
+		
+		if(dTargetList.isEmpty()){
+			return null;
+		}else{
+			int r = Main.getRandom(0, dTargetList.size()-1);
+			return dTargetList.get(r);
+		}
 	}
 	
 	

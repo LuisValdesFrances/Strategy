@@ -266,6 +266,7 @@ public class GfxManager {
 	            	imgFlagList.add(Image.createImage("/flag4.png"));
 	            	imgFlagList.add(Image.createImage("/flag5.png"));
 	            	imgFlagList.add(Image.createImage("/flag6.png"));
+	            	imgFlagList.add(Image.createImage("/flag7.png"));
 	            	
 	            	imgFlagSmallList.add(Image.createImage("/flag_small1.png"));
 	            	imgFlagSmallList.add(Image.createImage("/flag_small2.png"));
@@ -273,6 +274,7 @@ public class GfxManager {
 	            	imgFlagSmallList.add(Image.createImage("/flag_small4.png"));
 	            	imgFlagSmallList.add(Image.createImage("/flag_small5.png"));
 	            	imgFlagSmallList.add(Image.createImage("/flag_small6.png"));
+	            	imgFlagSmallList.add(Image.createImage("/flag_small7.png"));
 	            	
 	            	imgFlagBigList.add(Image.createImage("/flag_big1.png"));
 	            	imgFlagBigList.add(Image.createImage("/flag_big2.png"));
@@ -280,6 +282,7 @@ public class GfxManager {
 	            	imgFlagBigList.add(Image.createImage("/flag_big4.png"));
 	            	imgFlagBigList.add(Image.createImage("/flag_big5.png"));
 	            	imgFlagBigList.add(Image.createImage("/flag_big6.png"));
+	            	imgFlagBigList.add(Image.createImage("/flag_big7.png"));
 	            	
 	            	imgBigTroop = new ArrayList<Image>();
 	            	imgSmallTroop = new ArrayList<Image>();

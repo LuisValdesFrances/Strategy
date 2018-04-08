@@ -142,34 +142,53 @@ public class ModeGame {
 					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
 			player1.getArmyList().add(army);
 			
-			Player player2 = new Player("Daergonais", new ActionIA(), 2, 9);
+			///*
+			Player player2 = new Player("Quaca", new ActionIA(), 4, 14);
 			player2.setGold(10);
-			player2.getKingdomList().add(map.getKingdom(9));
-			player2.getKingdomList().add(map.getKingdom(10));
+			player2.getKingdomList().add(map.getKingdom(14));
+			player2.getKingdomList().add(map.getKingdom(15));
 			
-			army = new Army(worldConver, gameCamera, map, player2, map.getKingdom(9),player2.getFlag(), 
+			army = new Army(worldConver, gameCamera, map, player2, map.getKingdom(14),player2.getFlag(), 
 					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
 			player2.getArmyList().add(army);
-			
-			///*
-			Player player3 = new Player("Quaca", new ActionIA(), 3, 14);
-			player3.setGold(10);
-			player3.getKingdomList().add(map.getKingdom(14));
-			player3.getKingdomList().add(map.getKingdom(15));
-			
-			army = new Army(worldConver, gameCamera, map, player3, map.getKingdom(14),player3.getFlag(), 
-					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
-			player3.getArmyList().add(army);
 			//*/
 			
-			Player player4 = new Player("Lye", new ActionIA(), 4, 19);
-			player4.setGold(10);
-			player4.getKingdomList().add(map.getKingdom(19));
-			player4.getKingdomList().add(map.getKingdom(21));
+			Player player3 = new Player("Lye", new ActionIA(), 3, 19);
+			player3.setGold(10);
+			player3.getKingdomList().add(map.getKingdom(19));
+			player3.getKingdomList().add(map.getKingdom(21));
 			
-			army = new Army(worldConver, gameCamera, map, player3, map.getKingdom(19),player4.getFlag(), 
+			army = new Army(worldConver, gameCamera, map, player3, map.getKingdom(19),player3.getFlag(), 
+					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
+			player3.getArmyList().add(army);
+			
+			
+			Player player4 = new Player("Crom",  new ActionIA(), 2, 25);
+			player4.setGold(10);
+			player4.getKingdomList().add(map.getKingdom(25));
+			player4.getKingdomList().add(map.getKingdom(26));
+			
+			army = new Army(worldConver, gameCamera, map, player4, map.getKingdom(25),player4.getFlag(), 
 					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
 			player4.getArmyList().add(army);
+			
+			Player player5 = new Player("Gapeangue", new ActionIA(), 5, 36);
+			player5.setGold(10);
+			player5.getKingdomList().add(map.getKingdom(36));
+			player5.getKingdomList().add(map.getKingdom(37));
+			
+			army = new Army(worldConver, gameCamera, map, player5, map.getKingdom(36),player5.getFlag(), 
+					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
+			player5.getArmyList().add(army);
+			
+			Player player6 = new Player("Levantia", new ActionIA(), 0, 51);
+			player6.setGold(10);
+			player6.getKingdomList().add(map.getKingdom(51));
+			player6.getKingdomList().add(map.getKingdom(53));
+			
+			army = new Army(worldConver, gameCamera, map, player6, map.getKingdom(51),player6.getFlag(), 
+					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
+			player6.getArmyList().add(army);
 			
 			
 			List<Player> playerList = new ArrayList<Player>();
@@ -177,6 +196,8 @@ public class ModeGame {
 			playerList.add(player2);
 			playerList.add(player3);
 			playerList.add(player4);
+			playerList.add(player5);
+			playerList.add(player6);
 			
 			gameManager = new GameManager(worldConver, gameCamera, map, playerList);
 			

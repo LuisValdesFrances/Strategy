@@ -78,9 +78,9 @@ public class Map extends MapObject{
 	
 	public void clean(){
 		for (Kingdom k : kingdomList) {
-			k.process();
+			k.getButton().reset();
 			for (Terrain t : k.getTerrainList()) {
-				t.process();
+				t.getButton().reset();
 			}
 		}
 	}
