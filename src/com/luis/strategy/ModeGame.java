@@ -82,7 +82,7 @@ public class ModeGame {
 					GfxManager.imgButtonPauseRelease, 
 					GfxManager.imgButtonPauseFocus, 
 					Define.SIZEX-GfxManager.imgButtonPauseRelease.getWidth(), 
-					GfxManager.imgButtonPauseRelease.getHeight(),
+					GfxManager.imgButtonPauseRelease.getHeight()*2,
 					null, 0){
 				@Override
 				public void onButtonPressDown(){}

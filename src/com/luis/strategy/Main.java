@@ -69,6 +69,7 @@ public class Main extends MyCanvas implements Runnable {
 	public static final int COLOR_GREEN_BG = 0xff8bfc88;
 	public static final int COLOR_YELOW_BG = 0xfffcf659;
 
+	public static final boolean IS_FPS = true;
 	public static final boolean IS_DEBUG = false;
 	public static final boolean IS_TOUCH_INPUT_DEBUG = false;
 	public static final boolean IS_KEY_INPUT_DEBUG = false;
@@ -211,7 +212,12 @@ public class Main extends MyCanvas implements Runnable {
 					break;
 			}
 			
-			if (Main.IS_DEBUG) {
+			if (Main.IS_FPS) {
+				_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+				_g.setTextSize(Font.SYSTEM_SIZE[Settings.getInstance().getNativeResolution()]);
+				_g.drawText("" + iFramesXSecond + "/" + targetFPS,  0, _g.getTextHeight(), COLOR_RED);
+			}
+			else if (Main.IS_DEBUG) {
 				_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 				_g.setTextSize(Font.SYSTEM_SIZE[Settings.getInstance().getNativeResolution()]);
 				_g.setAlpha(160);
@@ -219,7 +225,7 @@ public class Main extends MyCanvas implements Runnable {
 				_g.fillRect(0, 0, Define.SIZEX, _g.getTextHeight() * 4);
 				_g.setAlpha(255);
 				_g.drawText("LGameEngine v.: " + Settings.LGAME_ENGINE_VERSION, 0, _g.getTextHeight(), COLOR_WHITE);
-				_g.drawText("FPS: " + targetFPS + "/" + iFramesXSecond, 0, _g.getTextHeight() * 2, COLOR_WHITE);
+				_g.drawText("FPS: " + iFramesXSecond + "/" + targetFPS, 0, _g.getTextHeight() * 2, COLOR_WHITE);
 				_g.drawText("DT Real/Trans: " + ((float)deltaTime / 1000f) + "/" + getDeltaSec(), Define.SIZEX4, _g.getTextHeight() * 2, COLOR_WHITE);
 				_g.drawText("SizeX: " + Define.SIZEX, 0, _g.getTextHeight() * 3,COLOR_WHITE);
 				_g.drawText("SizeY: " + Define.SIZEY, Define.SIZEX2, _g.getTextHeight() * 3, COLOR_WHITE);

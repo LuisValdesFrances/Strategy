@@ -106,7 +106,7 @@ public class BattleDiceBox {
 		this.armyAtack = armyAtack;
 		this.armyDefense = armyDefense;
 		this.state = STATE_START;
-		this.modPosY = -totalHeight/2;
+		this.modPosY = -((Define.SIZEY-totalHeight)+totalHeight);
 		this.modPosDice = -Define.SIZEX;
 		this.diceDifficult = calculateDifficult();
 		this.stateCombat = 0;
@@ -173,7 +173,7 @@ public class BattleDiceBox {
 				break;
 			case STATE_END:
 				modPosY += (modPosY*16f)*delta + 1f;
-				if(modPosY >= Define.SIZEY){
+				if(modPosY >= ((Define.SIZEY-totalHeight)+totalHeight)){
 					modPosY = Define.SIZEY;
 					state = STATE_UNACTIVE;
 				}
@@ -188,9 +188,8 @@ public class BattleDiceBox {
 	public void draw(Graphics g){
 		if(state != STATE_UNACTIVE){
 			g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-			int menuHeight = totalHeight;
-			int modAlpha = (int) ((Math.abs(modPosY) * MenuElement.bgAlpha) / 
-					(Define.SIZEY2+menuHeight/2));
+			int m = ((Define.SIZEY-totalHeight)+totalHeight);
+			int modAlpha = (int) ((Math.abs(modPosY) * MenuElement.bgAlpha) / m);
 			g.setAlpha(MenuElement.bgAlpha-modAlpha);
 			g.drawImage(MenuElement.imgBG, Define.SIZEX2, Define.SIZEY2, Graphics.VCENTER | Graphics.HCENTER);
 			g.setAlpha(255);

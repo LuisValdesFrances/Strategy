@@ -36,10 +36,8 @@ import com.luis.strategy.map.Terrain;
 public class GameManager {
 	
 	//
-	private static final boolean AUTO_PLAY = true;
 	public boolean isAutoPlay(){
 		return 
-				AUTO_PLAY &&
 				getCurrentPlayer().getActionIA() != null &&
 				//Si la victima es el jugador, se desactivan los triggers automaticos
 				(getEnemyAtKingdom(getCurrentPlayer()) == null || (getEnemyAtKingdom(getCurrentPlayer()) != null && getEnemyAtKingdom(getCurrentPlayer()).getPlayer().getActionIA() != null));
@@ -120,7 +118,7 @@ public class GameManager {
 				GfxManager.imgButtonDebugPauseRelease, 
 				GfxManager.imgButtonDebugPauseFocus, 
 				GfxManager.imgButtonDebugPauseRelease.getWidth(), 
-				GfxManager.imgButtonDebugPauseRelease.getHeight(),
+				GfxManager.imgButtonDebugPauseRelease.getHeight()*2,
 				null, 0){
 			@Override
 			public void onButtonPressDown(){}
@@ -328,11 +326,6 @@ public class GameManager {
 			break;
 		case STATE_ECONOMY:
 			economyBox.update(UserInput.getInstance().getMultiTouchHandler(), delta);
-			if(isAutoPlay()){
-				if(economyBox.isActive()){
-					economyBox.getBtnList().get(0).trigger();
-				}
-			}
 			break;
 		case STATE_DISCARD:
 			discardBox.update(UserInput.getInstance().getMultiTouchHandler(), delta);
@@ -988,7 +981,15 @@ public class GameManager {
 			
 			getCurrentPlayer().setGold(getCurrentPlayer().getGold()+tax-salary);
 			
-			economyBox.start("ECONOMY", "EARNING: +" +tax + " SALARY: -" + salary);
+			if(getCurrentPlayer().getActionIA() == null){
+				economyBox.start("ECONOMY", "EARNING: +" +tax + " SALARY: -" + salary);
+			}else{
+				if(getCurrentPlayer().getGold() < 0){
+					changeState(STATE_DISCARD);
+				}else{
+					changeState(STATE_ACTION);
+				}
+			}
 			
 			break;
 		case STATE_DISCARD:
@@ -1494,7 +1495,9 @@ public class GameManager {
 				(getCurrentPlayer().getActionIA() == null && (state == STATE_ACTION || state == STATE_DISCARD))
 				||
 				state == STATE_DEBUG){
-			if(UserInput.getInstance().getMultiTouchHandler().getTouchAction(0) == TouchData.ACTION_MOVE){
+			if(
+					UserInput.getInstance().getMultiTouchHandler().getTouchAction(0) == TouchData.ACTION_MOVE
+					&& UserInput.getInstance().getMultiTouchHandler().getTouchFrames(0) > 1){
 				if(lastTouchX != UserInput.getInstance().getMultiTouchHandler().getTouchX(0)){
 					cameraTargetX = cameraTargetX + lastTouchX - UserInput.getInstance().getMultiTouchHandler().getTouchX(0);
 				}
