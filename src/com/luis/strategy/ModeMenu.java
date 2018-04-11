@@ -2,13 +2,13 @@ package com.luis.strategy;
 
 import android.util.Log;
 
-import com.luis.lgameengine.gui.MenuManager;
 import com.luis.lgameengine.gameutils.Settings;
 import com.luis.lgameengine.gameutils.fonts.Font;
-import com.luis.lgameengine.gameutils.fonts.TextManager;
+import com.luis.lgameengine.gui.Button;
 import com.luis.lgameengine.implementation.fileio.FileIO;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.graphics.Image;
+import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 import com.luis.lgameengine.implementation.sound.SndManager;
 import com.luis.strategy.constants.Define;
 
@@ -26,6 +26,8 @@ public class ModeMenu {
 	public static Image vImgPlanet;
 	public static Image vImgAstheroid;
 	public static Image vImgAstheroid2;
+	
+	private static Button btnStart;
 	
 	
 	public static void init(int _iMenuState){
@@ -46,16 +48,35 @@ public class ModeMenu {
 			break;
 		case Define.ST_MENU_ASK_SOUND:
 		case Define.ST_MENU_ASK_LANGUAGE:
-			MenuManager.init(
-					GfxManager.vImgMenuButtons.getWidth(), GfxManager.vImgMenuButtons.getHeight()/2,
-					GfxManager.vImgSoftkeys.getWidth()/2, GfxManager.vImgSoftkeys.getHeight()/2,
-					GfxManager.vImgMenuArrows.getWidth()/2, GfxManager.vImgMenuArrows.getHeight());
+			
 			break;
 		case Define.ST_MENU_MAIN:
+			cloudFarBGX = Define.SIZEX2;
+			cloudNearBGX = Define.SIZEX;
+			cloudNear2BGX = Define.SIZEX+Define.SIZEX2;
+			
+			cloudFarBGY = Define.SIZEY2;
+			cloudNearBGY = Define.SIZEY2+Define.SIZEY4;
+			cloudNear2BGY = Define.SIZEY;
+			
+			btnStart = new Button(
+					GfxManager.imgButtonNextRelease, 
+					GfxManager.imgButtonNextFocus, 
+					Define.SIZEX-(int)(GfxManager.imgButtonNextRelease.getWidth()*0.75f), 
+					Define.SIZEY-(int)(GfxManager.imgButtonNextRelease.getHeight()*0.75f),
+					null, 0){
+				@Override
+				public void onButtonPressDown(){}
+				
+				@Override
+				public void onButtonPressUp(){
+					GameState.getInstance().setLevel(0);
+					Main.changeState(Define.ST_GAME_INIT, true);
+					reset();
+				}
+			};
 			break;
 		case Define. ST_MENU_OPTIONS:
-			iLanguageSelect = Main.iLanguage;
-			iSoundSelect = SndManager.isSound?0:1;
 			break;
 		case Define. ST_MENU_MORE:
 		case Define. ST_MENU_EXIT:
@@ -64,10 +85,7 @@ public class ModeMenu {
 			break;
 			
 		case Define. ST_MENU_SELECT_GAME:
-			MenuManager.init(
-					GfxManager.vImgMenuButtons.getWidth(), GfxManager.vImgMenuButtons.getHeight()/2,
-					GfxManager.vImgSoftkeys.getWidth()/2, GfxManager.vImgSoftkeys.getHeight()/2,
-					GfxManager.vImgMenuArrows.getWidth()/2, GfxManager.vImgMenuArrows.getHeight());
+			
 			break;
 		}
 	}
@@ -78,287 +96,31 @@ public class ModeMenu {
 			runLogo();
 			break;
 		case Define.ST_MENU_ASK_LANGUAGE:
-			if (UserInput.getInstance().getOptionMenuTouched_X(MenuManager.BUTTON_CENTER,0)) {
-				if (optionSelect <= 0) 
-					optionSelect = 1;
-				else 
-					optionSelect--;
-				
-				//UserInput.getInstance().isKeyLeft = false;
-				
-			} else if (UserInput.getInstance().getOptionMenuTouched_X(MenuManager.BUTTON_CENTER,1)) {
-				if (optionSelect >= NUMBER_OPTS_LANGUAGE-1) 
-					optionSelect = 0;
-				 else 
-					 optionSelect++;
-				
-				//UserInput.getInstance().isKeyRight = false;
-			} else if (UserInput.getInstance().goToSoftLeft(0,0)){
-				
-				/*
-				if (iOptionSelect == Resources.ENGLISH){
-					Log.i("LOGCAT", "Se van a salvar los datos:");
-					Main.iDataList[Main.INDEX_DATA_LANGUAGE] = Resources.ENGLISH;
-				}else if (iOptionSelect == Resources.SPANISH){
-					Log.i("LOGCAT", "Se van a salvar los datos:");
-					Main.iDataList[Main.INDEX_DATA_LANGUAGE] = Resources.SPANISH;
-				}else if (iOptionSelect == Resources.CATALA){
-					Log.i("LOGCAT", "Se van a salvar los datos:");
-					Main.iDataList[Main.INDEX_DATA_LANGUAGE] = Resources.CATALA;
-				}
-				
-				Main.iLanguage = Main.iDataList[Main.INDEX_DATA_LANGUAGE];
-				Resources.loadLanguage(Main.iLanguage);
-				Log.i("LOGCAT", "genSave: "+ Main.iDataList[Main.INDEX_DATA_LANGUAGE]);
-				FileIO.saveData(Main.iDataList, Main.DATA_NAME, Main.Context);
-	    		Log.i("LOGCAT", "Datos salvados");
-				Main.changeState(Define.ST_MENU_ASK_SOUND);
-				*/
-				
-				
-				Main.iLanguage = optionSelect;
-//				Resources.loadLanguage(Main.iLanguage);
-//				Main.iDataList[Main.INDEX_DATA_LANGUAGE]=iOptionSelect;
-//				Log.i("LOGCAT", "Save language: "+ iOptionSelect);
-//				FileIO.saveData(Main.iDataList, Main.DATA_NAME, Main.Context);
-//	    		Log.i("LOGCAT", "Datos salvados");
-				Main.changeState(Define.ST_MENU_ASK_SOUND,false);
-				
-			}
 			break;
 		
 		case Define.ST_MENU_ASK_SOUND:
-			if (UserInput.getInstance().getOptionMenuTouched_X(
-					MenuManager.BUTTON_CENTER,0)) {
-				if (optionSelect <= 0) 
-					optionSelect = 1;
-				else 
-					optionSelect--;
-				
-				//UserInput.getInstance().isKeyLeft = false;
-				
-			} else if (UserInput.getInstance().getOptionMenuTouched_X(
-					MenuManager.BUTTON_CENTER,1)) {
-				if (optionSelect >= NUMBER_OPTS_SOUND-1) 
-					optionSelect = 0;
-				 else 
-					 optionSelect++;
-				
-				//UserInput.getInstance().isKeyRight = false;
-			} else if (UserInput.getInstance().goToSoftLeft(0,0)) {
-				
-				if (optionSelect == 0){
-					Log.i("LOGCAT", "Sonido ON");
-					SndManager.isSound=true;
-				}else{
-					Log.i("LOGCAT", "Sonido OFF");
-					SndManager.isSound=false;
-				}
-				
-				Main.changeState(Define.ST_MENU_MAIN,false);
-				SndManager.playMusic(SndManager.MUSIC_MENU, true);
-				
-			}
 			break;
 		
 		case Define.ST_MENU_MAIN:
-			/*
-			if (UserInput.getInstance().isKeyUp) {
-				if (iOptionSelect <= 0) {
-					iOptionSelect = NUMBER_OPTS_MAIN_MENU - 1;
-				} else {
-					iOptionSelect--;
-				}
-				UserInput.getInstance().isKeyUp = false;
-				
-			} else if (UserInput.getInstance().isKeyDown) {
-				if (iOptionSelect >= NUMBER_OPTS_MAIN_MENU - 1) {
-					iOptionSelect = 0;
-				} else {
-					iOptionSelect++;
-				}
-				UserInput.getInstance().isKeyDown = false;
-				
-			}else {
-			*/
-				optionSelect = UserInput.getInstance().getOptionMenuTouched_Y(
-						NUMBER_OPTS_MAIN_MENU,
-						optionSelect);
-			//}
-			if (UserInput.getInstance().getOkTouched_Y(optionSelect)) {
-
-				switch (optionSelect) {
-				case 0:// Jugar
-					Main.changeState(Define.ST_GAME_INIT,true);
-					break;
-				case 1:// Opciones
-					Main.changeState(Define.ST_MENU_OPTIONS,false);
-					break;
-				case 2:// More
-					Main.changeState(Define.ST_MENU_MORE,false);
-					break;
-				case 3://Exit
-					Main.changeState(Define.ST_MENU_EXIT,false);
-					break;
-				}
-			}
+			runMenuBG(Main.getDeltaSec());
+			btnStart.update(UserInput.getInstance().getMultiTouchHandler());
 			break;
 			
 		case Define.ST_MENU_MORE:
-			/*
-			if (UserInput.getInstance().isKeyUp) {
-				if (iOptionSelect <= 0) {
-					iOptionSelect = NUMBER_OPTS_MORE_MENU - 1;
-				} else {
-					iOptionSelect--;
-				}
-				//UserInput.getInstance().isKeyUp = false;
-				
-			} else if (UserInput.getInstance().isKeyDown) {
-				if (iOptionSelect >= NUMBER_OPTS_MORE_MENU - 1) {
-					iOptionSelect = 0;
-				} else {
-					iOptionSelect++;
-				}
-				//UserInput.getInstance().isKeyDown = false;
-				
-			}else {
-			*/
-				optionSelect = UserInput.getInstance().getOptionMenuTouched_Y(
-						NUMBER_OPTS_MORE_MENU, optionSelect);
-			//}
-			if (UserInput.getInstance().getOkTouched_Y(optionSelect)) {
-
-				switch (optionSelect) {
-				case 0:
-					Main.changeState(Define.ST_MENU_HELP,false);
-					break;
-				case 1:
-					Main.changeState(Define.ST_MENU_ABOUT,false);
-					break;
-				}
-			}else if (UserInput.getInstance().goToSoftRight(0,0)) {
-				Main.changeState(Define.ST_MENU_MAIN,false);
-			}
 			break;
 			
 		case Define.ST_MENU_OPTIONS:
-			//Language
-			if (UserInput.getInstance().getOptionMenuTouched_X(
-							MenuManager.BUTTON_UP,0)) {
-				if (iLanguageSelect <= 0) 
-					iLanguageSelect = NUMBER_OPTS_LANGUAGE -1;
-				else 
-					iLanguageSelect--;
-				
-				RscManager.loadLanguage(iLanguageSelect);
-				
-				//UserInput.getInstance().isKeyLeft = false;
-				
-			} else if (UserInput.getInstance().getOptionMenuTouched_X(
-							MenuManager.BUTTON_UP,1)) {
-				if (iLanguageSelect >= NUMBER_OPTS_LANGUAGE -1) 
-					iLanguageSelect = 0;
-				 else 
-					iLanguageSelect++;
-				
-				RscManager.loadLanguage(iLanguageSelect);
-				
-				//UserInput.getInstance().isKeyRight = false;
-				}
-			
-			//Sound
-			if (UserInput.getInstance().getOptionMenuTouched_X(
-							MenuManager.BUTTON_CENTER,0)) {
-				if (iSoundSelect <= 0) 
-					iSoundSelect = NUMBER_OPTS_SOUND -1;
-				else 
-					iSoundSelect--;
-				
-				if (iSoundSelect == 0){
-					SndManager.isSound = true;
-					SndManager.playMusic(SndManager.MUSIC_MENU, true);
-				}else{
-					SndManager.stopMusic();
-					SndManager.isSound = false;
-				}
-				
-				//UserInput.getInstance().isKeyLeft = false;
-				
-			} else if (UserInput.getInstance().getOptionMenuTouched_X(
-							MenuManager.BUTTON_CENTER,1)) {
-				if (iSoundSelect >= NUMBER_OPTS_SOUND -1) 
-					iSoundSelect = 0;
-				 else 
-					 iSoundSelect++;
-				
-				if (iSoundSelect == 0){
-					SndManager.isSound = true;
-					SndManager.playMusic(SndManager.MUSIC_MENU, true);
-				}else{
-					SndManager.stopMusic();
-					SndManager.isSound = false;
-				}
-				//UserInput.getInstance().isKeyRight = false;
-			}
-			if (UserInput.getInstance().goToSoftLeft(0,0)) {
-				Main.iLanguage = iLanguageSelect;
-//				//saveSystemData();
-				Main.changeState(Define.ST_MENU_MAIN,false);
-			}
 			break;
 		case Define.ST_MENU_HELP:
 		case Define.ST_MENU_ABOUT:
-			if (UserInput.getInstance().goToSoftRight(0,0)) {
-				Main.changeState(Define.ST_MENU_MORE,false);
-			}
 			break;
 			
 		case Define.ST_MENU_EXIT:
-        	
-        	if (UserInput.getInstance().getOptionMenuTouched_X(
-					MenuManager.BUTTON_CENTER,0)) {
-				if (optionSelect <= 0) 
-					optionSelect = 1;
-				else 
-					optionSelect--;
-				
-				//UserInput.getInstance().isKeyLeft = false;
-				
-			} else if (UserInput.getInstance().getOptionMenuTouched_X(
-					MenuManager.BUTTON_CENTER,1)) {
-				if (optionSelect >= 1) 
-					optionSelect = 0;
-				 else 
-					 optionSelect++;
-				
-				//UserInput.getInstance().isKeyRight = false;
-			} else if (UserInput.getInstance().goToSoftLeft(0,0)
-					) {
-				
-			if (optionSelect == 0){
-				Main.changeState(Define.ST_MENU_MAIN,false);
-			}else{
-				Main.isGameRun=false;
-			}
-			}
         	break;
         	
         	
 		case Define.ST_MENU_SELECT_GAME:
-			optionSelect = UserInput.getInstance().getOptionMenuTouched_Y(2, optionSelect);
-			if (UserInput.getInstance().getOkTouched_Y(optionSelect)) {
-
-				switch (optionSelect) {
-				case 0:
-					GameState.getInstance().setLevel(1);
-					break;
-				case 1:
-					GameState.getInstance().setLevel(0);
-					break;
-				}
-				Main.changeState(Define.ST_GAME_INIT,true);
-			}
+			
 			break;
 		}
 	}
@@ -376,116 +138,47 @@ public class ModeMenu {
 			break;
 		case Define.ST_MENU_ASK_LANGUAGE:
 			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-			//_g.drawImage(GfxManager.vImgBackground, 0, 0, 0);
-			_g.setColor(Main.COLOR_BLACK);
-			_g.fillRect(0, 0, Define.SIZEX, Define.SIZEY);
-			MenuManager.drawButtonsAndTextX(_g, MenuManager.BUTTON_CENTER,NUMBER_OPTS_LANGUAGE, RscManager.TXT_ENGLISH, 
-					RscManager.allText, Font.FONT_BIG,
-					optionSelect, GfxManager.vImgSoftkeys,GfxManager.vImgMenuButtons, GfxManager.vImgMenuArrows, Main.iFrame);
-			Main.drawSoftkey(_g, Main.SOFT_OK, false);
 			break;
 			
 		case Define.ST_MENU_ASK_SOUND:
 			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-			//_g.drawImage(GfxManager.vImgBackground, 0, 0, 0);
-			_g.setColor(Main.COLOR_BLACK);
-			_g.fillRect(0, 0, Define.SIZEX, Define.SIZEY);
-			MenuManager.drawButtonsAndTextX(_g, MenuManager.BUTTON_CENTER,NUMBER_OPTS_SOUND, RscManager.TXT_SOUND_ON, 
-					RscManager.allText, Font.FONT_BIG,optionSelect, 
-					GfxManager.vImgSoftkeys,GfxManager.vImgMenuButtons, GfxManager.vImgMenuArrows, Main.iFrame);
-			Main.drawSoftkey(_g, Main.SOFT_OK, false);
 			break;
 		
 		case Define.ST_MENU_MAIN:
 			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-			//_g.drawImage(GfxManager.vImgBackground, 0, 0, 0);
-			_g.setColor(Main.COLOR_RED);
-			_g.fillRect(0, 0, Define.SIZEX, Define.SIZEY);
-			MenuManager.drawButtonsAndTextY(_g,NUMBER_OPTS_MAIN_MENU, RscManager.TXT_PLAY, RscManager.allText,
-				    Font.FONT_BIG, optionSelect, null, GfxManager.vImgMenuButtons, Main.iFrame);
+			_g.drawImage(GfxManager.imgMainBG, 0, 0, Graphics.TOP | Graphics.LEFT);
+			_g.drawImage(GfxManager.imgCloudBG, (int)cloudFarBGX, (int)cloudFarBGY, Graphics.VCENTER | Graphics.HCENTER);
+			_g.setImageSize(1.2f, 1.2f);
+			_g.drawImage(GfxManager.imgCloudBG, (int)cloudNearBGX, (int)cloudNearBGY, Graphics.VCENTER | Graphics.HCENTER);
+			_g.setImageSize(1f, 1f);
+			_g.drawImage(GfxManager.imgSwordBG, 0, Define.SIZEY, Graphics.BOTTOM | Graphics.LEFT);
+			_g.setImageSize(1.4f, 1.4f);
+			_g.drawImage(GfxManager.imgCloudBG, (int)cloudNear2BGX, (int)cloudNear2BGY, Graphics.VCENTER | Graphics.HCENTER);
+			_g.setImageSize(1f, 1f);
+			
+			btnStart.draw(_g, 0, 0);
 			break;
 			
 		case Define.ST_MENU_OPTIONS:
 			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-			//_g.drawImage(GfxManager.vImgBackground, 0, 0, 0);
-			_g.setColor(Main.COLOR_GREEN);
-			_g.fillRect(0, 0, Define.SIZEX, Define.SIZEY);
-			
-			MenuManager.drawButtonsAndTextX(_g, MenuManager.BUTTON_UP,NUMBER_OPTS_LANGUAGE, RscManager.TXT_ENGLISH, 
-					RscManager.allText, Font.FONT_BIG, 
-					iLanguageSelect, 
-					GfxManager.vImgSoftkeys,GfxManager.vImgMenuButtons, GfxManager.vImgMenuArrows, Main.iFrame);
-			MenuManager.drawButtonsAndTextX(_g, MenuManager.BUTTON_CENTER,NUMBER_OPTS_SOUND, RscManager.TXT_SOUND_ON, 
-					RscManager.allText, Font.FONT_BIG,
-					iSoundSelect, 
-					GfxManager.vImgSoftkeys,GfxManager.vImgMenuButtons, GfxManager.vImgMenuArrows, Main.iFrame);
-			Main.drawSoftkey(_g, Main.SOFT_OK, false);
 			break;
 			
 		case Define.ST_MENU_MORE:
 			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-			//_g.drawImage(GfxManager.vImgBackground, 0, 0, 0);
-			_g.setColor(Main.COLOR_BLACK);
-			_g.fillRect(0, 0, Define.SIZEX, Define.SIZEY);
-			MenuManager.drawButtonsAndTextY(_g,NUMBER_OPTS_MORE_MENU, RscManager.TXT_HELP, RscManager.allText, Font.FONT_BIG, 
-					optionSelect, null, GfxManager.vImgMenuButtons, Main.iFrame);
-			
-			Main.drawSoftkey(_g, Main.SOFT_BACK, false);
 			break;
 			
 		case Define.ST_MENU_HELP:
 		case Define.ST_MENU_ABOUT:
 			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-			//_g.drawImage(GfxManager.vImgBackground, 0, 0, 0);
-			_g.setColor(Main.COLOR_BLACK);
-			_g.fillRect(0, 0, Define.SIZEX, Define.SIZEY);
-			
-			_g.setAlpha(120);
-			_g.setColor(Main.COLOR_LILA_BG);
-			_g.fillRect(Define.SCR_MIDLE/64, Define.SCR_MIDLE/64, 
-					Define.SIZEX - Define.SCR_MIDLE/32, Define.SIZEY - Define.SCR_MIDLE/32);
-			_g.setAlpha(255);
-       	 
-			TextManager.draw(_g, Font.FONT_MEDIUM, 
-					RscManager.allText[Main.state==Define.ST_MENU_HELP? RscManager.TXT_HELP_DESCRIP:RscManager.TXT_ABOUT_DESCRIP], 
-        			Define.SIZEX2, Define.SIZEY2, Define.SIZEX - Define.SIZEX32, TextManager.ALING_CENTER, -1);
-			
-			Main.drawSoftkey(_g, Main.SOFT_BACK, false);
-			
 			break;
 			
 		case Define.ST_MENU_SELECT_GAME:
 			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-			//_g.drawImage(GfxManager.vImgBackground, 0, 0, 0);
-			_g.setColor(Main.COLOR_RED);
-			_g.fillRect(0, 0, Define.SIZEX, Define.SIZEY);
-			MenuManager.drawButtonsAndTextY(_g, 2, new String[]{"GENTEREX ", "CROM"},
-				    Font.FONT_BIG, optionSelect, null, GfxManager.vImgMenuButtons, Main.iFrame);
 			break;
 			
 		case Define.ST_MENU_EXIT:
 			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-			//_g.drawImage(GfxManager.vImgBackground, 0, 0, 0);
-			_g.setColor(Main.COLOR_BLACK);
-			_g.fillRect(0, 0, Define.SIZEX, Define.SIZEY);
-        	
-        	MenuManager.drawButtonsAndTextX(_g, MenuManager.BUTTON_CENTER,2, RscManager.TXT_NO, 
-        			RscManager.allText, Font.FONT_BIG,
-					optionSelect, 
-					GfxManager.vImgSoftkeys,GfxManager.vImgMenuButtons, GfxManager.vImgMenuArrows, Main.iFrame);
-        	
-        	_g.setAlpha(120);
-        	_g.setColor(Main.COLOR_LILA_BG);
-        	_g.fillRect(Define.SIZEX2 - (((RscManager.allText[RscManager.TXT_RETURN_MENU]).length()*Font.getFontWidth(Font.FONT_BIG))>>1), 
-        			    (Font.getFontHeight(Font.FONT_BIG)<<2) - (Font.getFontHeight(Font.FONT_MEDIUM)),
-                 	    (((RscManager.allText[RscManager.TXT_RETURN_MENU]).length()*Font.getFontWidth(Font.FONT_BIG))>>1),
-                 	     (Font.getFontHeight(Font.FONT_MEDIUM)));
-        	_g.setAlpha(255);
-        	
-        	TextManager.draw(_g, Font.FONT_MEDIUM, RscManager.allText[RscManager.TXT_WANT_EXIT_GAME], 
-        			Define.SIZEX2,(Font.getFontHeight(Font.FONT_BIG)<<2),Define.SIZEX, TextManager.ALING_CENTER, -1);
-        	Main.drawSoftkey(_g, Main.SOFT_OK, false);
-        	break;
+			break;
 		}
 	}
 	
@@ -556,13 +249,33 @@ public class ModeMenu {
 			iLevelAlpha = 255- (int)(((System.currentTimeMillis() - lInitialLogoTime)*255)/ST_TIME_LOGO_3);
 			if(iLevelAlpha <= 0){
 				iLevelAlpha = 255;
-				if(FileIO.isData()) Main.changeState(Define.ST_MENU_ASK_SOUND,true);
-				else Main.changeState(Define.ST_MENU_SELECT_GAME,true);
+				Main.changeState(Define.ST_MENU_MAIN, true);
 			}
 			
 			break;
 		}
 		//Log.i("Info", "iLevelAlpha: "+iLevelAlpha);
+	}
+	
+	public static float cloudFarBGX;
+	public static float cloudFarBGY;
+	public static float cloudNearBGX;
+	public static float cloudNearBGY;
+	public static float cloudNear2BGX;
+	public static float cloudNear2BGY;
+	public static void runMenuBG(float delta){
+		if(cloudFarBGX < -GfxManager.imgCloudBG.getWidth()/2){
+			cloudFarBGX = Define.SIZEX + (GfxManager.imgCloudBG.getWidth()/2);
+		}
+		if(cloudNearBGX < -(GfxManager.imgCloudBG.getWidth()*1.2f)/2){
+			cloudNearBGX = Define.SIZEX + ((GfxManager.imgCloudBG.getWidth()*1.2f)/2);
+		}
+		if(cloudNear2BGX < -(GfxManager.imgCloudBG.getWidth()*1.4f)/2){
+			cloudNear2BGX = Define.SIZEX + ((GfxManager.imgCloudBG.getWidth()*1.4f)/2);
+		}
+		cloudFarBGX-=10f*delta;
+		cloudNearBGX-=20f*delta;
+		cloudNear2BGX-=40f*delta;
 	}
 	
 	public static void saveSystemData(){

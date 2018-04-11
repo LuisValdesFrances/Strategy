@@ -14,20 +14,15 @@ public class GfxManager {
 	   public static Image vImgFontBig;
 	   
 	   public static Image vImgLogo;
-	   //public static Image vImgBackground;
-	   public static Image vImgMenuButtons;
-	   public static Image vImgMenuArrows;
-	   public static Image vImgSoftkeys;
-	   public static Image vImgPresent;
-	   public static Image vImageArrowsLR;
-	   public static Image vImageArrowsUD;
-	   public static Image vImagePatch;
-	   public static Image vImagePatch2;
-	   public static Image vImagePlanetLocked;
+	   public static Image imgMainBG;
+	   public static Image imgSwordBG;
+	   public static Image imgCloudBG;
 	   
 	   public static Image imgMenuBox;
 	   public static Image imgButtonRelease;
 	   public static Image imgButtonFocus;
+	   
+	  
 	   
 	   //Game images:
 	   public static Image imgGameBG;
@@ -133,31 +128,26 @@ public class GfxManager {
 	            break;
 	         case Define.ST_MENU_ASK_SOUND:
 	         case Define.ST_MENU_ASK_LANGUAGE:
-		        try {
-		        	vImgMenuButtons = Image.createImage("/menu_buttons.png");
-		            vImgMenuArrows = Image.createImage("/menu_arrows.png");
-		            vImgSoftkeys = Image.createImage("/softkeys.png");
-		            	try{
-		                //vImgBackground = Image.createImage("/bg_generic.png");
-		            }catch(Exception e){}
+		        
+		        
+		        break;
+		      
+	         case Define.ST_MENU_MAIN:
+	        	
+	        	 try {
+		      		 imgMainBG = Image.createImage("/main_bg.png");
+		      		 imgSwordBG = Image.createImage("/sword_bg.png");
+		      		 imgCloudBG = Image.createImage("/cloud_bg.png");
+		      		 
+		      		imgButtonNextRelease = Image.createImage("/next_release.png");
+	            	imgButtonNextFocus = Image.createImage("/next_focus.png");
 		        } catch (IOException ex) {
 		            ex.printStackTrace();
 		        }
-		        
-		        break;
-		       
+	      	   break;
 		     //Test
 	         case Define.ST_MENU_SELECT_GAME:
-	        	 try {
-			        	vImgMenuButtons = Image.createImage("/menu_buttons.png");
-			            vImgMenuArrows = Image.createImage("/menu_arrows.png");
-			            vImgSoftkeys = Image.createImage("/softkeys.png");
-			            try{
-			                //vImgBackground = Image.createImage("/bg_generic.png");
-			            }catch(Exception e){}
-			        } catch (IOException ex) {
-			            ex.printStackTrace();
-			        }
+	        	 
 	        	 break;
 	        	 
 		        
@@ -324,91 +314,99 @@ public class GfxManager {
 	            break;
 	        }
 	   }
+	   
+	public static void deleteMenuGFX() {
+		vImgLogo=null;
+		imgMainBG=null;
+		imgSwordBG=null;
+		imgCloudBG=null;
+		System.gc();
+	}
 
-	    public static void deleteGameGFX() {
-	    	
-	    	imgMap = null;
-        	
-        	imgTextBG = null;
-        	imgBlackBG = null;
-        	
-        	imgPadWest = null;
-        	imgPadEast = null;
-        	
-        	imgTerrainOk = null;
-        	
-        	imgTargetDomain = null;
-        	imgTargetAggregation = null;
-        	imgTargetBattle = null;
-        	
-        	imgMapSelectGreen = null;
-        	imgMapSelectRed  = null;
-        	
-        	imgArmyIdle = null;
-        	imgArmyRun = null;
-        	imgArmyOff = null;
-        	
-        	imgGameHud = null;
-        	imgChest = null;
-        	imgCoin = null;
-        	imgCrown = null;
-        	imgButtonPauseRelease = null;
-        	imgButtonPauseFocus  = null;
-        	imgButtonDebugPauseRelease = null;
-        	imgButtonDebugPauseFocus = null;
-        	imgButtonCancelRelease = null;
-        	imgButtonCancelFocus = null;
-        	imgButtonNextRelease = null;
-        	imgButtonNextFocus = null;
-        	imgButtonOkRelease = null;
-        	imgButtonOkFocus  = null;
-        	imgButtonCrossRelease = null;
-        	imgButtonCrossFocus = null;
-        	imgButtonCrossBigRelease = null;
-        	imgButtonCrossBigFocus  = null;
-        	
-        	imgButtonDeleteFocus = null;
-        	imgButtonDeleteRelease = null;
-        	
-        	imgButtonNewArmyFocus = null;
-        	imgButtonNewArmyRelease = null;
-        	imgButtonInfoFocus = null;
-        	imgButtonInfoRelease  = null;
-        	
-        	imgTextBox = null;
-        	imgBigBox = null;
-        	imgMediumBox = null;
-        	imgSmallBox = null;
-        	imgNotificationBox = null;
-        	imgButtonCombatRelease = null;
-        	imgButtonCombatFocus = null;
-        	imgButtonCardRelease = null;
-        	imgButtonCardFocus = null;
-        	imgButtonFlagHelmetRelease = null;
-        	imgButtonFlagHelmetFocus = null;
-        	imgButtonFlagCastleRelease = null;
-        	imgButtonFlagCastleFocus = null;
-        	
-        	imgFlagList = null;
-        	imgFlagSmallList = null;
-        	imgFlagBigList = null;
-        	
-        	imgTerrain = null;
-        	imgTerrainBox  = null;
-        	
-        	imgBigTroop = null;
-        	imgSmallTroop = null;
-        	imgIconTroop = null;
-        	
-        	imgVillagers = null;
-        	
-        	imgShieldIcon  = null;
-     	    imgCrossIcon = null;
-     	    imgOkIcon = null;
-     	    imgShield = null;
-     	    imgRollList  = null; 
-	        System.gc();
-	    }
+	public static void deleteGameGFX() {
+
+		imgMap = null;
+
+		imgTextBG = null;
+		imgBlackBG = null;
+
+		imgPadWest = null;
+		imgPadEast = null;
+
+		imgTerrainOk = null;
+
+		imgTargetDomain = null;
+		imgTargetAggregation = null;
+		imgTargetBattle = null;
+
+		imgMapSelectGreen = null;
+		imgMapSelectRed = null;
+
+		imgArmyIdle = null;
+		imgArmyRun = null;
+		imgArmyOff = null;
+
+		imgGameHud = null;
+		imgChest = null;
+		imgCoin = null;
+		imgCrown = null;
+		imgButtonPauseRelease = null;
+		imgButtonPauseFocus = null;
+		imgButtonDebugPauseRelease = null;
+		imgButtonDebugPauseFocus = null;
+		imgButtonCancelRelease = null;
+		imgButtonCancelFocus = null;
+		imgButtonNextRelease = null;
+		imgButtonNextFocus = null;
+		imgButtonOkRelease = null;
+		imgButtonOkFocus = null;
+		imgButtonCrossRelease = null;
+		imgButtonCrossFocus = null;
+		imgButtonCrossBigRelease = null;
+		imgButtonCrossBigFocus = null;
+
+		imgButtonDeleteFocus = null;
+		imgButtonDeleteRelease = null;
+
+		imgButtonNewArmyFocus = null;
+		imgButtonNewArmyRelease = null;
+		imgButtonInfoFocus = null;
+		imgButtonInfoRelease = null;
+
+		imgTextBox = null;
+		imgBigBox = null;
+		imgMediumBox = null;
+		imgSmallBox = null;
+		imgNotificationBox = null;
+		imgButtonCombatRelease = null;
+		imgButtonCombatFocus = null;
+		imgButtonCardRelease = null;
+		imgButtonCardFocus = null;
+		imgButtonFlagHelmetRelease = null;
+		imgButtonFlagHelmetFocus = null;
+		imgButtonFlagCastleRelease = null;
+		imgButtonFlagCastleFocus = null;
+
+		imgFlagList = null;
+		imgFlagSmallList = null;
+		imgFlagBigList = null;
+
+		imgTerrain = null;
+		imgTerrainBox = null;
+
+		imgBigTroop = null;
+		imgSmallTroop = null;
+		imgIconTroop = null;
+
+		imgVillagers = null;
+
+		imgShieldIcon = null;
+		imgCrossIcon = null;
+		imgOkIcon = null;
+		imgShield = null;
+		imgRollList = null;
+		System.gc();
+	}
     
    
     

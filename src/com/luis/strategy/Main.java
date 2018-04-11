@@ -304,54 +304,7 @@ public class Main extends MyCanvas implements Runnable {
 		}
 	}
 	
-	public static final int SOFT_OK = 0;
-	public static final int SOFT_BACK = 1;
-
-	public static void drawSoftkey(Graphics g, int softkeys, boolean blink) {
-		
-		int upBanner = IS_MOVE_SOFT_BANNER ? (GfxManager.vImgSoftkeys.getHeight() >> 1) : 0;
-
-		boolean paint = true;
-		if (blink) {
-			paint = isIntervalTwo();
-		}
-
-		if (paint) {
-			switch (softkeys) {
-			case SOFT_BACK:
-				g.setClip(
-						Define.SIZEX - (GfxManager.vImgSoftkeys.getWidth() >> 1),
-						Define.SIZEY - (GfxManager.vImgSoftkeys.getHeight() >> 1) - upBanner,
-						Define.SIZEX, Define.SIZEY - upBanner);
-
-				if (UserInput.getInstance().isTouchSoftRight(0,0)) {
-					g.drawImage(GfxManager.vImgSoftkeys,
-							Define.SIZEX- (GfxManager.vImgSoftkeys.getWidth()),
-							Define.SIZEY- (GfxManager.vImgSoftkeys.getHeight() >> 1) - upBanner, 0);
-				} else {
-					g.drawImage(GfxManager.vImgSoftkeys,Define.SIZEX- (GfxManager.vImgSoftkeys.getWidth() >> 1),
-							Define.SIZEY- (GfxManager.vImgSoftkeys.getHeight() >> 1) - upBanner, 0);
-				}
-				break;
-
-			case SOFT_OK:
-				g.setClip(
-						0,Define.SIZEY- (GfxManager.vImgSoftkeys.getHeight() >> 1) - upBanner,
-						GfxManager.vImgSoftkeys.getWidth() >> 1, Define.SIZEY - upBanner);
-
-				if (UserInput.getInstance().isTouchSoftLeft(0,0)) {
-					g.drawImage(GfxManager.vImgSoftkeys,-(GfxManager.vImgSoftkeys.getWidth() >> 1),
-							Define.SIZEY- GfxManager.vImgSoftkeys.getHeight() - upBanner, 0);
-				} else {
-					g.drawImage(GfxManager.vImgSoftkeys,0,Define.SIZEY- GfxManager.vImgSoftkeys.getHeight() - upBanner, 0);
-				}
-				break;
-			}
-		}
-		
-	}
-
-	 //Resources:
+	//Resources:
     private static Random vRandom;// = new Random(0);
     //Obtiene un randon entre el primer parametro(Numero menor) y el segundo parametro(numero mayor). 
     //Ambos incluidos.
@@ -433,7 +386,16 @@ public class Main extends MyCanvas implements Runnable {
 		iLastState = state;
 		state = _iNewState;
 		ModeMenu.optionSelect = 0;
-		
+		///*
+		switch(iLastState){
+			case Define.ST_MENU_MAIN:
+				GfxManager.deleteGameGFX();
+				break;
+			case Define.ST_MENU_SELECT_GAME:
+				GfxManager.deleteMenuGFX();
+				break;
+		}
+		//*/
 		if(_isLoadGraphics){
 			main.startClock();
 			GfxManager.loadGFX(_iNewState);
@@ -441,11 +403,6 @@ public class Main extends MyCanvas implements Runnable {
 
 		Log.i("INFO", "Estado cambiado a: " + _iNewState);
 		
-		switch(state){
-		case Define.ST_MENU_SELECT_GAME:
-			GfxManager.deleteGameGFX();
-			break;
-		}
 		
 		if (_iNewState < Define.ST_GAME_INIT)
 			ModeMenu.init(state);

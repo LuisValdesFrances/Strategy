@@ -306,21 +306,15 @@ public class ModeGame {
 			
 		case Define.ST_GAME_PAUSE:
 			if(!confirmationQuit.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec())){
-				
-				optionSelect = UserInput.getInstance().getOptionMenuTouched_Y(2, optionSelect);
-				
-				if (UserInput.getInstance().getOkTouched_Y(optionSelect)) {
-
-					switch (optionSelect) {
-					case 0:
-						Main.changeState(Define.ST_GAME_RUN, true);
-						break;
-					case 1:
-						UserInput.getInstance().getMultiTouchHandler().resetTouch();
-						UserInput.getInstance().getKeyboardHandler().resetKeys();
-						confirmationQuit.start();
-						break;
-					}
+				switch (confirmationQuit.getIndexPressed()) {
+				case 0:
+					Main.changeState(Define.ST_GAME_RUN, true);
+					break;
+				case 1:
+					UserInput.getInstance().getMultiTouchHandler().resetTouch();
+					UserInput.getInstance().getKeyboardHandler().resetKeys();
+					confirmationQuit.start();
+					break;
 				}
 				break;
 				}
@@ -349,12 +343,8 @@ public class ModeGame {
 			
 		case Define.ST_GAME_PAUSE:
 			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-			//_g.drawImage(GfxManager.vImgBackground, 0, 0, 0);
 			_g.setColor(Main.COLOR_RED);
 			_g.fillRect(0, 0, Define.SIZEX, Define.SIZEY);
-			MenuManager.drawButtonsAndTextY(_g, 2, new String[]{"CONTINUAR", "SALIR"},
-				    Font.FONT_BIG, optionSelect, null, GfxManager.vImgMenuButtons, Main.iFrame);
-			
 			confirmationQuit.draw(_g, false);
 			break;
 		}
