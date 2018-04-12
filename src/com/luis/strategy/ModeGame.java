@@ -114,15 +114,7 @@ public class ModeGame {
 					worldConver, gameCamera, 
 					0,//GfxManager.imgMap.getWidth()/2, 
 					0,//GfxManager.imgMap.getHeight()/2,
-					GfxManager.imgMap,
-					GfxManager.imgTerrain.get(GameParams.SMALL_CITY), 
-					GfxManager.imgTerrain.get(GameParams.MEDIUM_CITY), 
-					GfxManager.imgTerrain.get(GameParams.BIG_CITY), 
-					GfxManager.imgTerrain.get(GameParams.PLAIN), 
-					GfxManager.imgTerrain.get(GameParams.FOREST), 
-					GfxManager.imgTerrain.get(GameParams.MONTAIN), 
-					null,
-					GfxManager.imgCrown);
+					GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
 			
 			
 			switch(GameState.getInstance().getLevel()){
@@ -134,7 +126,7 @@ public class ModeGame {
         		break;
         	}
 			
-			Player player1 = new Player("Genterex", new ActionIA(), 1, 1);
+			Player player1 = new Player("Genterex", null, 1, 1);
 			player1.setGold(10);
 			player1.getKingdomList().add(map.getKingdom(1));
 			player1.getKingdomList().add(map.getKingdom(2));
@@ -199,7 +191,9 @@ public class ModeGame {
 			playerList.add(player5);
 			playerList.add(player6);
 			
-			gameManager = new GameManager(worldConver, gameCamera, map, playerList);
+			map.setPlayerList(playerList);
+			
+			gameManager = new GameManager(worldConver, gameCamera, map);
 			
 			/*
 			army = new Army();

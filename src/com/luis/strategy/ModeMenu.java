@@ -36,8 +36,8 @@ public class ModeMenu {
 		switch (_iMenuState) {
         case Define.ST_MENU_LOGO:
 			iStateLogo = ST_LOGO_1;
-			iLevelAlpha = 255;
-			lInitialLogoTime = System.currentTimeMillis();
+			alpha = 255;
+			startTime = System.currentTimeMillis();
 			Font.init(GfxManager.vImgFontSmall, GfxManager.vImgFontMedium, GfxManager.vImgFontBig);
 //			if(FileIO.isData()){
 //				
@@ -51,6 +51,10 @@ public class ModeMenu {
 			
 			break;
 		case Define.ST_MENU_MAIN:
+			
+			alpha = 255;
+			startTime = System.currentTimeMillis();
+			
 			cloudFarBGX = Define.SIZEX2;
 			cloudNearBGX = Define.SIZEX;
 			cloudNear2BGX = Define.SIZEX+Define.SIZEX2;
@@ -131,7 +135,7 @@ public class ModeMenu {
 			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 			_g.setColor(Main.COLOR_BLACK);
 			_g.fillRect(0, 0, Define.SIZEX, Define.SIZEY);
-			_g.setAlpha(iLevelAlpha);
+			_g.setAlpha(alpha);
 			_g.drawImage(GfxManager.vImgLogo, Define.SIZEX2, Define.SIZEY2, Graphics.VCENTER|Graphics.HCENTER);
 			_g.setAlpha(255);
              
@@ -146,6 +150,7 @@ public class ModeMenu {
 		
 		case Define.ST_MENU_MAIN:
 			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+			
 			_g.drawImage(GfxManager.imgMainBG, 0, 0, Graphics.TOP | Graphics.LEFT);
 			_g.drawImage(GfxManager.imgCloudBG, (int)cloudFarBGX, (int)cloudFarBGY, Graphics.VCENTER | Graphics.HCENTER);
 			_g.setImageSize(1.2f, 1.2f);
@@ -155,6 +160,11 @@ public class ModeMenu {
 			_g.setImageSize(1.4f, 1.4f);
 			_g.drawImage(GfxManager.imgCloudBG, (int)cloudNear2BGX, (int)cloudNear2BGY, Graphics.VCENTER | Graphics.HCENTER);
 			_g.setImageSize(1f, 1f);
+			if(alpha > 0){
+				_g.setAlpha(alpha);
+				_g.drawImage(GfxManager.imgBlackBG, 0, 0, Graphics.TOP | Graphics.LEFT);
+				_g.setAlpha(255);
+			}
 			
 			btnStart.draw(_g, 0, 0);
 			break;
@@ -218,37 +228,40 @@ public class ModeMenu {
         }
     }
 	
-	public static long lInitialLogoTime;
-	public static final long ST_TIME_LOGO_1 = 1000;
-	public static final long ST_TIME_LOGO_2 = 500;
-	public static final long ST_TIME_LOGO_3 = 1000;
+	public static long startTime;
+	public static final long ST_TIME_LOGO_1 = 1200;
+	public static final long ST_TIME_LOGO_2 = 800;
+	public static final long ST_TIME_LOGO_3 = 1200;
+	
+	public static final long ST_TIME_MAIN = 1200;
+	
 	public static int iStateLogo;
 	public static final int ST_LOGO_1 = 0;
 	public static final int ST_LOGO_2 = 2;
 	public static final int ST_LOGO_3 = 3;
-	public static int iLevelAlpha;
+	public static int alpha;
 	
 	public static void runLogo(){
 		switch(iStateLogo){
 		case ST_LOGO_1:
-			iLevelAlpha = (int)(((System.currentTimeMillis() - lInitialLogoTime)*255)/ST_TIME_LOGO_1);
-			if(iLevelAlpha >= 255){
-				iLevelAlpha = 255;
+			alpha = (int)(((System.currentTimeMillis() - startTime)*255)/ST_TIME_LOGO_1);
+			if(alpha >= 255){
+				alpha = 255;
 				iStateLogo = ST_LOGO_2;
-				lInitialLogoTime = System.currentTimeMillis();
+				startTime = System.currentTimeMillis();
 			}
 			break;
 		case ST_LOGO_2:
-			if(System.currentTimeMillis()>lInitialLogoTime+ST_TIME_LOGO_2){
+			if(System.currentTimeMillis()>startTime+ST_TIME_LOGO_2){
 				iStateLogo = ST_LOGO_3;
-				lInitialLogoTime = System.currentTimeMillis();
+				startTime = System.currentTimeMillis();
 				
 			}
 			break;
 		case ST_LOGO_3:
-			iLevelAlpha = 255- (int)(((System.currentTimeMillis() - lInitialLogoTime)*255)/ST_TIME_LOGO_3);
-			if(iLevelAlpha <= 0){
-				iLevelAlpha = 255;
+			alpha = 255- (int)(((System.currentTimeMillis() - startTime)*255)/ST_TIME_LOGO_3);
+			if(alpha <= 0){
+				alpha = 255;
 				Main.changeState(Define.ST_MENU_MAIN, true);
 			}
 			
@@ -264,6 +277,13 @@ public class ModeMenu {
 	public static float cloudNear2BGX;
 	public static float cloudNear2BGY;
 	public static void runMenuBG(float delta){
+		
+		alpha = 255-((int)(((System.currentTimeMillis() - startTime)*255)/ST_TIME_MAIN));
+		if(alpha <= 0){
+			alpha = 0;
+		}
+		
+		
 		if(cloudFarBGX < -GfxManager.imgCloudBG.getWidth()/2){
 			cloudFarBGX = Define.SIZEX + (GfxManager.imgCloudBG.getWidth()/2);
 		}

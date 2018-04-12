@@ -16,43 +16,19 @@ import com.luis.strategy.game.Player;
 
 public class Map extends MapObject{
 	
+	private List<Player>playerList;
 	private List<Kingdom> kingdomList;
-	private Image imgMap;
-	private Image imgSmallCity;
-	private Image imgMediumCity;
-	private Image imgBigCity;
-	private Image imgPlain;
-	private Image imgForest;
-	private Image imgMontain;
-	private Image imgCastle;
-	private Image imgCrown;
 	
-	private boolean alphaFlag;
-	private float alpha = 255;
-	
+	private int playerIndex;
+	private int turnCount;
 	
 	public Map(
-			WorldConver worldConver, GameCamera gameCamera,
-			int x, int y,
-			Image imgMap, Image imgSmallCity,
-			Image imgMediumCity, Image imgBigCity, Image imgPlain,
-			Image imgForest, Image imgMontain, Image imgCastle,
-			Image imgCrown) {
-		super(worldConver, gameCamera, null, x, y, imgMap.getWidth(), imgMap.getHeight(), x, y, imgMap.getWidth(), imgMap.getHeight());
+			WorldConver worldConver, GameCamera gameCamera, int x, int y, int w, int h) {
+		super(worldConver, gameCamera, null, x, y, w, h, x, y, w, h);
 		
 		this.map = this;
 		this.x = x;
 		this.y = y;
-		
-		this.imgMap = imgMap;
-		this.imgSmallCity = imgSmallCity;
-		this.imgMediumCity = imgMediumCity;
-		this.imgBigCity = imgBigCity;
-		this.imgPlain = imgPlain;
-		this.imgForest = imgForest;
-		this.imgMontain = imgMontain;
-		this.imgCastle = imgCastle;
-		this.imgCrown = imgCrown;
 	}
 	
 	public void update(MultiTouchHandler multiTouchHandler, float delta){
@@ -85,9 +61,11 @@ public class Map extends MapObject{
 		}
 	}
 	
+	private boolean alphaFlag;
+	private float alpha = 255;
 	public void drawMap(Graphics g, List<Player> playerList){
 		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-		g.drawImage(imgMap, 
+		g.drawImage(GfxManager.imgMap, 
 				worldConver.getConversionDrawX(gameCamera.getPosX(), x),
 				worldConver.getConversionDrawY(gameCamera.getPosY(), y),
 				Graphics.TOP | Graphics.LEFT
@@ -97,13 +75,13 @@ public class Map extends MapObject{
 			for(int i = 0; i < k.getTerrainList().size(); i++){
 				Image img = null;
 				switch(k.getTerrainList().get(i).getType()){
-				case GameParams.BIG_CITY : img = imgBigCity; break;
-				case GameParams.MEDIUM_CITY : img = imgMediumCity; break;
-				case GameParams.SMALL_CITY : img = imgSmallCity; break;
-				case GameParams.CASTLE : img = imgCastle; break;
-				case GameParams.PLAIN : img = imgPlain; break;
-				case GameParams.FOREST : img = imgForest; break;
-				case GameParams.MONTAIN : img = imgMontain; break;
+				case GameParams.BIG_CITY : img = GfxManager.imgTerrain.get(GameParams.BIG_CITY); break;
+				case GameParams.MEDIUM_CITY : img = GfxManager.imgTerrain.get(GameParams.MEDIUM_CITY); break;
+				case GameParams.SMALL_CITY : img = GfxManager.imgTerrain.get(GameParams.SMALL_CITY); break;
+				case GameParams.CASTLE : img = null; break;
+				case GameParams.PLAIN : img = GfxManager.imgTerrain.get(GameParams.PLAIN); break;
+				case GameParams.FOREST : img = GfxManager.imgTerrain.get(GameParams.FOREST); break;
+				case GameParams.MONTAIN : img = GfxManager.imgTerrain.get(GameParams.MONTAIN); break;
 				}
 				
 				if(k.getTerrainList().get(i).getButton().isTouching())
@@ -121,16 +99,18 @@ public class Map extends MapObject{
 				//Capitales
 				for(Player player : playerList){
 					if(player.getCapital() != null){
-						int modW = player.getCapital().getTerrainList().get(player.getCapital().getTerrainList().size()-1).getWidth()/2-imgCrown.getWidth()/3;
-						int modH = player.getCapital().getTerrainList().get(player.getCapital().getTerrainList().size()-1).getHeight()/2-imgCrown.getHeight()/3;
-						g.drawImage(imgCrown, 
-								worldConver.getConversionDrawX(gameCamera.getPosX(), 
-										player.getCapital().getTerrainList().get(player.getCapital().getTerrainList().size()-1).getAbsoluteX()-
-										modW),
-								worldConver.getConversionDrawY(gameCamera.getPosY(), 
-										player.getCapital().getTerrainList().get(player.getCapital().getTerrainList().size()-1).getAbsoluteY()-
-										modH),
-								Graphics.HCENTER | Graphics.VCENTER);
+						int modW = player.getCapital().getTerrainList().get(player.getCapital().getTerrainList().size()-1).getWidth()/2-
+								GfxManager.imgCrown.getWidth()/3;
+						int modH = player.getCapital().getTerrainList().get(player.getCapital().getTerrainList().size()-1).getHeight()/2-
+								GfxManager.imgCrown.getHeight()/3;
+						g.drawImage(GfxManager.imgCrown, 
+							worldConver.getConversionDrawX(gameCamera.getPosX(), 
+									player.getCapital().getTerrainList().get(player.getCapital().getTerrainList().size()-1).getAbsoluteX()-
+									modW),
+							worldConver.getConversionDrawY(gameCamera.getPosY(), 
+									player.getCapital().getTerrainList().get(player.getCapital().getTerrainList().size()-1).getAbsoluteY()-
+									modH),
+							Graphics.HCENTER | Graphics.VCENTER);
 					}
 				}
 				
@@ -196,6 +176,14 @@ public class Map extends MapObject{
 	}
 
 	
+	public List<Player> getPlayerList() {
+		return playerList;
+	}
+
+	public void setPlayerList(List<Player> playerList) {
+		this.playerList = playerList;
+	}
+
 	public List<Kingdom> getKingdomList() {
 		return kingdomList;
 	}
@@ -204,21 +192,27 @@ public class Map extends MapObject{
 		this.kingdomList = kingdomList;
 	}
 
-	public Image getImgMap() {
-		return imgMap;
-	}
-
-	public void setImgMap(Image imgMap) {
-		this.imgMap = imgMap;
-	}
-	
-	
-
 	public float getAlpha() {
 		return alpha;
 	}
 
 	public void setAlpha(float alpha) {
 		this.alpha = alpha;
+	}
+
+	public int getPlayerIndex() {
+		return playerIndex;
+	}
+
+	public void setPlayerIndex(int playerIndex) {
+		this.playerIndex = playerIndex;
+	}
+
+	public int getTurnCount() {
+		return turnCount;
+	}
+
+	public void setTurnCount(int turnCount) {
+		this.turnCount = turnCount;
 	}
 }

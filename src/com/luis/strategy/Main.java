@@ -377,6 +377,7 @@ public class Main extends MyCanvas implements Runnable {
 	}
 
 	public static boolean isLoading;
+	public static int tripleBufferWait;
 	public static void changeState(int _iNewState, boolean _isLoadGraphics) {
 		isLoading = true;
 		
@@ -410,6 +411,7 @@ public class Main extends MyCanvas implements Runnable {
 			ModeGame.init(state);
 		
 		main.stopClock();
+		tripleBufferWait = 0;
 		isLoading = false;
 
 	}
