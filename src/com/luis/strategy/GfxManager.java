@@ -18,9 +18,8 @@ public class GfxManager {
 	public static Image imgSwordBG;
 	public static Image imgCloudBG;
 
-	public static Image imgMenuBox;
-	public static Image imgButtonRelease;
-	public static Image imgButtonFocus;
+	public static Image imgButtonMenuRelease;
+	public static Image imgButtonMenuFocus;
 
 	// Game images:
 	public static Image imgGameBG;
@@ -115,17 +114,13 @@ public class GfxManager {
 
 				vImgLogo = Image.createImage("/4away.png");
 
-				imgMenuBox = Image.createImage("/menu_box.png");
-				imgButtonRelease = Image.createImage("/button_release.png");
-				imgButtonFocus = Image.createImage("/button_focus.png");
+				imgButtonMenuRelease = Image.createImage("/button_menu_release.png");
+				imgButtonMenuFocus = Image.createImage("/button_menu_focus.png");
 				
 				imgMainBG = Image.createImage("/main_bg.png");
 				imgSwordBG = Image.createImage("/sword_bg.png");
 				imgCloudBG = Image.createImage("/cloud_bg.png");
 				imgBlackBG = Image.createImage("/black_bg.png");
-
-				imgButtonNextRelease = Image.createImage("/next_release.png");
-				imgButtonNextFocus = Image.createImage("/next_focus.png");
 
 			} catch (IOException ex) {
 				ex.printStackTrace();
@@ -137,6 +132,16 @@ public class GfxManager {
 			break;
 
 		case Define.ST_MENU_MAIN:
+			if(Main.iLastState==Define.ST_GAME_CONFIRMATION_QUIT){
+				try {
+					imgMainBG = Image.createImage("/main_bg.png");
+					imgSwordBG = Image.createImage("/sword_bg.png");
+					imgCloudBG = Image.createImage("/cloud_bg.png");
+					imgBlackBG = Image.createImage("/black_bg.png");
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
+			}
 			break;
 		// Test
 		case Define.ST_MENU_SELECT_GAME:

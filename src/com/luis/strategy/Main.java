@@ -128,33 +128,37 @@ public class Main extends MyCanvas implements Runnable {
 		initGame();
 
 		while (isGameRun) {
-
 			deltaTime = System.currentTimeMillis() - lastTime;
 			lastTime = System.currentTimeMillis();
+			
+			if(orderToChangeState){
+				updateChangeState();
+			}else{
+				switch (state) {
+					case Define.ST_MENU_LOGO:
+					case Define.ST_MENU_ASK_LANGUAGE:
+					case Define.ST_MENU_ASK_SOUND:
+					case Define.ST_MENU_MAIN:
+					case Define.ST_MENU_OPTIONS:
+					case Define.ST_MENU_MORE:
+					case Define.ST_MENU_EXIT:
+					case Define.ST_MENU_HELP:
+					case Define.ST_MENU_ABOUT:
+					case Define.ST_MENU_SELECT_GAME:
+					if (!isLoading) {
+						ModeMenu.update();
+					}
+					break;
 
-			switch (state) {
-			case Define.ST_MENU_LOGO:
-			case Define.ST_MENU_ASK_LANGUAGE:
-			case Define.ST_MENU_ASK_SOUND:
-			case Define.ST_MENU_MAIN:
-			case Define.ST_MENU_OPTIONS:
-			case Define.ST_MENU_MORE:
-			case Define.ST_MENU_EXIT:
-			case Define.ST_MENU_HELP:
-			case Define.ST_MENU_ABOUT:
-			case Define.ST_MENU_SELECT_GAME:
-				if (!isLoading) {
-					ModeMenu.update();
+				case Define.ST_GAME_INIT:
+				case Define.ST_GAME_RUN:
+				case Define.ST_GAME_PAUSE:
+				case Define.ST_GAME_CONFIRMATION_QUIT:
+					if (!isLoading) {
+						ModeGame.update(state);
+					}
+					break;
 				}
-				break;
-
-			case Define.ST_GAME_INIT:
-			case Define.ST_GAME_RUN:
-			case Define.ST_GAME_PAUSE:
-				if (!isLoading) {
-					ModeGame.update(state);
-				}
-				break;
 			}
 			repaint();
 
@@ -208,6 +212,7 @@ public class Main extends MyCanvas implements Runnable {
 		         case Define.ST_GAME_INIT:
 		         case Define.ST_GAME_RUN:
 		         case Define.ST_GAME_PAUSE:
+		         case Define.ST_GAME_CONFIRMATION_QUIT:
 		        	 ModeGame.draw(_g, state);
 					break;
 			}
@@ -376,9 +381,31 @@ public class Main extends MyCanvas implements Runnable {
 		SndManager.flushSndManager();
 	}
 
-	public static boolean isLoading;
-	public static int tripleBufferWait;
+	private static boolean isLoading;
+	private static int tripleBufferWait;
+	private static boolean orderToChangeState;
+	private static int newState;
+	private static boolean isLoadGraphics;
+	
 	public static void changeState(int _iNewState, boolean _isLoadGraphics) {
+		if(!orderToChangeState){
+			tripleBufferWait = 0;
+			orderToChangeState = true;
+			newState = _iNewState;
+			isLoadGraphics = _isLoadGraphics;
+		}
+	}
+	private static void updateChangeState(){
+		if(tripleBufferWait > 3 && orderToChangeState){
+			executeChageState(newState, isLoadGraphics);
+			tripleBufferWait = 0;
+			orderToChangeState = false;
+		}else{
+			tripleBufferWait++;
+		}
+	}
+	private static void executeChageState(int _iNewState, boolean _isLoadGraphics){
+		
 		isLoading = true;
 		
 		UserInput.getInstance().getMultiTouchHandler().resetTouch();
@@ -411,10 +438,9 @@ public class Main extends MyCanvas implements Runnable {
 			ModeGame.init(state);
 		
 		main.stopClock();
-		tripleBufferWait = 0;
 		isLoading = false;
-
 	}
+	
 
 	/*
 	 * @Override public boolean onTouch(View _v, MotionEvent _event) { // switch

@@ -8,8 +8,6 @@ import com.luis.lgameengine.gui.Button;
 import com.luis.lgameengine.implementation.fileio.FileIO;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.graphics.Image;
-import com.luis.lgameengine.implementation.input.MultiTouchHandler;
-import com.luis.lgameengine.implementation.sound.SndManager;
 import com.luis.strategy.constants.Define;
 
 public class ModeMenu {
@@ -27,7 +25,10 @@ public class ModeMenu {
 	public static Image vImgAstheroid;
 	public static Image vImgAstheroid2;
 	
-	private static Button btnStart;
+	private static Button btnCampaign;
+	private static Button btnMultiPlayer;
+	private static Button btnOnLine;
+	private static Button btnPassAndPlay;
 	
 	
 	public static void init(int _iMenuState){
@@ -63,19 +64,31 @@ public class ModeMenu {
 			cloudNearBGY = Define.SIZEY2+Define.SIZEY4;
 			cloudNear2BGY = Define.SIZEY;
 			
-			btnStart = new Button(
-					GfxManager.imgButtonNextRelease, 
-					GfxManager.imgButtonNextFocus, 
-					Define.SIZEX-(int)(GfxManager.imgButtonNextRelease.getWidth()*0.75f), 
-					Define.SIZEY-(int)(GfxManager.imgButtonNextRelease.getHeight()*0.75f),
-					null, 0){
+			btnCampaign = new Button(
+					GfxManager.imgButtonMenuRelease, 
+					GfxManager.imgButtonMenuFocus, 
+					Define.SIZEX-(int)(GfxManager.imgButtonMenuRelease.getWidth()/2)-Define.SIZEY64, 
+					Define.SIZEY-(int)(GfxManager.imgButtonMenuRelease.getHeight()*1.5)-Define.SIZEY64,
+					RscManager.allText[RscManager.TXT_CAMPAING], Font.FONT_MEDIUM){
+				@Override
+				public void onButtonPressDown(){}
+				
+				@Override
+				public void onButtonPressUp(){}
+			};
+			btnMultiPlayer = new Button(
+					GfxManager.imgButtonMenuRelease, 
+					GfxManager.imgButtonMenuFocus, 
+					Define.SIZEX-(int)(GfxManager.imgButtonMenuRelease.getWidth()/2)-Define.SIZEY64, 
+					Define.SIZEY-(int)(GfxManager.imgButtonMenuRelease.getHeight()/2)-Define.SIZEY64,
+					RscManager.allText[RscManager.TXT_MULTI_PLAYER], Font.FONT_MEDIUM){
 				@Override
 				public void onButtonPressDown(){}
 				
 				@Override
 				public void onButtonPressUp(){
 					GameState.getInstance().setLevel(0);
-					Main.changeState(Define.ST_GAME_INIT, true);
+					Main.changeState(Define.ST_MENU_SELECT_GAME, true);
 					reset();
 				}
 			};
@@ -89,6 +102,34 @@ public class ModeMenu {
 			break;
 			
 		case Define. ST_MENU_SELECT_GAME:
+			btnOnLine = new Button(
+					GfxManager.imgButtonMenuRelease, 
+					GfxManager.imgButtonMenuFocus, 
+					Define.SIZEX-(int)(GfxManager.imgButtonMenuRelease.getWidth()/2)-Define.SIZEY64, 
+					Define.SIZEY-(int)(GfxManager.imgButtonMenuRelease.getHeight()/2)-Define.SIZEY64,
+					RscManager.allText[RscManager.TXT_ON_LINE], Font.FONT_MEDIUM){
+				@Override
+				public void onButtonPressDown(){}
+				
+				@Override
+				public void onButtonPressUp(){}
+			};
+			btnPassAndPlay = new Button(
+					GfxManager.imgButtonMenuRelease, 
+					GfxManager.imgButtonMenuFocus, 
+					Define.SIZEX-(int)(GfxManager.imgButtonMenuRelease.getWidth()/2)-Define.SIZEY64, 
+					Define.SIZEY-(int)(GfxManager.imgButtonMenuRelease.getHeight()/2)-Define.SIZEY64,
+					RscManager.allText[RscManager.TXT_PASS_AND_PLAY], Font.FONT_MEDIUM){
+				@Override
+				public void onButtonPressDown(){}
+				
+				@Override
+				public void onButtonPressUp(){
+					GameState.getInstance().setLevel(0);
+					Main.changeState(Define.ST_GAME_INIT, true);
+					reset();
+				}
+			};
 			
 			break;
 		}
@@ -107,7 +148,8 @@ public class ModeMenu {
 		
 		case Define.ST_MENU_MAIN:
 			runMenuBG(Main.getDeltaSec());
-			btnStart.update(UserInput.getInstance().getMultiTouchHandler());
+			btnCampaign.update(UserInput.getInstance().getMultiTouchHandler());
+			btnMultiPlayer.update(UserInput.getInstance().getMultiTouchHandler());
 			break;
 			
 		case Define.ST_MENU_MORE:
@@ -121,10 +163,10 @@ public class ModeMenu {
 			
 		case Define.ST_MENU_EXIT:
         	break;
-        	
-        	
-		case Define.ST_MENU_SELECT_GAME:
-			
+        case Define.ST_MENU_SELECT_GAME:
+        	runMenuBG(Main.getDeltaSec());
+			btnOnLine.update(UserInput.getInstance().getMultiTouchHandler());
+			btnPassAndPlay.update(UserInput.getInstance().getMultiTouchHandler());
 			break;
 		}
 	}
@@ -149,24 +191,14 @@ public class ModeMenu {
 			break;
 		
 		case Define.ST_MENU_MAIN:
-			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-			
-			_g.drawImage(GfxManager.imgMainBG, 0, 0, Graphics.TOP | Graphics.LEFT);
-			_g.drawImage(GfxManager.imgCloudBG, (int)cloudFarBGX, (int)cloudFarBGY, Graphics.VCENTER | Graphics.HCENTER);
-			_g.setImageSize(1.2f, 1.2f);
-			_g.drawImage(GfxManager.imgCloudBG, (int)cloudNearBGX, (int)cloudNearBGY, Graphics.VCENTER | Graphics.HCENTER);
-			_g.setImageSize(1f, 1f);
-			_g.drawImage(GfxManager.imgSwordBG, 0, Define.SIZEY, Graphics.BOTTOM | Graphics.LEFT);
-			_g.setImageSize(1.4f, 1.4f);
-			_g.drawImage(GfxManager.imgCloudBG, (int)cloudNear2BGX, (int)cloudNear2BGY, Graphics.VCENTER | Graphics.HCENTER);
-			_g.setImageSize(1f, 1f);
+			drawMenuBG(_g);
+			btnCampaign.draw(_g, 0, 0);
+			btnMultiPlayer.draw(_g, 0, 0);
 			if(alpha > 0){
 				_g.setAlpha(alpha);
 				_g.drawImage(GfxManager.imgBlackBG, 0, 0, Graphics.TOP | Graphics.LEFT);
 				_g.setAlpha(255);
 			}
-			
-			btnStart.draw(_g, 0, 0);
 			break;
 			
 		case Define.ST_MENU_OPTIONS:
@@ -183,7 +215,9 @@ public class ModeMenu {
 			break;
 			
 		case Define.ST_MENU_SELECT_GAME:
-			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+			drawMenuBG(_g);
+			btnOnLine.draw(_g, 0, 0);
+			btnPassAndPlay.draw(_g, 0, 0);
 			break;
 			
 		case Define.ST_MENU_EXIT:
@@ -261,7 +295,7 @@ public class ModeMenu {
 		case ST_LOGO_3:
 			alpha = 255- (int)(((System.currentTimeMillis() - startTime)*255)/ST_TIME_LOGO_3);
 			if(alpha <= 0){
-				alpha = 255;
+				alpha = 0;
 				Main.changeState(Define.ST_MENU_MAIN, true);
 			}
 			
@@ -296,6 +330,19 @@ public class ModeMenu {
 		cloudFarBGX-=10f*delta;
 		cloudNearBGX-=20f*delta;
 		cloudNear2BGX-=40f*delta;
+	}
+	
+	private static void drawMenuBG(Graphics g){
+		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+		g.drawImage(GfxManager.imgMainBG, 0, 0, Graphics.TOP | Graphics.LEFT);
+		g.drawImage(GfxManager.imgCloudBG, (int)cloudFarBGX, (int)cloudFarBGY, Graphics.VCENTER | Graphics.HCENTER);
+		g.setImageSize(1.2f, 1.2f);
+		g.drawImage(GfxManager.imgCloudBG, (int)cloudNearBGX, (int)cloudNearBGY, Graphics.VCENTER | Graphics.HCENTER);
+		g.setImageSize(1f, 1f);
+		g.drawImage(GfxManager.imgSwordBG, 0, Define.SIZEY, Graphics.BOTTOM | Graphics.LEFT);
+		g.setImageSize(1.4f, 1.4f);
+		g.drawImage(GfxManager.imgCloudBG, (int)cloudNear2BGX, (int)cloudNear2BGY, Graphics.VCENTER | Graphics.HCENTER);
+		g.setImageSize(1f, 1f);
 	}
 	
 	public static void saveSystemData(){

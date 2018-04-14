@@ -54,8 +54,8 @@ public class ModeGame {
 	 */
 	private static Button btnPause;
 	
-	private static int optionSelect;
-	private static MenuBox confirmationQuit;
+	private static MenuBox confirmationQuitBox;
+	private static MenuBox pauseBox;
 	
 	public static void init(int _iState) {
 		
@@ -126,7 +126,7 @@ public class ModeGame {
         		break;
         	}
 			
-			Player player1 = new Player("Genterex", null, 1, 1);
+			Player player1 = new Player("Genterex", new ActionIA(), 1, 1);
 			player1.setGold(10);
 			player1.getKingdomList().add(map.getKingdom(1));
 			player1.getKingdomList().add(map.getKingdom(2));
@@ -218,8 +218,6 @@ public class ModeGame {
 			army.setKingdom(map.getKingdom(8));
 			player.getArmyList().add(army);
 			*/
-			
-			Main.changeState(Define.ST_GAME_RUN, false);
 			break;
 			
 		case Define.ST_GAME_RUN:
@@ -227,31 +225,32 @@ public class ModeGame {
 			break;
 			
 		case Define.ST_GAME_PAUSE:
-			optionSelect = 0;
-			
-			confirmationQuit = new MenuBox(
+			pauseBox = new MenuBox(
 					Define.SIZEX, Define.SIZEY, 
-					GfxManager.imgMenuBox, 
-					GfxManager.imgButtonRelease, GfxManager.imgButtonFocus, 
+					GfxManager.imgBigBox, 
+					GfxManager.imgButtonMenuRelease, GfxManager.imgButtonMenuFocus, 
+					Define.SIZEX2, Define.SIZEY2,
+					null,
+					new String[]{RscManager.allText[RscManager.TXT_CONTINUE], RscManager.allText[RscManager.TXT_LEAVE]},
+					Font.FONT_MEDIUM, Font.FONT_MEDIUM){
+				@Override
+				public void onFinish(){}
+			};
+			pauseBox.start();
+			break;
+		case Define.ST_GAME_CONFIRMATION_QUIT:
+			confirmationQuitBox = new MenuBox(
+					Define.SIZEX, Define.SIZEY, 
+					GfxManager.imgBigBox, 
+					GfxManager.imgButtonMenuRelease, GfxManager.imgButtonMenuFocus, 
 					Define.SIZEX2, Define.SIZEY2,
 					RscManager.allText[RscManager.TXT_RETURN_MENU],
 					new String[]{RscManager.allText[RscManager.TXT_NO], RscManager.allText[RscManager.TXT_YES]},
 					Font.FONT_MEDIUM, Font.FONT_MEDIUM){
 				@Override
-				public void onFinish(){
-					switch(this.getIndexPressed()){
-					case 0:
-						UserInput.getInstance().getMultiTouchHandler().resetTouch();
-						UserInput.getInstance().getKeyboardHandler().resetKeys();
-						optionSelect = 0;
-						break;
-					case 1:
-						Main.changeState(Define.ST_MENU_SELECT_GAME, false);
-					break;
-					}
-				}
+				public void onFinish(){}
 			};
-			
+			confirmationQuitBox.start();
 			break;
 		}
 	}
@@ -259,6 +258,7 @@ public class ModeGame {
 	public static void update(int _iState) {
 		switch(_iState){
 		case Define.ST_GAME_INIT:
+			Main.changeState(Define.ST_GAME_RUN, false);
 			break;
 			
 		case Define.ST_GAME_RUN:
@@ -299,20 +299,20 @@ public class ModeGame {
 			break;
 			
 		case Define.ST_GAME_PAUSE:
-			if(!confirmationQuit.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec())){
-				switch (confirmationQuit.getIndexPressed()) {
-				case 0:
-					Main.changeState(Define.ST_GAME_RUN, true);
-					break;
-				case 1:
-					UserInput.getInstance().getMultiTouchHandler().resetTouch();
-					UserInput.getInstance().getKeyboardHandler().resetKeys();
-					confirmationQuit.start();
-					break;
-				}
-				break;
-				}
+			if(!pauseBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec())){
+				Main.changeState(
+						pauseBox.getIndexPressed()==0?Define.ST_GAME_RUN:Define.ST_GAME_CONFIRMATION_QUIT, 
+						false);
 			}
+			break;
+		case Define.ST_GAME_CONFIRMATION_QUIT:
+			if(!confirmationQuitBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec())){
+				Main.changeState(
+						confirmationQuitBox.getIndexPressed()==0?Define.ST_GAME_PAUSE:Define.ST_MENU_MAIN, 
+						confirmationQuitBox.getIndexPressed()==1);
+			}
+			break;
+		}
 		
 	}
 
@@ -323,23 +323,18 @@ public class ModeGame {
 			break;
 			
 		case Define.ST_GAME_RUN:
-			_g.setColor(0xff000000);
-			_g.setClip(0, 0, Define.SIZEX, Define.SIZEX);
-			_g.fillRect(0, 0, Define.SIZEX, Define.SIZEX);
-			
 			gameManager.draw(_g);
 			btnPause.draw(_g, 0, 0);
-			//gamePad.draw(_g);
-			
 			drawDebugButton(_g);
-			
 			break;
 			
 		case Define.ST_GAME_PAUSE:
-			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-			_g.setColor(Main.COLOR_RED);
-			_g.fillRect(0, 0, Define.SIZEX, Define.SIZEY);
-			confirmationQuit.draw(_g, false);
+			gameManager.draw(_g);
+			pauseBox.draw(_g, false);
+			break;
+		case Define.ST_GAME_CONFIRMATION_QUIT:
+			gameManager.draw(_g);
+			confirmationQuitBox.draw(_g, false);
 			break;
 		}
 	}

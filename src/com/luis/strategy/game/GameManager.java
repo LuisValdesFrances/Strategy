@@ -773,6 +773,12 @@ public class GameManager {
 				GfxManager.imgButtonDebugPauseRelease.getHeight(), 
 				Graphics.VCENTER | Graphics.LEFT);
 		}
+		drawRanking(g);
+		TextManager.drawSimpleText(g, Font.FONT_MEDIUM, getCurrentPlayer().getName(), 
+				0, Define.SIZEY-GfxManager.imgGameHud.getHeight(), Graphics.BOTTOM | Graphics.LEFT);
+		g.drawImage(GfxManager.imgGameHud, 0, Define.SIZEY, Graphics.BOTTOM | Graphics.LEFT);
+		drawGold(g);
+		
 		economyBox.draw(g, true);
 		armyBox.draw(g, true);
 		discardBox.draw(g, false);
@@ -781,16 +787,11 @@ public class GameManager {
 		terrainBox.draw(g, true);
 		endGameBox.draw(g, true);
 		
-		g.drawImage(GfxManager.imgGameHud, 0, Define.SIZEY, Graphics.BOTTOM | Graphics.LEFT);
-		TextManager.drawSimpleText(g, Font.FONT_MEDIUM, getCurrentPlayer().getName(), 
-				0, Define.SIZEY-GfxManager.imgGameHud.getHeight(), Graphics.BOTTOM | Graphics.LEFT);
 		btnCancel.draw(g, 0, 0);
 		btnNext.draw(g, 0, 0);
 		btnFlagHelmet.draw(g);
 		btnFlagCastle.draw(g);
 		btnDebugPause.draw(g, 0, 0);
-		drawGold(g);
-		drawRanking(g);
 		NotificationBox.getInstance().draw(g);
 	}
 	

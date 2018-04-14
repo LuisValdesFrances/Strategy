@@ -12,7 +12,13 @@ public class RscManager {
 	public static final int TXT_ENGLISH = TXT_BLANK+1;
 	public static final int TXT_SPANISH = TXT_ENGLISH+1;
 	public static final int TXT_CATALA = TXT_SPANISH+1;
-	public static final int TXT_PLAY = TXT_CATALA +1;
+	
+	public static final int TXT_CAMPAING = TXT_CATALA +1;
+	public static final int TXT_MULTI_PLAYER = TXT_CAMPAING +1;
+	public static final int TXT_ON_LINE = TXT_MULTI_PLAYER +1;
+	public static final int TXT_PASS_AND_PLAY = TXT_ON_LINE +1;
+	
+	public static final int TXT_PLAY = TXT_PASS_AND_PLAY +1;
 	public static final int TXT_OPTIONS = TXT_PLAY +1;
 	public static final int TXT_INFO=  TXT_OPTIONS+1;
 	public static final int TXT_EXIT=  TXT_INFO+1;
@@ -29,8 +35,8 @@ public class RscManager {
 	public static final int TXT_ABOUT_DESCRIP= TXT_HELP_DESCRIP+1;
 	public static final int TXT_POINTS= TXT_ABOUT_DESCRIP+1;
 	public static final int TXT_RECORD= TXT_POINTS+1;
-	public static final int TXT_RETRY= TXT_RECORD+1;
-	public static final int TXT_LEAVE= TXT_RETRY+1;
+	public static final int TXT_CONTINUE= TXT_RECORD+1;
+	public static final int TXT_LEAVE= TXT_CONTINUE+1;
 	public static final int TXT_NEW_RECORD= TXT_LEAVE+1;
 	public static final int TXT_RETURN_MENU= TXT_NEW_RECORD+1;
 	

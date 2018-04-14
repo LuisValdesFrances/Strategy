@@ -2,6 +2,10 @@
 English
 Español
 Català
+CAMPAING
+MULTIPLAYER
+ON LINE
+PASS AND PLAY
 Play
 Options
 More
@@ -19,7 +23,7 @@ Texto help.
 Desing and programer: Luis Valdes. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx Music and FX: Francisco Hoyos. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx All right reserved.
 Points:
 Record:
-Rertry
+Continue
 Leave
 New record:
 Do you want return to menu?
