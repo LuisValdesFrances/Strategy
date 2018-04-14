@@ -9,8 +9,8 @@ import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
-import com.luis.strategy.game.Player;
 import com.luis.strategy.map.Kingdom;
+import com.luis.strategy.map.Player;
 
 public class TerrainBox extends MenuBox{
 

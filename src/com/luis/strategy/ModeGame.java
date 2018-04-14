@@ -22,9 +22,9 @@ import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.data.DataKingdom;
 import com.luis.strategy.game.ActionIA;
 import com.luis.strategy.game.GameManager;
-import com.luis.strategy.game.Player;
 import com.luis.strategy.map.Kingdom;
 import com.luis.strategy.map.Map;
+import com.luis.strategy.map.Player;
 
 /**
  * 

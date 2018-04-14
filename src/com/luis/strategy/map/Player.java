@@ -1,4 +1,4 @@
-package com.luis.strategy.game;
+package com.luis.strategy.map;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,8 +7,7 @@ import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 import com.luis.strategy.army.Army;
 import com.luis.strategy.army.Troop;
 import com.luis.strategy.constants.GameParams;
-import com.luis.strategy.map.Kingdom;
-import com.luis.strategy.map.Terrain;
+import com.luis.strategy.game.ActionIA;
 
 public class Player {
 	

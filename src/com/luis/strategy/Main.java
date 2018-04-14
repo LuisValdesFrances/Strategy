@@ -40,9 +40,8 @@ public class Main extends MyCanvas implements Runnable {
 		return (int)deltaTime;
 	}
 	public static float getDeltaSec(){
-		//return (float)deltaTime / 1000f;
-		//return 0.03f;//Para debug
-		return Math.min(((float)deltaTime / 1000f), 0.1f);
+		return 0.03f;//Para debug
+		//return Math.min(((float)deltaTime / 1000f), 0.1f);
 	}
 	public static long lastTime;
 

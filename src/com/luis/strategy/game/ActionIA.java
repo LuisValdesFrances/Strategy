@@ -16,6 +16,7 @@ import com.luis.strategy.army.Troop;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.map.Kingdom;
 import com.luis.strategy.map.Map;
+import com.luis.strategy.map.Player;
 import com.luis.strategy.map.Terrain;
 
 public class ActionIA {
@@ -109,7 +110,8 @@ public class ActionIA {
 					//Si sigo teniendo presupuesto, compro:
 					if(troopBudget >= GameParams.TROOP_COST[troop]){
 						String text = player.getName() +  " has been acquired a new troop";
-						NotificationBox.getInstance().addMessage(text);
+						Log.i("Debug", text);
+						//NotificationBox.getInstance().addMessage(text);
 						troopBudget-= GameParams.TROOP_COST[troop];
 						player.setGold(player.getGold()-GameParams.TROOP_COST[troop]);
 						army.getTroopList().add(new Troop(troop, false));
@@ -124,13 +126,10 @@ public class ActionIA {
 			for(Army army: player.getArmyList()){
 				Troop troop = army.getTroopList().get(army.getTroopList().size()-1);
 				if(!troop.isSubject()){
-					Log.i("Debug", "Descartado tropa: " + troop.getId() + " - " + troop.getType());
-					
 					String text = player.getName() +  " descarta tropa: " + RscManager.allText[RscManager.TXT_GAME_INFANTRY + troop.getType()];
-					NotificationBox.getInstance().addMessage(text);
-					
+					Log.i("Debug", text);
+					//NotificationBox.getInstance().addMessage(text);
 					player.setGold(army.getPlayer().getGold() + GameParams.TROOP_COST[troop.getType()]);
-					
 					army.getTroopList().remove(army.getTroopList().size()-1);
 				}
 			}

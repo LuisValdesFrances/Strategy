@@ -12,13 +12,10 @@ import com.luis.strategy.Main;
 import com.luis.strategy.army.Army;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
+import com.luis.strategy.game.GameUtils;
 import com.luis.strategy.map.Terrain;
 
 public class BattleDiceBox {
-	
-	private Terrain terrain;
-	private Army armyAtack;
-	private Army armyDefense;
 	
 	private int state;
 	private int stateCombat = 0;
@@ -102,13 +99,10 @@ public class BattleDiceBox {
 	
 	private boolean autoPlay;
 	public void start(Terrain terrain, Army armyAtack, Army armyDefense, boolean autoPlay){
-		this.terrain = terrain;
-		this.armyAtack = armyAtack;
-		this.armyDefense = armyDefense;
 		this.state = STATE_START;
 		this.modPosY = -((Define.SIZEY-totalHeight)+totalHeight);
 		this.modPosDice = -Define.SIZEX;
-		this.diceDifficult = calculateDifficult();
+		this.diceDifficult = GameUtils.getInstance().calculateDifficult(terrain, armyAtack, armyDefense);
 		this.stateCombat = 0;
 		this.autoPlay = autoPlay;
 		
@@ -150,7 +144,7 @@ public class BattleDiceBox {
 				}else{
 					for(int i = 0; i < resultIcon.length; i++){
 						if(i <= stateCombat){
-							if(resultIcon[i].modSize > 0){
+							if(resultIcon[i].modSize > 0.01f){
 								resultIcon[i].modSize -= (resultIcon[i].modSize*8f)*delta;
 								resultIcon[i].modAlpha = (int) ((resultIcon[i].modSize*255f)/ResultIconPropierties.MAX_SIZE);
 							}
@@ -247,17 +241,7 @@ public class BattleDiceBox {
 	
 	public void onResult(){}
 	
-	public int calculateDifficult(){
-		int value=0;
-		
-		int pAtack = armyAtack.getPower(terrain);
-		int pDefense = armyDefense != null ? armyDefense.getPower(terrain):GameParams.TERRAIN_DEFENSE[terrain.getType()];
-		
-		
-		value = GameParams.ROLL_SYSTEM-((armyAtack.getPower(terrain) * GameParams.ROLL_SYSTEM)/(pAtack+pDefense));
-		
-		return value;
-	}
+	
 	
 	
 	class ResultIconPropierties{

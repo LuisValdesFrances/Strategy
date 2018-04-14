@@ -116,14 +116,6 @@ public class BattleBox extends MenuBox{
 				cancelButton.update(touchHandler);
 			}
 			
-			if(autoPlay){
-				if(cancelButton != null){
-					cancelButton.trigger();
-				}else{
-					btnList.get(0).trigger();
-				}
-			}
-			
 			return super.update(touchHandler, delta);
 		}
 		return true;

@@ -15,10 +15,10 @@ import com.luis.strategy.GfxManager;
 import com.luis.strategy.Main;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
-import com.luis.strategy.game.Player;
 import com.luis.strategy.map.Kingdom;
 import com.luis.strategy.map.Map;
 import com.luis.strategy.map.MapObject;
+import com.luis.strategy.map.Player;
 import com.luis.strategy.map.Terrain;
 
 public class Army extends MapObject{
