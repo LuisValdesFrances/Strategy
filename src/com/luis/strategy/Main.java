@@ -40,8 +40,8 @@ public class Main extends MyCanvas implements Runnable {
 		return (int)deltaTime;
 	}
 	public static float getDeltaSec(){
-		return 0.03f;//Para debug
-		//return Math.min(((float)deltaTime / 1000f), 0.1f);
+		//return 0.03f;//Para debug
+		return Math.min(((float)deltaTime / 1000f), 0.1f);
 	}
 	public static long lastTime;
 
@@ -144,6 +144,7 @@ public class Main extends MyCanvas implements Runnable {
 					case Define.ST_MENU_HELP:
 					case Define.ST_MENU_ABOUT:
 					case Define.ST_MENU_SELECT_GAME:
+					case Define.ST_MENU_SELECT_MAP:
 					if (!isLoading) {
 						ModeMenu.update();
 					}
@@ -206,6 +207,7 @@ public class Main extends MyCanvas implements Runnable {
 		         case Define.ST_MENU_HELP:
 		         case Define.ST_MENU_ABOUT:
 		         case Define.ST_MENU_SELECT_GAME:
+		         case Define.ST_MENU_SELECT_MAP:
 					ModeMenu.draw(_g);
 					break;
 		         case Define.ST_GAME_INIT:
@@ -412,14 +414,16 @@ public class Main extends MyCanvas implements Runnable {
 
 		iLastState = state;
 		state = _iNewState;
-		ModeMenu.optionSelect = 0;
 		///*
-		switch(iLastState){
-			case Define.ST_MENU_MAIN:
-				GfxManager.deleteGameGFX();
-				break;
-			case Define.ST_MENU_SELECT_GAME:
+		switch(state){
+			case Define.ST_GAME_INIT:
 				GfxManager.deleteMenuGFX();
+				break;
+			case Define.ST_MENU_MAIN:
+				if(iLastState == Define.ST_GAME_CONFIRMATION_QUIT){
+					GfxManager.deleteGameGFX();
+				}
+				
 				break;
 		}
 		//*/

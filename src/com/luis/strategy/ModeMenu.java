@@ -5,10 +5,13 @@ import android.util.Log;
 import com.luis.lgameengine.gameutils.Settings;
 import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gui.Button;
+import com.luis.lgameengine.gui.ListBox;
 import com.luis.lgameengine.implementation.fileio.FileIO;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.graphics.Image;
+import com.luis.strategy.GameState.PlayerConf;
 import com.luis.strategy.constants.Define;
+import com.luis.strategy.data.DataKingdom;
 
 public class ModeMenu {
 	
@@ -17,7 +20,6 @@ public class ModeMenu {
 	public static final int NUMBER_OPTS_MAIN_MENU = 4;
 	public static final int NUMBER_OPTS_MORE_MENU = 2;
 	
-	public static int optionSelect;
 	public static int iLanguageSelect;
 	public static int iSoundSelect;
 	
@@ -30,10 +32,11 @@ public class ModeMenu {
 	private static Button btnOnLine;
 	private static Button btnPassAndPlay;
 	
+	private static ListBox mapList;
+	
 	
 	public static void init(int _iMenuState){
 		Log.i("Info", "Init State: "+ _iMenuState);
-		optionSelect = 0;
 		switch (_iMenuState) {
         case Define.ST_MENU_LOGO:
 			iStateLogo = ST_LOGO_1;
@@ -87,7 +90,6 @@ public class ModeMenu {
 				
 				@Override
 				public void onButtonPressUp(){
-					GameState.getInstance().setLevel(0);
 					Main.changeState(Define.ST_MENU_SELECT_GAME, true);
 					reset();
 				}
@@ -125,12 +127,47 @@ public class ModeMenu {
 				
 				@Override
 				public void onButtonPressUp(){
-					GameState.getInstance().setLevel(0);
-					Main.changeState(Define.ST_GAME_INIT, true);
+					Main.changeState(Define.ST_MENU_SELECT_MAP, false);
 					reset();
 				}
 			};
-			
+			break;
+		case Define.ST_MENU_SELECT_MAP:
+			mapList = new ListBox(
+					Define.SIZEX, Define.SIZEY, 
+					null, GfxManager.imgNotificationBox, GfxManager.imgNotificationBox, 
+					Define.SIZEX2, Define.SIZEY2, 
+					"Select map", 
+					new String[]{
+							"OCCITANE (2-Player) Small", 
+							"SIX KINGDOMS (6-Player) Big",
+							"MAP 3 (3-Player) Med",
+							"MAP 4 (3-Player) Med",
+							"MAP 5 (3-Player) Med",
+							"MAP 6 (3-Player) Med",
+							"MAP 7 (3-Player) Med",
+							"MAP 8 (3-Player) Med",
+							"MAP 9 (3-Player) Med",
+							}, 
+					Font.FONT_BIG, Font.FONT_SMALL){
+				
+				@Override
+				public void onFinish(){
+					
+					GameState.getInstance().init(
+							getIndexPressed(), DataKingdom.INIT_MAP_DATA[getIndexPressed()].length);
+					
+					int i = 0;
+					for(PlayerConf pc : GameState.getInstance().getPlayerConfList()){
+						pc.name="Player " + (i+1);
+						pc.flag=i;
+						pc.IA = true;
+						i++;
+					}
+					Main.changeState(Define.ST_GAME_INIT, true);
+				}
+			};
+			mapList.start();
 			break;
 		}
 	}
@@ -167,6 +204,10 @@ public class ModeMenu {
         	runMenuBG(Main.getDeltaSec());
 			btnOnLine.update(UserInput.getInstance().getMultiTouchHandler());
 			btnPassAndPlay.update(UserInput.getInstance().getMultiTouchHandler());
+			break;
+        case Define.ST_MENU_SELECT_MAP:
+        	runMenuBG(Main.getDeltaSec());
+        	mapList.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
 			break;
 		}
 	}
@@ -218,6 +259,10 @@ public class ModeMenu {
 			drawMenuBG(_g);
 			btnOnLine.draw(_g, 0, 0);
 			btnPassAndPlay.draw(_g, 0, 0);
+			break;
+		case Define.ST_MENU_SELECT_MAP:
+			drawMenuBG(_g);
+			mapList.draw(_g, false);
 			break;
 			
 		case Define.ST_MENU_EXIT:

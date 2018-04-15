@@ -36,8 +36,8 @@ public class RscManager {
 	public static final int TXT_POINTS= TXT_ABOUT_DESCRIP+1;
 	public static final int TXT_RECORD= TXT_POINTS+1;
 	public static final int TXT_CONTINUE= TXT_RECORD+1;
-	public static final int TXT_LEAVE= TXT_CONTINUE+1;
-	public static final int TXT_NEW_RECORD= TXT_LEAVE+1;
+	public static final int TXT_QUIT= TXT_CONTINUE+1;
+	public static final int TXT_NEW_RECORD= TXT_QUIT+1;
 	public static final int TXT_RETURN_MENU= TXT_NEW_RECORD+1;
 	
 	public static final int TXT_GAME_PLAIN= TXT_RETURN_MENU+1;

@@ -11,7 +11,17 @@ public class GameState {
 		return gameState;
 	}
 	
-	private int level;
+	private int map;
+	private PlayerConf[] playerConfList; 
+	
+	public void init(int map, int numPlayer){
+		this.map = map;
+		playerConfList = new PlayerConf[numPlayer];
+		for (int i = 0; i < playerConfList.length; i++) {
+			playerConfList[i] = new PlayerConf();
+		}
+		
+	}
 
 	public static GameState getGameState() {
 		return gameState;
@@ -21,13 +31,29 @@ public class GameState {
 		GameState.gameState = gameState;
 	}
 
-	public int getLevel() {
-		return level;
+	public int getMap() {
+		return map;
 	}
 
-	public void setLevel(int level) {
-		this.level = level;
+	public void setMap(int map) {
+		this.map = map;
 	}
+
 	
-	
+	public PlayerConf[] getPlayerConfList() {
+		return playerConfList;
+	}
+
+	public void setPlayerConfList(PlayerConf[] playerConfList) {
+		this.playerConfList = playerConfList;
+	}
+
+
+	public class PlayerConf{
+		
+		public String name; 
+		public int flag; 
+		public boolean IA;
+		
+	}
 }

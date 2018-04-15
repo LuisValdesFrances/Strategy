@@ -24,7 +24,7 @@ Desing and programer: Luis Valdes. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 Points:
 Record:
 Continue
-Leave
+Quit
 New record:
 Do you want return to menu?
 Plain

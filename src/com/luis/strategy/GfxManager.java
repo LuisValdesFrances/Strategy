@@ -90,7 +90,6 @@ public class GfxManager {
 
 	public static Image imgArmyIdle;
 	public static Image imgArmyRun;
-	public static Image imgArmyOff;
 
 	public static List<Image> imgFlagList;
 	public static List<Image> imgFlagSmallList;
@@ -121,6 +120,9 @@ public class GfxManager {
 				imgSwordBG = Image.createImage("/sword_bg.png");
 				imgCloudBG = Image.createImage("/cloud_bg.png");
 				imgBlackBG = Image.createImage("/black_bg.png");
+				
+				imgNotificationBox = Image
+						.createImage("/notification_box.png");
 
 			} catch (IOException ex) {
 				ex.printStackTrace();
@@ -138,6 +140,9 @@ public class GfxManager {
 					imgSwordBG = Image.createImage("/sword_bg.png");
 					imgCloudBG = Image.createImage("/cloud_bg.png");
 					imgBlackBG = Image.createImage("/black_bg.png");
+					
+					imgNotificationBox = Image
+							.createImage("/notification_box.png");
 				} catch (IOException ex) {
 					ex.printStackTrace();
 				}
@@ -150,13 +155,12 @@ public class GfxManager {
 
 		case Define.ST_GAME_INIT:
 			try {
-				switch (GameState.getInstance().getLevel()) {
+				switch (GameState.getInstance().getMap()) {
 				case 0:
-					imgMap = Image.createImage("/crom.png");
-
+					imgMap = Image.createImage("/genterex.png");
 					break;
 				case 1:
-					imgMap = Image.createImage("/genterex.png");
+					imgMap = Image.createImage("/crom.png");
 					break;
 				}
 
@@ -165,11 +169,7 @@ public class GfxManager {
 
 				imgPadWest = Image.createImage("/pad_left.png");
 				imgPadEast = Image.createImage("/pad_right.png");
-				/*
-				 * imgPadNorth = Image.createImage("/pad_up.png"); imgPadSouth =
-				 * Image.createImage("/pad_down.png"); imgPadAux =
-				 * Image.createImage("/pad_aux.png");
-				 */
+				
 				imgTerrainOk = Image.createImage("/terrain_ok.png");
 
 				imgTargetDomain = Image.createImage("/target_domain.png");
@@ -182,7 +182,6 @@ public class GfxManager {
 
 				imgArmyIdle = Image.createImage("/army_idle.png");
 				imgArmyRun = Image.createImage("/army_run.png");
-				imgArmyOff = Image.createImage("/army_off.png");
 
 				imgGameHud = Image.createImage("/game_hud.png");
 				imgChest = Image.createImage("/chest.png");
@@ -224,7 +223,7 @@ public class GfxManager {
 				imgMediumBox = Image.createImage("/medium_box.png");
 				imgSmallBox = Image.createImage("/small_box.png");
 				imgNotificationBox = Image
-						.createImage("/game_notification_box.png");
+						.createImage("/notification_box.png");
 				imgButtonCombatRelease = Image
 						.createImage("/combat_release.png");
 				imgButtonCombatFocus = Image.createImage("/combat_focus.png");
@@ -355,7 +354,6 @@ public class GfxManager {
 
 		imgArmyIdle = null;
 		imgArmyRun = null;
-		imgArmyOff = null;
 
 		imgGameHud = null;
 		imgChest = null;

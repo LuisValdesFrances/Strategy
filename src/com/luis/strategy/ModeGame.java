@@ -20,6 +20,7 @@ import com.luis.strategy.connection.Download;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.data.DataKingdom;
+import com.luis.strategy.data.GameBuild;
 import com.luis.strategy.game.ActionIA;
 import com.luis.strategy.game.GameManager;
 import com.luis.strategy.map.Kingdom;
@@ -68,13 +69,6 @@ public class ModeGame {
 			//Download d = new Download();
 			//d.download("http://172.104.228.65:8080/StrategyServer/json/test?id=2&name=test%20name&surname=test%20surname");
 			
-			switch(GameState.getInstance().getLevel()){
-			case 0:
-				break;
-			case 1:
-				break;
-			}
-			
 			/**
 			 * Game GUI
 			 */
@@ -116,108 +110,22 @@ public class ModeGame {
 					0,//GfxManager.imgMap.getHeight()/2,
 					GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
 			
-			
-			switch(GameState.getInstance().getLevel()){
+			switch(GameState.getInstance().getMap()){
         	case 0:
-        		map.setKingdomList(DataKingdom.getCrom(worldConver, gameCamera, map));
+        		map.setKingdomList(DataKingdom.getGenterex(worldConver, gameCamera, map));
 	            break;
         	case 1:
-        		map.setKingdomList(DataKingdom.getGenterex(worldConver, gameCamera, map));
+        		map.setKingdomList(DataKingdom.getCrom(worldConver, gameCamera, map));
         		break;
         	}
 			
-			Player player1 = new Player("Genterex", new ActionIA(), 1, 1);
-			player1.setGold(10);
-			player1.getKingdomList().add(map.getKingdom(1));
-			player1.getKingdomList().add(map.getKingdom(2));
-			Army army = new Army(worldConver, gameCamera, map, player1, map.getKingdom(1),player1.getFlag(), 
-					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
-			player1.getArmyList().add(army);
-			
-			///*
-			Player player2 = new Player("Quaca", new ActionIA(), 4, 14);
-			player2.setGold(10);
-			player2.getKingdomList().add(map.getKingdom(14));
-			player2.getKingdomList().add(map.getKingdom(15));
-			
-			army = new Army(worldConver, gameCamera, map, player2, map.getKingdom(14),player2.getFlag(), 
-					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
-			player2.getArmyList().add(army);
-			//*/
-			
-			Player player3 = new Player("Lye", new ActionIA(), 3, 19);
-			player3.setGold(10);
-			player3.getKingdomList().add(map.getKingdom(19));
-			player3.getKingdomList().add(map.getKingdom(21));
-			
-			army = new Army(worldConver, gameCamera, map, player3, map.getKingdom(19),player3.getFlag(), 
-					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
-			player3.getArmyList().add(army);
-			
-			
-			Player player4 = new Player("Crom",  new ActionIA(), 2, 25);
-			player4.setGold(10);
-			player4.getKingdomList().add(map.getKingdom(25));
-			player4.getKingdomList().add(map.getKingdom(26));
-			
-			army = new Army(worldConver, gameCamera, map, player4, map.getKingdom(25),player4.getFlag(), 
-					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
-			player4.getArmyList().add(army);
-			
-			Player player5 = new Player("Gapeangue", new ActionIA(), 5, 36);
-			player5.setGold(10);
-			player5.getKingdomList().add(map.getKingdom(36));
-			player5.getKingdomList().add(map.getKingdom(37));
-			
-			army = new Army(worldConver, gameCamera, map, player5, map.getKingdom(36),player5.getFlag(), 
-					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
-			player5.getArmyList().add(army);
-			
-			Player player6 = new Player("Levantia", new ActionIA(), 0, 51);
-			player6.setGold(10);
-			player6.getKingdomList().add(map.getKingdom(51));
-			player6.getKingdomList().add(map.getKingdom(53));
-			
-			army = new Army(worldConver, gameCamera, map, player6, map.getKingdom(51),player6.getFlag(), 
-					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
-			player6.getArmyList().add(army);
-			
-			
-			List<Player> playerList = new ArrayList<Player>();
-			playerList.add(player1);
-			playerList.add(player2);
-			playerList.add(player3);
-			playerList.add(player4);
-			playerList.add(player5);
-			playerList.add(player6);
+			List<Player> playerList = GameBuild.getInstance().build(
+					GameState.getInstance(), map, worldConver, gameCamera);
 			
 			map.setPlayerList(playerList);
 			
 			gameManager = new GameManager(worldConver, gameCamera, map);
 			
-			/*
-			army = new Army();
-			army.setKingdom(map.getKingdom(2));
-			player.getArmyList().add(army);
-			army = new Army();
-			army.setKingdom(map.getKingdom(3));
-			player.getArmyList().add(army);
-			army = new Army();
-			army.setKingdom(map.getKingdom(4));
-			player.getArmyList().add(army);
-			army = new Army();
-			army.setKingdom(map.getKingdom(5));
-			player.getArmyList().add(army);
-			army = new Army();
-			army.setKingdom(map.getKingdom(6));
-			player.getArmyList().add(army);
-			army = new Army();
-			army.setKingdom(map.getKingdom(7));
-			player.getArmyList().add(army);
-			army = new Army();
-			army.setKingdom(map.getKingdom(8));
-			player.getArmyList().add(army);
-			*/
 			break;
 			
 		case Define.ST_GAME_RUN:
@@ -231,7 +139,11 @@ public class ModeGame {
 					GfxManager.imgButtonMenuRelease, GfxManager.imgButtonMenuFocus, 
 					Define.SIZEX2, Define.SIZEY2,
 					null,
-					new String[]{RscManager.allText[RscManager.TXT_CONTINUE], RscManager.allText[RscManager.TXT_LEAVE]},
+					new String[]{
+							RscManager.allText[RscManager.TXT_CONTINUE], 
+							RscManager.allText[RscManager.TXT_QUIT],
+							RscManager.allText[RscManager.TXT_OPTIONS]
+					},
 					Font.FONT_MEDIUM, Font.FONT_MEDIUM){
 				@Override
 				public void onFinish(){}
@@ -330,11 +242,11 @@ public class ModeGame {
 			
 		case Define.ST_GAME_PAUSE:
 			gameManager.draw(_g);
-			pauseBox.draw(_g, false);
+			pauseBox.draw(_g, true);
 			break;
 		case Define.ST_GAME_CONFIRMATION_QUIT:
 			gameManager.draw(_g);
-			confirmationQuitBox.draw(_g, false);
+			confirmationQuitBox.draw(_g, true);
 			break;
 		}
 	}
