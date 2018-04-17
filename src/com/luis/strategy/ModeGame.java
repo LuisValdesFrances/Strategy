@@ -93,13 +93,18 @@ public class ModeGame {
 			
 			gameFrame = 0;
 			
+			int mapWidth = GfxManager.imgMapList.get(0).getWidth()*
+					DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][0];
+			int mapHeight = GfxManager.imgMapList.get(0).getHeight()*
+					DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][1];
+			
 			worldConver = new WorldConver(
 					Define.SIZEX, Define.SIZEY,
 					0,//GfxManager.imgGameHud.getHeight()*2, 
 					GfxManager.imgGameHud.getHeight(),
 					0,//GfxManager.imgGameHud.getHeight()*2, 
 					0,//GfxManager.imgGameHud.getHeight(),
-					GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
+					mapWidth, mapHeight);
 			
 			gameCamera = new GameCamera(worldConver, 0, 0, 
 					GamePerformance.getInstance().getFrameMult(Main.targetFPS));
@@ -108,7 +113,10 @@ public class ModeGame {
 					worldConver, gameCamera, 
 					0,//GfxManager.imgMap.getWidth()/2, 
 					0,//GfxManager.imgMap.getHeight()/2,
-					GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
+					mapWidth, mapHeight,
+					DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][0],
+					DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][1]
+					);
 			
 			switch(GameState.getInstance().getMap()){
         	case 0:

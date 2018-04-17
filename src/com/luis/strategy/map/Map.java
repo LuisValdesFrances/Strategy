@@ -21,13 +21,16 @@ public class Map extends MapObject{
 	private int playerIndex;
 	private int turnCount;
 	
+	private int numberPartsW;
+	private int numberPartsH;
+	
 	public Map(
-			WorldConver worldConver, GameCamera gameCamera, int x, int y, int w, int h) {
+			WorldConver worldConver, GameCamera gameCamera, int x, int y, int w, int h,
+			int numberPartsW, int numberPartsH) {
 		super(worldConver, gameCamera, null, x, y, w, h, x, y, w, h);
-		
 		this.map = this;
-		this.x = x;
-		this.y = y;
+		this.numberPartsW = numberPartsW;
+		this.numberPartsH = numberPartsH;
 	}
 	
 	public void update(MultiTouchHandler multiTouchHandler, float delta){
@@ -64,12 +67,21 @@ public class Map extends MapObject{
 	private float alpha = 255;
 	public void drawMap(Graphics g, List<Player> playerList){
 		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-		g.drawImage(GfxManager.imgMap, 
-				worldConver.getConversionDrawX(gameCamera.getPosX(), x),
-				worldConver.getConversionDrawY(gameCamera.getPosY(), y),
-				Graphics.TOP | Graphics.LEFT
-				);
-		
+		int pW = getWidth()/numberPartsW;
+		int pH = getHeight()/numberPartsH;
+		{
+		int i = 0;
+		for(int y = 0; y < numberPartsH; y++){
+			for(int x = 0; x < numberPartsW; x++){
+				g.drawImage(GfxManager.imgMapList.get(i),
+						worldConver.getConversionDrawX(gameCamera.getPosX(), getX())+x*pW,
+						worldConver.getConversionDrawY(gameCamera.getPosY(), getY())+y*pH,
+						Graphics.TOP | Graphics.LEFT
+						);
+				i++;
+			}
+		}
+		}
 		for(Kingdom k : kingdomList){
 			for(int i = 0; i < k.getTerrainList().size(); i++){
 				Image img = null;

@@ -8,7 +8,6 @@ import android.util.Log;
 import com.luis.lgameengine.gameutils.gameworld.GameCamera;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.gui.NotificationBox;
-import com.luis.strategy.GfxManager;
 import com.luis.strategy.Main;
 import com.luis.strategy.RscManager;
 import com.luis.strategy.army.Army;
@@ -92,7 +91,7 @@ public class ActionIA {
 								player,
 								k,
 								player.getFlag(), 
-								map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
+								map.getX(), map.getY(), map.getWidth(), map.getHeight());
 						army.setState(Army.STATE_OFF);
 						player.getArmyList().add(army);
 					}

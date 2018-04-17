@@ -71,7 +71,7 @@ public class GfxManager {
 	public static Image imgButtonFlagCastleRelease;
 	public static Image imgButtonFlagCastleFocus;
 
-	public static Image imgMap;
+	public static List<Image> imgMapList;
 	public static Image imgTerrainOk;
 
 	public static Image imgTargetDomain;
@@ -155,12 +155,16 @@ public class GfxManager {
 
 		case Define.ST_GAME_INIT:
 			try {
+				imgMapList = new ArrayList<Image>();
 				switch (GameState.getInstance().getMap()) {
 				case 0:
-					imgMap = Image.createImage("/genterex.png");
+					imgMapList.add(Image.createImage("/genterex.png"));
 					break;
 				case 1:
-					imgMap = Image.createImage("/crom.png");
+					imgMapList.add(Image.createImage("/crom_1.png"));
+					imgMapList.add(Image.createImage("/crom_2.png"));
+					imgMapList.add(Image.createImage("/crom_3.png"));
+					imgMapList.add(Image.createImage("/crom_4.png"));
 					break;
 				}
 
@@ -335,7 +339,7 @@ public class GfxManager {
 
 	public static void deleteGameGFX() {
 
-		imgMap = null;
+		imgMapList = null;
 
 		imgTextBG = null;
 		imgBlackBG = null;

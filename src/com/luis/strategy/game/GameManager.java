@@ -229,7 +229,7 @@ public class GameManager {
 						getCurrentPlayer(),
 						getKingdom(),
 						getCurrentPlayer().getFlag(), 
-						map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
+						map.getX(), map.getY(), map.getWidth(), map.getHeight());
 				army.setState(Army.STATE_OFF);
 				getCurrentPlayer().getArmyList().add(army);
 				cancel();

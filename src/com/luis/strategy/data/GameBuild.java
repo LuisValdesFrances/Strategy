@@ -6,7 +6,6 @@ import java.util.List;
 import com.luis.lgameengine.gameutils.gameworld.GameCamera;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.strategy.GameState;
-import com.luis.strategy.GfxManager;
 import com.luis.strategy.army.Army;
 import com.luis.strategy.game.ActionIA;
 import com.luis.strategy.map.Map;
@@ -46,7 +45,7 @@ public class GameBuild {
 			
 			Army army = new Army(worldConver, gameCamera, 
 					map, player, map.getKingdom(k1), player.getFlag(), 
-					map.getX(), map.getY(), GfxManager.imgMap.getWidth(), GfxManager.imgMap.getHeight());
+					map.getX(), map.getY(), map.getWidth(), map.getHeight());
 			player.getArmyList().add(army);
 			
 			playerList.add(player);
