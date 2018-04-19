@@ -420,7 +420,7 @@ public class Main extends MyCanvas implements Runnable {
 				GfxManager.deleteMenuGFX();
 				break;
 			case Define.ST_MENU_MAIN:
-				if(iLastState == Define.ST_GAME_CONFIRMATION_QUIT){
+				if(iLastState >= Define.ST_GAME_INIT ){
 					GfxManager.deleteGameGFX();
 				}
 				

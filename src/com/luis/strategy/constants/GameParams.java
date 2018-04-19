@@ -20,9 +20,6 @@ public class GameParams {
 	//Ganancias reportadas por el territorio
 	public static final int[] TERRAIN_TAX =			new int[]{5, 3, 1, 2, 4, 8, 1};
 	
-	
-	
-	
 	//Id tropa
 	public static final int INFANTRY = 0;
 	public static final int KNIGHT = 1;

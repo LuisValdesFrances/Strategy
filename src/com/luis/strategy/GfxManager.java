@@ -134,7 +134,7 @@ public class GfxManager {
 			break;
 
 		case Define.ST_MENU_MAIN:
-			if(Main.iLastState==Define.ST_GAME_CONFIRMATION_QUIT){
+			if(Main.iLastState >= Define.ST_GAME_INIT){
 				try {
 					imgMainBG = Image.createImage("/main_bg.png");
 					imgSwordBG = Image.createImage("/sword_bg.png");
@@ -161,6 +161,7 @@ public class GfxManager {
 					imgMapList.add(Image.createImage("/genterex.png"));
 					break;
 				case 1:
+				case 2:
 					imgMapList.add(Image.createImage("/crom_1.png"));
 					imgMapList.add(Image.createImage("/crom_2.png"));
 					imgMapList.add(Image.createImage("/crom_3.png"));

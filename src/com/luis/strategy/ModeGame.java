@@ -1,11 +1,9 @@
 package com.luis.strategy;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.luis.lgameengine.gui.Button;
 import com.luis.lgameengine.gui.MenuBox;
-import com.luis.lgameengine.gui.MenuManager;
 import com.luis.lgameengine.gameutils.GamePerformance;
 import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gameutils.gameworld.GameCamera;
@@ -13,17 +11,11 @@ import com.luis.lgameengine.gameutils.gameworld.GfxEffects;
 import com.luis.lgameengine.gameutils.gameworld.ParticleManager;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.implementation.graphics.Graphics;
-import com.luis.lgameengine.implementation.graphics.Image;
-import com.luis.strategy.army.Army;
-import com.luis.strategy.army.Troop;
 import com.luis.strategy.connection.Download;
 import com.luis.strategy.constants.Define;
-import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.data.DataKingdom;
 import com.luis.strategy.data.GameBuild;
-import com.luis.strategy.game.ActionIA;
 import com.luis.strategy.game.GameManager;
-import com.luis.strategy.map.Kingdom;
 import com.luis.strategy.map.Map;
 import com.luis.strategy.map.Player;
 
@@ -123,6 +115,7 @@ public class ModeGame {
         		map.setKingdomList(DataKingdom.getGenterex(worldConver, gameCamera, map));
 	            break;
         	case 1:
+        	case 2:
         		map.setKingdomList(DataKingdom.getCrom(worldConver, gameCamera, map));
         		break;
         	}

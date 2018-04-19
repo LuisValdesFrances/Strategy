@@ -141,7 +141,7 @@ public class ModeMenu {
 					new String[]{
 							"OCCITANE (2-Player) Small", 
 							"SIX KINGDOMS (6-Player) Big",
-							"MAP 3 (3-Player) Med",
+							"SIX KINGDOMS IA (6-Player) Big",
 							"MAP 4 (3-Player) Med",
 							"MAP 5 (3-Player) Med",
 							"MAP 6 (3-Player) Med",
@@ -161,7 +161,7 @@ public class ModeMenu {
 					for(PlayerConf pc : GameState.getInstance().getPlayerConfList()){
 						pc.name="Player " + (i+1);
 						pc.flag=i;
-						pc.IA = true;
+						pc.IA = i!=0 || getIndexPressed()==2;
 						i++;
 					}
 					Main.changeState(Define.ST_GAME_INIT, true);

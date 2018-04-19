@@ -39,6 +39,7 @@ public class GameBuild {
 					gameState.getPlayerConfList()[i].IA?new ActionIA():null, 
 					gameState.getPlayerConfList()[i].flag, 
 					k1);
+			
 			player.setGold(10);
 			player.getKingdomList().add(map.getKingdom(k1));
 			player.getKingdomList().add(map.getKingdom(k2));

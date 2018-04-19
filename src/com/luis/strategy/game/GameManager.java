@@ -5,19 +5,19 @@ import java.util.List;
 
 import com.luis.army.gui.ArmyBox;
 import com.luis.army.gui.BattleBox;
-import com.luis.army.gui.TerrainBox;
 import com.luis.army.gui.FlagButton;
 import com.luis.army.gui.SimpleBox;
+import com.luis.army.gui.TerrainBox;
 import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gameutils.fonts.TextManager;
 import com.luis.lgameengine.gameutils.gameworld.GameCamera;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
-import com.luis.lgameengine.implementation.graphics.Graphics;
-import com.luis.lgameengine.implementation.input.MultiTouchHandler;
-import com.luis.lgameengine.implementation.input.TouchData;
 import com.luis.lgameengine.gui.Button;
 import com.luis.lgameengine.gui.MenuElement;
 import com.luis.lgameengine.gui.NotificationBox;
+import com.luis.lgameengine.implementation.graphics.Graphics;
+import com.luis.lgameengine.implementation.input.MultiTouchHandler;
+import com.luis.lgameengine.implementation.input.TouchData;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.Main;
 import com.luis.strategy.ModeGame;
@@ -32,6 +32,8 @@ import com.luis.strategy.map.Map;
 import com.luis.strategy.map.Player;
 import com.luis.strategy.map.Terrain;
 
+
+
 public class GameManager {
 	
 	//
@@ -45,6 +47,9 @@ public class GameManager {
 	public static Button btnDebugPause;
 	private static boolean isDebugPaused;
 	
+	private static float IAWait = 0.5f;
+	private static float IAWaitCount;
+	
 	//Pad
 	private int lastTouchX;
 	private int lastTouchY;
@@ -56,8 +61,6 @@ public class GameManager {
 	
 	private Map map;
 	
-	//private Army activeArmy;
-	
 	private int state;
 	private int lastState;
 	public static final int STATE_INCOME = 0;
@@ -66,7 +69,8 @@ public class GameManager {
 	public static final int STATE_ACTION = 3;
 	public static final int STATE_END = 4;
 	public static final int STATE_FINISH = 5;
-	public static final int STATE_DEBUG = 6;
+	public static final int STATE_IA_WAIT = 6;
+	public static final int STATE_DEBUG = 7;
 	
 	
 	//SUB-STATE ACTION
@@ -265,14 +269,10 @@ public class GameManager {
 		resultBox = new SimpleBox(GfxManager.imgSmallBox, true){
 			@Override
 			public void onFinish(){
-				if(isFinishGame()){
-					changeState(STATE_FINISH);
+				if(startConquest){
+					changeSubState(SUB_STATE_ACTION_CONQUEST);
 				}else{
-					if(startConquest){
-						changeSubState(SUB_STATE_ACTION_CONQUEST);
-					}else{
-						startEscape();
-					}
+					startEscape();
 				}
 			}
 		};
@@ -293,7 +293,7 @@ public class GameManager {
 			@Override
 			public void onFinish() {
 				super.onFinish();
-				Main.changeState(Define.ST_MENU_SELECT_GAME, false);
+				Main.changeState(Define.ST_MENU_MAIN, false);
 			}
 		};
 		discardBox = new SimpleBox(GfxManager.imgNotificationBox, false){
@@ -348,7 +348,6 @@ public class GameManager {
 					}
 				}
 			}
-			
 		break;
 		
 		case STATE_ACTION:
@@ -664,9 +663,17 @@ public class GameManager {
 			}
 		break;
 		
+		
 		case STATE_FINISH:
 			if(!endGameBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
 				
+			}
+			break;
+		case STATE_IA_WAIT:
+			if(IAWaitCount < IAWait){
+				IAWaitCount+= delta;
+			}else{
+				changeState(STATE_END);
 			}
 			break;
 		case STATE_DEBUG:
@@ -998,6 +1005,7 @@ public class GameManager {
 					getCurrentPlayer().getName());
 			cameraTargetX = getCurrentPlayer().getCapital().getAbsoluteX();
 			cameraTargetY = getCurrentPlayer().getCapital().getAbsoluteY();
+			IAWaitCount = 0;
 			break;
 		case STATE_ECONOMY:
 			
@@ -1008,7 +1016,7 @@ public class GameManager {
 			
 			//Calculo de ganancias:
 			int tax = getCurrentPlayer().getTaxes();
-			//Calculo de salarios:
+			//Calculo de salarios
 			int salary = getCurrentPlayer().getCost(false);
 			
 			getCurrentPlayer().setGold(getCurrentPlayer().getGold()+tax-salary);
@@ -1039,14 +1047,17 @@ public class GameManager {
 			if(isDebugPaused){
 				changeState(STATE_DEBUG);
 			}else{
-				map.setTurnCount(map.getTurnCount()+1);
-				do{
-					map.setPlayerIndex((map.getPlayerIndex()+1)%map.getPlayerList().size());
+				if(isFinishGame()){
+					changeState(STATE_FINISH);
+				}else{
+					map.setTurnCount(map.getTurnCount()+1);
+					do{
+						map.setPlayerIndex((map.getPlayerIndex()+1)%map.getPlayerList().size());
+					}
+					while(getCurrentPlayer().getCapital() == null);
+					changeState(STATE_INCOME);
 				}
-				while(getCurrentPlayer().getCapital() == null);
-				changeState(STATE_INCOME);
 			}
-			
 			break;
 		case STATE_FINISH:
 			endGameBox.start(
@@ -1093,11 +1104,13 @@ public class GameManager {
 					getDefeatArmy().setDefeat(false);
 				}
 				if(getCurrentPlayer().getActionIA() != null){
+					
 					//Management
 					getCurrentPlayer().getActionIA().management(worldConver, gameCamera, map, map.getPlayerList());
 					
 					//Activo los ejercitos uno a uno
 					Army iaArmy = getCurrentPlayer().getActionIA().getActiveArmy(map.getPlayerList());
+					
 					if(iaArmy != null){
 						setSelectedArmy(iaArmy);
 						
@@ -1106,9 +1119,10 @@ public class GameManager {
 						cameraTargetY = getSelectedArmy().getAbsoluteY();
 						setDataTarget(getSelectedArmy());
 						changeSubState(SUB_STATE_ACTION_ARMY_SELECT);
+					//Cuando no me quedan mas ejercitos, cambio de estado
 					}else{
 						if(isAutoPlay()){
-							changeState(STATE_END);
+							changeState(STATE_IA_WAIT);
 						}
 					}
 				}
@@ -1605,14 +1619,10 @@ public class GameManager {
 			resultBox.start(textH, textB);
 			changeSubState(SUB_STATE_ACTION_RESULT);
 		}else{
-			if(isFinishGame()){
-				changeState(STATE_FINISH);
+			if(startConquest){
+				changeSubState(SUB_STATE_ACTION_CONQUEST);
 			}else{
-				if(startConquest){
-					changeSubState(SUB_STATE_ACTION_CONQUEST);
-				}else{
-					startEscape();
-				}
+				startEscape();
 			}
 		}
 	}
@@ -1663,6 +1673,5 @@ public class GameManager {
 	private Player getCurrentPlayer() {
 		return map.getPlayerList().get(map.getPlayerIndex());
 	}
-	
-	
+		
 }
