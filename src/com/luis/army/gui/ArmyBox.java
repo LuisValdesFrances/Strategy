@@ -11,10 +11,10 @@ import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 import com.luis.lgameengine.gui.Button;
 import com.luis.lgameengine.gui.MenuBox;
 import com.luis.strategy.GfxManager;
-import com.luis.strategy.army.Army;
-import com.luis.strategy.army.Troop;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
+import com.luis.strategy.map.Army;
+import com.luis.strategy.map.Troop;
 
 
 public class ArmyBox extends MenuBox{
@@ -164,9 +164,7 @@ public class ArmyBox extends MenuBox{
 						if(deleteButtonList.get(i).update(touchHandler)){
 							Log.i("Debug", "Descartado tropa: " + army.getTroopList().get(i).getId() + " - " + army.getTroopList().get(i).getType());
 							army.getPlayer().setGold(army.getPlayer().getGold() + 
-									(discardMode?
-											GameParams.TROOP_COST[army.getTroopList().get(i).getType()]:
-											GameParams.TROOP_COST[army.getTroopList().get(i).getType()]/2));
+									(GameParams.TROOP_COST[army.getTroopList().get(i).getType()]/2));
 							army.getTroopList().remove(army.getTroopList().get(i));
 							check();
 							break;

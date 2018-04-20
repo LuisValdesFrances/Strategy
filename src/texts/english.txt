@@ -27,6 +27,7 @@ Continue
 Quit
 New record:
 Do you want return to menu?
+TURN:
 Plain
 Forest
 Montain

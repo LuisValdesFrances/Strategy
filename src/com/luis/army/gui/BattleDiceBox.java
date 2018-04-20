@@ -9,10 +9,10 @@ import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.Main;
-import com.luis.strategy.army.Army;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.game.GameUtils;
+import com.luis.strategy.map.Army;
 import com.luis.strategy.map.Terrain;
 
 public class BattleDiceBox {

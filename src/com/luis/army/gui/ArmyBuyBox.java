@@ -12,9 +12,9 @@ import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.RscManager;
-import com.luis.strategy.army.Army;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
+import com.luis.strategy.map.Army;
 
 public class ArmyBuyBox {
 	

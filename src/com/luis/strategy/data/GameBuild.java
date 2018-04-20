@@ -6,8 +6,8 @@ import java.util.List;
 import com.luis.lgameengine.gameutils.gameworld.GameCamera;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.strategy.GameState;
-import com.luis.strategy.army.Army;
 import com.luis.strategy.game.ActionIA;
+import com.luis.strategy.map.Army;
 import com.luis.strategy.map.Map;
 import com.luis.strategy.map.Player;
 

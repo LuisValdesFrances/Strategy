@@ -40,7 +40,8 @@ public class RscManager {
 	public static final int TXT_NEW_RECORD= TXT_QUIT+1;
 	public static final int TXT_RETURN_MENU= TXT_NEW_RECORD+1;
 	
-	public static final int TXT_GAME_PLAIN= TXT_RETURN_MENU+1;
+	public static final int TXT_GAME_TURN= TXT_RETURN_MENU+1;
+	public static final int TXT_GAME_PLAIN= TXT_GAME_TURN+1;
 	public static final int TXT_GAME_FOREST= TXT_GAME_PLAIN+1;
 	public static final int TXT_GAME_MONTAIN= TXT_GAME_FOREST+1;
 	public static final int TXT_GAME_SMALL_CITY= TXT_GAME_MONTAIN+1;

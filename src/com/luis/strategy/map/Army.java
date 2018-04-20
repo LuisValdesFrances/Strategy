@@ -1,9 +1,7 @@
-package com.luis.strategy.army;
+package com.luis.strategy.map;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import android.util.Log;
 
 import com.luis.lgameengine.gameutils.gameworld.GameCamera;
 import com.luis.lgameengine.gameutils.gameworld.Math2D;
@@ -15,11 +13,6 @@ import com.luis.strategy.GfxManager;
 import com.luis.strategy.Main;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
-import com.luis.strategy.map.Kingdom;
-import com.luis.strategy.map.Map;
-import com.luis.strategy.map.MapObject;
-import com.luis.strategy.map.Player;
-import com.luis.strategy.map.Terrain;
 
 public class Army extends MapObject{
 	
@@ -36,13 +29,15 @@ public class Army extends MapObject{
 	private int state;
 	public static final int STATE_ON = 0;
 	public static final int STATE_MOVE = 1;
-	public static final int STATE_OFF = 2;
+	public static final int STATE_ATACK = 2;
+	public static final int STATE_OFF = 3;
 	
 	
 	private boolean flip;
 	public int anim;
-	public static final int ANIN_IDLE=0;
-	public static final int ANIN_MOVE=1;
+	public static final int ANIN_IDLE = 0;
+	public static final int ANIN_MOVE = 1;
+	public static final int ANIN_ATACK = 2;
 	
 	private static final float SPEED = 10f;
 	
@@ -73,6 +68,7 @@ public class Army extends MapObject{
 		spriteList = new ArrayList<SpriteImage>();
 		spriteList.add(new SpriteImage(GfxManager.imgArmyIdle.getWidth(), GfxManager.imgArmyIdle.getHeight(), 0.10f, 7));	
 		spriteList.add(new SpriteImage(GfxManager.imgArmyRun.getWidth(), GfxManager.imgArmyRun.getHeight(), 0.12f, 8));
+		spriteList.add(new SpriteImage(GfxManager.imgArmyAtack.getWidth(), GfxManager.imgArmyRun.getHeight(), 0.09f, 7));
 		
 		if(getPlayer().getActionIA() != null){
 			iaDecision = new IADecision();
@@ -120,6 +116,11 @@ public class Army extends MapObject{
 			setX(getX()+speedX);
 			setY(getY()-speedY);
 			break;
+		case STATE_ATACK:
+			if(spriteList.get(anim).isEndAnimation()){
+				changeState(STATE_OFF);
+			}
+			break;
 		}
 	}
 	
@@ -146,7 +147,7 @@ public class Army extends MapObject{
 		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 		
 		float flagX;
-		if(state != STATE_MOVE){
+		if(state != STATE_MOVE && state != STATE_ATACK){
 			flagX = (float) (getAbsoluteX()
 				-GfxManager.imgFlagSmallList.get(flag).getWidth()*0.75);
 		}else{
@@ -189,6 +190,12 @@ public class Army extends MapObject{
 					worldConver.getConversionDrawY(gameCamera.getPosY(), getAbsoluteY()),
 					flip, Graphics.VCENTER | Graphics.HCENTER);
 			break;
+		case ANIN_ATACK:
+			spriteList.get(anim).drawFrame(g, GfxManager.imgArmyAtack,
+					worldConver.getConversionDrawX(gameCamera.getPosX(), getAbsoluteX()),
+					worldConver.getConversionDrawY(gameCamera.getPosY(), getAbsoluteY()),
+					flip, Graphics.VCENTER | Graphics.HCENTER);
+			break;
 		}
 		g.setAlpha(255);
 		/*
@@ -211,13 +218,16 @@ public class Army extends MapObject{
 		case STATE_MOVE: 
 			anim = ANIN_MOVE;
 			spriteList.get(anim).resetAnimation(0);
-			
 			flip = lastKingdom.getAbsoluteX() > kingdom.getAbsoluteX(); 
+			break;
+		case STATE_ATACK: 
+			anim = ANIN_ATACK;
+			spriteList.get(anim).resetAnimation(0);
 			break;
 		case STATE_OFF:
 			anim = ANIN_IDLE;
 			spriteList.get(anim).resetAnimation(0);
-			flip = false;
+			flip = lastKingdom.getAbsoluteX() > kingdom.getAbsoluteX();
 			break;
 		}
 		state = newState;

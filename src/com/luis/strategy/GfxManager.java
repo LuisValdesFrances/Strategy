@@ -90,6 +90,7 @@ public class GfxManager {
 
 	public static Image imgArmyIdle;
 	public static Image imgArmyRun;
+	public static Image imgArmyAtack;
 
 	public static List<Image> imgFlagList;
 	public static List<Image> imgFlagSmallList;
@@ -187,6 +188,7 @@ public class GfxManager {
 
 				imgArmyIdle = Image.createImage("/army_idle.png");
 				imgArmyRun = Image.createImage("/army_run.png");
+				imgArmyAtack = Image.createImage("/army_atack.png");
 
 				imgGameHud = Image.createImage("/game_hud.png");
 				imgChest = Image.createImage("/chest.png");

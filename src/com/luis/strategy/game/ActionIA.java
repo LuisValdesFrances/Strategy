@@ -10,13 +10,13 @@ import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.gui.NotificationBox;
 import com.luis.strategy.Main;
 import com.luis.strategy.RscManager;
-import com.luis.strategy.army.Army;
-import com.luis.strategy.army.Troop;
 import com.luis.strategy.constants.GameParams;
+import com.luis.strategy.map.Army;
 import com.luis.strategy.map.Kingdom;
 import com.luis.strategy.map.Map;
 import com.luis.strategy.map.Player;
 import com.luis.strategy.map.Terrain;
+import com.luis.strategy.map.Troop;
 
 public class ActionIA {
 	
@@ -35,7 +35,7 @@ public class ActionIA {
 			Log.i("Debug", defenser.getPlayer().getName() + " tiene un ejercito superior por lo que COMBATE batalla");
 			return false;
 		}else{
-			boolean scape = Main.getRandom(0, 100)>=50;
+			boolean scape = Main.getRandom(0, 100)>=75;
 			
 			if(scape){
 				Log.i("Debug", defenser.getPlayer().getName() + " tiene un ejercito inferior por lo que HUYE batalla");

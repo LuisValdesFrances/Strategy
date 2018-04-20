@@ -1,7 +1,7 @@
 package com.luis.strategy.game;
 
-import com.luis.strategy.army.Army;
 import com.luis.strategy.constants.GameParams;
+import com.luis.strategy.map.Army;
 import com.luis.strategy.map.Terrain;
 
 public class GameUtils {

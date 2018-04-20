@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.luis.lgameengine.implementation.input.MultiTouchHandler;
-import com.luis.strategy.army.Army;
-import com.luis.strategy.army.Troop;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.game.ActionIA;
 
@@ -101,7 +99,8 @@ public class Player {
 		for(Army army : getArmyList()){
 			for(Troop troop : army.getTroopList()){
 				if(!troop.isSubject() || includeSubject){
-					salaries += GameParams.TROOP_COST[troop.getType()];
+					//Los salarios de las tropas corresponden a la mitad de su coste
+					salaries += GameParams.TROOP_COST[troop.getType()]/2;
 				}
 			}
 		}

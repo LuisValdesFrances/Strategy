@@ -1,4 +1,4 @@
-package com.luis.strategy.army;
+package com.luis.strategy.map;
 
 public class Troop {
 	
