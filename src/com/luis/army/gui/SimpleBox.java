@@ -22,12 +22,12 @@ public class SimpleBox extends MenuBox{
 		
 		if(includeButton)
 			btnList.add(new Button(
-				GfxManager.imgButtonOkRelease, 
-				GfxManager.imgButtonOkFocus, 
-				screenWidth/2, 
-				screenHeight/2 + GfxManager.imgSmallBox.getHeight()/2, 
-				null, 
-				-1){});
+					GfxManager.imgButtonOkRelease, 
+					GfxManager.imgButtonOkFocus, 
+					screenWidth/2, 
+					screenHeight/2 + GfxManager.imgSmallBox.getHeight()/2, 
+					null, 
+					-1){});
 		
 		if(includeCancelButton)
 			btnList.add(new Button(
