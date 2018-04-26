@@ -271,7 +271,7 @@ public class GameManager {
 			}
 		};
 		
-		resultBox = new SimpleBox(GfxManager.imgSmallBox, true){
+		resultBox = new SimpleBox(GfxManager.imgSmallBox, true, false){
 			@Override
 			public void onFinish(){
 				if(startConquest){
@@ -282,7 +282,7 @@ public class GameManager {
 			}
 		};
 		
-		economyBox = new SimpleBox(GfxManager.imgSmallBox, true){
+		economyBox = new SimpleBox(GfxManager.imgSmallBox, true, false){
 			@Override
 			public void onFinish(){
 				//Compruebo si estoy en saldo negativo
@@ -294,14 +294,14 @@ public class GameManager {
 			}
 		};
 		
-		endGameBox = new SimpleBox(GfxManager.imgSmallBox, true){
+		endGameBox = new SimpleBox(GfxManager.imgSmallBox, true, false){
 			@Override
 			public void onFinish() {
 				super.onFinish();
 				Main.changeState(Define.ST_MENU_MAIN, false);
 			}
 		};
-		discardBox = new SimpleBox(GfxManager.imgNotificationBox, false){
+		discardBox = new SimpleBox(GfxManager.imgNotificationBox, false, false){
 			@Override
 			public void onFinish() {
 				super.onFinish();
@@ -1639,51 +1639,6 @@ public class GameManager {
 					}
 				}
 			}
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
 			
 			
 			

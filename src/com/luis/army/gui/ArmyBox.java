@@ -11,6 +11,7 @@ import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 import com.luis.lgameengine.gui.Button;
 import com.luis.lgameengine.gui.MenuBox;
 import com.luis.strategy.GfxManager;
+import com.luis.strategy.RscManager;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.map.Army;
@@ -20,6 +21,7 @@ import com.luis.strategy.map.Troop;
 public class ArmyBox extends MenuBox{
 	
 	private ArmyBuyBox armyBuyBox;
+	private SimpleBox confirmationBox;
 	
 	private Army army;
 	private boolean isCurrentPlayer;
@@ -30,6 +32,8 @@ public class ArmyBox extends MenuBox{
 	private boolean discardMode;
 	
 	private boolean enableCrossButton;
+	
+	private int selectedTroop;
 	
 	public ArmyBox() {
 		super(Define.SIZEX, Define.SIZEY, GfxManager.imgBigBox, null, null,
@@ -52,6 +56,21 @@ public class ArmyBox extends MenuBox{
 					army.getPlayer().setGold(army.getPlayer().getGold()-GameParams.TROOP_COST[this.getIndex()]);
 					army.getTroopList().add(new Troop(this.getIndex(), false));
 					updateTroops();
+				}
+			}
+		};
+		
+		confirmationBox = new SimpleBox(GfxManager.imgSmallBox, true, true){
+			@Override
+			public void onFinish(){
+				if(indexPressed == 0){
+					Log.i("Debug", "Descartado tropa: " + army.getTroopList().get(selectedTroop).getId() + " - " + army.getTroopList().get(selectedTroop).getType());
+					army.getPlayer().setGold(army.getPlayer().getGold() + 
+							(GameParams.TROOP_COST[army.getTroopList().get(selectedTroop).getType()]/2));
+					army.getTroopList().remove(army.getTroopList().get(selectedTroop));
+					check();
+				}else if(indexPressed == 1){
+					
 				}
 			}
 		};
@@ -162,18 +181,27 @@ public class ArmyBox extends MenuBox{
 				for(int i = 0; i < army.getTroopList().size(); i++){
 					if(!army.getTroopList().get(i).isSubject()){
 						if(deleteButtonList.get(i).update(touchHandler)){
-							Log.i("Debug", "Descartado tropa: " + army.getTroopList().get(i).getId() + " - " + army.getTroopList().get(i).getType());
-							army.getPlayer().setGold(army.getPlayer().getGold() + 
-									(GameParams.TROOP_COST[army.getTroopList().get(i).getType()]/2));
-							army.getTroopList().remove(army.getTroopList().get(i));
-							check();
+							selectedTroop = i;
+							String text =
+									RscManager.allText[RscManager.TXT_GAME_DO_YOU_WANT_DISCARD] + " " + 
+									RscManager.allText[RscManager.TXT_GAME_INFANTRY + army.getTroopList().get(selectedTroop).getType()] + " " + 
+									RscManager.allText[RscManager.TXT_GAME_FOR] + " " + 
+									(GameParams.TROOP_COST[army.getTroopList().get(selectedTroop).getType()]/2) + " " +
+									RscManager.allText[RscManager.TXT_GAME_COINS] + " " + 
+									RscManager.allText[RscManager.TXT_GAME_INTERROGATION_ICON];
+							confirmationBox.start(null, text);
 							break;
 						}
 					}
 				}
 				
-				if(crossButton != null & enableCrossButton)
+				if(crossButton != null & enableCrossButton){
 					crossButton.update(touchHandler);
+				}
+				
+				if(deleteButtonList != null && deleteButtonList.size() > 0){
+					confirmationBox.update(touchHandler, delta);
+				}
 			}
 			return super.update(touchHandler, delta);
 			}
@@ -217,6 +245,10 @@ public class ArmyBox extends MenuBox{
 				if(isCurrentPlayer && !army.getTroopList().get(i).isSubject()){
 					deleteButtonList.get(i).draw(g, (int)modPosX, 0);
 				}
+			}
+			
+			if(deleteButtonList != null && deleteButtonList.size() > 0){
+				confirmationBox.draw(g, true);
 			}
 			
 			if(crossButton != null)

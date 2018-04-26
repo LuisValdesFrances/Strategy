@@ -380,6 +380,7 @@ public class ModeMenu {
 	private static void drawMenuBG(Graphics g){
 		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 		g.drawImage(GfxManager.imgMainBG, 0, 0, Graphics.TOP | Graphics.LEFT);
+		g.drawImage(GfxManager.imgTitle, Define.SIZEX - Define.SIZEX32, Define.SIZEX32, Graphics.TOP | Graphics.RIGHT);
 		g.drawImage(GfxManager.imgCloudBG, (int)cloudFarBGX, (int)cloudFarBGY, Graphics.VCENTER | Graphics.HCENTER);
 		g.setImageSize(1.2f, 1.2f);
 		g.drawImage(GfxManager.imgCloudBG, (int)cloudNearBGX, (int)cloudNearBGY, Graphics.VCENTER | Graphics.HCENTER);

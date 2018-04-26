@@ -13,7 +13,7 @@ public class SimpleBox extends MenuBox{
 	
 	private String textBody;
 	
-	public SimpleBox(Image imgBox, boolean includeButton) {
+	public SimpleBox(Image imgBox, boolean includeButton, boolean includeCancelButton) {
 		
 		super(
 			Define.SIZEX, Define.SIZEY, imgBox, null, null, 
@@ -28,6 +28,15 @@ public class SimpleBox extends MenuBox{
 				screenHeight/2 + GfxManager.imgSmallBox.getHeight()/2, 
 				null, 
 				-1){});
+		
+		if(includeCancelButton)
+			btnList.add(new Button(
+					GfxManager.imgButtonDeleteRelease, 
+					GfxManager.imgButtonDeleteFocus, 
+					screenWidth/2-GfxManager.imgSmallBox.getWidth()/2, 
+					screenHeight/2 - GfxManager.imgSmallBox.getHeight()/2, 
+					null, 
+					-1){});
 	}
 	
 	

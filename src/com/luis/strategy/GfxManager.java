@@ -17,6 +17,7 @@ public class GfxManager {
 	public static Image imgMainBG;
 	public static Image imgSwordBG;
 	public static Image imgCloudBG;
+	public static Image imgTitle;
 
 	public static Image imgButtonMenuRelease;
 	public static Image imgButtonMenuFocus;
@@ -121,6 +122,7 @@ public class GfxManager {
 				imgSwordBG = Image.createImage("/sword_bg.png");
 				imgCloudBG = Image.createImage("/cloud_bg.png");
 				imgBlackBG = Image.createImage("/black_bg.png");
+				imgTitle = Image.createImage("/title.png");
 				
 				imgNotificationBox = Image
 						.createImage("/notification_box.png");
@@ -141,6 +143,7 @@ public class GfxManager {
 					imgSwordBG = Image.createImage("/sword_bg.png");
 					imgCloudBG = Image.createImage("/cloud_bg.png");
 					imgBlackBG = Image.createImage("/black_bg.png");
+					imgTitle = Image.createImage("/title.png");
 					
 					imgNotificationBox = Image
 							.createImage("/notification_box.png");
@@ -337,6 +340,7 @@ public class GfxManager {
 		imgSwordBG = null;
 		imgCloudBG = null;
 		imgBlackBG = null;
+		imgTitle = null;
 		System.gc();
 	}
 

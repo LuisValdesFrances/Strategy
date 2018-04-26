@@ -55,7 +55,8 @@ ECONOMY
 Earning
 Salary
 Cost of troops exceedes your tresaure. Discard troops.
-Player 
-Victory
-Defeat
  is the winner!
+Do you want discard this troop of
+for
+coins
+?
