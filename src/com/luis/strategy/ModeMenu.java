@@ -31,6 +31,7 @@ public class ModeMenu {
 	public static Image vImgAstheroid2;
 	
 	private static Button btnBack;
+	private static Button btnNext;
 	private static Button btnCampaign;
 	private static Button btnMultiPlayer;
 	private static Button btnOnLine;
@@ -79,6 +80,22 @@ public class ModeMenu {
 					}
 				};
 			};
+			
+			btnNext = new Button(GfxManager.imgButtonBackRelease, GfxManager.imgButtonBackFocus,
+					Define.SIZEX-Define.SIZEX32-GfxManager.imgButtonBackRelease.getWidth()/2,
+					Define.SIZEY-Define.SIZEY32-GfxManager.imgButtonBackRelease.getHeight()/2,
+					null, -1){
+				@Override
+				public void onButtonPressUp() {
+					switch(Main.state){
+					case Define.ST_MENU_CONFIG_MAP:
+						configMapBox.setIndexPressed(0);
+						configMapBox.cancel();
+						break;
+					}
+				};
+			};
+
 			break;
 		case Define.ST_MENU_ASK_SOUND:
 		case Define.ST_MENU_ASK_LANGUAGE:
@@ -210,7 +227,7 @@ public class ModeMenu {
 				@Override
 				public void onFinish(){
 					if(getIndexPressed() != -1){
-						
+						Main.changeState(Define.ST_GAME_INIT, true);
 					}else{
 						Main.changeState(Define.ST_MENU_SELECT_MAP, false);
 					}
@@ -263,6 +280,7 @@ public class ModeMenu {
         case Define.ST_MENU_CONFIG_MAP:
 			runMenuBG(Main.getDeltaSec());
 			btnBack.update(UserInput.getInstance().getMultiTouchHandler());
+			btnNext.update(UserInput.getInstance().getMultiTouchHandler());
 			configMapBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
 			break;
 		}
@@ -326,6 +344,7 @@ public class ModeMenu {
 		case Define.ST_MENU_CONFIG_MAP:
 			drawMenuBG(_g);
 			btnBack.draw(_g, 0, 0);
+			btnNext.draw(_g, 0, 0);
 			configMapBox.draw(_g, true);
 			break;
 			

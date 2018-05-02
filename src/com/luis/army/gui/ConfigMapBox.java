@@ -21,7 +21,7 @@ public class ConfigMapBox extends ListBox{
 
 	private List<String> playerList;
 	private List<Button> playerFlagBtnList;
-	private List<Boolean> flagAvailableList;
+	private List<Boolean> availableFlagList;
 	
 	private PlayerConf[] playerConfList;
 	
@@ -36,8 +36,11 @@ public class ConfigMapBox extends ListBox{
 		this.playerConfList = pcList;
 		playerList = new ArrayList<String>();
 		playerFlagBtnList = new ArrayList<Button>();
-		flagAvailableList = new ArrayList<Boolean>();
+		availableFlagList = new ArrayList<Boolean>();
 		
+		for(int i = 0; i < GfxManager.imgFlagList.size(); i++){
+			availableFlagList.add(true);
+		}
 		
 		for(int i = 0; i < btnList.size(); i++){
 			String playerName = "Player " + (i+1);
@@ -50,8 +53,7 @@ public class ConfigMapBox extends ListBox{
 				btnList.get(i).getY(), 
 				null, -1));
 			
-			//ojo
-			flagAvailableList.add(true);
+			availableFlagList.set(i, false);
 		}
 	}
 	
@@ -69,8 +71,22 @@ public class ConfigMapBox extends ListBox{
 			}
 			
 			for(int i = 0; i < playerFlagBtnList.size(); i++){
+				//Cambio el flag
 				if(playerFlagBtnList.get(i).update(touchHandler)){
-					playerConfList[i].flag = (playerConfList[i].flag + 1)%(GfxManager.imgFlagList.size()-1);
+					
+					int selectedFlag = playerConfList[i].flag;
+					
+					//Pongo disponible el actual
+					availableFlagList.set(selectedFlag, true);
+					selectedFlag = (selectedFlag + 1)%(GfxManager.imgFlagList.size()-1);
+					
+					//Voy pasando flags hasta que encuentre el siguiente disponible
+					while(!availableFlagList.get(selectedFlag)){
+						selectedFlag = (selectedFlag + 1)%(GfxManager.imgFlagList.size()-1);
+					}
+					playerConfList[i].flag = selectedFlag;
+					availableFlagList.set(selectedFlag, false);
+					
 					playerFlagBtnList.get(i).reset();
 					break;
 				}
@@ -84,6 +100,14 @@ public class ConfigMapBox extends ListBox{
 		
 		return super.update(touchHandler, delta);
 	}
+	
+	/*
+	@Override public void onFinish() {
+		for(PlayerConf pc : playerConfList){
+			
+		}
+	};
+	*/
 	
 	@Override
 	public void draw(Graphics g, boolean drawBG){
