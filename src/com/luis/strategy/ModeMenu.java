@@ -157,7 +157,7 @@ public class ModeMenu {
 					GfxManager.imgButtonMenuBigRelease, 
 					GfxManager.imgButtonMenuBigFocus, 
 					Define.SIZEX-(int)(GfxManager.imgButtonMenuBigRelease.getWidth()/2)-Define.SIZEY64, 
-					Define.SIZEY-(int)(GfxManager.imgButtonMenuBigRelease.getHeight()/2)-Define.SIZEY64,
+					Define.SIZEY-(int)(GfxManager.imgButtonMenuBigRelease.getHeight()*1.5)-Define.SIZEY64,
 					RscManager.allText[RscManager.TXT_ON_LINE], Font.FONT_MEDIUM){
 				@Override
 				public void onButtonPressDown(){}

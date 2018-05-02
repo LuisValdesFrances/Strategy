@@ -13,11 +13,13 @@ import com.luis.army.gui.TerrainBox;
 import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gameutils.fonts.TextManager;
 import com.luis.lgameengine.gameutils.gameworld.GameCamera;
+import com.luis.lgameengine.gameutils.gameworld.GfxEffects;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.gui.Button;
 import com.luis.lgameengine.gui.MenuElement;
 import com.luis.lgameengine.gui.NotificationBox;
 import com.luis.lgameengine.implementation.graphics.Graphics;
+import com.luis.lgameengine.implementation.graphics.Image;
 import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 import com.luis.lgameengine.implementation.input.TouchData;
 import com.luis.strategy.GfxManager;
@@ -37,6 +39,9 @@ import com.luis.strategy.map.Troop;
 
 
 public class GameManager {
+	
+	//
+	private Image gameBuffer;
 	
 	//
 	public boolean isAutoPlay(){
@@ -105,6 +110,7 @@ public class GameManager {
 	private SimpleBox endGameBox;
 	
 	public GameManager(WorldConver wc, GameCamera gc, Map m){
+		this.gameBuffer = Image.createImage(Define.SIZEX2, Define.SIZEY2);
 		this.worldConver = wc;
 		this.gameCamera = gc;
 		this.map = m;
@@ -550,7 +556,10 @@ public class GameManager {
 	
 	public void draw(Graphics g){
 		
-		map.drawMap(g, map.getPlayerList());
+		
+		//Pintado en el buffer
+		
+		map.drawMap(gameBuffer.getGraphics(), map.getPlayerList());
 		
 		//Flags
 		for(Player player : map.getPlayerList()){
@@ -559,21 +568,21 @@ public class GameManager {
 				//Controla que no se pinta la ultima bandera mientras se ejecuta e efecto de conquista del jugador en curso
 				if(
 						player.getId() != getCurrentPlayer().getId() ||
-						
 						(!startConquest && subState != SUB_STATE_ACTION_CONQUEST) || 
 						i!=player.getKingdomList().size()-1){
-				g.setClip(0, 0, Define.SIZEX, Define.SIZEX);
-				g.drawImage(GfxManager.imgFlagList.get(player.getFlag()),
-						worldConver.getConversionDrawX(
-						gameCamera.getPosX(), kingdom.getTerrainList().get(kingdom.getTerrainList().size()-1).getAbsoluteX())+
-							GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth()/2,
-						worldConver.getConversionDrawY(
-						gameCamera.getPosY(), kingdom.getTerrainList().get(kingdom.getTerrainList().size()-1).getAbsoluteY())+
-							GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight()/2,
-						
-						Graphics.BOTTOM | Graphics.HCENTER);
-				i++;
-			}
+					
+					gameBuffer.getGraphics().setClip(0, 0, Define.SIZEX, Define.SIZEX);
+					gameBuffer.getGraphics().drawImage(GfxManager.imgFlagList.get(player.getFlag()),
+							worldConver.getConversionDrawX(
+							gameCamera.getPosX(), kingdom.getTerrainList().get(kingdom.getTerrainList().size()-1).getAbsoluteX())+
+								GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth()/2,
+							worldConver.getConversionDrawY(
+							gameCamera.getPosY(), kingdom.getTerrainList().get(kingdom.getTerrainList().size()-1).getAbsoluteY())+
+								GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight()/2,
+							
+							Graphics.BOTTOM | Graphics.HCENTER);
+					i++;
+				}
 			}
 		}
 		
@@ -582,15 +591,21 @@ public class GameManager {
 			for(Army army: map.getPlayerList().get(i).getArmyList()){
 				boolean isSelected =  subState == SUB_STATE_ACTION_WAIT && 
 						getSelectedArmy() != null && getSelectedArmy().getId() == army.getId();
-				army.draw(g, getSelectedArmy()!= null && isSelected, i == map.getPlayerIndex() && army.getState() == Army.STATE_ON);
+				army.draw(gameBuffer.getGraphics(), getSelectedArmy()!= null && isSelected, i == map.getPlayerIndex() && army.getState() == Army.STATE_ON);
 			}
 		}
 		
 		if(subState == SUB_STATE_ACTION_SELECT && getCurrentPlayer().getActionIA() == null)
-			map.drawTarget(g);
+			map.drawTarget(gameBuffer.getGraphics());
+		
+		Image img = GfxEffects.getInstance().getDistorsionedImageXY2(gameBuffer, 1f, 1.2f);
+		g.drawImage(img, Define.SIZEX2, Define.SIZEY2, Graphics.VCENTER | Graphics.HCENTER);
 		
 		
+		
+		//Fin buffer
 		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+		
 		
 		drawGUI(g);
 		
