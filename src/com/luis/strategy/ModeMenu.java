@@ -47,7 +47,7 @@ public class ModeMenu {
         case Define.ST_MENU_LOGO:
         	
         	MenuElement.imgBG = GfxManager.imgBlackBG;
-    		MenuElement.bgAlpha = (int)(GameParams.BG_BLACK_ALPHA);
+    		MenuElement.bgAlpha = (int)(GameParams.BG_BLACK_ALPHA*0.5);
 			
     		iStateLogo = ST_LOGO_1;
 			alpha = 255;
@@ -61,9 +61,9 @@ public class ModeMenu {
 //			}
 			RscManager.loadLanguage(Main.iLanguage);
 			
-			btnBack = new Button(GfxManager.imgButtonBackRelease, GfxManager.imgButtonBackFocus,
-					Define.SIZEX32+GfxManager.imgButtonBackRelease.getWidth()/2,
-					Define.SIZEY32+GfxManager.imgButtonBackRelease.getHeight()/2,
+			btnBack = new Button(GfxManager.imgButtonArrowBackRelease, GfxManager.imgButtonArrowBackFocus,
+					Define.SIZEX32+GfxManager.imgButtonArrowBackRelease.getWidth()/2,
+					Define.SIZEY32+GfxManager.imgButtonArrowBackRelease.getHeight()/2,
 					null, -1){
 				@Override
 				public void onButtonPressUp() {
@@ -81,9 +81,9 @@ public class ModeMenu {
 				};
 			};
 			
-			btnNext = new Button(GfxManager.imgButtonBackRelease, GfxManager.imgButtonBackFocus,
-					Define.SIZEX-Define.SIZEX32-GfxManager.imgButtonBackRelease.getWidth()/2,
-					Define.SIZEY-Define.SIZEY32-GfxManager.imgButtonBackRelease.getHeight()/2,
+			btnNext = new Button(GfxManager.imgButtonArrowNextRelease, GfxManager.imgButtonArrowNextFocus,
+					Define.SIZEX-Define.SIZEX32-GfxManager.imgButtonArrowBackRelease.getWidth()/2,
+					Define.SIZEY-Define.SIZEY32-GfxManager.imgButtonArrowBackRelease.getHeight()/2,
 					null, -1){
 				@Override
 				public void onButtonPressUp() {

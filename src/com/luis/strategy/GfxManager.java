@@ -26,8 +26,10 @@ public class GfxManager {
 	public static Image imgButtonMenuSmallRelease;
 	public static Image imgButtonMenuSmallFocus;
 	
-	public static Image imgButtonBackRelease;
-	public static Image imgButtonBackFocus;
+	public static Image imgButtonArrowBackRelease;
+	public static Image imgButtonArrowBackFocus;
+	public static Image imgButtonArrowNextRelease;
+	public static Image imgButtonArrowNextFocus;
 
 	// Game images:
 	public static Image imgGameBG;
@@ -131,8 +133,10 @@ public class GfxManager {
 				imgButtonMenuSmallRelease = Image.createImage("/button_menu_small_release.png");
 				imgButtonMenuSmallFocus = Image.createImage("/button_menu_small_focus.png");
 				
-				imgButtonBackRelease = Image.createImage("/back_release.png");
-				imgButtonBackFocus = Image.createImage("/back_focus.png");
+				imgButtonArrowBackRelease = Image.createImage("/arrow_back_release.png");
+				imgButtonArrowBackFocus = Image.createImage("/arrow_back_focus.png");
+				imgButtonArrowNextRelease = Image.createImage("/arrow_next_release.png");
+				imgButtonArrowNextFocus = Image.createImage("/arrow_next_focus.png");
 				
 				imgMainBG = Image.createImage("/main_bg.png");
 				imgSwordBG = Image.createImage("/sword_bg.png");
@@ -372,8 +376,8 @@ public class GfxManager {
 		imgBlackBG = null;
 		imgTitle = null;
 		imgFlagSmallList = null;
-		imgButtonBackRelease = null;
-		imgButtonBackFocus = null;
+		imgButtonArrowBackRelease = null;
+		imgButtonArrowBackFocus = null;
 		System.gc();
 	}
 
