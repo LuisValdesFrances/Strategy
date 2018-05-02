@@ -137,7 +137,7 @@ public class ModeGame {
 			pauseBox = new MenuBox(
 					Define.SIZEX, Define.SIZEY, 
 					GfxManager.imgBigBox, 
-					GfxManager.imgButtonMenuRelease, GfxManager.imgButtonMenuFocus, 
+					GfxManager.imgButtonMenuBigRelease, GfxManager.imgButtonMenuBigFocus, 
 					Define.SIZEX2, Define.SIZEY2,
 					null,
 					new String[]{
@@ -155,7 +155,7 @@ public class ModeGame {
 			confirmationQuitBox = new MenuBox(
 					Define.SIZEX, Define.SIZEY, 
 					GfxManager.imgBigBox, 
-					GfxManager.imgButtonMenuRelease, GfxManager.imgButtonMenuFocus, 
+					GfxManager.imgButtonMenuBigRelease, GfxManager.imgButtonMenuBigFocus, 
 					Define.SIZEX2, Define.SIZEY2,
 					RscManager.allText[RscManager.TXT_RETURN_MENU],
 					new String[]{RscManager.allText[RscManager.TXT_NO], RscManager.allText[RscManager.TXT_YES]},

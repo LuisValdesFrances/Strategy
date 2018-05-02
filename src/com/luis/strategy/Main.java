@@ -51,7 +51,7 @@ public class Main extends MyCanvas implements Runnable {
 	private KeyboardHandler vKeyData;
 
 	public static int state;
-	public static int iLastState;
+	public static int lastState;
 
 	public static final int COLOR_BLACK = 0x00000000;
 	public static final int COLOR_GREEN    = 0xff0ee50e;
@@ -145,6 +145,7 @@ public class Main extends MyCanvas implements Runnable {
 					case Define.ST_MENU_ABOUT:
 					case Define.ST_MENU_SELECT_GAME:
 					case Define.ST_MENU_SELECT_MAP:
+					case Define.ST_MENU_CONFIG_MAP:
 					if (!isLoading) {
 						ModeMenu.update();
 					}
@@ -208,6 +209,7 @@ public class Main extends MyCanvas implements Runnable {
 		         case Define.ST_MENU_ABOUT:
 		         case Define.ST_MENU_SELECT_GAME:
 		         case Define.ST_MENU_SELECT_MAP:
+		         case Define.ST_MENU_CONFIG_MAP:
 					ModeMenu.draw(_g);
 					break;
 		         case Define.ST_GAME_INIT:
@@ -412,7 +414,7 @@ public class Main extends MyCanvas implements Runnable {
 		UserInput.getInstance().getMultiTouchHandler().resetTouch();
 		UserInput.getInstance().getKeyboardHandler().resetKeys();
 
-		iLastState = state;
+		lastState = state;
 		state = _iNewState;
 		///*
 		switch(state){
@@ -420,7 +422,7 @@ public class Main extends MyCanvas implements Runnable {
 				GfxManager.deleteMenuGFX();
 				break;
 			case Define.ST_MENU_MAIN:
-				if(iLastState >= Define.ST_GAME_INIT ){
+				if(lastState >= Define.ST_GAME_INIT ){
 					GfxManager.deleteGameGFX();
 				}
 				

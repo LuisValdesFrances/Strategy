@@ -21,6 +21,10 @@ Help
 About
 Texto help.
 Desing and programer: Luis Valdes. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx Music and FX: Francisco Hoyos. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx All right reserved.
+SELECT MAP
+CONFIGURE MAP
+HUMAN
+IA
 Points:
 Record:
 Continue

@@ -19,8 +19,15 @@ public class GfxManager {
 	public static Image imgCloudBG;
 	public static Image imgTitle;
 
-	public static Image imgButtonMenuRelease;
-	public static Image imgButtonMenuFocus;
+	public static Image imgButtonMenuBigRelease;
+	public static Image imgButtonMenuBigFocus;
+	public static Image imgButtonMenuMediumRelease;
+	public static Image imgButtonMenuMediumFocus;
+	public static Image imgButtonMenuSmallRelease;
+	public static Image imgButtonMenuSmallFocus;
+	
+	public static Image imgButtonBackRelease;
+	public static Image imgButtonBackFocus;
 
 	// Game images:
 	public static Image imgGameBG;
@@ -71,6 +78,8 @@ public class GfxManager {
 	public static Image imgButtonFlagHelmetFocus;
 	public static Image imgButtonFlagCastleRelease;
 	public static Image imgButtonFlagCastleFocus;
+	
+	
 
 	public static List<Image> imgMapList;
 	public static Image imgTerrainOk;
@@ -115,14 +124,32 @@ public class GfxManager {
 
 				vImgLogo = Image.createImage("/4away.png");
 
-				imgButtonMenuRelease = Image.createImage("/button_menu_release.png");
-				imgButtonMenuFocus = Image.createImage("/button_menu_focus.png");
+				imgButtonMenuBigRelease = Image.createImage("/button_menu_big_release.png");
+				imgButtonMenuBigFocus = Image.createImage("/button_menu_big_focus.png");
+				imgButtonMenuMediumRelease = Image.createImage("/button_menu_medium_release.png");
+				imgButtonMenuMediumFocus = Image.createImage("/button_menu_medium_focus.png");
+				imgButtonMenuSmallRelease = Image.createImage("/button_menu_small_release.png");
+				imgButtonMenuSmallFocus = Image.createImage("/button_menu_small_focus.png");
+				
+				imgButtonBackRelease = Image.createImage("/back_release.png");
+				imgButtonBackFocus = Image.createImage("/back_focus.png");
 				
 				imgMainBG = Image.createImage("/main_bg.png");
 				imgSwordBG = Image.createImage("/sword_bg.png");
 				imgCloudBG = Image.createImage("/cloud_bg.png");
 				imgBlackBG = Image.createImage("/black_bg.png");
 				imgTitle = Image.createImage("/title.png");
+				
+				
+				imgFlagList = new ArrayList<Image>();
+				imgFlagList.add(Image.createImage("/flag1.png"));
+				imgFlagList.add(Image.createImage("/flag2.png"));
+				imgFlagList.add(Image.createImage("/flag3.png"));
+				imgFlagList.add(Image.createImage("/flag4.png"));
+				imgFlagList.add(Image.createImage("/flag5.png"));
+				imgFlagList.add(Image.createImage("/flag6.png"));
+				imgFlagList.add(Image.createImage("/flag7.png"));
+				imgFlagList.add(Image.createImage("/flag8.png"));
 				
 				imgNotificationBox = Image
 						.createImage("/notification_box.png");
@@ -137,7 +164,7 @@ public class GfxManager {
 			break;
 
 		case Define.ST_MENU_MAIN:
-			if(Main.iLastState >= Define.ST_GAME_INIT){
+			if(Main.lastState >= Define.ST_GAME_INIT){
 				try {
 					imgMainBG = Image.createImage("/main_bg.png");
 					imgSwordBG = Image.createImage("/sword_bg.png");
@@ -276,6 +303,7 @@ public class GfxManager {
 				imgFlagList.add(Image.createImage("/flag5.png"));
 				imgFlagList.add(Image.createImage("/flag6.png"));
 				imgFlagList.add(Image.createImage("/flag7.png"));
+				imgFlagList.add(Image.createImage("/flag8.png"));
 
 				imgFlagSmallList.add(Image.createImage("/flag_small1.png"));
 				imgFlagSmallList.add(Image.createImage("/flag_small2.png"));
@@ -284,6 +312,7 @@ public class GfxManager {
 				imgFlagSmallList.add(Image.createImage("/flag_small5.png"));
 				imgFlagSmallList.add(Image.createImage("/flag_small6.png"));
 				imgFlagSmallList.add(Image.createImage("/flag_small7.png"));
+				imgFlagSmallList.add(Image.createImage("/flag_small8.png"));
 
 				imgFlagBigList.add(Image.createImage("/flag_big1.png"));
 				imgFlagBigList.add(Image.createImage("/flag_big2.png"));
@@ -292,6 +321,7 @@ public class GfxManager {
 				imgFlagBigList.add(Image.createImage("/flag_big5.png"));
 				imgFlagBigList.add(Image.createImage("/flag_big6.png"));
 				imgFlagBigList.add(Image.createImage("/flag_big7.png"));
+				imgFlagBigList.add(Image.createImage("/flag_big8.png"));
 
 				imgBigTroop = new ArrayList<Image>();
 				imgSmallTroop = new ArrayList<Image>();
@@ -341,6 +371,9 @@ public class GfxManager {
 		imgCloudBG = null;
 		imgBlackBG = null;
 		imgTitle = null;
+		imgFlagSmallList = null;
+		imgButtonBackRelease = null;
+		imgButtonBackFocus = null;
 		System.gc();
 	}
 

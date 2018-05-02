@@ -33,6 +33,10 @@ public class RscManager {
 	public static final int TXT_ABOUT= TXT_HELP+1;
 	public static final int TXT_HELP_DESCRIP= TXT_ABOUT+1;
 	public static final int TXT_ABOUT_DESCRIP= TXT_HELP_DESCRIP+1;
+	public static final int TXT_SELECT_MAP= TXT_ABOUT_DESCRIP+1;
+	public static final int TXT_CONFIG_MAP= TXT_SELECT_MAP+1;
+	public static final int TXT_MAP_CONFIG_HUMAN = TXT_CONFIG_MAP+1;
+	public static final int TXT_MAP_CONFIG_IA = TXT_MAP_CONFIG_HUMAN+1;
 	public static final int TXT_POINTS= TXT_ABOUT_DESCRIP+1;
 	public static final int TXT_RECORD= TXT_POINTS+1;
 	public static final int TXT_CONTINUE= TXT_RECORD+1;
