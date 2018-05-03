@@ -13,7 +13,6 @@ import com.luis.army.gui.TerrainBox;
 import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gameutils.fonts.TextManager;
 import com.luis.lgameengine.gameutils.gameworld.GameCamera;
-import com.luis.lgameengine.gameutils.gameworld.GfxEffects;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.gui.Button;
 import com.luis.lgameengine.gui.MenuElement;
@@ -42,7 +41,7 @@ public class GameManager {
 	
 	//
 	private Image gameBuffer;
-	public float distorsion = 1.12f;
+	public float distorsion = 1.5f;//1.12f;
 	
 	//
 	public boolean isAutoPlay(){
@@ -370,13 +369,19 @@ public class GameManager {
 					for(Terrain terrain : kingdom.getTerrainList()){
 						if(terrain.isSelect()){
 							terrain.getButton().reset();
-							terrainBox.start(getCurrentPlayer(), kingdom,
-								terrain.getType() >= GameParams.SMALL_CITY &&
-								getArmyAtKingdom(kingdom)== null && 
-								getCurrentPlayer().hasKingom(kingdom), 
-								terrain.getType());
-								
-							changeSubState(SUB_STATE_CITY_MANAGEMENT);
+							
+							//Porculeria de los terrenos
+							if(terrain.getType() >= GameParams.SMALL_CITY){
+							
+								terrainBox.start(getCurrentPlayer(), kingdom,
+									terrain.getType() >= GameParams.SMALL_CITY &&
+									getArmyAtKingdom(kingdom)== null && 
+									getCurrentPlayer().hasKingom(kingdom), 
+									terrain.getType());
+									
+								changeSubState(SUB_STATE_CITY_MANAGEMENT);
+							
+							}
 						}
 					}
 				}
@@ -585,14 +590,6 @@ public class GameManager {
 			}
 		}
 		
-		//Army
-		for(int i = 0; i < map.getPlayerList().size(); i++){
-			for(Army army: map.getPlayerList().get(i).getArmyList()){
-				boolean isSelected =  subState == SUB_STATE_ACTION_WAIT && 
-						getSelectedArmy() != null && getSelectedArmy().getId() == army.getId();
-				army.draw(gameBuffer.getGraphics(), getSelectedArmy()!= null && isSelected, i == map.getPlayerIndex() && army.getState() == Army.STATE_ON);
-			}
-		}
 		
 		if(subState == SUB_STATE_ACTION_SELECT && getCurrentPlayer().getActionIA() == null)
 			map.drawTarget(gameBuffer.getGraphics());
@@ -600,7 +597,7 @@ public class GameManager {
 		
 		 float distPixelsW = (float)gameBuffer.getWidth() * (distorsion -1f); 
 		 float distPixelsH = (float)gameBuffer.getHeight() * (distorsion -1f);
-		 ///*
+		 
 		 g.drawDistorisionImage(
 				 gameBuffer, Define.SIZEX2, Define.SIZEY2, 
 				 0, 0, 
@@ -608,11 +605,23 @@ public class GameManager {
 				 -(int)distPixelsW, gameBuffer.getHeight() + (int)distPixelsH, 
 				 gameBuffer.getWidth() + (int)distPixelsW, gameBuffer.getHeight() + (int)distPixelsH,
 				 Graphics.VCENTER | Graphics.HCENTER);
-		//*/
-		 //g.drawImage(gameBuffer, Define.SIZEX2, Define.SIZEY2, Graphics.VCENTER | Graphics.HCENTER);
+		
+		//g.drawImage(gameBuffer, Define.SIZEX2, Define.SIZEY2, Graphics.VCENTER | Graphics.HCENTER);
+		
 		
 		//Fin buffer
 		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+		
+		
+		//Army
+		for(int i = 0; i < map.getPlayerList().size(); i++){
+			for(Army army: map.getPlayerList().get(i).getArmyList()){
+				boolean isSelected =  subState == SUB_STATE_ACTION_WAIT && 
+						getSelectedArmy() != null && getSelectedArmy().getId() == army.getId();
+				army.draw(g, getSelectedArmy()!= null && isSelected, i == map.getPlayerIndex() && army.getState() == Army.STATE_ON,
+						distorsion);
+			}
+		}
 		
 		drawGUI(g);
 		
