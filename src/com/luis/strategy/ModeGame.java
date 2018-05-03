@@ -142,8 +142,8 @@ public class ModeGame {
 					null,
 					new String[]{
 							RscManager.allText[RscManager.TXT_CONTINUE], 
-							RscManager.allText[RscManager.TXT_QUIT],
-							RscManager.allText[RscManager.TXT_OPTIONS]
+							RscManager.allText[RscManager.TXT_OPTIONS],
+							RscManager.allText[RscManager.TXT_QUIT]
 					},
 					Font.FONT_MEDIUM, Font.FONT_MEDIUM){
 				@Override
@@ -226,7 +226,6 @@ public class ModeGame {
 			}
 			break;
 		}
-		
 	}
 
 	public static void draw(Graphics _g, int _iState) {

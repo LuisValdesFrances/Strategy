@@ -73,11 +73,18 @@ public class Map extends MapObject{
 		int i = 0;
 		for(int y = 0; y < numberPartsH; y++){
 			for(int x = 0; x < numberPartsW; x++){
-				g.drawImage(GfxManager.imgMapList.get(i),
-						worldConver.getConversionDrawX(gameCamera.getPosX(), getX())+x*pW,
-						worldConver.getConversionDrawY(gameCamera.getPosY(), getY())+y*pH,
-						Graphics.TOP | Graphics.LEFT
-						);
+				
+				if(worldConver.isObjectInGameLayout(
+						gameCamera.getPosX(), gameCamera.getPosY(), 
+						getX()+x*pW, getY()+y*pH, 
+						pW, pH)){
+				
+					g.drawImage(GfxManager.imgMapList.get(i),
+							worldConver.getConversionDrawX(gameCamera.getPosX(), getX()+x*pW),
+							worldConver.getConversionDrawY(gameCamera.getPosY(), getY()+y*pH),
+							Graphics.TOP | Graphics.LEFT
+							);
+				}
 				i++;
 			}
 		}

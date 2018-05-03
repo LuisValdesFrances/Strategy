@@ -126,37 +126,7 @@ public class GfxManager {
 
 				vImgLogo = Image.createImage("/4away.png");
 
-				imgButtonMenuBigRelease = Image.createImage("/button_menu_big_release.png");
-				imgButtonMenuBigFocus = Image.createImage("/button_menu_big_focus.png");
-				imgButtonMenuMediumRelease = Image.createImage("/button_menu_medium_release.png");
-				imgButtonMenuMediumFocus = Image.createImage("/button_menu_medium_focus.png");
-				imgButtonMenuSmallRelease = Image.createImage("/button_menu_small_release.png");
-				imgButtonMenuSmallFocus = Image.createImage("/button_menu_small_focus.png");
-				
-				imgButtonArrowBackRelease = Image.createImage("/arrow_back_release.png");
-				imgButtonArrowBackFocus = Image.createImage("/arrow_back_focus.png");
-				imgButtonArrowNextRelease = Image.createImage("/arrow_next_release.png");
-				imgButtonArrowNextFocus = Image.createImage("/arrow_next_focus.png");
-				
-				imgMainBG = Image.createImage("/main_bg.png");
-				imgSwordBG = Image.createImage("/sword_bg.png");
-				imgCloudBG = Image.createImage("/cloud_bg.png");
-				imgBlackBG = Image.createImage("/black_bg.png");
-				imgTitle = Image.createImage("/title.png");
-				
-				
-				imgFlagList = new ArrayList<Image>();
-				imgFlagList.add(Image.createImage("/flag1.png"));
-				imgFlagList.add(Image.createImage("/flag2.png"));
-				imgFlagList.add(Image.createImage("/flag3.png"));
-				imgFlagList.add(Image.createImage("/flag4.png"));
-				imgFlagList.add(Image.createImage("/flag5.png"));
-				imgFlagList.add(Image.createImage("/flag6.png"));
-				imgFlagList.add(Image.createImage("/flag7.png"));
-				imgFlagList.add(Image.createImage("/flag8.png"));
-				
-				imgNotificationBox = Image
-						.createImage("/notification_box.png");
+				loadMenuGfx();
 
 			} catch (IOException ex) {
 				ex.printStackTrace();
@@ -170,14 +140,7 @@ public class GfxManager {
 		case Define.ST_MENU_MAIN:
 			if(Main.lastState >= Define.ST_GAME_INIT){
 				try {
-					imgMainBG = Image.createImage("/main_bg.png");
-					imgSwordBG = Image.createImage("/sword_bg.png");
-					imgCloudBG = Image.createImage("/cloud_bg.png");
-					imgBlackBG = Image.createImage("/black_bg.png");
-					imgTitle = Image.createImage("/title.png");
-					
-					imgNotificationBox = Image
-							.createImage("/notification_box.png");
+					loadMenuGfx();
 				} catch (IOException ex) {
 					ex.printStackTrace();
 				}
@@ -190,17 +153,41 @@ public class GfxManager {
 
 		case Define.ST_GAME_INIT:
 			try {
+				//Menu commons
+				imgButtonMenuBigRelease = Image.createImage("/button_menu_big_release.png");
+				imgButtonMenuBigFocus = Image.createImage("/button_menu_big_focus.png");
+				
+				
 				imgMapList = new ArrayList<Image>();
 				switch (GameState.getInstance().getMap()) {
 				case 0:
-					imgMapList.add(Image.createImage("/genterex.png"));
+					imgMapList.add(Image.createImage("/maps/genterex_1.png"));
+					imgMapList.add(Image.createImage("/maps/genterex_2.png"));
+					imgMapList.add(Image.createImage("/maps/genterex_3.png"));
+					imgMapList.add(Image.createImage("/maps/genterex_4.png"));
+					imgMapList.add(Image.createImage("/maps/genterex_5.png"));
+					imgMapList.add(Image.createImage("/maps/genterex_6.png"));
+					imgMapList.add(Image.createImage("/maps/genterex_7.png"));
+					imgMapList.add(Image.createImage("/maps/genterex_8.png"));
 					break;
 				case 1:
 				case 2:
-					imgMapList.add(Image.createImage("/crom_1.png"));
-					imgMapList.add(Image.createImage("/crom_2.png"));
-					imgMapList.add(Image.createImage("/crom_3.png"));
-					imgMapList.add(Image.createImage("/crom_4.png"));
+					imgMapList.add(Image.createImage("/maps/crom_1.png"));
+					imgMapList.add(Image.createImage("/maps/crom_2.png"));
+					imgMapList.add(Image.createImage("/maps/crom_3.png"));
+					imgMapList.add(Image.createImage("/maps/crom_4.png"));
+					imgMapList.add(Image.createImage("/maps/crom_5.png"));
+					imgMapList.add(Image.createImage("/maps/crom_6.png"));
+					imgMapList.add(Image.createImage("/maps/crom_7.png"));
+					imgMapList.add(Image.createImage("/maps/crom_8.png"));
+					imgMapList.add(Image.createImage("/maps/crom_9.png"));
+					imgMapList.add(Image.createImage("/maps/crom_10.png"));
+					imgMapList.add(Image.createImage("/maps/crom_11.png"));
+					imgMapList.add(Image.createImage("/maps/crom_12.png"));
+					imgMapList.add(Image.createImage("/maps/crom_13.png"));
+					imgMapList.add(Image.createImage("/maps/crom_14.png"));
+					imgMapList.add(Image.createImage("/maps/crom_15.png"));
+					imgMapList.add(Image.createImage("/maps/crom_16.png"));
 					break;
 				}
 
@@ -367,30 +354,80 @@ public class GfxManager {
 			break;
 		}
 	}
+	
+	public static void loadMenuGfx() throws IOException{
+		imgButtonMenuBigRelease = Image.createImage("/button_menu_big_release.png");
+		imgButtonMenuBigFocus = Image.createImage("/button_menu_big_focus.png");
+		imgButtonMenuMediumRelease = Image.createImage("/button_menu_medium_release.png");
+		imgButtonMenuMediumFocus = Image.createImage("/button_menu_medium_focus.png");
+		imgButtonMenuSmallRelease = Image.createImage("/button_menu_small_release.png");
+		imgButtonMenuSmallFocus = Image.createImage("/button_menu_small_focus.png");
+		
+		imgButtonArrowBackRelease = Image.createImage("/arrow_back_release.png");
+		imgButtonArrowBackFocus = Image.createImage("/arrow_back_focus.png");
+		imgButtonArrowNextRelease = Image.createImage("/arrow_next_release.png");
+		imgButtonArrowNextFocus = Image.createImage("/arrow_next_focus.png");
+		
+		imgMainBG = Image.createImage("/main_bg.png");
+		imgSwordBG = Image.createImage("/sword_bg.png");
+		imgCloudBG = Image.createImage("/cloud_bg.png");
+		imgBlackBG = Image.createImage("/black_bg.png");
+		imgTitle = Image.createImage("/title.png");
+		
+		
+		imgFlagList = new ArrayList<Image>();
+		imgFlagList.add(Image.createImage("/flag1.png"));
+		imgFlagList.add(Image.createImage("/flag2.png"));
+		imgFlagList.add(Image.createImage("/flag3.png"));
+		imgFlagList.add(Image.createImage("/flag4.png"));
+		imgFlagList.add(Image.createImage("/flag5.png"));
+		imgFlagList.add(Image.createImage("/flag6.png"));
+		imgFlagList.add(Image.createImage("/flag7.png"));
+		imgFlagList.add(Image.createImage("/flag8.png"));
+		
+		imgNotificationBox = Image
+				.createImage("/notification_box.png");
+	}
 
 	public static void deleteMenuGFX() {
-		vImgLogo = null;
+		imgButtonMenuBigRelease = null;
+		imgButtonMenuBigFocus = null;
+		imgButtonMenuMediumRelease = null;
+		imgButtonMenuMediumFocus = null;
+		imgButtonMenuSmallRelease = null;
+		imgButtonMenuSmallFocus = null;
+		
+		imgButtonArrowBackRelease = null;
+		imgButtonArrowBackFocus = null;
+		imgButtonArrowNextRelease = null;
+		imgButtonArrowNextFocus = null;
+		
 		imgMainBG = null;
 		imgSwordBG = null;
 		imgCloudBG = null;
 		imgBlackBG = null;
 		imgTitle = null;
-		imgFlagSmallList = null;
-		imgButtonArrowBackRelease = null;
-		imgButtonArrowBackFocus = null;
+		
+		imgFlagList = null;
+		
+		imgNotificationBox = null;
 		System.gc();
 	}
 
 	public static void deleteGameGFX() {
 
+		//Menu commons
+		imgButtonMenuBigRelease = null;
+		imgButtonMenuBigFocus = null;
+		
 		imgMapList = null;
-
+		
 		imgTextBG = null;
 		imgBlackBG = null;
 
 		imgPadWest = null;
 		imgPadEast = null;
-
+		
 		imgTerrainOk = null;
 
 		imgTargetDomain = null;
@@ -402,6 +439,7 @@ public class GfxManager {
 
 		imgArmyIdle = null;
 		imgArmyRun = null;
+		imgArmyAtack = null;
 
 		imgGameHud = null;
 		imgChest = null;

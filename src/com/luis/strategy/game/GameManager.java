@@ -42,6 +42,7 @@ public class GameManager {
 	
 	//
 	private Image gameBuffer;
+	public float distorsion = 1.12f;
 	
 	//
 	public boolean isAutoPlay(){
@@ -110,7 +111,7 @@ public class GameManager {
 	private SimpleBox endGameBox;
 	
 	public GameManager(WorldConver wc, GameCamera gc, Map m){
-		this.gameBuffer = Image.createImage(Define.SIZEX2, Define.SIZEY2);
+		this.gameBuffer = Image.createImage(Define.SIZEX, Define.SIZEY);
 		this.worldConver = wc;
 		this.gameCamera = gc;
 		this.map = m;
@@ -556,9 +557,7 @@ public class GameManager {
 	
 	public void draw(Graphics g){
 		
-		
 		//Pintado en el buffer
-		
 		map.drawMap(gameBuffer.getGraphics(), map.getPlayerList());
 		
 		//Flags
@@ -571,7 +570,7 @@ public class GameManager {
 						(!startConquest && subState != SUB_STATE_ACTION_CONQUEST) || 
 						i!=player.getKingdomList().size()-1){
 					
-					gameBuffer.getGraphics().setClip(0, 0, Define.SIZEX, Define.SIZEX);
+					gameBuffer.getGraphics().setClip(0, 0, gameBuffer.getWidth(), gameBuffer.getHeight());
 					gameBuffer.getGraphics().drawImage(GfxManager.imgFlagList.get(player.getFlag()),
 							worldConver.getConversionDrawX(
 							gameCamera.getPosX(), kingdom.getTerrainList().get(kingdom.getTerrainList().size()-1).getAbsoluteX())+
@@ -598,14 +597,22 @@ public class GameManager {
 		if(subState == SUB_STATE_ACTION_SELECT && getCurrentPlayer().getActionIA() == null)
 			map.drawTarget(gameBuffer.getGraphics());
 		
-		Image img = GfxEffects.getInstance().getDistorsionedImageXY2(gameBuffer, 1f, 1.2f);
-		g.drawImage(img, Define.SIZEX2, Define.SIZEY2, Graphics.VCENTER | Graphics.HCENTER);
 		
-		
+		 float distPixelsW = (float)gameBuffer.getWidth() * (distorsion -1f); 
+		 float distPixelsH = (float)gameBuffer.getHeight() * (distorsion -1f);
+		 ///*
+		 g.drawDistorisionImage(
+				 gameBuffer, Define.SIZEX2, Define.SIZEY2, 
+				 0, 0, 
+				 gameBuffer.getWidth(), 0, 
+				 -(int)distPixelsW, gameBuffer.getHeight() + (int)distPixelsH, 
+				 gameBuffer.getWidth() + (int)distPixelsW, gameBuffer.getHeight() + (int)distPixelsH,
+				 Graphics.VCENTER | Graphics.HCENTER);
+		//*/
+		 //g.drawImage(gameBuffer, Define.SIZEX2, Define.SIZEY2, Graphics.VCENTER | Graphics.HCENTER);
 		
 		//Fin buffer
 		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-		
 		
 		drawGUI(g);
 		
@@ -1535,6 +1542,7 @@ public class GameManager {
 				}
 			}
 		}
+		
 		lastTouchX = UserInput.getInstance().getMultiTouchHandler().getTouchX(0);
 		lastTouchY = UserInput.getInstance().getMultiTouchHandler().getTouchY(0);
 		cameraTargetX = Math.max(cameraTargetX, worldConver.getLayoutX() / 2f);
