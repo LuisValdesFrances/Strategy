@@ -41,7 +41,7 @@ public class GameManager {
 	
 	//
 	private Image gameBuffer;
-	public float distorsion = 1.5f;//1.12f;
+	public float distorsion = 1.15f;
 	
 	//
 	public boolean isAutoPlay(){
@@ -110,7 +110,9 @@ public class GameManager {
 	private SimpleBox endGameBox;
 	
 	public GameManager(WorldConver wc, GameCamera gc, Map m){
-		this.gameBuffer = Image.createImage(Define.SIZEX, Define.SIZEY);
+		this.gameBuffer = Image.createImage(
+				(int)wc.getGameLayoutX(), 
+				(int)wc.getGameLayoutY());
 		this.worldConver = wc;
 		this.gameCamera = gc;
 		this.map = m;
@@ -595,16 +597,26 @@ public class GameManager {
 			map.drawTarget(gameBuffer.getGraphics());
 		
 		
-		 float distPixelsW = (float)gameBuffer.getWidth() * (distorsion -1f); 
-		 float distPixelsH = (float)gameBuffer.getHeight() * (distorsion -1f);
+		 float totalW = (float)gameBuffer.getWidth()*distorsion;
+		 float totalH = (float)gameBuffer.getHeight()*distorsion;
+		 
+		 //Army
+		 for(int i = 0; i < map.getPlayerList().size(); i++){
+			 for(Army army: map.getPlayerList().get(i).getArmyList()){
+				 boolean isSelected =  subState == SUB_STATE_ACTION_WAIT && 
+						 getSelectedArmy() != null && getSelectedArmy().getId() == army.getId();
+				 army.draw(gameBuffer.getGraphics(), getSelectedArmy()!= null && isSelected, i == map.getPlayerIndex() && army.getState() == Army.STATE_ON,
+						 distorsion, distorsion);
+			 }
+		 }
 		 
 		 g.drawDistorisionImage(
-				 gameBuffer, Define.SIZEX2, Define.SIZEY2, 
-				 0, 0, 
-				 gameBuffer.getWidth(), 0, 
-				 -(int)distPixelsW, gameBuffer.getHeight() + (int)distPixelsH, 
-				 gameBuffer.getWidth() + (int)distPixelsW, gameBuffer.getHeight() + (int)distPixelsH,
-				 Graphics.VCENTER | Graphics.HCENTER);
+				 gameBuffer, 
+				 (int)worldConver.getCentGameLayoutX() - gameBuffer.getWidth()/2 , (int)worldConver.getCentGameLayoutY() - gameBuffer.getHeight()/2, //Point corner top-left 
+				 (int)worldConver.getCentGameLayoutX() + gameBuffer.getWidth()/2 , (int)worldConver.getCentGameLayoutY() - gameBuffer.getHeight()/2, //Point corner top-right
+				 (int)worldConver.getCentGameLayoutX() - (int)totalW/2, (int)worldConver.getCentGameLayoutY() - gameBuffer.getHeight()/2 + (int)totalH,  //Point corner button-left
+				 (int)worldConver.getCentGameLayoutX() + (int)totalW/2, (int)worldConver.getCentGameLayoutY() - gameBuffer.getHeight()/2 + (int)totalH	 //Point corner button-right
+				 );
 		
 		//g.drawImage(gameBuffer, Define.SIZEX2, Define.SIZEY2, Graphics.VCENTER | Graphics.HCENTER);
 		
@@ -613,15 +625,6 @@ public class GameManager {
 		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 		
 		
-		//Army
-		for(int i = 0; i < map.getPlayerList().size(); i++){
-			for(Army army: map.getPlayerList().get(i).getArmyList()){
-				boolean isSelected =  subState == SUB_STATE_ACTION_WAIT && 
-						getSelectedArmy() != null && getSelectedArmy().getId() == army.getId();
-				army.draw(g, getSelectedArmy()!= null && isSelected, i == map.getPlayerIndex() && army.getState() == Army.STATE_ON,
-						distorsion);
-			}
-		}
 		
 		drawGUI(g);
 		

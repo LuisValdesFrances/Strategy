@@ -125,7 +125,10 @@ public class ModeMenu {
 					public void onButtonPressDown(){}
 					
 					@Override
-					public void onButtonPressUp(){}
+					public void onButtonPressUp(){
+						Main.changeState(Define.ST_TEST, false);
+						reset();
+					}
 				};
 				btnMultiPlayer = new Button(
 						GfxManager.imgButtonMenuBigRelease, 
@@ -235,6 +238,9 @@ public class ModeMenu {
 			};
 			configMapBox.start();
 			break;
+		
+		case Define.ST_TEST:
+			break;
 		}
 	}
 	
@@ -282,6 +288,9 @@ public class ModeMenu {
 			btnBack.update(UserInput.getInstance().getMultiTouchHandler());
 			btnNext.update(UserInput.getInstance().getMultiTouchHandler());
 			configMapBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
+			break;
+			
+        case Define.ST_TEST:
 			break;
 		}
 	}
@@ -350,6 +359,32 @@ public class ModeMenu {
 			
 		case Define.ST_MENU_EXIT:
 			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+			break;
+			
+		case Define.ST_TEST:
+			
+			_g.setColor(0x000000);
+			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+			_g.fillRect(0, 0, Define.SIZEX, Define.SIZEY);
+			
+			int distW = GfxManager.imgGreenBox.getWidth()/4;
+			int distH = GfxManager.imgGreenBox.getHeight()/4;
+			int totalW = GfxManager.imgGreenBox.getWidth() + distH*2;
+			int totalH = GfxManager.imgGreenBox.getHeight() + distH;
+			
+			
+			_g.drawDistorisionImage(
+					 GfxManager.imgGreenBox, 
+					 
+					 Define.SIZEX2- GfxManager.imgGreenBox.getWidth()/2, 10, 	//Point corner top-left 
+					 Define.SIZEX2+ GfxManager.imgGreenBox.getWidth()/2, 10,  //Point corner top-right
+					 Define.SIZEX2 - totalW/2, 10 + totalH, //Point corner button-left
+					 Define.SIZEX2 + totalW/2, 10 + totalH	//Point corner button-right
+					 );
+			
+			_g.drawImage(GfxManager.imgRedBox, Define.SIZEX2, 10, Graphics.TOP | Graphics.HCENTER);
+			
+			
 			break;
 		}
 	}

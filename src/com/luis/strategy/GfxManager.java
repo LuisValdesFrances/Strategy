@@ -8,6 +8,10 @@ import com.luis.lgameengine.implementation.graphics.Image;
 import com.luis.strategy.constants.Define;
 
 public class GfxManager {
+	
+	//test
+	public static Image imgGreenBox;
+	public static Image imgRedBox;
 
 	public static Image vImgFontSmall;
 	public static Image vImgFontMedium;
@@ -356,6 +360,10 @@ public class GfxManager {
 	}
 	
 	public static void loadMenuGfx() throws IOException{
+		
+		imgGreenBox = Image.createImage("/test/greenBox.png");
+		imgRedBox = Image.createImage("/test/redBox.png");
+		
 		imgButtonMenuBigRelease = Image.createImage("/button_menu_big_release.png");
 		imgButtonMenuBigFocus = Image.createImage("/button_menu_big_focus.png");
 		imgButtonMenuMediumRelease = Image.createImage("/button_menu_medium_release.png");

@@ -146,6 +146,8 @@ public class Main extends MyCanvas implements Runnable {
 					case Define.ST_MENU_SELECT_GAME:
 					case Define.ST_MENU_SELECT_MAP:
 					case Define.ST_MENU_CONFIG_MAP:
+						
+					case Define.ST_TEST:
 					if (!isLoading) {
 						ModeMenu.update();
 					}
@@ -210,6 +212,8 @@ public class Main extends MyCanvas implements Runnable {
 		         case Define.ST_MENU_SELECT_GAME:
 		         case Define.ST_MENU_SELECT_MAP:
 		         case Define.ST_MENU_CONFIG_MAP:
+		        	 
+		         case Define.ST_TEST:
 					ModeMenu.draw(_g);
 					break;
 		         case Define.ST_GAME_INIT:

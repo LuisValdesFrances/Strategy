@@ -128,44 +128,45 @@ public class Army extends MapObject{
 		}
 	}
 	
-	public void draw(Graphics g, boolean isSelected, boolean isActive, float distorsion){
+	public void draw(Graphics g, boolean isSelected, boolean isActive, 
+			float distorsionX, float distorsionY){
 		
 		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 		
 		int pX = worldConver.getConversionDrawX(gameCamera.getPosX(), getAbsoluteX());
 		int pY = worldConver.getConversionDrawY(gameCamera.getPosY(), getAbsoluteY());
-		float distorsionLayoutX = worldConver.getLayoutX()*(distorsion -1f);
-		float distorsionLayoutY = worldConver.getLayoutY()*(distorsion -1f);
 		
 		
+		float modSize = 0;
+		/*
 		//Modo 3D
 		//Tamaño
-		float modSize = (((float)pY) * (distorsion -1f)) / worldConver.getLayoutY();
+		float modSize = (((float)pY) * (distorsionY -1f)) / worldConver.getLayoutY();
 		g.setImageSize(1+modSize, 1+modSize);
 		
-		
-		
+		float extraWidth = (distorsionX-1f)*worldConver.getLayoutX();
+		float extraHeight = (distorsionY-1f)*worldConver.getLayoutY();
 		//Deformacion en la posicion X
-		float sepCenter = pX - worldConver.getLayoutX();
+		float sepCenter = pX - worldConver.getCentGameLayoutX();
 		//Deformacion máxima en x
-		float modX = (sepCenter * distorsionLayoutX) / worldConver.getCentGameLayoutX();
-		
+		float maxX = (sepCenter * extraWidth) / worldConver.getLayoutX()/2;
 		//Relativizacion de la deformacion máxima (Menos acusada cuando mas al fondo)
-		float relativeModX = (modX * pY) /  worldConver.getLayoutY();
+		float relativeModX = (maxX * pY) /  worldConver.getLayoutY();
 		
 		//Deformacion en la posicion Y
-		float relativeModY = (pY * distorsionLayoutY) / worldConver.getLayoutY();
+		float relativeModY = (pY * extraHeight) / worldConver.getLayoutY();
 		
 		
 		pX += relativeModX;
 		pY += relativeModY;
+		*/
 		
 		if(isSelected){
 			g.setAlpha((int)map.getAlpha());
 			g.drawImage(
 					isActive?GfxManager.imgMapSelectGreen:GfxManager.imgMapSelectRed, 
 					pX,
-					pY,
+					pY+getHeight()/2,
 					Graphics.VCENTER | Graphics.HCENTER);
 			g.setAlpha(255);
 		}
@@ -211,7 +212,6 @@ public class Army extends MapObject{
 		
 		
 		
-		///*
 		switch(anim){
 		case ANIN_IDLE:
 			spriteList.get(anim).drawFrame(g, GfxManager.imgArmyIdle, 
@@ -235,12 +235,14 @@ public class Army extends MapObject{
 					flip, Graphics.VCENTER | Graphics.HCENTER);
 			break;
 		}
-		//*/
-		//Test
-		g.setTextSize(Font.SYSTEM_SIZE[Settings.getInstance().getNativeResolution()]);
-		g.drawText(""+(1+modSize), pX+30, pY+20, Color.RED);
-		//g.drawImage(GfxManager.imgCoin, pX, pY,  Graphics.VCENTER | Graphics.HCENTER);
 		
+		//Test
+		/*
+		g.setTextSize(Font.SYSTEM_SIZE[Settings.getInstance().getNativeResolution()]);
+		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+		g.drawText(""+(relativeModX), pX+30, pY+20, Color.RED);
+		g.drawImage(GfxManager.imgCoin, pX, pY,  Graphics.VCENTER | Graphics.HCENTER);
+		*/
 		g.setImageSize(1, 1);
 		g.setAlpha(255);
 		/*

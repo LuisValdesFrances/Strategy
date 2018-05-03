@@ -46,6 +46,7 @@ public class Define {
 	public static final int ST_MENU_SELECT_GAME = 9;
 	public static final int ST_MENU_SELECT_MAP = 10;
 	public static final int ST_MENU_CONFIG_MAP = 11;
+	public static final int ST_TEST = 12;
 
 	// Game states:
 	public static final int ST_GAME_INIT = 100;
