@@ -10,20 +10,16 @@ import com.luis.strategy.game.ActionIA;
 public class Player {
 	
 	private static int idCount;
+	
 	private int id;
-	
 	private String name;
-	
 	private int gold;
+	private int capitalKingdom;
+	private int flag;
+	private ActionIA actionIA;
 	
 	private List<Army> armyList;
 	private List<Kingdom> kingdomList;
-	
-	private int capitalKingdom;
-	
-	private int flag;
-	
-	private ActionIA actionIA;
 	
 	public Player(String name, ActionIA actionIA, int flag, int capitalKingdom){
 		this.id = idCount++;
@@ -176,7 +172,7 @@ public class Player {
 	*/
 	
 	public boolean changeCapital(){
-		if(getCapital() == null){
+		if(getCapitalkingdom() == null){
 			for(Kingdom k : kingdomList){
 				if(k.getTerrainList().get(k.getTerrainList().size()-1).getType() == GameParams.BIG_CITY){
 					setCapitalKingdom(k.getId());
@@ -209,7 +205,7 @@ public class Player {
 		this.actionIA = actionIA;
 	}
 
-	public Kingdom getCapital() {
+	public Kingdom getCapitalkingdom() {
 		Kingdom kingdom = null;
 		for(int i = 0; i < kingdomList.size() && kingdom == null; i++){
 			if(kingdomList.get(i).getId() == capitalKingdom){

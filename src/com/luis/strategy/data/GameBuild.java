@@ -8,7 +8,7 @@ import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.strategy.GameState;
 import com.luis.strategy.game.ActionIA;
 import com.luis.strategy.map.Army;
-import com.luis.strategy.map.Map;
+import com.luis.strategy.map.GameScene;
 import com.luis.strategy.map.Player;
 
 public class GameBuild {
@@ -24,7 +24,7 @@ public class GameBuild {
 	
 	public List<Player> build(
 			GameState gameState,
-			Map map, WorldConver worldConver, GameCamera gameCamera){
+			GameScene gameScene, WorldConver worldConver, GameCamera gameCamera){
 		
 		List<Player> playerList = new ArrayList<Player>();
 		GameState.PlayerConf[] playerConfList = gameState.getPlayerConfList();
@@ -41,12 +41,12 @@ public class GameBuild {
 					k1);
 			
 			player.setGold(10);
-			player.getKingdomList().add(map.getKingdom(k1));
-			player.getKingdomList().add(map.getKingdom(k2));
+			player.getKingdomList().add(gameScene.getKingdom(k1));
+			player.getKingdomList().add(gameScene.getKingdom(k2));
 			
 			Army army = new Army(worldConver, gameCamera, 
-					map, player, map.getKingdom(k1), player.getFlag(), 
-					map.getX(), map.getY(), map.getWidth(), map.getHeight());
+					gameScene.getMap(), player, gameScene.getKingdom(k1), player.getFlag(), 
+					gameScene.getMap().getX(), gameScene.getMap().getY(), gameScene.getMap().getWidth(), gameScene.getMap().getHeight());
 			player.getArmyList().add(army);
 			
 			playerList.add(player);

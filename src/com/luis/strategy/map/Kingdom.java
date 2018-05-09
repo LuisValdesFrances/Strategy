@@ -27,7 +27,7 @@ public class Kingdom extends MapObject{
 	
 	
 	public Kingdom(
-		WorldConver worldConver, GameCamera gameCamera, Map map,
+		WorldConver worldConver, GameCamera gameCamera, MapObject map,
 		float x, float y, float mapX, float mapY, int mapWidth, int mapHeight) {
 		super(
 			worldConver, gameCamera, map, 

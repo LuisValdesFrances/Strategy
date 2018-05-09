@@ -1,4 +1,4 @@
-package com.luis.army.gui;
+package com.luis.strategy.gui;
 
 import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gameutils.fonts.TextManager;
@@ -121,9 +121,8 @@ public class BattleBox extends MenuBox{
 		return true;
 	}
 	
-	@Override
-	public void draw(Graphics g, boolean drawBG){
-		super.draw(g, drawBG);
+	public void draw(Graphics g){
+		super.draw(g, GfxManager.imgBlackBG);
 		if(state != STATE_UNACTIVE){
 			for(int i = 0; i < GfxManager.imgIconTroop.size(); i++){
 				g.setClip(0, 0, Define.SIZEX, Define.SIZEY);

@@ -1,4 +1,4 @@
-package com.luis.army.gui;
+package com.luis.strategy.gui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -169,7 +169,7 @@ public class ArmyBuyBox {
 			int modAlpha = (int) ((Math.abs(modPosY) * MenuElement.bgAlpha) / 
 					(Define.SIZEY2+menuHeight/2));
 			g.setAlpha(MenuElement.bgAlpha-modAlpha);
-			g.drawImage(MenuElement.imgBG, Define.SIZEX2, Define.SIZEY2, Graphics.VCENTER | Graphics.HCENTER);
+			g.drawImage(GfxManager.imgBlackBG, Define.SIZEX2, Define.SIZEY2, Graphics.VCENTER | Graphics.HCENTER);
 			g.setAlpha(255);
 			
 			int modY = state==STATE_END?modPosY*-1:modPosY;

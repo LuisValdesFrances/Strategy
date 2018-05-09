@@ -1,4 +1,4 @@
-package com.luis.army.gui;
+package com.luis.strategy.gui;
 
 import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gameutils.fonts.TextManager;
@@ -105,9 +105,8 @@ public class TerrainBox extends MenuBox{
 		return super.update(touchHandler, delta);
 	}
 	
-	@Override
-	public void draw(Graphics g, boolean drawBG){
-		super.draw(g, drawBG);
+	public void draw(Graphics g){
+		super.draw(g, GfxManager.imgBlackBG);
 		if(state != STATE_UNACTIVE){
 			
 			TextManager.drawSimpleText(g, Font.FONT_BIG, textHeader, 

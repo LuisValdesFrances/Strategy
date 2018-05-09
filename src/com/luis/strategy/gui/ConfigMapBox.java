@@ -1,4 +1,4 @@
-package com.luis.army.gui;
+package com.luis.strategy.gui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,9 +109,8 @@ public class ConfigMapBox extends ListBox{
 	};
 	*/
 	
-	@Override
-	public void draw(Graphics g, boolean drawBG){
-		super.draw(g, drawBG);
+	public void draw(Graphics g){
+		super.draw(g, GfxManager.imgBlackBG);
 		
 		for(int i = 0; i < btnList.size(); i++){
 			TextManager.drawSimpleText(g, Font.FONT_BIG, 

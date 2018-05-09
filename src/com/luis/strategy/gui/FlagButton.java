@@ -1,4 +1,4 @@
-package com.luis.army.gui;
+package com.luis.strategy.gui;
 
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.graphics.Image;

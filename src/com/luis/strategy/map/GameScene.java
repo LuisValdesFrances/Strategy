@@ -12,25 +12,38 @@ import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 
 
-
-public class Map extends MapObject{
+public class GameScene{
+	
+	private int mapId;
+	private int playerIndex;
+	private int turnCount;
 	
 	private List<Player>playerList;
 	private List<Kingdom> kingdomList;
 	
-	private int playerIndex;
-	private int turnCount;
-	
 	private int numberPartsW;
 	private int numberPartsH;
 	
-	public Map(
-			WorldConver worldConver, GameCamera gameCamera, int x, int y, int w, int h,
+	private MapObject map;
+	
+	public GameScene(
+			int mapId,
+			WorldConver worldConver, GameCamera gameCamera,
+			int mapX, int mapY,
 			int numberPartsW, int numberPartsH) {
-		super(worldConver, gameCamera, null, x, y, w, h, x, y, w, h);
-		this.map = this;
+		this.mapId = mapId;
 		this.numberPartsW = numberPartsW;
 		this.numberPartsH = numberPartsH;
+		map = new MapObject(
+				worldConver, gameCamera,
+				null,
+				mapX, mapY, GfxManager.imgMapList.get(0).getWidth()*numberPartsW, GfxManager.imgMapList.get(0).getWidth()*numberPartsH,
+				mapX, mapY, GfxManager.imgMapList.get(0).getWidth()*numberPartsW, GfxManager.imgMapList.get(0).getWidth()*numberPartsH) {
+		};
+	}
+	
+	public void init(){
+		
 	}
 	
 	public void update(MultiTouchHandler multiTouchHandler, float delta){
@@ -65,10 +78,10 @@ public class Map extends MapObject{
 	
 	private boolean alphaFlag;
 	private float alpha = 255;
-	public void drawMap(Graphics g, List<Player> playerList){
+	public void drawMap(Graphics g, WorldConver worldConver, GameCamera gameCamera, List<Player> playerList){
 		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-		int pW = getWidth()/numberPartsW;
-		int pH = getHeight()/numberPartsH;
+		int pW = GfxManager.imgMapList.get(0).getWidth();
+		int pH = GfxManager.imgMapList.get(0).getHeight();
 		{
 		int i = 0;
 		for(int y = 0; y < numberPartsH; y++){
@@ -76,12 +89,12 @@ public class Map extends MapObject{
 				
 				if(worldConver.isObjectInGameLayout(
 						gameCamera.getPosX(), gameCamera.getPosY(), 
-						getX()+x*pW, getY()+y*pH, 
+						map.getX()+x*pW, map.getY()+y*pH, 
 						pW, pH)){
 				
 					g.drawImage(GfxManager.imgMapList.get(i),
-							worldConver.getConversionDrawX(gameCamera.getPosX(), getX()+x*pW),
-							worldConver.getConversionDrawY(gameCamera.getPosY(), getY()+y*pH),
+							worldConver.getConversionDrawX(gameCamera.getPosX(), map.getX()+x*pW),
+							worldConver.getConversionDrawY(gameCamera.getPosY(), map.getY()+y*pH),
 							Graphics.TOP | Graphics.LEFT
 							);
 				}
@@ -116,17 +129,17 @@ public class Map extends MapObject{
 				
 				//Capitales
 				for(Player player : playerList){
-					if(player.getCapital() != null){
-						int modW = player.getCapital().getTerrainList().get(player.getCapital().getTerrainList().size()-1).getWidth()/2-
+					if(player.getCapitalkingdom() != null){
+						int modW = player.getCapitalkingdom().getTerrainList().get(player.getCapitalkingdom().getTerrainList().size()-1).getWidth()/2-
 								GfxManager.imgCrown.getWidth()/3;
-						int modH = player.getCapital().getTerrainList().get(player.getCapital().getTerrainList().size()-1).getHeight()/2-
+						int modH = player.getCapitalkingdom().getTerrainList().get(player.getCapitalkingdom().getTerrainList().size()-1).getHeight()/2-
 								GfxManager.imgCrown.getHeight()/3;
 						g.drawImage(GfxManager.imgCrown, 
 							worldConver.getConversionDrawX(gameCamera.getPosX(), 
-									player.getCapital().getTerrainList().get(player.getCapital().getTerrainList().size()-1).getAbsoluteX()-
+									player.getCapitalkingdom().getTerrainList().get(player.getCapitalkingdom().getTerrainList().size()-1).getAbsoluteX()-
 									modW),
 							worldConver.getConversionDrawY(gameCamera.getPosY(), 
-									player.getCapital().getTerrainList().get(player.getCapital().getTerrainList().size()-1).getAbsoluteY()-
+									player.getCapitalkingdom().getTerrainList().get(player.getCapitalkingdom().getTerrainList().size()-1).getAbsoluteY()-
 									modH),
 							Graphics.HCENTER | Graphics.VCENTER);
 					}
@@ -194,6 +207,14 @@ public class Map extends MapObject{
 	}
 
 	
+	public int getId() {
+		return mapId;
+	}
+
+	public void setId(int id) {
+		this.mapId = id;
+	}
+
 	public List<Player> getPlayerList() {
 		return playerList;
 	}
@@ -233,4 +254,17 @@ public class Map extends MapObject{
 	public void setTurnCount(int turnCount) {
 		this.turnCount = turnCount;
 	}
+
+	public MapObject getMap() {
+		return map;
+	}
+
+	public void setMap(MapObject map) {
+		this.map = map;
+	}
+
+	
+	
+	
+	
 }

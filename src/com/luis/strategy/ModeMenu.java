@@ -2,7 +2,6 @@ package com.luis.strategy;
 
 import android.util.Log;
 
-import com.luis.army.gui.ConfigMapBox;
 import com.luis.lgameengine.gameutils.Settings;
 import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gui.Button;
@@ -15,6 +14,7 @@ import com.luis.strategy.GameState.PlayerConf;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.data.DataKingdom;
+import com.luis.strategy.gui.ConfigMapBox;
 
 public class ModeMenu {
 	
@@ -46,11 +46,10 @@ public class ModeMenu {
 		switch (_iMenuState) {
         case Define.ST_MENU_LOGO:
         	
-        	MenuElement.imgBG = GfxManager.imgBlackBG;
-    		MenuElement.bgAlpha = (int)(GameParams.BG_BLACK_ALPHA*0.5);
+        	MenuElement.bgAlpha = (int)(GameParams.BG_BLACK_ALPHA*0.5);
 			
     		iStateLogo = ST_LOGO_1;
-			alpha = 255;
+			alpha = 0;
 			logoAlpha = 255;
 			startTime = System.currentTimeMillis();
 			Font.init(GfxManager.vImgFontSmall, GfxManager.vImgFontMedium, GfxManager.vImgFontBig);
@@ -347,14 +346,14 @@ public class ModeMenu {
 		case Define.ST_MENU_SELECT_MAP:
 			drawMenuBG(_g);
 			btnBack.draw(_g, 0, 0);
-			selectMapBox.draw(_g, true);
+			selectMapBox.draw(_g, GfxManager.imgBlackBG);
 			break;
 		
 		case Define.ST_MENU_CONFIG_MAP:
 			drawMenuBG(_g);
 			btnBack.draw(_g, 0, 0);
 			btnNext.draw(_g, 0, 0);
-			configMapBox.draw(_g, true);
+			configMapBox.draw(_g);
 			break;
 			
 		case Define.ST_MENU_EXIT:

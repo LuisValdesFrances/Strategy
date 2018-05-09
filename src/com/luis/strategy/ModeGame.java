@@ -1,5 +1,10 @@
 package com.luis.strategy;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 import com.luis.lgameengine.gui.Button;
@@ -12,11 +17,12 @@ import com.luis.lgameengine.gameutils.gameworld.ParticleManager;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.strategy.connection.Download;
+import com.luis.strategy.connection.GameBuilder;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.data.DataKingdom;
 import com.luis.strategy.data.GameBuild;
 import com.luis.strategy.game.GameManager;
-import com.luis.strategy.map.Map;
+import com.luis.strategy.map.GameScene;
 import com.luis.strategy.map.Player;
 
 /**
@@ -40,7 +46,7 @@ public class ModeGame {
 	private static GfxEffects gfxEffects;
 	
 	private static GameManager gameManager;
-	private static Map map;
+	private static GameScene gameScene;
 	
 	/**
 	 * Interface
@@ -101,31 +107,37 @@ public class ModeGame {
 			gameCamera = new GameCamera(worldConver, 0, 0, 
 					GamePerformance.getInstance().getFrameMult(Main.targetFPS));
 			
-			map = new Map(
-					worldConver, gameCamera, 
-					0,//GfxManager.imgMap.getWidth()/2, 
-					0,//GfxManager.imgMap.getHeight()/2,
-					mapWidth, mapHeight,
-					DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][0],
-					DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][1]
-					);
 			
-			switch(GameState.getInstance().getMap()){
-        	case 0:
-        		map.setKingdomList(DataKingdom.getGenterex(worldConver, gameCamera, map));
-	            break;
-        	case 1:
-        	case 2:
-        		map.setKingdomList(DataKingdom.getCrom(worldConver, gameCamera, map));
-        		break;
-        	}
 			
-			List<Player> playerList = GameBuild.getInstance().build(
-					GameState.getInstance(), map, worldConver, gameCamera);
+			if(gameScene == null){
+				gameScene = new GameScene(
+						GameState.getInstance().getMap(),
+						worldConver, gameCamera, 
+						0,//GfxManager.imgMap.getWidth()/2, 
+						0,//GfxManager.imgMap.getHeight()/2,
+						DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][0],
+						DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][1]
+						);
+				
+				switch(GameState.getInstance().getMap()){
+	        	case 0:
+	        		gameScene.setKingdomList(DataKingdom.getGenterex(worldConver, gameCamera, gameScene.getMap()));
+		            break;
+	        	case 1:
+	        	case 2:
+	        		gameScene.setKingdomList(DataKingdom.getCrom(worldConver, gameCamera, gameScene.getMap()));
+	        		break;
+	        	}
+				
+				List<Player> playerList = GameBuild.getInstance().build(
+						GameState.getInstance(), gameScene, worldConver, gameCamera);
+				
+				gameScene.setPlayerList(playerList);
+			}else{
+				
+			}
 			
-			map.setPlayerList(playerList);
-			
-			gameManager = new GameManager(worldConver, gameCamera, map);
+			gameManager = new GameManager(worldConver, gameCamera, gameScene);
 			
 			break;
 			
@@ -134,6 +146,69 @@ public class ModeGame {
 			break;
 			
 		case Define.ST_GAME_PAUSE:
+			
+			
+			HttpURLConnection connection = null;
+			try {
+
+				// open URL connection
+				URL url = new URL("http://192.168.1.110:8080/KingServer/mapTestServlet2");
+				connection = (HttpURLConnection) url.openConnection();
+				connection.setRequestProperty("Content-Type", "application/octet-stream");
+				connection.setRequestMethod("POST");
+				connection.setDoInput(true);
+				connection.setDoOutput(true);
+				connection.setUseCaches(false);
+
+				// send object
+				ObjectOutputStream objOut = new ObjectOutputStream(
+						connection.getOutputStream());
+				objOut.writeObject(GameBuilder.getInstance().build(gameScene));
+				objOut.flush();
+				objOut.close();
+
+				BufferedReader in = new BufferedReader(new InputStreamReader(
+						connection.getInputStream()));
+
+				String str = "";
+				String result = "";
+				while ((str = in.readLine()) != null) {
+					result += str + "\n";
+				}
+				in.close();
+
+				System.out.println(result);
+				connection.disconnect();
+
+				// Envia el post
+				// ObjectInputStream objIn = new
+				// ObjectInputStream(conn.getInputStream());
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}	
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 			pauseBox = new MenuBox(
 					Define.SIZEX, Define.SIZEY, 
 					GfxManager.imgBigBox, 
@@ -220,6 +295,9 @@ public class ModeGame {
 			break;
 		case Define.ST_GAME_CONFIRMATION_QUIT:
 			if(!confirmationQuitBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec())){
+				//Limio el juego
+				gameScene =null;
+				System.gc();
 				Main.changeState(
 						confirmationQuitBox.getIndexPressed()==0?Define.ST_GAME_PAUSE:Define.ST_MENU_MAIN, 
 						confirmationQuitBox.getIndexPressed()==1);
@@ -242,11 +320,11 @@ public class ModeGame {
 			
 		case Define.ST_GAME_PAUSE:
 			gameManager.draw(_g);
-			pauseBox.draw(_g, true);
+			pauseBox.draw(_g, GfxManager.imgBlackBG);
 			break;
 		case Define.ST_GAME_CONFIRMATION_QUIT:
 			gameManager.draw(_g);
-			confirmationQuitBox.draw(_g, true);
+			confirmationQuitBox.draw(_g, GfxManager.imgBlackBG);
 			break;
 		}
 	}

@@ -13,7 +13,8 @@ import com.luis.strategy.RscManager;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.map.Army;
 import com.luis.strategy.map.Kingdom;
-import com.luis.strategy.map.Map;
+import com.luis.strategy.map.GameScene;
+import com.luis.strategy.map.MapObject;
 import com.luis.strategy.map.Player;
 import com.luis.strategy.map.Terrain;
 import com.luis.strategy.map.Troop;
@@ -50,7 +51,7 @@ public class ActionIA {
 	/**
 	 * Crea ejercitos nuevos y compra tropas a los que se encuentren en ciudades
 	 */
-	public void management(WorldConver worldConver, GameCamera gameCamera, Map map, List<Player> playerList){
+	public void management(WorldConver worldConver, GameCamera gameCamera, MapObject map, List<Player> playerList){
 		/*
 		int cost = player.getCost(false);
 		int salary = player.getTaxes();
@@ -233,7 +234,7 @@ public class ActionIA {
 		}
 	}
 	
-	public boolean isKingdomToMove(Map map, Kingdom kingdom){
+	public boolean isKingdomToMove(GameScene map, Kingdom kingdom){
 		
 		switch(getSelectedArmy().getIaDecision().getDecision()){
 			case DECISION_ATACK:

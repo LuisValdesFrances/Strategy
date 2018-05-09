@@ -1,4 +1,4 @@
-package com.luis.army.gui;
+package com.luis.strategy.gui;
 
 import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gameutils.fonts.TextManager;
@@ -46,9 +46,8 @@ public class SimpleBox extends MenuBox{
 		start();
 	}
 	
-	@Override
-	public void draw(Graphics g, boolean drawBG){
-		super.draw(g, drawBG);
+	public void draw(Graphics g){
+		super.draw(g, GfxManager.imgBlackBG);
 		if(state != STATE_UNACTIVE){
 			TextManager.draw(g, Font.FONT_SMALL, textBody, 
 					getX() + (int)modPosX, 

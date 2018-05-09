@@ -1,4 +1,4 @@
-package com.luis.army.gui;
+package com.luis.strategy.gui;
 
 import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gameutils.fonts.TextManager;
@@ -185,7 +185,7 @@ public class BattleDiceBox {
 			int m = ((Define.SIZEY-totalHeight)+totalHeight);
 			int modAlpha = (int) ((Math.abs(modPosY) * MenuElement.bgAlpha) / m);
 			g.setAlpha(MenuElement.bgAlpha-modAlpha);
-			g.drawImage(MenuElement.imgBG, Define.SIZEX2, Define.SIZEY2, Graphics.VCENTER | Graphics.HCENTER);
+			g.drawImage(GfxManager.imgBlackBG, Define.SIZEX2, Define.SIZEY2, Graphics.VCENTER | Graphics.HCENTER);
 			g.setAlpha(255);
 			
 			int modY = state==STATE_END?modPosY*-1:modPosY;

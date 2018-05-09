@@ -1,4 +1,4 @@
-package com.luis.army.gui;
+package com.luis.strategy.gui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -208,9 +208,8 @@ public class ArmyBox extends MenuBox{
 		return true;
 	}
 	
-	@Override
-	public void draw(Graphics g, boolean drawBG){
-		super.draw(g, drawBG);
+	public void draw(Graphics g){
+		super.draw(g, GfxManager.imgBlackBG);
 		if(state != STATE_UNACTIVE){
 			
 			int countColumns = 0;
@@ -248,7 +247,7 @@ public class ArmyBox extends MenuBox{
 			}
 			
 			if(deleteButtonList != null && deleteButtonList.size() > 0){
-				confirmationBox.draw(g, true);
+				confirmationBox.draw(g);
 			}
 			
 			if(crossButton != null)

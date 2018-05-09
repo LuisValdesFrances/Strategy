@@ -429,7 +429,6 @@ public class Main extends MyCanvas implements Runnable {
 				if(lastState >= Define.ST_GAME_INIT ){
 					GfxManager.deleteGameGFX();
 				}
-				
 				break;
 		}
 		//*/

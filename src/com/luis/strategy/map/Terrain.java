@@ -11,7 +11,7 @@ public class Terrain extends MapObject{
 	private boolean conquest;
 	
 	public Terrain(
-			WorldConver worldConver, GameCamera gameCamera, Map map,
+			WorldConver worldConver, GameCamera gameCamera, MapObject map,
 			float x, float y, int width, int height,
 			float mapX, float mapY,
 			int mapWidth, int mapHeight, int type, boolean conquest) {

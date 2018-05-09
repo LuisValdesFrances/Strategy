@@ -9,7 +9,7 @@ public abstract class MapObject{
 	
 	protected WorldConver worldConver;
 	protected GameCamera gameCamera;
-	protected Map map;
+	protected MapObject map;
 	protected float x;
 	protected float y;
 	protected int width;
@@ -33,7 +33,7 @@ public abstract class MapObject{
 	
 	public MapObject(
 			WorldConver worldConver, GameCamera gameCamera,
-			Map map,
+			MapObject map,
 			float x, float y, int width, int height, 
 			float mapX, float mapY, int mapWidth, int mapHeight) {
 		super();

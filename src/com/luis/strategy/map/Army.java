@@ -55,7 +55,7 @@ public class Army extends MapObject{
 	//IA
 	private IADecision iaDecision;
 	
-	public Army (WorldConver worldConver, GameCamera gameCamera, Map map,
+	public Army (WorldConver worldConver, GameCamera gameCamera, MapObject map,
 			Player player,
 			Kingdom kingdom, int flag, float mapX, float mapY, int mapWidth, int mapHeight) {
 		
@@ -129,7 +129,7 @@ public class Army extends MapObject{
 	}
 	
 	public void draw(Graphics g, boolean isSelected, boolean isActive, 
-			float distorsionX, float distorsionY){
+			float distorsionX, float distorsionY, GameScene gameScene){
 		
 		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 		
@@ -162,7 +162,7 @@ public class Army extends MapObject{
 		*/
 		
 		if(isSelected){
-			g.setAlpha((int)map.getAlpha());
+			g.setAlpha((int)gameScene.getAlpha());
 			g.drawImage(
 					isActive?GfxManager.imgMapSelectGreen:GfxManager.imgMapSelectRed, 
 					pX,

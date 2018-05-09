@@ -5,11 +5,6 @@ import java.util.List;
 
 import android.util.Log;
 
-import com.luis.army.gui.ArmyBox;
-import com.luis.army.gui.BattleBox;
-import com.luis.army.gui.FlagButton;
-import com.luis.army.gui.SimpleBox;
-import com.luis.army.gui.TerrainBox;
 import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gameutils.fonts.TextManager;
 import com.luis.lgameengine.gameutils.gameworld.GameCamera;
@@ -28,9 +23,14 @@ import com.luis.strategy.RscManager;
 import com.luis.strategy.UserInput;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
+import com.luis.strategy.gui.ArmyBox;
+import com.luis.strategy.gui.BattleBox;
+import com.luis.strategy.gui.FlagButton;
+import com.luis.strategy.gui.SimpleBox;
+import com.luis.strategy.gui.TerrainBox;
 import com.luis.strategy.map.Army;
 import com.luis.strategy.map.Kingdom;
-import com.luis.strategy.map.Map;
+import com.luis.strategy.map.GameScene;
 import com.luis.strategy.map.Player;
 import com.luis.strategy.map.Terrain;
 import com.luis.strategy.map.Troop;
@@ -66,7 +66,7 @@ public class GameManager {
 	public GameCamera gameCamera;
 	public WorldConver worldConver;
 	
-	private Map map;
+	private GameScene gameScene;
 	
 	private int state;
 	private int lastState;
@@ -109,20 +109,19 @@ public class GameManager {
 	private SimpleBox discardBox;
 	private SimpleBox endGameBox;
 	
-	public GameManager(WorldConver wc, GameCamera gc, Map m){
+	public GameManager(WorldConver wc, GameCamera gc, GameScene m){
 		this.gameBuffer = Image.createImage(
 				(int)wc.getGameLayoutX(), 
 				(int)wc.getGameLayoutY());
 		this.worldConver = wc;
 		this.gameCamera = gc;
-		this.map = m;
+		this.gameScene = m;
 		this.lastTouchX = UserInput.getInstance().getMultiTouchHandler().getTouchX(0);
 		this.lastTouchY = UserInput.getInstance().getMultiTouchHandler().getTouchY(0);
 		
 		this.cameraTargetX=0;//worldConver.getCentlayoutX();
 		this.cameraTargetY=0;//=worldConver.getCentlayoutY();
 		
-		MenuElement.imgBG = GfxManager.imgBlackBG;
 		MenuElement.bgAlpha = GameParams.BG_BLACK_ALPHA;
 		
 		btnDebugPause = new Button(
@@ -242,11 +241,11 @@ public class GameManager {
 				Army army = new Army(
 						worldConver, 
 						gameCamera, 
-						map, 
+						gameScene.getMap(), 
 						getCurrentPlayer(),
 						getKingdom(),
 						getCurrentPlayer().getFlag(), 
-						map.getX(), map.getY(), map.getWidth(), map.getHeight());
+						gameScene.getMap().getX(), gameScene.getMap().getY(), gameScene.getMap().getWidth(), gameScene.getMap().getHeight());
 				army.setState(Army.STATE_OFF);
 				getCurrentPlayer().getArmyList().add(army);
 				cancel();
@@ -351,8 +350,8 @@ public class GameManager {
 				}
 			}
 				
-			for(int i = 0; i < map.getPlayerList().size(); i++){
-				for(Army army: map.getPlayerList().get(i).getArmyList()){
+			for(int i = 0; i < gameScene.getPlayerList().size(); i++){
+				for(Army army: gameScene.getPlayerList().get(i).getArmyList()){
 					if(army.isSelect()){
 						army.getButton().reset();
 						cleanArmyAction();
@@ -367,7 +366,7 @@ public class GameManager {
 			switch(subState){
 			case SUB_STATE_ACTION_WAIT:
 				//Atcualizar iteracion terreno:
-				for(Kingdom kingdom : map.getKingdomList()){
+				for(Kingdom kingdom : gameScene.getKingdomList()){
 					for(Terrain terrain : kingdom.getTerrainList()){
 						if(terrain.isSelect()){
 							terrain.getButton().reset();
@@ -388,8 +387,8 @@ public class GameManager {
 					}
 				}
 					
-				for(int i = 0; i < map.getPlayerList().size(); i++){
-					for(Army army: map.getPlayerList().get(i).getArmyList()){
+				for(int i = 0; i < gameScene.getPlayerList().size(); i++){
+					for(Army army: gameScene.getPlayerList().get(i).getArmyList()){
 						if(army.isSelect()){
 							army.getButton().reset();
 							cleanArmyAction();
@@ -398,7 +397,7 @@ public class GameManager {
 							//Camara se posiciona en el seleccionado
 							cameraTargetX = getSelectedArmy().getAbsoluteX();
 							cameraTargetY = getSelectedArmy().getAbsoluteY();
-							if(i == map.getPlayerIndex() && army.getState() == Army.STATE_ON){
+							if(i == gameScene.getPlayerIndex() && army.getState() == Army.STATE_ON){
 								btnFlagHelmet.start();
 								setDataTarget(getSelectedArmy());
 								changeSubState(SUB_STATE_ACTION_SELECT);
@@ -411,13 +410,13 @@ public class GameManager {
 			break;
 				
 			case SUB_STATE_ACTION_SELECT:
-				for(Kingdom kingdom: map.getKingdomList()){
+				for(Kingdom kingdom: gameScene.getKingdomList()){
 					
 					//Chequea si el reino que se ha tocado (isSelect) es valido(target != -1)
 					if(
 						(getCurrentPlayer().getActionIA() == null && kingdom.getTarget()!= -1 && kingdom.isSelect())
 						||
-						(getCurrentPlayer().getActionIA() != null && getCurrentPlayer().getActionIA().isKingdomToMove(map, kingdom))
+						(getCurrentPlayer().getActionIA() != null && getCurrentPlayer().getActionIA().isKingdomToMove(gameScene, kingdom))
 							
 					){
 						kingdom.getButton().reset();
@@ -433,7 +432,7 @@ public class GameManager {
 						putArmyAtKingdom(getSelectedArmy(), getSelectedArmy().getKingdom(), kingdom);
 						
 						//Quito todos los otros indicadores de target
-						for(Kingdom k: map.getKingdomList()){
+						for(Kingdom k: gameScene.getKingdomList()){
 							if(k.getId() != getSelectedArmy().getKingdom().getId()){
 								k.setTarget(-1);
 							}
@@ -549,7 +548,7 @@ public class GameManager {
 			!terrainBox.isActive()){
 			updateCamera();
 			if(getCurrentPlayer().getActionIA() == null && state == STATE_ACTION){
-				map.update(UserInput.getInstance().getMultiTouchHandler(), delta);
+				gameScene.update(UserInput.getInstance().getMultiTouchHandler(), delta);
 			}
 		}
 		
@@ -557,7 +556,7 @@ public class GameManager {
 		
 		
 		//Actualizar animaciones
-		for(Player player : map.getPlayerList())
+		for(Player player : gameScene.getPlayerList())
 			player.updateArmies(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
 		
 	}
@@ -565,10 +564,10 @@ public class GameManager {
 	public void draw(Graphics g){
 		
 		//Pintado en el buffer
-		map.drawMap(gameBuffer.getGraphics(), map.getPlayerList());
+		gameScene.drawMap(gameBuffer.getGraphics(), worldConver, gameCamera, gameScene.getPlayerList());
 		
 		//Flags
-		for(Player player : map.getPlayerList()){
+		for(Player player : gameScene.getPlayerList()){
 			int i=0;
 			for(Kingdom kingdom : player.getKingdomList()){
 				//Controla que no se pinta la ultima bandera mientras se ejecuta e efecto de conquista del jugador en curso
@@ -594,19 +593,19 @@ public class GameManager {
 		
 		
 		if(subState == SUB_STATE_ACTION_SELECT && getCurrentPlayer().getActionIA() == null)
-			map.drawTarget(gameBuffer.getGraphics());
+			gameScene.drawTarget(gameBuffer.getGraphics());
 		
 		
 		 float totalW = (float)gameBuffer.getWidth()*distorsion;
 		 float totalH = (float)gameBuffer.getHeight()*distorsion;
 		 
 		 //Army
-		 for(int i = 0; i < map.getPlayerList().size(); i++){
-			 for(Army army: map.getPlayerList().get(i).getArmyList()){
+		 for(int i = 0; i < gameScene.getPlayerList().size(); i++){
+			 for(Army army: gameScene.getPlayerList().get(i).getArmyList()){
 				 boolean isSelected =  subState == SUB_STATE_ACTION_WAIT && 
 						 getSelectedArmy() != null && getSelectedArmy().getId() == army.getId();
-				 army.draw(gameBuffer.getGraphics(), getSelectedArmy()!= null && isSelected, i == map.getPlayerIndex() && army.getState() == Army.STATE_ON,
-						 distorsion, distorsion);
+				 army.draw(gameBuffer.getGraphics(), getSelectedArmy()!= null && isSelected, i == gameScene.getPlayerIndex() && army.getState() == Army.STATE_ON,
+						 distorsion, distorsion, gameScene);
 			 }
 		 }
 		 
@@ -629,14 +628,14 @@ public class GameManager {
 		drawGUI(g);
 		
 		if(ModeGame.showDebugInfo){
-			for(Kingdom k : map.getKingdomList())
+			for(Kingdom k : gameScene.getKingdomList())
 				TextManager.drawSimpleText(g, Font.FONT_MEDIUM, 
 						"ST:" + k.getState(),
 					worldConver.getConversionDrawX(gameCamera.getPosX(), k.getAbsoluteX()),
 					worldConver.getConversionDrawY(gameCamera.getPosY(), k.getAbsoluteY()),
 					Graphics.BOTTOM | Graphics.RIGHT);
 			
-			for(Player p : map.getPlayerList())
+			for(Player p : gameScene.getPlayerList())
 				for(Army a : p.getArmyList())
 					TextManager.drawSimpleText(g, Font.FONT_SMALL, 
 					""+a.getKingdom().getId() + "-" + a.getId(),
@@ -708,13 +707,13 @@ public class GameManager {
 		g.drawImage(GfxManager.imgGameHud, 0, Define.SIZEY, Graphics.BOTTOM | Graphics.LEFT);
 		drawGold(g);
 		
-		economyBox.draw(g, true);
-		armyBox.draw(g, true);
-		discardBox.draw(g, false);
-		battleBox.draw(g, true);
-		terrainBox.draw(g, true);
-		endGameBox.draw(g, true);
-		resultBox.draw(g, true);
+		economyBox.draw(g);
+		armyBox.draw(g);
+		discardBox.draw(g);
+		battleBox.draw(g);
+		terrainBox.draw(g);
+		endGameBox.draw(g);
+		resultBox.draw(g);
 		btnCancel.draw(g, 0, 0);
 		btnNext.draw(g, 0, 0);
 		btnFlagHelmet.draw(g);
@@ -738,16 +737,16 @@ public class GameManager {
 	
 	private void drawRanking(Graphics g){
 		int nPlayer = 0;
-		for(Player player : map.getPlayerList()){
-			if(player.getCapital() != null){
+		for(Player player : gameScene.getPlayerList()){
+			if(player.getCapitalkingdom() != null){
 				nPlayer++;
 			}
 		}
 		Player[] pList = new Player[nPlayer];
 		int index = 0;
-		for(int i = 0; i < map.getPlayerList().size(); i++){
-			if(map.getPlayerList().get(i).getCapital() != null){
-				pList[index++] = map.getPlayerList().get(i);
+		for(int i = 0; i < gameScene.getPlayerList().size(); i++){
+			if(gameScene.getPlayerList().get(i).getCapitalkingdom() != null){
+				pList[index++] = gameScene.getPlayerList().get(i);
 			}
 		}
 		
@@ -773,7 +772,7 @@ public class GameManager {
 	}
 	
 	private void cleanArmyAction(){
-		for(Player player:map.getPlayerList()){
+		for(Player player:gameScene.getPlayerList()){
 			for(Army army : player.getArmyList()){
 				army.setSelected(false);
 				army.setDefeat(false);
@@ -785,13 +784,13 @@ public class GameManager {
 	private void setDataTarget(Army army){
 		
 		//Quito todos lo indicadores de target
-		for(Kingdom k: map.getKingdomList()){
+		for(Kingdom k: gameScene.getKingdomList()){
 			k.setTarget(-1);
 		}
 		
 		
 		for(Kingdom border : getSelectedArmy().getKingdom() .getBorderList()){
-			for(Kingdom kingdom: map.getKingdomList()){
+			for(Kingdom kingdom: gameScene.getKingdomList()){
 				if(kingdom.getTarget()== -1 && kingdom.getId() == border.getId()){
 					
 					//Si tengo un ejercito en la zona me uno
@@ -855,7 +854,7 @@ public class GameManager {
 				btnFlagHelmet.hide();
 				btnFlagCastle.hide();
 				//Quito todos lo indicadores de target
-				for(Kingdom k: map.getKingdomList()){
+				for(Kingdom k: gameScene.getKingdomList()){
 					k.setTarget(-1);
 				}
 				changeSubState(SUB_STATE_ACTION_WAIT);
@@ -868,7 +867,7 @@ public class GameManager {
 	private void changeState(int newState){
 		UserInput.getInstance().getMultiTouchHandler().resetTouch();
 		cleanArmyAction();
-		map.clean();
+		gameScene.clean();
 		btnNext.setDisabled(true);
 		btnCancel.setDisabled(true);
 		btnFlagHelmet.hide();
@@ -882,15 +881,15 @@ public class GameManager {
 			btnDebugPause.setDisabled(getCurrentPlayer().getActionIA() == null);
 			
 			startPresentation(Font.FONT_BIG, RscManager.allText[RscManager.TXT_GAME_TURN] + 
-					(map.getTurnCount()+1) + " - " + getCurrentPlayer().getName());
-			cameraTargetX = getCurrentPlayer().getCapital().getAbsoluteX();
-			cameraTargetY = getCurrentPlayer().getCapital().getAbsoluteY();
+					(gameScene.getTurnCount()+1) + " - " + getCurrentPlayer().getName());
+			cameraTargetX = getCurrentPlayer().getCapitalkingdom().getAbsoluteX();
+			cameraTargetY = getCurrentPlayer().getCapitalkingdom().getAbsoluteY();
 			IAWaitCount = 0;
 			break;
 		case STATE_ECONOMY:
 			
 			//Activo tropas
-			for(Player player : map.getPlayerList())
+			for(Player player : gameScene.getPlayerList())
 				for(Army army : player.getArmyList())
 					army.changeState(Army.STATE_ON);
 			
@@ -931,11 +930,11 @@ public class GameManager {
 					changeState(STATE_FINISH);
 				}else{
 					do{
-						map.setPlayerIndex((map.getPlayerIndex()+1)%map.getPlayerList().size());
+						gameScene.setPlayerIndex((gameScene.getPlayerIndex()+1)%gameScene.getPlayerList().size());
 					}
-					while(getCurrentPlayer().getCapital() == null);
-					if(map.getPlayerIndex()==0)
-						map.setTurnCount(map.getTurnCount()+1);
+					while(getCurrentPlayer().getCapitalkingdom() == null);
+					if(gameScene.getPlayerIndex()==0)
+						gameScene.setTurnCount(gameScene.getTurnCount()+1);
 					changeState(STATE_INCOME);
 				}
 			}
@@ -960,7 +959,7 @@ public class GameManager {
 		lastSubState =subState;
 		subState = newSubState;
 		
-		map.clean();
+		gameScene.clean();
 		
 		switch(state){
 		case STATE_INCOME:
@@ -987,10 +986,10 @@ public class GameManager {
 				if(getCurrentPlayer().getActionIA() != null){
 					
 					//Management
-					getCurrentPlayer().getActionIA().management(worldConver, gameCamera, map, map.getPlayerList());
+					getCurrentPlayer().getActionIA().management(worldConver, gameCamera, gameScene.getMap(), gameScene.getPlayerList());
 					
 					//Activo los ejercitos uno a uno
-					Army iaArmy = getCurrentPlayer().getActionIA().getActiveArmy(map.getPlayerList());
+					Army iaArmy = getCurrentPlayer().getActionIA().getActiveArmy(gameScene.getPlayerList());
 					
 					if(iaArmy != null){
 						setSelectedArmy(iaArmy);
@@ -1176,7 +1175,7 @@ public class GameManager {
 	 */
 	private Army getSelectedArmy(){
 		Army selected = null;
-		for(Player player : map.getPlayerList()){
+		for(Player player : gameScene.getPlayerList()){
 			for(Army army : player.getArmyList()){
 				if(army.isSelected()){
 					selected = army;
@@ -1188,7 +1187,7 @@ public class GameManager {
 	}
 	
 	private void setSelectedArmy(Army army){
-		for(Player player : map.getPlayerList()){
+		for(Player player : gameScene.getPlayerList()){
 			for(Army a : player.getArmyList()){
 				if(a.getId() == army.getId()){
 					a.setSelected(true);
@@ -1201,9 +1200,9 @@ public class GameManager {
 	private Player getWinner(){
 		Player winner = null;
 		if(isFinishGame()){
-			for(int i = 0; i < map.getPlayerList().size() && winner == null; i++){
-				if(map.getPlayerList().get(i).getCapital() != null){
-					winner = map.getPlayerList().get(i);
+			for(int i = 0; i < gameScene.getPlayerList().size() && winner == null; i++){
+				if(gameScene.getPlayerList().get(i).getCapitalkingdom() != null){
+					winner = gameScene.getPlayerList().get(i);
 				}
 			}
 		}
@@ -1212,10 +1211,10 @@ public class GameManager {
 	
 	private Player getPlayerByKingdom(Kingdom kingdom){
 		Player player = null;
-		for(int i = 0; i < map.getPlayerList().size() && player == null; i++){
-			for(int j = 0; j < map.getPlayerList().get(i).getKingdomList().size() && player == null; j++){
-				if(map.getPlayerList().get(i).getKingdomList().get(j).getId() == kingdom.getId()){
-					player = map.getPlayerList().get(i);
+		for(int i = 0; i < gameScene.getPlayerList().size() && player == null; i++){
+			for(int j = 0; j < gameScene.getPlayerList().get(i).getKingdomList().size() && player == null; j++){
+				if(gameScene.getPlayerList().get(i).getKingdomList().get(j).getId() == kingdom.getId()){
+					player = gameScene.getPlayerList().get(i);
 				}
 			}
 		}
@@ -1224,9 +1223,9 @@ public class GameManager {
 	
 	private boolean isFinishGame(){
 		boolean end = true;
-		for(int i = 0; i < map.getPlayerList().size() && end; i++){
-			if(map.getPlayerList().get(i).getId() != getCurrentPlayer().getId()){
-				if(map.getPlayerList().get(i).getCapital() != null){
+		for(int i = 0; i < gameScene.getPlayerList().size() && end; i++){
+			if(gameScene.getPlayerList().get(i).getId() != getCurrentPlayer().getId()){
+				if(gameScene.getPlayerList().get(i).getCapitalkingdom() != null){
 					end = false;
 				}
 			}
@@ -1252,7 +1251,7 @@ public class GameManager {
 	
 	private Army getDefeatArmy(){
 		Army army = null;
-		for(Player player: map.getPlayerList()){
+		for(Player player: gameScene.getPlayerList()){
 			for(Army a : player.getArmyList()){
 				if(a.isDefeat()){
 					army = a;
@@ -1265,7 +1264,7 @@ public class GameManager {
 	
 	private Army getArmyAtKingdom(Kingdom kingdom){
 		Army army = null;
-		for(Player player : map.getPlayerList()){
+		for(Player player : gameScene.getPlayerList()){
 			army = player.getArmy(kingdom);
 			if(army != null)
 				break;
@@ -1278,7 +1277,7 @@ public class GameManager {
 	 */
 	private Army getEnemyAtKingdom(Player player, Kingdom kingdom){
 		Army enemy = null;
-		for(Player p : map.getPlayerList()){
+		for(Player p : gameScene.getPlayerList()){
 			if(p.getId() != player.getId()){
 				for(Army a : p.getArmyList()){
 					if(a.getKingdom().getId() == kingdom.getId()){
@@ -1304,7 +1303,7 @@ public class GameManager {
 	}
 	
 	private void removeArmy(Army army){
-		for(Player player: map.getPlayerList()){
+		for(Player player: gameScene.getPlayerList()){
 			for(int i = 0; i < player.getArmyList().size(); i++){
 				if(player.getArmyList().get(i).getId() == army.getId()){
 					player.getArmyList().remove(i);
@@ -1336,7 +1335,7 @@ public class GameManager {
 	
 	private void addNewConquest(Player player, Kingdom kingdom){
 		//Elimino el territorio del domino de cualquier jugador
-		for(Player p : map.getPlayerList()){
+		for(Player p : gameScene.getPlayerList()){
 			p.removeKingdom(kingdom);
 		}
 		
@@ -1486,7 +1485,7 @@ public class GameManager {
 					changeCapital = defeatPlayer != null && defeatPlayer.changeCapital();
 					
 					//Eliminacion jugador
-					deletePlayer = defeatPlayer != null && defeatPlayer.getCapital() == null;
+					deletePlayer = defeatPlayer != null && defeatPlayer.getCapitalkingdom() == null;
 				}
 			}
 		}
@@ -1501,8 +1500,8 @@ public class GameManager {
 			NotificationBox.getInstance().addMessage(
 					RscManager.allText[RscManager.TXT_GAME_PLAYER] + defeatPlayer.getName() +
 					" change his capital");
-			cameraTargetX = defeatPlayer.getCapital().getAbsoluteX();
-			cameraTargetY = defeatPlayer.getCapital().getAbsoluteY();
+			cameraTargetX = defeatPlayer.getCapitalkingdom().getAbsoluteX();
+			cameraTargetY = defeatPlayer.getCapitalkingdom().getAbsoluteY();
 		}
 		if(deletePlayer){
 			NotificationBox.getInstance().addMessage(
@@ -1832,7 +1831,7 @@ public class GameManager {
 	}
 	
 	private Player getCurrentPlayer() {
-		return map.getPlayerList().get(map.getPlayerIndex());
+		return gameScene.getPlayerList().get(gameScene.getPlayerIndex());
 	}
 		
 }

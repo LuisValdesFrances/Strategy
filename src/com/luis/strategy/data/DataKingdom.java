@@ -8,7 +8,7 @@ import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.map.Kingdom;
-import com.luis.strategy.map.Map;
+import com.luis.strategy.map.MapObject;
 import com.luis.strategy.map.Terrain;
 
 public class DataKingdom {
@@ -26,7 +26,7 @@ public class DataKingdom {
 	
 	public static final int[][] MAP_PARTS = {{4,2}, {4,4}};
 	
-	public static List<Kingdom> getGenterex(WorldConver worldConver, GameCamera gameCamera, Map map){
+	public static List<Kingdom> getGenterex(WorldConver worldConver, GameCamera gameCamera, MapObject map){
 		
 		List<Kingdom> kingdomList = new ArrayList<Kingdom>();
 		
@@ -189,7 +189,7 @@ public class DataKingdom {
 		return kingdomList;
 	}
 	
-public static List<Kingdom> getCrom(WorldConver worldConver, GameCamera gameCamera, Map map){
+public static List<Kingdom> getCrom(WorldConver worldConver, GameCamera gameCamera, MapObject map){
 		
 		List<Kingdom> kingdomList = new ArrayList<Kingdom>();
 		
