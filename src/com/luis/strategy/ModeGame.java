@@ -1,8 +1,10 @@
 package com.luis.strategy;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -20,6 +22,7 @@ import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.data.DataKingdom;
 import com.luis.strategy.data.GameBuilder;
+import com.luis.strategy.datapackage.DataPackage;
 import com.luis.strategy.game.GameManager;
 import com.luis.strategy.map.GameScene;
 import com.luis.strategy.map.Player;
@@ -58,16 +61,8 @@ public class ModeGame {
 		
 		switch(_iState){
 		case Define.ST_GAME_INIT:
+		case Define.ST_GAME_CONTINUE:
 			
-			//Test api
-			//http://172.104.228.65:8080/StrategyServer/json/test?id=2&name=test%20name&surname=test%20surname
-			//https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml
-			//Download d = new Download();
-			//d.download("http://172.104.228.65:8080/StrategyServer/json/test?id=2&name=test%20name&surname=test%20surname");
-			
-			/**
-			 * Game GUI
-			 */
 			btnPause = new Button(
 					GfxManager.imgButtonPauseRelease, 
 					GfxManager.imgButtonPauseFocus, 
@@ -89,6 +84,34 @@ public class ModeGame {
 			
 			gameFrame = 0;
 			
+			if(Main.state == Define.ST_GAME_INIT){
+				GameScene gameScene = new GameScene(GameState.getInstance()
+						.getMap(),
+						0,// GfxManager.imgMap.getWidth()/2,
+						0,// GfxManager.imgMap.getHeight()/2,
+						DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][0],
+						DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][1]);
+	
+				switch (GameState.getInstance().getMap()) {
+				case 0:
+					gameScene.setKingdomList(DataKingdom.getGenterex(gameScene.getMap()));
+					break;
+				case 1:
+				case 2:
+					gameScene.setKingdomList(DataKingdom.getCrom(gameScene.getMap()));
+					break;
+				}
+				List<Player> playerList = GameBuilder.getInstance().build(GameState.getInstance(), gameScene);
+				gameScene.setPlayerList(playerList);
+				GameState.getInstance().setGameScene(gameScene);
+			}
+			else if(Main.state == Define.ST_GAME_CONTINUE){
+				
+				
+				GameScene gameScene = GameBuilder.getInstance().build(GameState.getInstance().getDataPackage());
+				GameState.getInstance().setGameScene(gameScene);
+			}
+			
 			int mapWidth = GfxManager.imgMapList.get(0).getWidth()*
 					DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][0];
 			int mapHeight = GfxManager.imgMapList.get(0).getHeight()*
@@ -104,41 +127,10 @@ public class ModeGame {
 			
 			gameCamera = new GameCamera(worldConver, 0, 0, 
 					GamePerformance.getInstance().getFrameMult(Main.targetFPS));
-			
-			
-			
-			if(GameState.getInstance().getGameScene() == null){
-				GameScene gameScene = new GameScene(
-						GameState.getInstance().getMap(),
-						0,//GfxManager.imgMap.getWidth()/2, 
-						0,//GfxManager.imgMap.getHeight()/2,
-						DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][0],
-						DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][1]
-						);
-				
-				switch(GameState.getInstance().getMap()){
-	        	case 0:
-	        		gameScene.setKingdomList(DataKingdom.getGenterex(gameScene.getMap()));
-		            break;
-	        	case 1:
-	        	case 2:
-	        		gameScene.setKingdomList(DataKingdom.getCrom(gameScene.getMap()));
-	        		break;
-	        	}
-				
-				List<Player> playerList = GameBuilder.getInstance().build(GameState.getInstance(), gameScene);
-				
-				gameScene.setPlayerList(playerList);
-				
-				GameState.getInstance().setGameScene(gameScene);
-			}else{
-				
-			}
-			
 			gameManager = new GameManager(worldConver, gameCamera, GameState.getInstance().getGameScene());
 			
 			break;
-			
+		
 		case Define.ST_GAME_RUN:
 			
 			break;
@@ -146,11 +138,13 @@ public class ModeGame {
 		case Define.ST_GAME_PAUSE:
 			
 			
-			/*
+			///*
+			//Escrutura online
 			HttpURLConnection connection = null;
 			try {
 				// open URL connection
-				URL url = new URL("http://192.168.1.110:8080/KingServer/mapTestServlet2");
+				//URL url = new URL("http://192.168.1.110:8080/KingServer/mapTestServlet2");//local
+				URL url = new URL("http://172.104.228.65:8080/KingServer/mapTestServlet2");//online
 				connection = (HttpURLConnection) url.openConnection();
 				connection.setRequestProperty("Content-Type", "application/octet-stream");
 				connection.setRequestMethod("POST");
@@ -161,7 +155,7 @@ public class ModeGame {
 				// send object
 				ObjectOutputStream objOut = new ObjectOutputStream(
 						connection.getOutputStream());
-				objOut.writeObject(GameBuilder.getInstance().build(gameScene));
+				objOut.writeObject(GameBuilder.getInstance().build(GameState.getInstance().getGameScene()));
 				objOut.flush();
 				objOut.close();
 
@@ -185,7 +179,11 @@ public class ModeGame {
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}	
-			*/
+			//*/
+			
+			
+			/*
+			 * Escritura local
 			try {
 				FileOutputStream fos = Main. context.openFileOutput("Test", Main.context.MODE_PRIVATE);
 				ObjectOutputStream os = new ObjectOutputStream(fos);
@@ -196,7 +194,7 @@ public class ModeGame {
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}	
-			
+			*/
 			
 			
 			
@@ -251,6 +249,7 @@ public class ModeGame {
 	public static void update(int _iState) {
 		switch(_iState){
 		case Define.ST_GAME_INIT:
+		case Define.ST_GAME_CONTINUE:
 			Main.changeState(Define.ST_GAME_RUN, false);
 			break;
 			
@@ -317,6 +316,7 @@ public class ModeGame {
 		_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 		switch(_iState){
 		case Define.ST_GAME_INIT:
+		case Define.ST_GAME_CONTINUE:
 			break;
 			
 		case Define.ST_GAME_RUN:

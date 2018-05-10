@@ -156,6 +156,7 @@ public class GfxManager {
 			break;
 
 		case Define.ST_GAME_INIT:
+		case Define.ST_GAME_CONTINUE:
 			try {
 				//Menu commons
 				imgButtonMenuBigRelease = Image.createImage("/button_menu_big_release.png");

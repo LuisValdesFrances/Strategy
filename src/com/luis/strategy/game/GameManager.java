@@ -41,7 +41,7 @@ public class GameManager {
 	
 	//
 	private Image gameBuffer;
-	public float distorsion = 1.15f;
+	public float distorsion = 1.12f;
 	
 	//
 	public boolean isAutoPlay(){
@@ -109,13 +109,13 @@ public class GameManager {
 	private SimpleBox discardBox;
 	private SimpleBox endGameBox;
 	
-	public GameManager(WorldConver wc, GameCamera gc, GameScene m){
+	public GameManager(WorldConver wc, GameCamera gc, GameScene gs){
 		this.gameBuffer = Image.createImage(
 				(int)wc.getGameLayoutX(), 
 				(int)wc.getGameLayoutY());
 		this.worldConver = wc;
 		this.gameCamera = gc;
-		this.gameScene = m;
+		this.gameScene = gs;
 		this.lastTouchX = UserInput.getInstance().getMultiTouchHandler().getTouchX(0);
 		this.lastTouchY = UserInput.getInstance().getMultiTouchHandler().getTouchY(0);
 		
@@ -244,6 +244,7 @@ public class GameManager {
 						getKingdom(),
 						getCurrentPlayer().getFlag(), 
 						gameScene.getMap().getX(), gameScene.getMap().getY(), gameScene.getMap().getWidth(), gameScene.getMap().getHeight());
+				army.initTroops();
 				army.setState(Army.STATE_OFF);
 				getCurrentPlayer().getArmyList().add(army);
 				cancel();
@@ -771,7 +772,7 @@ public class GameManager {
 	}
 	
 	private void cleanArmyAction(){
-		for(Player player:gameScene.getPlayerList()){
+		for(Player player : gameScene.getPlayerList()){
 			for(Army army : player.getArmyList()){
 				army.setSelected(false);
 				army.setDefeat(false);

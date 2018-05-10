@@ -158,6 +158,7 @@ public class Main extends MyCanvas implements Runnable {
 					break;
 
 				case Define.ST_GAME_INIT:
+				case Define.ST_GAME_CONTINUE:
 				case Define.ST_GAME_RUN:
 				case Define.ST_GAME_PAUSE:
 				case Define.ST_GAME_CONFIRMATION_QUIT:
@@ -221,6 +222,7 @@ public class Main extends MyCanvas implements Runnable {
 					ModeMenu.draw(_g);
 					break;
 		         case Define.ST_GAME_INIT:
+		         case Define.ST_GAME_CONTINUE:
 		         case Define.ST_GAME_RUN:
 		         case Define.ST_GAME_PAUSE:
 		         case Define.ST_GAME_CONFIRMATION_QUIT:
@@ -427,6 +429,7 @@ public class Main extends MyCanvas implements Runnable {
 		///*
 		switch(state){
 			case Define.ST_GAME_INIT:
+			case Define.ST_GAME_CONTINUE:
 				GfxManager.deleteMenuGFX();
 				break;
 			case Define.ST_MENU_MAIN:

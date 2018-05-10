@@ -2,6 +2,8 @@ package com.luis.strategy;
 
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import android.util.Log;
 
@@ -17,10 +19,8 @@ import com.luis.strategy.GameState.PlayerConf;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.data.DataKingdom;
-import com.luis.strategy.data.GameBuilder;
 import com.luis.strategy.datapackage.DataPackage;
 import com.luis.strategy.gui.ConfigMapBox;
-import com.luis.strategy.map.GameScene;
 
 public class ModeMenu {
 	
@@ -61,11 +61,6 @@ public class ModeMenu {
 			logoAlpha = 255;
 			startTime = System.currentTimeMillis();
 			Font.init(GfxManager.vImgFontSmall, GfxManager.vImgFontMedium, GfxManager.vImgFontBig);
-//			if(FileIO.isData()){
-//				
-//			}else{
-//				
-//			}
 			RscManager.loadLanguage(Main.iLanguage);
 			
 			btnBack = new Button(GfxManager.imgButtonArrowBackRelease, GfxManager.imgButtonArrowBackFocus,
@@ -174,7 +169,10 @@ public class ModeMenu {
 				
 				@Override
 				public void onButtonPressUp(){
+					
 					DataPackage dataPackage = null;
+					/*
+					//Lectura local
 					try{
 						FileInputStream fis = Main.context.openFileInput("Test");
 						ObjectInputStream is = new ObjectInputStream(fis);
@@ -184,10 +182,37 @@ public class ModeMenu {
 					}catch(Exception e){
 						e.printStackTrace();
 					}
+					*/
 					
-					GameScene gameScene = GameBuilder.getInstance().build(dataPackage);
-					GameState.getInstance().setGameScene(gameScene);
-					Main.changeState(Define.ST_GAME_INIT, true);
+					//Lectura onLine
+					HttpURLConnection connection = null;
+					try {
+
+						// open URL connection
+						//URL url = new URL("http://192.168.1.110:8080/KingServer/mapTestServlet2");//local
+						URL url = new URL("http://172.104.228.65:8080/KingServer/mapTestServlet2");//online
+						connection = (HttpURLConnection) url.openConnection();
+						connection.setRequestProperty("Content-Type",
+								"application/octet-stream");
+						connection.setRequestMethod("GET");
+						connection.setDoInput(true);
+						connection.setDoOutput(false);
+						connection.setUseCaches(false);
+
+						ObjectInputStream objIn = new ObjectInputStream(
+								connection.getInputStream());
+						dataPackage = (DataPackage) objIn.readObject();
+						objIn.close();
+
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					
+					
+					
+					GameState.getInstance().init(dataPackage);
+					
+					Main.changeState(Define.ST_GAME_CONTINUE, true);
 					reset();
 				}
 			};

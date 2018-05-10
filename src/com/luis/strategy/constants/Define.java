@@ -51,9 +51,10 @@ public class Define {
 
 	// Game states:
 	public static final int ST_GAME_INIT = 100;
-	public static final int ST_GAME_RUN = 101;
-	public static final int ST_GAME_PAUSE = 102;
-	public static final int ST_GAME_CONFIRMATION_QUIT = 103;
+	public static final int ST_GAME_CONTINUE = 101;
+	public static final int ST_GAME_RUN = 102;
+	public static final int ST_GAME_PAUSE = 103;
+	public static final int ST_GAME_CONFIRMATION_QUIT = 104;
 	   
 	  
 	 

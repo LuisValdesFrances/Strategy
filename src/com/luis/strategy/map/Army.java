@@ -75,14 +75,16 @@ public class Army extends MapObject{
 			iaDecision = new IADecision();
 		}
 		
-		//Añado el minimo de tropas
-		for(int i = 0; i < GameParams.TROOP_START.length; i++){
-			for(int j = 0; j < GameParams.TROOP_START[i]; j++){
+		anim = ANIN_IDLE;
+	}
+	
+	public void initTroops() {
+		// Añado el minimo de tropas
+		for (int i = 0; i < GameParams.TROOP_START.length; i++) {
+			for (int j = 0; j < GameParams.TROOP_START[i]; j++) {
 				getTroopList().add(new Troop(i, true));
 			}
 		}
-		
-		anim = ANIN_IDLE;
 	}
 	
 	public void update(MultiTouchHandler multiTouchHandler, WorldConver worldConver, GameCamera gameCamera, float delta){

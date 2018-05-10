@@ -1,5 +1,6 @@
 package com.luis.strategy;
 
+import com.luis.strategy.datapackage.DataPackage;
 import com.luis.strategy.map.GameScene;
 
 public class GameState {
@@ -10,6 +11,7 @@ public class GameState {
 	
 	
 	private GameScene gameScene;
+	private DataPackage dataPackage;
 	
 	public void init(int map, int numPlayer){
 		this.map = map;
@@ -17,7 +19,15 @@ public class GameState {
 		for (int i = 0; i < playerConfList.length; i++) {
 			playerConfList[i] = new PlayerConf();
 		}
-		
+	}
+	
+	public void init(DataPackage dataPackage){
+		this.dataPackage = dataPackage;
+		this.map = dataPackage.getMap();
+		playerConfList = new PlayerConf[dataPackage.getPlayerDataList().size()];
+		for (int i = 0; i < playerConfList.length; i++) {
+			playerConfList[i] = new PlayerConf();
+		}
 	}
 
 	public static GameState getInstance(){
@@ -34,6 +44,15 @@ public class GameState {
 
 	public void setGameScene(GameScene gameScene) {
 		this.gameScene = gameScene;
+	}
+
+	
+	public DataPackage getDataPackage() {
+		return dataPackage;
+	}
+
+	public void setDataPackage(DataPackage dataPackage) {
+		this.dataPackage = dataPackage;
 	}
 
 	public static GameState getGameState() {
