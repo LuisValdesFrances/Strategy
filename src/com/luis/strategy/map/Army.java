@@ -3,7 +3,6 @@ package com.luis.strategy.map;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import com.luis.lgameengine.gameutils.gameworld.GameCamera;
 import com.luis.lgameengine.gameutils.gameworld.Math2D;
 import com.luis.lgameengine.gameutils.gameworld.SpriteImage;
@@ -52,11 +51,12 @@ public class Army extends MapObject{
 	//IA
 	private IADecision iaDecision;
 	
-	public Army (WorldConver worldConver, GameCamera gameCamera, MapObject map,
+	public Army (MapObject map,
 			Player player,
 			Kingdom kingdom, int flag, float mapX, float mapY, int mapWidth, int mapHeight) {
 		
-		super(worldConver, gameCamera, map,
+		super(
+			map,
 			kingdom.getX(), kingdom.getY(),
 			GfxManager.imgArmyIdle.getWidth()/9, GfxManager.imgArmyIdle.getHeight(), 
 			mapX, mapY, mapWidth, mapHeight);
@@ -85,12 +85,12 @@ public class Army extends MapObject{
 		anim = ANIN_IDLE;
 	}
 	
-	public void update(MultiTouchHandler multiTouchHandler, float delta){
+	public void update(MultiTouchHandler multiTouchHandler, WorldConver worldConver, GameCamera gameCamera, float delta){
 		spriteList.get(anim).updateAnimation(delta);
 		
 		switch(state){
 		case STATE_ON:
-			super.update(multiTouchHandler);
+			super.update(multiTouchHandler, worldConver, gameCamera);
 			if(idleCount < idleWait){
 				idleCount+= delta;
 				spriteList.get(anim).setFrame(0);
@@ -125,7 +125,8 @@ public class Army extends MapObject{
 		}
 	}
 	
-	public void draw(Graphics g, boolean isSelected, boolean isActive, 
+	public void draw(
+			Graphics g, WorldConver worldConver, GameCamera gameCamera, boolean isSelected, boolean isActive, 
 			float distorsionX, float distorsionY, GameScene gameScene){
 		
 		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);

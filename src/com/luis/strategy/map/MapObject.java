@@ -7,8 +7,6 @@ import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 
 public abstract class MapObject{
 	
-	protected WorldConver worldConver;
-	protected GameCamera gameCamera;
 	protected MapObject map;
 	protected float x;
 	protected float y;
@@ -32,13 +30,10 @@ public abstract class MapObject{
 	protected Button button;
 	
 	public MapObject(
-			WorldConver worldConver, GameCamera gameCamera,
 			MapObject map,
 			float x, float y, int width, int height, 
 			float mapX, float mapY, int mapWidth, int mapHeight) {
 		super();
-		this.worldConver = worldConver;
-		this.gameCamera = gameCamera;
 		this.map = map;
 		this.x = x;
 		this.y = y;
@@ -67,9 +62,9 @@ public abstract class MapObject{
 		};
 	}
 	
-	public void update(MultiTouchHandler multiTouchHandler){
-		button.setX(getTouchX());
-		button.setY(getTouchY());
+	public void update(MultiTouchHandler multiTouchHandler, WorldConver worldConver, GameCamera gameCamera){
+		button.setX(getTouchX(worldConver, gameCamera));
+		button.setY(getTouchY(worldConver, gameCamera));
 		button.update(multiTouchHandler);
 	}
 	
@@ -112,14 +107,14 @@ public abstract class MapObject{
 		this.height = height;
 	}
 
-	public int getTouchX() {
+	public int getTouchX(WorldConver worldConver, GameCamera gameCamera) {
 		return worldConver.getConversionDrawX(gameCamera.getPosX(), touchX);
 	}
 
 	public void setTouchX(int touchX) {
 		this.touchX = touchX;
 	}
-	public int getTouchY() {
+	public int getTouchY(WorldConver worldConver, GameCamera gameCamera) {
 		return worldConver.getConversionDrawY(gameCamera.getPosY(), touchY);
 	}
 

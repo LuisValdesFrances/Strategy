@@ -17,11 +17,9 @@ import com.luis.lgameengine.gameutils.gameworld.GfxEffects;
 import com.luis.lgameengine.gameutils.gameworld.ParticleManager;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.implementation.graphics.Graphics;
-import com.luis.strategy.connection.Download;
-import com.luis.strategy.connection.GameBuilder;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.data.DataKingdom;
-import com.luis.strategy.data.GameBuild;
+import com.luis.strategy.data.GameBuilder;
 import com.luis.strategy.game.GameManager;
 import com.luis.strategy.map.GameScene;
 import com.luis.strategy.map.Player;
@@ -112,7 +110,6 @@ public class ModeGame {
 			if(GameState.getInstance().getGameScene() == null){
 				GameScene gameScene = new GameScene(
 						GameState.getInstance().getMap(),
-						worldConver, gameCamera, 
 						0,//GfxManager.imgMap.getWidth()/2, 
 						0,//GfxManager.imgMap.getHeight()/2,
 						DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][0],
@@ -121,16 +118,15 @@ public class ModeGame {
 				
 				switch(GameState.getInstance().getMap()){
 	        	case 0:
-	        		gameScene.setKingdomList(DataKingdom.getGenterex(worldConver, gameCamera, gameScene.getMap()));
+	        		gameScene.setKingdomList(DataKingdom.getGenterex(gameScene.getMap()));
 		            break;
 	        	case 1:
 	        	case 2:
-	        		gameScene.setKingdomList(DataKingdom.getCrom(worldConver, gameCamera, gameScene.getMap()));
+	        		gameScene.setKingdomList(DataKingdom.getCrom(gameScene.getMap()));
 	        		break;
 	        	}
 				
-				List<Player> playerList = GameBuild.getInstance().build(
-						GameState.getInstance(), gameScene, worldConver, gameCamera);
+				List<Player> playerList = GameBuilder.getInstance().build(GameState.getInstance(), gameScene);
 				
 				gameScene.setPlayerList(playerList);
 				

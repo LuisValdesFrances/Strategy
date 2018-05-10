@@ -86,8 +86,6 @@ public class ActionIA {
 						player.setGold(player.getGold()-GameParams.ARMY_COST);
 						
 						Army army = new Army(
-								worldConver, 
-								gameCamera, 
 								map, 
 								player,
 								k,

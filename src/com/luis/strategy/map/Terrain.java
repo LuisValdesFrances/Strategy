@@ -11,17 +11,17 @@ public class Terrain extends MapObject{
 	private boolean conquest;
 	
 	public Terrain(
-			WorldConver worldConver, GameCamera gameCamera, MapObject map,
+			MapObject map,
 			float x, float y, int width, int height,
 			float mapX, float mapY,
 			int mapWidth, int mapHeight, int type, boolean conquest) {
-		super(worldConver, gameCamera, map, x, y, width, height, mapX, mapY, mapWidth, mapHeight);
+		super(map, x, y, width, height, mapX, mapY, mapWidth, mapHeight);
 		this.type = type;
 		this.conquest = conquest;
 	}
 	
-	public void update(MultiTouchHandler multiTouchHandler){
-		super.update(multiTouchHandler);
+	public void update(MultiTouchHandler multiTouchHandler, WorldConver worldConver, GameCamera gameCamera){
+		super.update(multiTouchHandler, worldConver, gameCamera);
 	}
 	
 	public int getType() {

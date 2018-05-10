@@ -3,6 +3,8 @@ package com.luis.strategy.map;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.luis.lgameengine.gameutils.gameworld.GameCamera;
+import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.game.ActionIA;
@@ -46,9 +48,10 @@ public class Player {
 		return selected;
 	}
 	
-	public void updateArmies(MultiTouchHandler multiTouchHandler, float delta){
+	public void updateArmies(
+			MultiTouchHandler multiTouchHandler, WorldConver worldConver, GameCamera gameCamera, float delta){
 		for(Army army : armyList){
-			army.update(multiTouchHandler, delta);
+			army.update(multiTouchHandler, worldConver, gameCamera, delta);
 		}
 	}
 	

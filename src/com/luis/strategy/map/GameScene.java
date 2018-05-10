@@ -28,14 +28,12 @@ public class GameScene{
 	
 	public GameScene(
 			int mapId,
-			WorldConver worldConver, GameCamera gameCamera,
 			int mapX, int mapY,
 			int numberPartsW, int numberPartsH) {
 		this.mapId = mapId;
 		this.numberPartsW = numberPartsW;
 		this.numberPartsH = numberPartsH;
 		map = new MapObject(
-				worldConver, gameCamera,
 				null,
 				mapX, mapY, GfxManager.imgMapList.get(0).getWidth()*numberPartsW, GfxManager.imgMapList.get(0).getWidth()*numberPartsH,
 				mapX, mapY, GfxManager.imgMapList.get(0).getWidth()*numberPartsW, GfxManager.imgMapList.get(0).getWidth()*numberPartsH) {
@@ -46,7 +44,7 @@ public class GameScene{
 		
 	}
 	
-	public void update(MultiTouchHandler multiTouchHandler, float delta){
+	public void update(MultiTouchHandler multiTouchHandler, WorldConver worldConver, GameCamera gameCamera, float delta){
 		if(alphaFlag){
 			alpha-= 60f*delta;
 		}else{
@@ -60,9 +58,9 @@ public class GameScene{
 		
 		//Evemtos touch que chocan contra los de la GUI
 		for (Kingdom k : kingdomList) {
-			k.update(multiTouchHandler);
+			k.update(multiTouchHandler, worldConver, gameCamera);
 			for (Terrain t : k.getTerrainList()) {
-				t.update(multiTouchHandler);
+				t.update(multiTouchHandler, worldConver, gameCamera);
 			}
 		}
 	}
@@ -161,7 +159,7 @@ public class GameScene{
 		}
 	}
 	
-	public void drawTarget(Graphics g){
+	public void drawTarget(Graphics g, WorldConver worldConver, GameCamera gameCamera){
 		
 		g.setClip(0, 0, Define.SIZEX, Define.SIZEX);
 		for(Kingdom k : kingdomList){
@@ -183,7 +181,7 @@ public class GameScene{
 				}
 				
 				g.setAlpha((int)alpha);
-				g.drawImage(imgTarget, k.getTouchX(), k.getTouchY(), Graphics.VCENTER | Graphics.HCENTER);
+				g.drawImage(imgTarget, k.getTouchX(worldConver, gameCamera), k.getTouchY(worldConver, gameCamera), Graphics.VCENTER | Graphics.HCENTER);
 				g.setAlpha(255);
 			}
 		}

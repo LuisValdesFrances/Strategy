@@ -239,8 +239,6 @@ public class GameManager {
 				getCurrentPlayer().setGold(getCurrentPlayer().getGold()-GameParams.ARMY_COST);
 				
 				Army army = new Army(
-						worldConver, 
-						gameCamera, 
 						gameScene.getMap(), 
 						getCurrentPlayer(),
 						getKingdom(),
@@ -548,7 +546,7 @@ public class GameManager {
 			!terrainBox.isActive()){
 			updateCamera();
 			if(getCurrentPlayer().getActionIA() == null && state == STATE_ACTION){
-				gameScene.update(UserInput.getInstance().getMultiTouchHandler(), delta);
+				gameScene.update(UserInput.getInstance().getMultiTouchHandler(), worldConver, gameCamera, delta);
 			}
 		}
 		
@@ -557,7 +555,7 @@ public class GameManager {
 		
 		//Actualizar animaciones
 		for(Player player : gameScene.getPlayerList())
-			player.updateArmies(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
+			player.updateArmies(UserInput.getInstance().getMultiTouchHandler(), worldConver, gameCamera, Main.getDeltaSec());
 		
 	}
 	
@@ -593,7 +591,7 @@ public class GameManager {
 		
 		
 		if(subState == SUB_STATE_ACTION_SELECT && getCurrentPlayer().getActionIA() == null)
-			gameScene.drawTarget(gameBuffer.getGraphics());
+			gameScene.drawTarget(gameBuffer.getGraphics(), worldConver, gameCamera);
 		
 		
 		 float totalW = (float)gameBuffer.getWidth()*distorsion;
@@ -604,7 +602,8 @@ public class GameManager {
 			 for(Army army: gameScene.getPlayerList().get(i).getArmyList()){
 				 boolean isSelected =  subState == SUB_STATE_ACTION_WAIT && 
 						 getSelectedArmy() != null && getSelectedArmy().getId() == army.getId();
-				 army.draw(gameBuffer.getGraphics(), getSelectedArmy()!= null && isSelected, i == gameScene.getPlayerIndex() && army.getState() == Army.STATE_ON,
+				 army.draw(gameBuffer.getGraphics(), worldConver, gameCamera,
+						 getSelectedArmy()!= null && isSelected, i == gameScene.getPlayerIndex() && army.getState() == Army.STATE_ON,
 						 distorsion, distorsion, gameScene);
 			 }
 		 }

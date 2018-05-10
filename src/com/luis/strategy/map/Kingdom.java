@@ -3,8 +3,6 @@ package com.luis.strategy.map;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.luis.lgameengine.gameutils.gameworld.GameCamera;
-import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.constants.GameParams;
 
@@ -27,10 +25,10 @@ public class Kingdom extends MapObject{
 	
 	
 	public Kingdom(
-		WorldConver worldConver, GameCamera gameCamera, MapObject map,
+		MapObject map,
 		float x, float y, float mapX, float mapY, int mapWidth, int mapHeight) {
 		super(
-			worldConver, gameCamera, map, 
+			map, 
 			x, y, 
 			GfxManager.imgTargetDomain.getWidth(), GfxManager.imgTargetDomain.getHeight(), 
 			mapX, mapY, mapWidth, mapHeight);
