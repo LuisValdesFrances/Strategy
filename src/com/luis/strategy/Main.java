@@ -8,7 +8,9 @@ import java.util.Random;
  */
 
 
+
 import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 
 import com.luis.lgameengine.gameutils.GamePerformance;
@@ -81,11 +83,13 @@ public class Main extends MyCanvas implements Runnable {
 	public static final int INDEX_DATA_RECORD = 1;
 
 	public static int iLanguage;
+	
+	public static Context context;
 
 	public Main(Activity activity) {
 		super(activity, Define.SIZEX, Define.SIZEY);
 		main = this;
-
+		context = activity.getApplicationContext();
 		// if(Integer.parseInt(VERSION.SDK) < 5)
 		// touchHandler = new SingleTouchHandler(view, scaleX, scaleY);
 		// else
@@ -146,7 +150,7 @@ public class Main extends MyCanvas implements Runnable {
 					case Define.ST_MENU_SELECT_GAME:
 					case Define.ST_MENU_SELECT_MAP:
 					case Define.ST_MENU_CONFIG_MAP:
-						
+					case Define.ST_MENU_CAMPAING:
 					case Define.ST_TEST:
 					if (!isLoading) {
 						ModeMenu.update();
@@ -212,7 +216,7 @@ public class Main extends MyCanvas implements Runnable {
 		         case Define.ST_MENU_SELECT_GAME:
 		         case Define.ST_MENU_SELECT_MAP:
 		         case Define.ST_MENU_CONFIG_MAP:
-		        	 
+		         case Define.ST_MENU_CAMPAING:
 		         case Define.ST_TEST:
 					ModeMenu.draw(_g);
 					break;

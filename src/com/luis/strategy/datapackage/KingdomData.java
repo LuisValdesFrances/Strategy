@@ -1,6 +1,10 @@
 package com.luis.strategy.datapackage;
 
-public class KingdomData {
+import java.io.Serializable;
+
+public class KingdomData  implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
 	
 	private int id;
 	private int state;

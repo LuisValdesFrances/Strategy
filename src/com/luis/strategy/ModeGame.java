@@ -1,6 +1,7 @@
 package com.luis.strategy;
 
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 import java.net.HttpURLConnection;
@@ -46,7 +47,6 @@ public class ModeGame {
 	private static GfxEffects gfxEffects;
 	
 	private static GameManager gameManager;
-	private static GameScene gameScene;
 	
 	/**
 	 * Interface
@@ -109,8 +109,8 @@ public class ModeGame {
 			
 			
 			
-			if(gameScene == null){
-				gameScene = new GameScene(
+			if(GameState.getInstance().getGameScene() == null){
+				GameScene gameScene = new GameScene(
 						GameState.getInstance().getMap(),
 						worldConver, gameCamera, 
 						0,//GfxManager.imgMap.getWidth()/2, 
@@ -133,11 +133,13 @@ public class ModeGame {
 						GameState.getInstance(), gameScene, worldConver, gameCamera);
 				
 				gameScene.setPlayerList(playerList);
+				
+				GameState.getInstance().setGameScene(gameScene);
 			}else{
 				
 			}
 			
-			gameManager = new GameManager(worldConver, gameCamera, gameScene);
+			gameManager = new GameManager(worldConver, gameCamera, GameState.getInstance().getGameScene());
 			
 			break;
 			
@@ -148,9 +150,9 @@ public class ModeGame {
 		case Define.ST_GAME_PAUSE:
 			
 			
+			/*
 			HttpURLConnection connection = null;
 			try {
-
 				// open URL connection
 				URL url = new URL("http://192.168.1.110:8080/KingServer/mapTestServlet2");
 				connection = (HttpURLConnection) url.openConnection();
@@ -187,10 +189,17 @@ public class ModeGame {
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}	
-			
-			
-			
-			
+			*/
+			try {
+				FileOutputStream fos = Main. context.openFileOutput("Test", Main.context.MODE_PRIVATE);
+				ObjectOutputStream os = new ObjectOutputStream(fos);
+				os.writeObject(GameBuilder.getInstance().
+						build(GameState.getInstance().getGameScene()));
+				os.close();
+				fos.close();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}	
 			
 			
 			
@@ -216,7 +225,7 @@ public class ModeGame {
 					Define.SIZEX2, Define.SIZEY2,
 					null,
 					new String[]{
-							RscManager.allText[RscManager.TXT_CONTINUE], 
+							RscManager.allText[RscManager.TXT_CONTINUE_GAME], 
 							RscManager.allText[RscManager.TXT_OPTIONS],
 							RscManager.allText[RscManager.TXT_QUIT]
 					},
@@ -296,8 +305,10 @@ public class ModeGame {
 		case Define.ST_GAME_CONFIRMATION_QUIT:
 			if(!confirmationQuitBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec())){
 				//Limio el juego
-				gameScene =null;
-				System.gc();
+				if(confirmationQuitBox.getIndexPressed()==1){
+					GameState.getInstance().setGameScene(null);
+					System.gc();
+				}
 				Main.changeState(
 						confirmationQuitBox.getIndexPressed()==0?Define.ST_GAME_PAUSE:Define.ST_MENU_MAIN, 
 						confirmationQuitBox.getIndexPressed()==1);

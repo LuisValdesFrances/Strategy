@@ -1,18 +1,15 @@
 package com.luis.strategy;
 
+import com.luis.strategy.map.GameScene;
+
 public class GameState {
 
 	private static GameState gameState;
-	
-	public static GameState getInstance(){
-		if(gameState == null){
-			gameState = new GameState();
-		}
-		return gameState;
-	}
-	
 	private int map;
 	private PlayerConf[] playerConfList; 
+	
+	
+	private GameScene gameScene;
 	
 	public void init(int map, int numPlayer){
 		this.map = map;
@@ -21,6 +18,22 @@ public class GameState {
 			playerConfList[i] = new PlayerConf();
 		}
 		
+	}
+
+	public static GameState getInstance(){
+		if(gameState == null){
+			gameState = new GameState();
+		}
+		return gameState;
+	}
+	
+	
+	public GameScene getGameScene() {
+		return gameScene;
+	}
+
+	public void setGameScene(GameScene gameScene) {
+		this.gameScene = gameScene;
 	}
 
 	public static GameState getGameState() {

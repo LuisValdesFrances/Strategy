@@ -1,5 +1,8 @@
 package com.luis.strategy;
 
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+
 import android.util.Log;
 
 import com.luis.lgameengine.gameutils.Settings;
@@ -11,10 +14,13 @@ import com.luis.lgameengine.implementation.fileio.FileIO;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.graphics.Image;
 import com.luis.strategy.GameState.PlayerConf;
+import com.luis.strategy.connection.GameBuilder;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.data.DataKingdom;
+import com.luis.strategy.datapackage.DataPackage;
 import com.luis.strategy.gui.ConfigMapBox;
+import com.luis.strategy.map.GameScene;
 
 public class ModeMenu {
 	
@@ -36,6 +42,8 @@ public class ModeMenu {
 	private static Button btnMultiPlayer;
 	private static Button btnOnLine;
 	private static Button btnPassAndPlay;
+	private static Button btnContinue;
+	private static Button btnStart;
 	
 	private static ListBox selectMapBox;
 	private static ConfigMapBox configMapBox;
@@ -125,7 +133,7 @@ public class ModeMenu {
 					
 					@Override
 					public void onButtonPressUp(){
-						Main.changeState(Define.ST_TEST, false);
+						Main.changeState(Define.ST_MENU_CAMPAING, false);
 						reset();
 					}
 				};
@@ -152,6 +160,52 @@ public class ModeMenu {
 		case Define. ST_MENU_EXIT:
 		case Define. ST_MENU_HELP:
 		case Define. ST_MENU_ABOUT:
+			break;
+		
+		case Define. ST_MENU_CAMPAING:
+			btnContinue = new Button(
+					GfxManager.imgButtonMenuBigRelease, 
+					GfxManager.imgButtonMenuBigFocus, 
+					Define.SIZEX-(int)(GfxManager.imgButtonMenuBigRelease.getWidth()/2)-Define.SIZEY64, 
+					Define.SIZEY-(int)(GfxManager.imgButtonMenuBigRelease.getHeight()*1.5)-Define.SIZEY64,
+					RscManager.allText[RscManager.TXT_CONTINUE], Font.FONT_MEDIUM){
+				@Override
+				public void onButtonPressDown(){}
+				
+				@Override
+				public void onButtonPressUp(){
+					DataPackage dataPackage = null;
+					try{
+						FileInputStream fis = Main.context.openFileInput("Test");
+						ObjectInputStream is = new ObjectInputStream(fis);
+						dataPackage = (DataPackage) is.readObject();
+						is.close();
+						fis.close();
+					}catch(Exception e){
+						e.printStackTrace();
+					}
+					
+					GameScene gameScene = GameBuilder.getInstance().build(dataPackage);
+					GameState.getInstance().setGameScene(gameScene);
+					Main.changeState(Define.ST_GAME_INIT, true);
+					reset();
+				}
+			};
+			btnStart = new Button(
+					GfxManager.imgButtonMenuBigRelease, 
+					GfxManager.imgButtonMenuBigFocus, 
+					Define.SIZEX-(int)(GfxManager.imgButtonMenuBigRelease.getWidth()/2)-Define.SIZEY64, 
+					Define.SIZEY-(int)(GfxManager.imgButtonMenuBigRelease.getHeight()/2)-Define.SIZEY64,
+					RscManager.allText[RscManager.TXT_START], Font.FONT_MEDIUM){
+				@Override
+				public void onButtonPressDown(){}
+				
+				@Override
+				public void onButtonPressUp(){
+					
+					reset();
+				}
+			};
 			break;
 			
 		case Define. ST_MENU_SELECT_GAME:
@@ -271,6 +325,12 @@ public class ModeMenu {
 			
 		case Define.ST_MENU_EXIT:
         	break;
+		case Define.ST_MENU_CAMPAING:
+	        	runMenuBG(Main.getDeltaSec());
+	        	btnBack.update(UserInput.getInstance().getMultiTouchHandler());
+				btnContinue.update(UserInput.getInstance().getMultiTouchHandler());
+				btnStart.update(UserInput.getInstance().getMultiTouchHandler());
+				break;
         case Define.ST_MENU_SELECT_GAME:
         	runMenuBG(Main.getDeltaSec());
         	btnBack.update(UserInput.getInstance().getMultiTouchHandler());
@@ -335,6 +395,13 @@ public class ModeMenu {
 		case Define.ST_MENU_HELP:
 		case Define.ST_MENU_ABOUT:
 			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+			break;
+			
+		case Define. ST_MENU_CAMPAING:
+			drawMenuBG(_g);
+			btnBack.draw(_g, 0, 0);
+			btnContinue.draw(_g, 0, 0);
+			btnStart.draw(_g, 0, 0);
 			break;
 			
 		case Define.ST_MENU_SELECT_GAME:

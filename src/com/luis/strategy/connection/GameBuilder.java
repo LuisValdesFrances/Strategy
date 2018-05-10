@@ -46,6 +46,7 @@ public class GameBuilder {
 			pd.setFlag(p.getFlag());
 			pd.setIA(p.getActionIA() != null);
 			
+			//Add army list to player object
 			List<ArmyData> adList = new ArrayList<ArmyData>();
 			for(Army a : p.getArmyList()){
 				ArmyData ad = new ArmyData();
@@ -54,6 +55,7 @@ public class GameBuilder {
 			}
 			pd.setArmyList(adList);
 			
+			//Add kingdom list to player object
 			List<KingdomData> kdList = new ArrayList<KingdomData>();
 			for(Kingdom k : p.getKingdomList()){
 				KingdomData kd = new KingdomData();
@@ -63,8 +65,12 @@ public class GameBuilder {
 			}
 			pd.setKingdomList(kdList);
 			
-			dataPackage.setPlayerDataList(playerDataList);
+			
+			playerDataList.add(pd);
 		}
+		
+		//Añado las lista de jugadores
+		dataPackage.setPlayerDataList(playerDataList);
 		
 		return dataPackage;
 	}

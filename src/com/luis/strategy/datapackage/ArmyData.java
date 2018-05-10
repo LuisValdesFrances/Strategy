@@ -1,6 +1,10 @@
 package com.luis.strategy.datapackage;
 
-public class ArmyData {
+import java.io.Serializable;
+
+public class ArmyData implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
 	
 	private int kingdom;
 

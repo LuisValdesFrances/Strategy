@@ -3,10 +3,7 @@ package com.luis.strategy.map;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.graphics.Color;
 
-import com.luis.lgameengine.gameutils.Settings;
-import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gameutils.gameworld.GameCamera;
 import com.luis.lgameengine.gameutils.gameworld.Math2D;
 import com.luis.lgameengine.gameutils.gameworld.SpriteImage;
