@@ -21,6 +21,7 @@ import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.data.DataKingdom;
 import com.luis.strategy.datapackage.DataPackage;
 import com.luis.strategy.gui.ConfigMapBox;
+import com.luis.strategy.gui.AccountBox;
 
 public class ModeMenu {
 	
@@ -45,8 +46,12 @@ public class ModeMenu {
 	private static Button btnContinue;
 	private static Button btnStart;
 	
+	private static Button btnNewAccount;
+	private static Button btnLogin;
+	
 	private static ListBox selectMapBox;
 	private static ConfigMapBox configMapBox;
+	private static AccountBox newAccountBox;
 	
 	
 	public static void init(int _iMenuState){
@@ -71,6 +76,9 @@ public class ModeMenu {
 				public void onButtonPressUp() {
 					switch(Main.state){
 					case Define.ST_MENU_SELECT_GAME:
+					case Define.ST_MENU_CAMPAING:
+					case Define.ST_MENU_ON_LINE_START:
+					case Define.ST_MENU_ON_LINE_LIST:
 						Main.changeState(Define.ST_MENU_MAIN, false);
 						break;
 					case Define.ST_MENU_SELECT_MAP:
@@ -158,6 +166,7 @@ public class ModeMenu {
 			break;
 		
 		case Define. ST_MENU_CAMPAING:
+			
 			btnContinue = new Button(
 					GfxManager.imgButtonMenuBigRelease, 
 					GfxManager.imgButtonMenuBigFocus, 
@@ -244,7 +253,10 @@ public class ModeMenu {
 				public void onButtonPressDown(){}
 				
 				@Override
-				public void onButtonPressUp(){}
+				public void onButtonPressUp(){
+					Main.changeState(Define.ST_MENU_ON_LINE_START, false);
+					reset();
+				}
 			};
 			btnPassAndPlay = new Button(
 					GfxManager.imgButtonMenuBigRelease, 
@@ -316,6 +328,73 @@ public class ModeMenu {
 			};
 			configMapBox.start();
 			break;
+			
+			
+			
+		case Define.ST_MENU_ON_LINE_START:
+			String data = 
+				FileIO.getInstance().loadData(Define.DATA_USER, 
+						Settings.getInstance().getActiviy().getApplicationContext());
+
+			if(false){//if (data != null && data.length() > 0) {
+				Log.i("Debug", "Datos cargado: " + data);
+				String[] d = data.split("\n");
+				GameState.getInstance().setName(d[0]);
+				GameState.getInstance().setPassword(d[1]);
+				Main.changeState(Define.ST_MENU_ON_LINE_LIST, false);
+				
+			} 
+			else {
+				Log.i("Debug", "No existen datos guardados");
+				/*
+				String d = "Test1@123pepe";
+				FileIO.getInstance().saveData(d, Define.DATA_USER, 
+						Settings.getInstance().getActiviy().getApplicationContext());
+				*/
+				btnNewAccount = new Button(
+						GfxManager.imgButtonMenuBigRelease, 
+						GfxManager.imgButtonMenuBigFocus, 
+						Define.SIZEX-(int)(GfxManager.imgButtonMenuBigRelease.getWidth()/2)-Define.SIZEY64, 
+						Define.SIZEY-(int)(GfxManager.imgButtonMenuBigRelease.getHeight()*1.5)-Define.SIZEY64,
+						RscManager.allText[RscManager.TXT_NEW_ACOUNT], Font.FONT_MEDIUM){
+					@Override
+					public void onButtonPressDown(){}
+					
+					@Override
+					public void onButtonPressUp(){
+						Main.changeState(Define.ST_MENU_ON_LINE_NEW_ACCOUNT, false);
+						reset();
+					}
+				};
+				btnLogin = new Button(
+						GfxManager.imgButtonMenuBigRelease, 
+						GfxManager.imgButtonMenuBigFocus, 
+						Define.SIZEX-(int)(GfxManager.imgButtonMenuBigRelease.getWidth()/2)-Define.SIZEY64, 
+						Define.SIZEY-(int)(GfxManager.imgButtonMenuBigRelease.getHeight()/2)-Define.SIZEY64,
+						RscManager.allText[RscManager.TXT_LOGIN], Font.FONT_MEDIUM){
+					@Override
+					public void onButtonPressDown(){}
+					
+					@Override
+					public void onButtonPressUp(){
+						Main.changeState(Define.ST_MENU_ON_LINE_LOGIN, false);
+						reset();
+					}
+				};
+				
+				Main.changeState(Define.ST_MENU_ON_LINE_LIST, false);
+			}
+			
+			break;
+		 case Define.ST_MENU_ON_LINE_NEW_ACCOUNT:
+			 newAccountBox = new AccountBox();
+			 break;
+		 case Define.ST_MENU_ON_LINE_LOGIN:
+			 break;
+		 case Define.ST_MENU_ON_LINE_LIST:
+			 break;
+		 case Define.ST_MENU_ON_LINE_HOST:
+			 break;
 		
 		case Define.ST_TEST:
 			break;
@@ -373,6 +452,31 @@ public class ModeMenu {
 			btnNext.update(UserInput.getInstance().getMultiTouchHandler());
 			configMapBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
 			break;
+			
+        case Define.ST_MENU_ON_LINE_START:
+        	 runMenuBG(Main.getDeltaSec());
+        	 btnBack.update(UserInput.getInstance().getMultiTouchHandler());
+        	 btnNewAccount.update(UserInput.getInstance().getMultiTouchHandler());
+        	 btnLogin.update(UserInput.getInstance().getMultiTouchHandler());
+			 break;
+		 case Define.ST_MENU_ON_LINE_NEW_ACCOUNT:
+			 runMenuBG(Main.getDeltaSec());
+			 btnBack.update(UserInput.getInstance().getMultiTouchHandler());
+			 if(newAccountBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec())){
+				 
+			 }
+		 case Define.ST_MENU_ON_LINE_LOGIN:
+			 runMenuBG(Main.getDeltaSec());
+			 btnBack.update(UserInput.getInstance().getMultiTouchHandler());
+			 break;
+		 case Define.ST_MENU_ON_LINE_LIST:
+			 runMenuBG(Main.getDeltaSec());
+			 btnBack.update(UserInput.getInstance().getMultiTouchHandler());
+			 break;
+		 case Define.ST_MENU_ON_LINE_HOST:
+			 runMenuBG(Main.getDeltaSec());
+			 btnBack.update(UserInput.getInstance().getMultiTouchHandler());
+			 break;
 			
         case Define.ST_TEST:
 			break;
@@ -448,6 +552,30 @@ public class ModeMenu {
 			configMapBox.draw(_g);
 			break;
 			
+		 case Define.ST_MENU_ON_LINE_START:
+			 drawMenuBG(_g);
+			 btnBack.draw(_g, 0, 0);
+			 btnNewAccount.draw(_g, 0, 0);
+			 btnLogin.draw(_g, 0, 0);
+			 break;
+		 case Define.ST_MENU_ON_LINE_NEW_ACCOUNT:
+			 drawMenuBG(_g);
+			 btnBack.draw(_g, 0, 0);
+			 newAccountBox.draw(_g);
+			 break;
+		 case Define.ST_MENU_ON_LINE_LOGIN:
+			 drawMenuBG(_g);
+			 btnBack.draw(_g, 0, 0);
+			 break;
+		 case Define.ST_MENU_ON_LINE_LIST:
+			 drawMenuBG(_g);
+			 btnBack.draw(_g, 0, 0);
+			 break;
+		 case Define.ST_MENU_ON_LINE_HOST:
+			 drawMenuBG(_g);
+			 btnBack.draw(_g, 0, 0);
+			 break;
+			
 		case Define.ST_MENU_EXIT:
 			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 			break;
@@ -463,7 +591,6 @@ public class ModeMenu {
 			int totalW = GfxManager.imgGreenBox.getWidth() + distH*2;
 			int totalH = GfxManager.imgGreenBox.getHeight() + distH;
 			
-			
 			_g.drawDistorisionImage(
 					 GfxManager.imgGreenBox, 
 					 
@@ -474,8 +601,6 @@ public class ModeMenu {
 					 );
 			
 			_g.drawImage(GfxManager.imgRedBox, Define.SIZEX2, 10, Graphics.TOP | Graphics.HCENTER);
-			
-			
 			break;
 		}
 	}
@@ -586,7 +711,13 @@ public class ModeMenu {
 		cloudNearBGX-=20f*delta;
 		cloudNear2BGX-=40f*delta;
 		
-		if(Main.state == Define.ST_MENU_MAIN || Main.state == Define.ST_MENU_SELECT_GAME){
+		if(
+				Main.state == Define.ST_MENU_MAIN || 
+				Main.state == Define.ST_MENU_SELECT_GAME || 
+				Main.state == Define.ST_MENU_ON_LINE_START || 
+				Main.state == Define.ST_MENU_ON_LINE_LOGIN
+				
+		){
 			logoAlpha +=delta*255;
 			logoAlpha = Math.min(255, logoAlpha);
 		}else{
@@ -616,11 +747,4 @@ public class ModeMenu {
 		g.drawImage(GfxManager.imgCloudBG, (int)cloudNear2BGX, (int)cloudNear2BGY, Graphics.VCENTER | Graphics.HCENTER);
 		g.setImageSize(1f, 1f);
 	}
-	
-	public static void saveSystemData(){
-		Main.iDataList[Main.INDEX_DATA_LANGUAGE] = Main.iLanguage;
-		Log.i("LOGCAT", "Save: "+ Main.iDataList[Main.INDEX_DATA_LANGUAGE]);
-		FileIO.saveData(Main.iDataList, Main.DATA_NAME, Settings.getInstance().getActiviy());
-		Log.i("LOGCAT", "Datos salvados");
-	}
-	}
+}

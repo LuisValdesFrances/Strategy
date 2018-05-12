@@ -34,6 +34,11 @@ public class GfxManager {
 	public static Image imgButtonArrowBackFocus;
 	public static Image imgButtonArrowNextRelease;
 	public static Image imgButtonArrowNextFocus;
+	
+	public static Image imgButtonKeyboardRelease;
+	public static Image imgButtonKeyboardFocus;
+	public static Image imgButtonKeyboardReleaseSp;
+	public static Image imgButtonKeyboardFocusSp;
 
 	// Game images:
 	public static Image imgGameBG;
@@ -377,6 +382,11 @@ public class GfxManager {
 		imgButtonArrowNextRelease = Image.createImage("/arrow_next_release.png");
 		imgButtonArrowNextFocus = Image.createImage("/arrow_next_focus.png");
 		
+		imgButtonKeyboardRelease = Image.createImage("/button_keyboard_release.png");
+		imgButtonKeyboardFocus = Image.createImage("/button_keyboard_focus.png");
+		imgButtonKeyboardReleaseSp = Image.createImage("/button_keyboard_release_sp.png");
+		imgButtonKeyboardFocusSp = Image.createImage("/button_keyboard_focus_sp.png");
+		
 		imgMainBG = Image.createImage("/main_bg.png");
 		imgSwordBG = Image.createImage("/sword_bg.png");
 		imgCloudBG = Image.createImage("/cloud_bg.png");
@@ -410,6 +420,11 @@ public class GfxManager {
 		imgButtonArrowBackFocus = null;
 		imgButtonArrowNextRelease = null;
 		imgButtonArrowNextFocus = null;
+		
+		imgButtonKeyboardRelease = null;
+		imgButtonKeyboardFocus = null;
+		imgButtonKeyboardReleaseSp = null;
+		imgButtonKeyboardFocusSp = null;
 		
 		imgMainBG = null;
 		imgSwordBG = null;

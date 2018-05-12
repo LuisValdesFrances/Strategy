@@ -5,13 +5,24 @@ import com.luis.strategy.map.GameScene;
 
 public class GameState {
 
-	private static GameState gameState;
+	private static GameState instance;
+	
+	//Game configuration menu
 	private int map;
-	private PlayerConf[] playerConfList; 
+	private PlayerConf[] playerConfList;
 	
-	
+	//Game serial data
 	private GameScene gameScene;
 	private DataPackage dataPackage;
+	
+	//User configuration
+	private String name;
+	private String password;
+	private int gameMode;
+	
+	public static final int GAME_MODE_CAMPAING = 0;
+	public static final int GAME_MODE_PLAY_AND_PASS = 1;
+	public static final int GAME_MODE_ONLINE = 2;
 	
 	public void init(int map, int numPlayer){
 		this.map = map;
@@ -31,10 +42,10 @@ public class GameState {
 	}
 
 	public static GameState getInstance(){
-		if(gameState == null){
-			gameState = new GameState();
+		if(instance == null){
+			instance = new GameState();
 		}
-		return gameState;
+		return instance;
 	}
 	
 	
@@ -56,11 +67,11 @@ public class GameState {
 	}
 
 	public static GameState getGameState() {
-		return gameState;
+		return instance;
 	}
 
 	public static void setGameState(GameState gameState) {
-		GameState.gameState = gameState;
+		GameState.instance = gameState;
 	}
 
 	public int getMap() {
@@ -80,9 +91,33 @@ public class GameState {
 		this.playerConfList = playerConfList;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public int getGameMode() {
+		return gameMode;
+	}
+
+	public void setGameMode(int gameMode) {
+		this.gameMode = gameMode;
+	}
+
+
 
 	public class PlayerConf{
-		
 		public String name; 
 		public int flag; 
 		public boolean IA;

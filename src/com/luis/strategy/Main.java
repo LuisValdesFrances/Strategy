@@ -7,10 +7,7 @@ import java.util.Random;
  * @author Luis Valdes Frances
  */
 
-
-
 import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
 
 import com.luis.lgameengine.gameutils.GamePerformance;
@@ -76,20 +73,14 @@ public class Main extends MyCanvas implements Runnable {
 	public static final boolean IS_KEY_INPUT_DEBUG = false;
 	public static final boolean IS_GAME_DEBUG = false;
 
-	// Nombre del fichero donde se guardaran y cargaran los datos:
-	public static final String DATA_NAME = "angryufodata";
-	public static int[] iDataList;
 	public static final int INDEX_DATA_LANGUAGE = 0;
 	public static final int INDEX_DATA_RECORD = 1;
 
 	public static int iLanguage;
 	
-	public static Context context;
-
 	public Main(Activity activity) {
 		super(activity, Define.SIZEX, Define.SIZEY);
 		main = this;
-		context = activity.getApplicationContext();
 		// if(Integer.parseInt(VERSION.SDK) < 5)
 		// touchHandler = new SingleTouchHandler(view, scaleX, scaleY);
 		// else
@@ -102,21 +93,6 @@ public class Main extends MyCanvas implements Runnable {
 
 	private void initGame() {
 		Log.i("INFO", "initMain run");
-		// FileIO.loadData(DATA_NAME, Main.Context);
-		// if(FileIO.isData()){
-		// iDataList = FileIO.getIntData();
-		// Log.i("LOGCAT", "Existen "+iDataList.length + " datos");
-		// iLanguage = Main.iDataList[0];
-		// ModeGame.iRecordPoints = Main.iDataList[1];
-		// for(int i = 0; i < iDataList.length; i++){
-		// Log.i("LOGCAT", "genLoad: "+ Main.iDataList[i]);
-		// }
-		// }else{
-		// Log.i("LOGCAT", "No existen datos guardados");
-		// Main.iDataList = new int[INDEX_DATA_RECORD+1];
-		// iLanguage = 0;
-		// ModeGame.iRecordPoints = 0;
-		// }
 		targetFPS = GamePerformance.getInstance().getOptimalFrames();//30;
 		minDurationFrame = 1000 / targetFPS;
 		changeState(Define.ST_MENU_LOGO,true);
@@ -151,6 +127,13 @@ public class Main extends MyCanvas implements Runnable {
 					case Define.ST_MENU_SELECT_MAP:
 					case Define.ST_MENU_CONFIG_MAP:
 					case Define.ST_MENU_CAMPAING:
+						
+					case Define.ST_MENU_ON_LINE_START:
+					case Define.ST_MENU_ON_LINE_NEW_ACCOUNT:
+					case Define.ST_MENU_ON_LINE_LOGIN:
+					case Define.ST_MENU_ON_LINE_LIST:
+					case Define.ST_MENU_ON_LINE_HOST:
+					
 					case Define.ST_TEST:
 					if (!isLoading) {
 						ModeMenu.update();
@@ -218,6 +201,13 @@ public class Main extends MyCanvas implements Runnable {
 		         case Define.ST_MENU_SELECT_MAP:
 		         case Define.ST_MENU_CONFIG_MAP:
 		         case Define.ST_MENU_CAMPAING:
+		        	 
+		         case Define.ST_MENU_ON_LINE_START:
+				 case Define.ST_MENU_ON_LINE_NEW_ACCOUNT:
+				 case Define.ST_MENU_ON_LINE_LOGIN:
+				 case Define.ST_MENU_ON_LINE_LIST:
+				 case Define.ST_MENU_ON_LINE_HOST:
+		        	 
 		         case Define.ST_TEST:
 					ModeMenu.draw(_g);
 					break;

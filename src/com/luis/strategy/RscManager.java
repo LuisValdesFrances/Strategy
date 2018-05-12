@@ -19,8 +19,10 @@ public class RscManager {
 	public static final int TXT_MULTI_PLAYER = TXT_START +1;
 	public static final int TXT_ON_LINE = TXT_MULTI_PLAYER +1;
 	public static final int TXT_PASS_AND_PLAY = TXT_ON_LINE +1;
+	public static final int TXT_NEW_ACOUNT = TXT_PASS_AND_PLAY +1;
+	public static final int TXT_LOGIN = TXT_NEW_ACOUNT +1;
 	
-	public static final int TXT_PLAY = TXT_PASS_AND_PLAY +1;
+	public static final int TXT_PLAY = TXT_LOGIN +1;
 	public static final int TXT_OPTIONS = TXT_PLAY +1;
 	public static final int TXT_INFO=  TXT_OPTIONS+1;
 	public static final int TXT_EXIT=  TXT_INFO+1;

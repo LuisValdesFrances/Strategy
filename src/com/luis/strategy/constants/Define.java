@@ -47,7 +47,14 @@ public class Define {
 	public static final int ST_MENU_SELECT_MAP = 10;
 	public static final int ST_MENU_CONFIG_MAP = 11;
 	public static final int ST_MENU_CAMPAING = 12;
-	public static final int ST_TEST = 13;
+	
+	public static final int ST_MENU_ON_LINE_START = 13;
+	public static final int ST_MENU_ON_LINE_NEW_ACCOUNT = 14;
+	public static final int ST_MENU_ON_LINE_LOGIN = 15;
+	public static final int ST_MENU_ON_LINE_LIST = 16;
+	public static final int ST_MENU_ON_LINE_HOST = 17;
+	
+	public static final int ST_TEST = 50;
 
 	// Game states:
 	public static final int ST_GAME_INIT = 100;
@@ -56,6 +63,8 @@ public class Define {
 	public static final int ST_GAME_PAUSE = 103;
 	public static final int ST_GAME_CONFIRMATION_QUIT = 104;
 	   
+	// Nombre del fichero donde se guardaran y cargaran los datos:
+	public static final String DATA_USER = "strategyDataUser";
 	  
 	 
 	

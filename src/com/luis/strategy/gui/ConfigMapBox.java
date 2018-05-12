@@ -60,7 +60,6 @@ public class ConfigMapBox extends ListBox{
 	@Override
 	public boolean update(MultiTouchHandler touchHandler, float delta){
 		
-		
 		if(state == STATE_ACTIVE){
 			for(int i = 0; i < btnList.size(); i++){
 				if(btnList.get(i).update(touchHandler)){
