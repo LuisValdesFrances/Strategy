@@ -1,6 +1,6 @@
 package com.luis.strategy;
 
-import com.luis.strategy.datapackage.DataPackage;
+import com.luis.strategy.datapackage.scene.SceneData;
 import com.luis.strategy.map.GameScene;
 
 public class GameState {
@@ -13,7 +13,7 @@ public class GameState {
 	
 	//Game serial data
 	private GameScene gameScene;
-	private DataPackage dataPackage;
+	private SceneData dataPackage;
 	
 	//User configuration
 	private String name;
@@ -32,7 +32,7 @@ public class GameState {
 		}
 	}
 	
-	public void init(DataPackage dataPackage){
+	public void init(SceneData dataPackage){
 		this.dataPackage = dataPackage;
 		this.map = dataPackage.getMap();
 		playerConfList = new PlayerConf[dataPackage.getPlayerDataList().size()];
@@ -58,11 +58,11 @@ public class GameState {
 	}
 
 	
-	public DataPackage getDataPackage() {
+	public SceneData getDataPackage() {
 		return dataPackage;
 	}
 
-	public void setDataPackage(DataPackage dataPackage) {
+	public void setDataPackage(SceneData dataPackage) {
 		this.dataPackage = dataPackage;
 	}
 

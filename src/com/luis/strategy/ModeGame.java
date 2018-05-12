@@ -22,7 +22,7 @@ import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.data.DataKingdom;
 import com.luis.strategy.data.GameBuilder;
-import com.luis.strategy.datapackage.DataPackage;
+import com.luis.strategy.datapackage.scene.SceneData;
 import com.luis.strategy.game.GameManager;
 import com.luis.strategy.map.GameScene;
 import com.luis.strategy.map.Player;
@@ -143,8 +143,7 @@ public class ModeGame {
 			HttpURLConnection connection = null;
 			try {
 				// open URL connection
-				//URL url = new URL("http://192.168.1.110:8080/KingServer/mapTestServlet2");//local
-				URL url = new URL("http://172.104.228.65:8080/KingServer/mapTestServlet2");//online
+				URL url = new URL(Define.SERVER_URL + "mapTestServlet2");//online
 				connection = (HttpURLConnection) url.openConnection();
 				connection.setRequestProperty("Content-Type", "application/octet-stream");
 				connection.setRequestMethod("POST");

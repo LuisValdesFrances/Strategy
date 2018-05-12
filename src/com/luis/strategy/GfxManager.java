@@ -39,6 +39,9 @@ public class GfxManager {
 	public static Image imgButtonKeyboardFocus;
 	public static Image imgButtonKeyboardReleaseSp;
 	public static Image imgButtonKeyboardFocusSp;
+	
+	public static Image imgInputBox;
+	public static Image imgTextPointer;
 
 	// Game images:
 	public static Image imgGameBG;
@@ -393,6 +396,8 @@ public class GfxManager {
 		imgBlackBG = Image.createImage("/black_bg.png");
 		imgTitle = Image.createImage("/title.png");
 		
+		imgInputBox = Image.createImage("/input_box.png");
+		imgTextPointer = Image.createImage("/text_pointer.png");
 		
 		imgFlagList = new ArrayList<Image>();
 		imgFlagList.add(Image.createImage("/flag1.png"));
@@ -425,6 +430,9 @@ public class GfxManager {
 		imgButtonKeyboardFocus = null;
 		imgButtonKeyboardReleaseSp = null;
 		imgButtonKeyboardFocusSp = null;
+		
+		imgInputBox = null;
+		imgTextPointer = null;
 		
 		imgMainBG = null;
 		imgSwordBG = null;

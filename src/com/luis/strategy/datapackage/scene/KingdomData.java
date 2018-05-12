@@ -1,4 +1,4 @@
-package com.luis.strategy.datapackage;
+package com.luis.strategy.datapackage.scene;
 
 import java.io.Serializable;
 

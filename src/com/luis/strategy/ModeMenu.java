@@ -1,7 +1,10 @@
 package com.luis.strategy;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -12,6 +15,7 @@ import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gui.Button;
 import com.luis.lgameengine.gui.ListBox;
 import com.luis.lgameengine.gui.MenuElement;
+import com.luis.lgameengine.gui.NotificationBox;
 import com.luis.lgameengine.implementation.fileio.FileIO;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.graphics.Image;
@@ -19,7 +23,9 @@ import com.luis.strategy.GameState.PlayerConf;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.data.DataKingdom;
-import com.luis.strategy.datapackage.DataPackage;
+import com.luis.strategy.data.GameBuilder;
+import com.luis.strategy.datapackage.scene.SceneData;
+import com.luis.strategy.datapackage.user.UserData;
 import com.luis.strategy.gui.ConfigMapBox;
 import com.luis.strategy.gui.AccountBox;
 
@@ -51,7 +57,7 @@ public class ModeMenu {
 	
 	private static ListBox selectMapBox;
 	private static ConfigMapBox configMapBox;
-	private static AccountBox newAccountBox;
+	private static AccountBox accountBox;
 	
 	
 	public static void init(int _iMenuState){
@@ -78,7 +84,6 @@ public class ModeMenu {
 					case Define.ST_MENU_SELECT_GAME:
 					case Define.ST_MENU_CAMPAING:
 					case Define.ST_MENU_ON_LINE_START:
-					case Define.ST_MENU_ON_LINE_LIST:
 						Main.changeState(Define.ST_MENU_MAIN, false);
 						break;
 					case Define.ST_MENU_SELECT_MAP:
@@ -86,6 +91,9 @@ public class ModeMenu {
 						break;
 					case Define.ST_MENU_CONFIG_MAP:
 						configMapBox.cancel();
+						break;
+					case Define.ST_MENU_ON_LINE_NEW_ACCOUNT:
+						accountBox.cancel();
 						break;
 					}
 				};
@@ -105,6 +113,10 @@ public class ModeMenu {
 					}
 				};
 			};
+			
+			NotificationBox.getInstance().init(
+					Define.SIZEX, Define.SIZEY, 
+					null, NotificationBox.DURATION_LONG);
 
 			break;
 		case Define.ST_MENU_ASK_SOUND:
@@ -155,6 +167,8 @@ public class ModeMenu {
 						reset();
 					}
 				};
+				
+				btnCampaign.setDisabled(true);
 			}
 			break;
 		case Define. ST_MENU_OPTIONS:
@@ -179,7 +193,7 @@ public class ModeMenu {
 				@Override
 				public void onButtonPressUp(){
 					
-					DataPackage dataPackage = null;
+					SceneData dataPackage = null;
 					/*
 					//Lectura local
 					try{
@@ -210,7 +224,7 @@ public class ModeMenu {
 
 						ObjectInputStream objIn = new ObjectInputStream(
 								connection.getInputStream());
-						dataPackage = (DataPackage) objIn.readObject();
+						dataPackage = (SceneData) objIn.readObject();
 						objIn.close();
 
 					} catch (Exception e) {
@@ -387,7 +401,89 @@ public class ModeMenu {
 			
 			break;
 		 case Define.ST_MENU_ON_LINE_NEW_ACCOUNT:
-			 newAccountBox = new AccountBox();
+			 accountBox = new AccountBox(){
+				 @Override
+				 public void onSendForm() {
+					 super.onSendForm();
+					 
+					 String p1 = getTextPassword();
+					 String p2 = getTextRepPassword();
+					 if(!getTextPassword().equals(getTextRepPassword())){
+						 NotificationBox.getInstance().addMessage(RscManager.allText[RscManager.TXT_PASS_NO_MATCH]);
+						 
+					 }else{
+						 
+						 String result = "";
+						 String msg = "";
+						 //Escrutura online
+						 UserData userData = new UserData();
+						 userData.setName(getTextName());
+						 userData.setPassword(getTextPassword());
+						 HttpURLConnection connection = null;
+							try {
+								URL url = new URL(Define.SERVER_URL + "createUserServlet");//online
+								connection = (HttpURLConnection) url.openConnection();
+								connection.setRequestProperty("Content-Type", "application/octet-stream");
+								connection.setRequestMethod("POST");
+								connection.setDoInput(true);
+								connection.setDoOutput(true);
+								connection.setUseCaches(false);
+
+								// send object
+								ObjectOutputStream objOut = new ObjectOutputStream(
+										connection.getOutputStream());
+								objOut.writeObject(userData);
+								objOut.flush();
+								objOut.close();
+
+								BufferedReader in = new BufferedReader(new InputStreamReader(
+										connection.getInputStream()));
+
+								String str = "";
+								while ((str = in.readLine()) != null) {
+									result += str + "\n";
+								}
+								in.close();
+
+								System.out.println(result);
+								connection.disconnect();
+
+							} catch (Exception ex) {
+								ex.printStackTrace();
+								result = "Connection error";
+							}	
+						 
+						if(result.equals("Connection error")){
+							msg = RscManager.allText[RscManager.TXT_CONNECTION_ERROR];
+						}
+						else if(result.equals("Server error")){
+							msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
+						}
+						else if(result.equals("User error")){
+							msg = RscManager.allText[RscManager.TXT_INCORRECT_USER_NAME];
+						}
+						else if(result.equals("Succes")){
+							msg = RscManager.allText[RscManager.TXT_ACCOUNT_CREATED];
+							 //Guardo los datos en la memoria local
+							
+							//Cambio de estado
+						}
+						
+						NotificationBox.getInstance().addMessage(msg);
+					 }
+					 
+				 }
+				 
+				 @Override
+				public void onFinish(){
+					 if(accountBox.isSucces()){
+						 Main.changeState(Define.ST_MENU_ON_LINE_LIST, false);
+					 }else{
+						 Main.changeState(Define.ST_MENU_ON_LINE_START, false);
+					 }
+				}
+			 };
+			 accountBox.start();
 			 break;
 		 case Define.ST_MENU_ON_LINE_LOGIN:
 			 break;
@@ -402,6 +498,7 @@ public class ModeMenu {
 	}
 	
 	public static void update(){
+		
 		switch (Main.state) {
 		case Define.ST_MENU_LOGO:
 			runLogo();
@@ -462,9 +559,7 @@ public class ModeMenu {
 		 case Define.ST_MENU_ON_LINE_NEW_ACCOUNT:
 			 runMenuBG(Main.getDeltaSec());
 			 btnBack.update(UserInput.getInstance().getMultiTouchHandler());
-			 if(newAccountBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec())){
-				 
-			 }
+			 accountBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
 		 case Define.ST_MENU_ON_LINE_LOGIN:
 			 runMenuBG(Main.getDeltaSec());
 			 btnBack.update(UserInput.getInstance().getMultiTouchHandler());
@@ -481,9 +576,12 @@ public class ModeMenu {
         case Define.ST_TEST:
 			break;
 		}
+		
+		NotificationBox.getInstance().update(Main.getDeltaSec());
 	}
 	
 	public static void draw(Graphics _g){
+		
 		switch (Main.state) {
 		case Define.ST_MENU_LOGO:
 			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
@@ -561,7 +659,7 @@ public class ModeMenu {
 		 case Define.ST_MENU_ON_LINE_NEW_ACCOUNT:
 			 drawMenuBG(_g);
 			 btnBack.draw(_g, 0, 0);
-			 newAccountBox.draw(_g);
+			 accountBox.draw(_g);
 			 break;
 		 case Define.ST_MENU_ON_LINE_LOGIN:
 			 drawMenuBG(_g);
@@ -603,6 +701,8 @@ public class ModeMenu {
 			_g.drawImage(GfxManager.imgRedBox, Define.SIZEX2, 10, Graphics.TOP | Graphics.HCENTER);
 			break;
 		}
+		
+		NotificationBox.getInstance().draw(_g);
 	}
 	
 	public static void drawBackground(Graphics _g, Image _vGB) {

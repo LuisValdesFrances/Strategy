@@ -62,9 +62,17 @@ public class Define {
 	public static final int ST_GAME_RUN = 102;
 	public static final int ST_GAME_PAUSE = 103;
 	public static final int ST_GAME_CONFIRMATION_QUIT = 104;
+	
+	
+	public static final String SERVER_URL = "http://172.104.228.65:8080/KingServer/";//Online
+	//public static final String SERVER_URL = "http://192.168.1.110:8080/KingServer/";//Local
 	   
 	// Nombre del fichero donde se guardaran y cargaran los datos:
 	public static final String DATA_USER = "strategyDataUser";
+	public static final int MAX_NAME_CHAR = 14;
+	public static final int MAX_PASSWORD_CHAR = 20;
+	public static final int MIN_NAME_CHAR = 4;
+	public static final int MIN_PASSWORD_CHAR = 8;
 	  
 	 
 	

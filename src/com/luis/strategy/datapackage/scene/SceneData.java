@@ -1,9 +1,9 @@
-package com.luis.strategy.datapackage;
+package com.luis.strategy.datapackage.scene;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class DataPackage implements Serializable{
+public class SceneData implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	

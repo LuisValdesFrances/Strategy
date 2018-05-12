@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.luis.strategy.GameState;
-import com.luis.strategy.datapackage.ArmyData;
-import com.luis.strategy.datapackage.DataPackage;
-import com.luis.strategy.datapackage.KingdomData;
-import com.luis.strategy.datapackage.PlayerData;
-import com.luis.strategy.datapackage.TroopData;
+import com.luis.strategy.datapackage.scene.ArmyData;
+import com.luis.strategy.datapackage.scene.SceneData;
+import com.luis.strategy.datapackage.scene.KingdomData;
+import com.luis.strategy.datapackage.scene.PlayerData;
+import com.luis.strategy.datapackage.scene.TroopData;
 import com.luis.strategy.game.ActionIA;
 import com.luis.strategy.map.Army;
 import com.luis.strategy.map.GameScene;
@@ -60,7 +60,7 @@ public class GameBuilder {
 		return playerList;
 	}
 	
-	public GameScene build(DataPackage dataPackage){
+	public GameScene build(SceneData dataPackage){
 		
 		GameState.getInstance().init(dataPackage.getMap(), dataPackage.getPlayerDataList().size());
 		
@@ -129,8 +129,8 @@ public class GameBuilder {
 		return gameScene;
 	}
 	
-	public DataPackage build(GameScene gameScene){
-		DataPackage dataPackage = new DataPackage();
+	public SceneData build(GameScene gameScene){
+		SceneData dataPackage = new SceneData();
 		dataPackage.setMap(gameScene.getId());
 		dataPackage.setPlayerIndex(gameScene.getPlayerIndex());
 		dataPackage.setTurnCount(gameScene.getTurnCount());

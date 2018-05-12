@@ -35,6 +35,15 @@ Continue
 Quit
 New record:
 Do you want return to menu?
+Name
+Password
+Repeat pass
+Passwords do not match
+Sorry, there is already a user with that name. Try it with another name.
+Incorrect username or password
+Connection error
+Server error
+Account has been created
 TURN:
 Plain
 Forest

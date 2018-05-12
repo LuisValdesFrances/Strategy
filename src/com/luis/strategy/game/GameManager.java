@@ -316,10 +316,6 @@ public class GameManager {
 		};
 		discardBox.setY(GfxManager.imgNotificationBox.getHeight()/2);
 		
-		NotificationBox.getInstance().init(
-				Define.SIZEX, Define.SIZEY, 
-				null, NotificationBox.DURATION_MEDIUM);
-		
 		changeState(STATE_INCOME);
 	}
 	
