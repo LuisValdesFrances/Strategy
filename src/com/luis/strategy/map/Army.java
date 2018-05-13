@@ -34,7 +34,7 @@ public class Army extends MapObject{
 	
 	
 	private boolean flip;
-	public int anim;
+	private int anim;
 	public static final int ANIN_IDLE = 0;
 	public static final int ANIN_MOVE = 1;
 	public static final int ANIN_ATACK = 2;
@@ -414,8 +414,6 @@ public class Army extends MapObject{
 		this.player = player;
 	}
 	
-	
-
 	public IADecision getIaDecision() {
 		return iaDecision;
 	}

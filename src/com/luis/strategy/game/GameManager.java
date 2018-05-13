@@ -29,6 +29,7 @@ import com.luis.strategy.gui.FlagButton;
 import com.luis.strategy.gui.SimpleBox;
 import com.luis.strategy.gui.TerrainBox;
 import com.luis.strategy.map.Army;
+import com.luis.strategy.map.Army.IADecision;
 import com.luis.strategy.map.Kingdom;
 import com.luis.strategy.map.GameScene;
 import com.luis.strategy.map.Player;
@@ -54,7 +55,8 @@ public class GameManager {
 	public static Button btnDebugPause;
 	private static boolean isDebugPaused;
 	
-	private static float IAWait = 0.70f;
+	private static final float IA_WAIT = 0.8f;
+	
 	private static float IAWaitCount;
 	
 	//Pad
@@ -75,24 +77,25 @@ public class GameManager {
 	public static final int STATE_ACTION = 3;
 	public static final int STATE_END = 4;
 	public static final int STATE_FINISH = 5;
-	public static final int STATE_IA_WAIT = 6;
-	public static final int STATE_DEBUG = 7;
+	public static final int STATE_DEBUG = 6;
 	
 	
 	//SUB-STATE ACTION
 	public int subState;
-	public static final int SUB_STATE_ACTION_WAIT = 0;
-	public static final int SUB_STATE_ACTION_SELECT = 1;
-	public static final int SUB_STATE_ACTION_MOVE = 2;
-	public static final int SUB_STATE_ACTION_RESOLVE_MOVE = 3;
-	public static final int SUB_STATE_ACTION_COMBAT_ANIM = 4;
-	public static final int SUB_STATE_ACTION_COMBAT = 5;
-	public static final int SUB_STATE_ACTION_RESULT = 6;
-	public static final int SUB_STATE_ACTION_CONQUEST = 7;
-	public static final int SUB_STATE_ACTION_SCAPE = 8;
-	public static final int SUB_STATE_ACTION_RESOLVE_SCAPE = 9;
-	public static final int SUB_STATE_ARMY_MANAGEMENT = 10;
-	public static final int SUB_STATE_CITY_MANAGEMENT = 11;
+	public static final int SUB_STATE_ACTION_IA_WAIT_START = 0;
+	public static final int SUB_STATE_ACTION_WAIT = 1;
+	public static final int SUB_STATE_ACTION_SELECT = 2;
+	public static final int SUB_STATE_ACTION_MOVE = 3;
+	public static final int SUB_STATE_ACTION_RESOLVE_MOVE = 4;
+	public static final int SUB_STATE_ACTION_COMBAT_ANIM = 5;
+	public static final int SUB_STATE_ACTION_COMBAT = 6;
+	public static final int SUB_STATE_ACTION_RESULT = 7;
+	public static final int SUB_STATE_ACTION_CONQUEST = 8;
+	public static final int SUB_STATE_ACTION_SCAPE = 9;
+	public static final int SUB_STATE_ACTION_RESOLVE_SCAPE = 10;
+	public static final int SUB_STATE_ARMY_MANAGEMENT = 11;
+	public static final int SUB_STATE_CITY_MANAGEMENT = 12;
+	public static final int SUB_STATE_ACTION_IA_WAIT_END = 13;
 	
 	//GUI
 	private static Button btnNext;
@@ -357,7 +360,16 @@ public class GameManager {
 		
 		case STATE_ACTION:
 			switch(subState){
+			case SUB_STATE_ACTION_IA_WAIT_START:
+				if(getCurrentPlayer().getActionIA() != null && IAWaitCount < IA_WAIT){
+					IAWaitCount+=delta;
+				}else{
+					IAWaitCount = 0;
+					changeSubState(SUB_STATE_ACTION_WAIT);
+				}
+				break;
 			case SUB_STATE_ACTION_WAIT:
+				
 				//Atcualizar iteracion terreno:
 				for(Kingdom kingdom : gameScene.getKingdomList()){
 					for(Terrain terrain : kingdom.getTerrainList()){
@@ -476,7 +488,12 @@ public class GameManager {
 				break;
 			case SUB_STATE_ACTION_CONQUEST:
 				if(!updateConquest(delta)){
-					startEscape();
+					Army defeat = getDefeatArmy();
+					if(defeat != null){
+						changeSubState(SUB_STATE_ACTION_SCAPE);
+					}else{
+						changeSubState(SUB_STATE_ACTION_WAIT);
+					}
 				}
 				break;
 				
@@ -512,6 +529,14 @@ public class GameManager {
 					changeSubState(SUB_STATE_ACTION_WAIT);
 				}
 				break;
+			case SUB_STATE_ACTION_IA_WAIT_END:
+				if(getCurrentPlayer().getActionIA() != null && IAWaitCount < IA_WAIT){
+					IAWaitCount+=delta;
+				}else{
+					IAWaitCount = 0;
+					changeState(STATE_END);
+				}
+				break;
 			}
 		break;
 		
@@ -519,13 +544,6 @@ public class GameManager {
 		case STATE_FINISH:
 			if(!endGameBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
 				
-			}
-			break;
-		case STATE_IA_WAIT:
-			if(IAWaitCount < IAWait){
-				IAWaitCount+= delta;
-			}else{
-				changeState(STATE_END);
 			}
 			break;
 		case STATE_DEBUG:
@@ -876,7 +894,6 @@ public class GameManager {
 					(gameScene.getTurnCount()+1) + " - " + getCurrentPlayer().getName());
 			cameraTargetX = getCurrentPlayer().getCapitalkingdom().getAbsoluteX();
 			cameraTargetY = getCurrentPlayer().getCapitalkingdom().getAbsoluteY();
-			IAWaitCount = 0;
 			break;
 		case STATE_ECONOMY:
 			
@@ -912,6 +929,13 @@ public class GameManager {
 			}
 			break;
 		case STATE_ACTION:
+			/*
+			if(getCurrentPlayer().getActionIA() != null){
+				changeSubState(SUB_STATE_ACTION_IA_WAIT_START);
+			}else{
+				changeSubState(SUB_STATE_ACTION_WAIT);
+			}
+			*/
 			changeSubState(SUB_STATE_ACTION_WAIT);
 			break;
 		case STATE_END:
@@ -963,7 +987,18 @@ public class GameManager {
 			btnCancel.setDisabled(true);
 			
 			switch(subState){
-				
+			case SUB_STATE_ACTION_IA_WAIT_START:
+				IAWaitCount = 0;
+				//Solo espero si IA va a dar una torta
+				if(!(getSelectedArmy() != null && 
+						(
+						getSelectedArmy().getIaDecision().getDecision() == ActionIA.DECISION_ATACK || 
+						getSelectedArmy().getIaDecision().getDecision() == ActionIA.DECISION_MOVE_AND_ATACK
+						)
+					)){
+					changeSubState(SUB_STATE_ACTION_WAIT);
+				}
+				break;
 			case SUB_STATE_ACTION_WAIT:
 				btnFlagHelmet.hide();
 				btnFlagCastle.hide();
@@ -993,7 +1028,7 @@ public class GameManager {
 					//Cuando no me quedan mas ejercitos, cambio de estado
 					}else{
 						if(isAutoPlay()){
-							changeState(STATE_IA_WAIT);
+							changeSubState(SUB_STATE_ACTION_IA_WAIT_END);
 						}
 					}
 				}
@@ -1037,6 +1072,9 @@ public class GameManager {
 			case SUB_STATE_ARMY_MANAGEMENT:
 				break;
 			case SUB_STATE_CITY_MANAGEMENT:
+				break;
+			case SUB_STATE_ACTION_IA_WAIT_END:
+				IAWaitCount = 0;
 				break;
 			}
 			
@@ -1309,7 +1347,11 @@ public class GameManager {
 		if(defeat != null){
 			changeSubState(SUB_STATE_ACTION_SCAPE);
 		}else{
-			changeSubState(SUB_STATE_ACTION_WAIT);
+			if(getCurrentPlayer().getActionIA() != null){
+				changeSubState(SUB_STATE_ACTION_IA_WAIT_START);
+			}else{
+				changeSubState(SUB_STATE_ACTION_WAIT);
+			}
 		}
 	}
 	
@@ -1590,8 +1632,12 @@ public class GameManager {
 		if(armyFiendList.size() > 1){
 			aggregation(armyFiendList.get(0), armyFiendList.get(1));
 			//activeArmy = armyList.get(0);
-			changeSubState(SUB_STATE_ACTION_WAIT);
 			NotificationBox.getInstance().addMessage("The armies have joined forces");
+			if(getCurrentPlayer().getActionIA() != null){
+				changeSubState(SUB_STATE_ACTION_IA_WAIT_START);
+			}else{
+				changeSubState(SUB_STATE_ACTION_WAIT);
+			}
 			
 		}else{
 			
@@ -1636,7 +1682,11 @@ public class GameManager {
 				if(getCurrentPlayer().hasKingom(getSelectedArmy().getKingdom())){
 					getSelectedArmy().getKingdom().setTarget(-1);
 					getSelectedArmy().changeState(Army.STATE_OFF);
-					changeSubState(SUB_STATE_ACTION_WAIT);
+					if(getCurrentPlayer().getActionIA() != null){
+						changeSubState(SUB_STATE_ACTION_IA_WAIT_START);
+					}else{
+						changeSubState(SUB_STATE_ACTION_WAIT);
+					}
 				}else{
 					//Si es la IA, solo se muestra la ventana de combate si se va a producir un combate
 					if(getCurrentPlayer().getActionIA() != null){
@@ -1651,7 +1701,7 @@ public class GameManager {
 						}else{
 							getSelectedArmy().getKingdom().setTarget(-1);
 							getSelectedArmy().changeState(Army.STATE_OFF);
-							changeSubState(SUB_STATE_ACTION_WAIT);
+							changeSubState(SUB_STATE_ACTION_IA_WAIT_START);
 						}
 					}else{
 						int kingdomState = getSelectedArmy().getKingdom().getState();
@@ -1820,7 +1870,11 @@ public class GameManager {
 			changeState(STATE_DEBUG);
 		}
 			
-		changeSubState(SUB_STATE_ACTION_WAIT);
+		if(getCurrentPlayer().getActionIA() != null){
+			changeSubState(SUB_STATE_ACTION_IA_WAIT_START);
+		}else{
+			changeSubState(SUB_STATE_ACTION_WAIT);
+		}
 	}
 	
 	private Player getCurrentPlayer() {
