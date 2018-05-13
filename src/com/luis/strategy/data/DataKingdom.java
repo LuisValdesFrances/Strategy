@@ -19,10 +19,11 @@ public class DataKingdom {
 	public static final int[][][] INIT_MAP_DATA =
 		{
 		{{1,2}, {7,8}},
-		{{1,2}, {14,15}, {19,21}, {25,26}, {36,37}, {51,53}}
+		{{1,2}, {14,15}, {19,21}, {25,26}, {36,37}, {51,53}},
 		};
 	
-	public static final int[][] MAP_PARTS = {{4,2}, {4,4}};
+	public static final int[][] MAP_PARTS = {{4,2}, {4,4}
+	};
 	
 	public static List<Kingdom> getGenterex(MapObject map){
 		

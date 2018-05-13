@@ -125,26 +125,26 @@ public class GameScene{
 					worldConver.getConversionDrawY(gameCamera.getPosY(), k.getTerrainList().get(i).getAbsoluteY()),
 					Graphics.VCENTER | Graphics.HCENTER);
 				
-				//Capitales
-				for(Player player : playerList){
-					if(player.getCapitalkingdom() != null){
-						int modW = player.getCapitalkingdom().getTerrainList().get(player.getCapitalkingdom().getTerrainList().size()-1).getWidth()/2-
-								GfxManager.imgCrown.getWidth()/3;
-						int modH = player.getCapitalkingdom().getTerrainList().get(player.getCapitalkingdom().getTerrainList().size()-1).getHeight()/2-
-								GfxManager.imgCrown.getHeight()/3;
-						g.drawImage(GfxManager.imgCrown, 
-							worldConver.getConversionDrawX(gameCamera.getPosX(), 
-									player.getCapitalkingdom().getTerrainList().get(player.getCapitalkingdom().getTerrainList().size()-1).getAbsoluteX()-
-									modW),
-							worldConver.getConversionDrawY(gameCamera.getPosY(), 
-									player.getCapitalkingdom().getTerrainList().get(player.getCapitalkingdom().getTerrainList().size()-1).getAbsoluteY()-
-									modH),
-							Graphics.HCENTER | Graphics.VCENTER);
-					}
-				}
-				
 				g.setAlpha(255);
 				g.setImageSize(1f, 1f);
+			}
+			
+			//Capitales
+			for(Player player : playerList){
+				if(player.getCapitalkingdom() != null){
+					int modW = player.getCapitalkingdom().getTerrainList().get(player.getCapitalkingdom().getTerrainList().size()-1).getWidth()/2-
+							GfxManager.imgCrown.getWidth()/3;
+					int modH = player.getCapitalkingdom().getTerrainList().get(player.getCapitalkingdom().getTerrainList().size()-1).getHeight()/2-
+							GfxManager.imgCrown.getHeight()/3;
+					g.drawImage(GfxManager.imgCrown, 
+						worldConver.getConversionDrawX(gameCamera.getPosX(), 
+								player.getCapitalkingdom().getTerrainList().get(player.getCapitalkingdom().getTerrainList().size()-1).getAbsoluteX()-
+								modW),
+						worldConver.getConversionDrawY(gameCamera.getPosY(), 
+								player.getCapitalkingdom().getTerrainList().get(player.getCapitalkingdom().getTerrainList().size()-1).getAbsoluteY()-
+								modH),
+						Graphics.HCENTER | Graphics.VCENTER);
+				}
 			}
 			
 			//OK

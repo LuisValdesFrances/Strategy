@@ -15,7 +15,7 @@ import com.luis.strategy.constants.Define;
 
 
 
-public class AccountBox extends MenuBox{
+public class CreateUserBox extends MenuBox{
 	
 	private Keyboard keyboard;
 	
@@ -24,6 +24,7 @@ public class AccountBox extends MenuBox{
 	private String textRepPassword;
 	
 	private int inputPointer;
+	private int newInputPointer;
 	
 	private int lineNamePosY;
 	private int linePassPosY;
@@ -34,11 +35,10 @@ public class AccountBox extends MenuBox{
 	private Button inputBoxRepPass;
 	
 	private Button btnOk;
-	private boolean succes;
 	
 	private int labelX;
 
-	public AccountBox() {
+	public CreateUserBox() {
 		super(
 				Define.SIZEX, Define.SIZEY, 
 				null,
@@ -82,6 +82,11 @@ public class AccountBox extends MenuBox{
 			@Override
 			public void onButtonPressUp() {
 				super.onButtonPressUp();
+				reset();
+				newInputPointer = 0;
+				if(newInputPointer == inputPointer){
+					return;
+				}
 				switch(inputPointer){
 				case 1:
 					textPassword = keyboard.getTextChain();
@@ -90,7 +95,7 @@ public class AccountBox extends MenuBox{
 					textRepPassword = keyboard.getTextChain();
 					break;
 				}
-				inputPointer = 0;
+				inputPointer = newInputPointer;
 				keyboard.setTextChain(textName);
 			}
 		};
@@ -99,6 +104,11 @@ public class AccountBox extends MenuBox{
 			@Override
 			public void onButtonPressUp() {
 				super.onButtonPressUp();
+				reset();
+				newInputPointer = 1;
+				if(newInputPointer == inputPointer){
+					return;
+				}
 				switch(inputPointer){
 				case 0:
 					textName = keyboard.getTextChain();
@@ -107,7 +117,7 @@ public class AccountBox extends MenuBox{
 					textRepPassword = keyboard.getTextChain();
 					break;
 				}
-				inputPointer = 1;
+				inputPointer = newInputPointer;
 				keyboard.setTextChain(textPassword);
 			}
 		};
@@ -116,6 +126,11 @@ public class AccountBox extends MenuBox{
 			@Override
 			public void onButtonPressUp() {
 				super.onButtonPressUp();
+				reset();
+				newInputPointer = 2;
+				if(newInputPointer == inputPointer){
+					return;
+				}
 				switch(inputPointer){
 				case 0:
 					textName = keyboard.getTextChain();
@@ -124,7 +139,7 @@ public class AccountBox extends MenuBox{
 					textPassword = keyboard.getTextChain();
 					break;
 				}
-				inputPointer = 2;
+				inputPointer = newInputPointer;
 				keyboard.setTextChain(textRepPassword);
 			}
 		};
@@ -139,8 +154,6 @@ public class AccountBox extends MenuBox{
 				onSendForm();
 			};
 		};
-		
-		succes = false;
 	}
 	
 	
@@ -218,10 +231,18 @@ public class AccountBox extends MenuBox{
 		TextManager.drawSimpleText(g, Font.FONT_SMALL, textName, 
 				inputBoxName.getX()+(int)modPosX, lineNamePosY, 
 				Graphics.VCENTER | Graphics.HCENTER);
-		TextManager.drawSimpleText(g, Font.FONT_SMALL, textPassword, 
+		String pass = "";
+		for(int i = 0; i < textPassword.length(); i++){
+			pass+="*";
+		}
+		TextManager.drawSimpleText(g, Font.FONT_SMALL, pass, 
 				inputBoxPass.getX()+(int)modPosX, linePassPosY, 
 				Graphics.VCENTER | Graphics.HCENTER);
-		TextManager.drawSimpleText(g, Font.FONT_SMALL, textRepPassword, 
+		pass = "";
+		for(int i = 0; i < textRepPassword.length(); i++){
+			pass+="*";
+		}
+		TextManager.drawSimpleText(g, Font.FONT_SMALL, pass, 
 				inputBoxRepPass.getX()+(int)modPosX, lineRepPassPosY, 
 				Graphics.VCENTER | Graphics.HCENTER);
 		
@@ -231,9 +252,7 @@ public class AccountBox extends MenuBox{
 		btnOk.draw(g, 0, 0);
 	}
 
-	public boolean isSucces() {
-		return succes;
-	}
+	
 
 
 	public String getTextName() {
@@ -241,18 +260,8 @@ public class AccountBox extends MenuBox{
 	}
 
 
-	public void setTextName(String textName) {
-		this.textName = textName;
-	}
-
-
 	public String getTextPassword() {
 		return textPassword;
-	}
-
-
-	public void setTextPassword(String textPassword) {
-		this.textPassword = textPassword;
 	}
 
 

@@ -57,8 +57,9 @@ public class RscManager {
 	public static final int TXT_CONNECTION_ERROR= TXT_INCORRECT_USER_NAME+1;
 	public static final int TXT_SERVER_ERROR= TXT_CONNECTION_ERROR+1;
 	public static final int TXT_ACCOUNT_CREATED= TXT_SERVER_ERROR+1;
+	public static final int TXT_CONNECTED_BY= TXT_ACCOUNT_CREATED+1;
 	
-	public static final int TXT_GAME_TURN= TXT_ACCOUNT_CREATED+1;
+	public static final int TXT_GAME_TURN= TXT_CONNECTED_BY+1;
 	public static final int TXT_GAME_PLAIN= TXT_GAME_TURN+1;
 	public static final int TXT_GAME_FOREST= TXT_GAME_PLAIN+1;
 	public static final int TXT_GAME_MONTAIN= TXT_GAME_FOREST+1;

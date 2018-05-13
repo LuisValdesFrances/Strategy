@@ -88,6 +88,8 @@ public class GfxManager {
 	public static Image imgButtonCrossFocus;
 	public static Image imgButtonCrossBigRelease;
 	public static Image imgButtonCrossBigFocus;
+	public static Image imgButtonSearchBigRelease;
+	public static Image imgButtonSearchBigFocus;
 	public static Image imgButtonFlagHelmetRelease;
 	public static Image imgButtonFlagHelmetFocus;
 	public static Image imgButtonFlagCastleRelease;
@@ -184,7 +186,6 @@ public class GfxManager {
 					imgMapList.add(Image.createImage("/maps/genterex_8.png"));
 					break;
 				case 1:
-				case 2:
 					imgMapList.add(Image.createImage("/maps/crom_1.png"));
 					imgMapList.add(Image.createImage("/maps/crom_2.png"));
 					imgMapList.add(Image.createImage("/maps/crom_3.png"));
@@ -203,7 +204,7 @@ public class GfxManager {
 					imgMapList.add(Image.createImage("/maps/crom_16.png"));
 					break;
 				}
-
+				
 				imgTextBG = Image.createImage("/text_bg.png");
 				imgBlackBG = Image.createImage("/black_bg.png");
 
@@ -384,6 +385,10 @@ public class GfxManager {
 		imgButtonArrowBackFocus = Image.createImage("/arrow_back_focus.png");
 		imgButtonArrowNextRelease = Image.createImage("/arrow_next_release.png");
 		imgButtonArrowNextFocus = Image.createImage("/arrow_next_focus.png");
+		imgButtonCrossBigRelease = Image.createImage("/cross_big_release.png");
+		imgButtonCrossBigFocus = Image.createImage("/cross_big_focus.png");
+		imgButtonSearchBigRelease = Image.createImage("/search_big_release.png");
+		imgButtonCrossBigRelease = Image.createImage("/search_big_focus.png");
 		
 		imgButtonKeyboardRelease = Image.createImage("/button_keyboard_release.png");
 		imgButtonKeyboardFocus = Image.createImage("/button_keyboard_focus.png");
@@ -430,6 +435,11 @@ public class GfxManager {
 		imgButtonKeyboardFocus = null;
 		imgButtonKeyboardReleaseSp = null;
 		imgButtonKeyboardFocusSp = null;
+		
+		imgButtonCrossBigRelease = null;
+		imgButtonCrossBigFocus = null;
+		imgButtonSearchBigRelease = null;
+		imgButtonCrossBigRelease = null;
 		
 		imgInputBox = null;
 		imgTextPointer = null;

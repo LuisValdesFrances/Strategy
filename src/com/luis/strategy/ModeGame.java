@@ -22,10 +22,8 @@ import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.data.DataKingdom;
 import com.luis.strategy.data.GameBuilder;
-import com.luis.strategy.datapackage.scene.SceneData;
 import com.luis.strategy.game.GameManager;
 import com.luis.strategy.map.GameScene;
-import com.luis.strategy.map.Player;
 
 /**
  * 
@@ -85,30 +83,12 @@ public class ModeGame {
 			gameFrame = 0;
 			
 			if(Main.state == Define.ST_GAME_INIT){
-				GameScene gameScene = new GameScene(GameState.getInstance()
-						.getMap(),
-						0,// GfxManager.imgMap.getWidth()/2,
-						0,// GfxManager.imgMap.getHeight()/2,
-						DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][0],
-						DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][1]);
-	
-				switch (GameState.getInstance().getMap()) {
-				case 0:
-					gameScene.setKingdomList(DataKingdom.getGenterex(gameScene.getMap()));
-					break;
-				case 1:
-				case 2:
-					gameScene.setKingdomList(DataKingdom.getCrom(gameScene.getMap()));
-					break;
-				}
-				List<Player> playerList = GameBuilder.getInstance().build(GameState.getInstance(), gameScene);
-				gameScene.setPlayerList(playerList);
+				
+				GameScene gameScene = GameBuilder.getInstance().buildPassAndPlay();
 				GameState.getInstance().setGameScene(gameScene);
 			}
 			else if(Main.state == Define.ST_GAME_CONTINUE){
-				
-				
-				GameScene gameScene = GameBuilder.getInstance().build(GameState.getInstance().getDataPackage());
+				GameScene gameScene = GameBuilder.getInstance().buildGameScene();
 				GameState.getInstance().setGameScene(gameScene);
 			}
 			
@@ -138,7 +118,7 @@ public class ModeGame {
 		case Define.ST_GAME_PAUSE:
 			
 			
-			///*
+			/*
 			//Escrutura online
 			HttpURLConnection connection = null;
 			try {
@@ -154,7 +134,7 @@ public class ModeGame {
 				// send object
 				ObjectOutputStream objOut = new ObjectOutputStream(
 						connection.getOutputStream());
-				objOut.writeObject(GameBuilder.getInstance().build(GameState.getInstance().getGameScene()));
+				objOut.writeObject(GameBuilder.getInstance().buildSceneData());
 				objOut.flush();
 				objOut.close();
 
@@ -178,13 +158,13 @@ public class ModeGame {
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}	
-			//*/
+			*/
 			
 			
 			/*
 			 * Escritura local
 			try {
-				FileOutputStream fos = Main. context.openFileOutput("Test", Main.context.MODE_PRIVATE);
+				FileOutputStream fos = Main. context.openFileOutput(Define.DATA_GAME_SAVE, Main.context.MODE_PRIVATE);
 				ObjectOutputStream os = new ObjectOutputStream(fos);
 				os.writeObject(GameBuilder.getInstance().
 						build(GameState.getInstance().getGameScene()));
@@ -194,20 +174,6 @@ public class ModeGame {
 				ex.printStackTrace();
 			}	
 			*/
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
 			
 			
 			

@@ -20,11 +20,14 @@ public class GameState {
 	private String password;
 	private int gameMode;
 	
+	//private boolean isOnlineGameOn;//Chequea si se esta en medio de una partida on line
+	
 	public static final int GAME_MODE_CAMPAING = 0;
 	public static final int GAME_MODE_PLAY_AND_PASS = 1;
 	public static final int GAME_MODE_ONLINE = 2;
 	
-	public void init(int map, int numPlayer){
+	public void init(int gameMode, int map, int numPlayer){
+		this.gameMode = gameMode;
 		this.map = map;
 		playerConfList = new PlayerConf[numPlayer];
 		for (int i = 0; i < playerConfList.length; i++) {
@@ -32,7 +35,8 @@ public class GameState {
 		}
 	}
 	
-	public void init(SceneData dataPackage){
+	public void init(int gameMode, SceneData dataPackage){
+		this.gameMode = gameMode;
 		this.dataPackage = dataPackage;
 		this.map = dataPackage.getMap();
 		playerConfList = new PlayerConf[dataPackage.getPlayerDataList().size()];

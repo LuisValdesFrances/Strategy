@@ -69,7 +69,6 @@ public class GameManager {
 	private GameScene gameScene;
 	
 	private int state;
-	private int lastState;
 	public static final int STATE_INCOME = 0;
 	public static final int STATE_ECONOMY = 1;
 	public static final int STATE_DISCARD = 2;
@@ -82,7 +81,6 @@ public class GameManager {
 	
 	//SUB-STATE ACTION
 	public int subState;
-	private int lastSubState;
 	public static final int SUB_STATE_ACTION_WAIT = 0;
 	public static final int SUB_STATE_ACTION_SELECT = 1;
 	public static final int SUB_STATE_ACTION_MOVE = 2;
@@ -604,7 +602,7 @@ public class GameManager {
 						 distorsion, distorsion, gameScene);
 			 }
 		 }
-		 
+		 /*
 		 g.drawDistorisionImage(
 				 gameBuffer, 
 				 (int)worldConver.getCentGameLayoutX() - gameBuffer.getWidth()/2 , (int)worldConver.getCentGameLayoutY() - gameBuffer.getHeight()/2, //Point corner top-left 
@@ -612,8 +610,8 @@ public class GameManager {
 				 (int)worldConver.getCentGameLayoutX() - (int)totalW/2, (int)worldConver.getCentGameLayoutY() - gameBuffer.getHeight()/2 + (int)totalH,  //Point corner button-left
 				 (int)worldConver.getCentGameLayoutX() + (int)totalW/2, (int)worldConver.getCentGameLayoutY() - gameBuffer.getHeight()/2 + (int)totalH	 //Point corner button-right
 				 );
-		
-		//g.drawImage(gameBuffer, Define.SIZEX2, Define.SIZEY2, Graphics.VCENTER | Graphics.HCENTER);
+		*/
+		g.drawImage(gameBuffer, Define.SIZEX2, Define.SIZEY2-GfxManager.imgGameHud.getHeight()/2, Graphics.VCENTER | Graphics.HCENTER);
 		
 		
 		//Fin buffer
@@ -869,8 +867,6 @@ public class GameManager {
 		btnFlagHelmet.hide();
 		btnFlagCastle.hide();
 		subState = 0;
-		lastSubState = 0;
-		lastState = state;
 		state = newState;
 		switch(state){
 		case STATE_INCOME:
@@ -952,7 +948,6 @@ public class GameManager {
 		btnNext.setDisabled(true);
 		btnCancel.setDisabled(true);
 		
-		lastSubState =subState;
 		subState = newSubState;
 		
 		gameScene.clean();
@@ -1030,8 +1025,7 @@ public class GameManager {
 				if(getDefeatArmy().getId() != getSelectedArmy().getId()){
 					getSelectedArmy().changeState(Army.STATE_OFF);
 					
-					//Si abandono una conquista, se pierde el progreso
-					getSelectedArmy().getKingdom().setState(0);
+					getSelectedArmy().getKingdom().setState(0);//control
 				}
 				Kingdom defeatTarget = getBorderKingdom(getDefeatArmy());
 				putArmyAtKingdom(getDefeatArmy(), getDefeatArmy().getKingdom(), defeatTarget);
@@ -1405,7 +1399,7 @@ public class GameManager {
 		
 		textN1=textB;
 		
-		//combate contra otro ejercito
+		////Hay ejercito enemigo
 		if(enemy != null){
 			//Resolucion del combate
 			Army defeated = null;
@@ -1438,10 +1432,10 @@ public class GameManager {
 				//Daño
 				int casualtiesFromArmy = 0;
 				int casualtiesFromEnemy = 0;
-				if(result == 1){
+				if(result == 1){//Ejercito selecionado pierde
 					casualtiesFromArmy = (getSelectedArmy().getCost() * 25) / 100; 
 					casualtiesFromEnemy = (enemy.getCost() * 50) / 100; 
-				}else if(result == 2){
+				}else if(result == 2){//Ejercito selecionado gana
 					casualtiesFromArmy = (getSelectedArmy().getCost() * 50) / 100; 
 					casualtiesFromEnemy = (enemy.getCost() * 25) / 100;
 				}
@@ -1455,26 +1449,29 @@ public class GameManager {
 						casualtiesFromArmy + RscManager.allText[RscManager.TXT_GAME_LOSSES];
 				textN2=textB;
 			}
-			
-			if(getSelectedArmy() != null){
-				getSelectedArmy().getKingdom().setState(0);
+			//Si el atacante gana, le quita el territorio al defensor
+			if(getSelectedArmy() != null && result > 1){
+				getSelectedArmy().getKingdom().setState(0);//control
 				getSelectedArmy().getKingdom().setTarget(-1);
 			}
 			
-		}else{
+		}
+		
+		//No hay ejercito enemigo pues se combate en un territorio vacio
+		else{
 			if(result > 1){
 				//Resolucion del combate
-				int state = getSelectedArmy().getKingdom().getState()+1;
-				int totalStates =getSelectedArmy().getKingdom().getTotalStates();
-				if(state < totalStates){
-					getSelectedArmy().getKingdom().setState(state);
+				int newState = getSelectedArmy().getKingdom().getState()+1;
+				int totalStates = getSelectedArmy().getKingdom().getTotalStates();
+				if(newState < totalStates){
+					getSelectedArmy().getKingdom().setState(newState);
 					getSelectedArmy().getKingdom().setTarget(-1);
 				}else{//Conquista
 					startConquest = true;
 					defeatPlayer = getPlayerByKingdom(getSelectedArmy().getKingdom());
+					
 					getSelectedArmy().getKingdom().setState(0);
 					getSelectedArmy().getKingdom().setTarget(-1);
-					
 					addNewConquest(getCurrentPlayer(), getSelectedArmy().getKingdom());
 					
 					//Cambio de capital

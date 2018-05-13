@@ -49,10 +49,11 @@ public class Define {
 	public static final int ST_MENU_CAMPAING = 12;
 	
 	public static final int ST_MENU_ON_LINE_START = 13;
-	public static final int ST_MENU_ON_LINE_NEW_ACCOUNT = 14;
+	public static final int ST_MENU_ON_LINE_CREATE_USER = 14;
 	public static final int ST_MENU_ON_LINE_LOGIN = 15;
 	public static final int ST_MENU_ON_LINE_LIST = 16;
-	public static final int ST_MENU_ON_LINE_HOST = 17;
+	public static final int ST_MENU_ON_LINE_CREATE_HOST = 18;
+	public static final int ST_MENU_ON_LINE_HOST = 19;
 	
 	public static final int ST_TEST = 50;
 
@@ -64,11 +65,13 @@ public class Define {
 	public static final int ST_GAME_CONFIRMATION_QUIT = 104;
 	
 	
-	public static final String SERVER_URL = "http://172.104.228.65:8080/KingServer/";//Online
-	//public static final String SERVER_URL = "http://192.168.1.110:8080/KingServer/";//Local
+	//public static final String SERVER_URL = "http://172.104.228.65:8080/KingServer/";//Online
+	public static final String SERVER_URL = "http://192.168.1.110:8080/KingServer/";//Local
 	   
 	// Nombre del fichero donde se guardaran y cargaran los datos:
 	public static final String DATA_USER = "strategyDataUser";
+	public static final String DATA_PASS_AND_PLAY = "strategyDataPassAndPlay";
+	public static final String DATA_CAMPAING = "strategyDataCampaing";
 	public static final int MAX_NAME_CHAR = 14;
 	public static final int MAX_PASSWORD_CHAR = 20;
 	public static final int MIN_NAME_CHAR = 4;

@@ -29,8 +29,6 @@ public class ArmyBox extends MenuBox{
 	private List<Button>deleteButtonList;
 	private Button crossButton;
 	
-	private boolean discardMode;
-	
 	private boolean enableCrossButton;
 	
 	private int selectedTroop;
@@ -87,7 +85,6 @@ public class ArmyBox extends MenuBox{
 		super.start();
 		this.army = a;
 		this.isCurrentPlayer = isCurrentPlayer;
-		this.discardMode = discardMode;
 		
 		int imageW = GfxManager.imgSmallTroop.get(0).getWidth();
 		int imageH = GfxManager.imgSmallTroop.get(0).getHeight();

@@ -22,7 +22,10 @@ import com.luis.strategy.constants.Define;
 
 public class Main extends MyCanvas implements Runnable {
 
-	public static Main main;
+	public static Main instance;
+	public static Main getInstance(){
+		return instance;
+	}
 	public static boolean isTouchDevice = true;
 	
 	public static final boolean IS_MOVE_SOFT_BANNER = false;
@@ -80,7 +83,7 @@ public class Main extends MyCanvas implements Runnable {
 	
 	public Main(Activity activity) {
 		super(activity, Define.SIZEX, Define.SIZEY);
-		main = this;
+		instance = this;
 		// if(Integer.parseInt(VERSION.SDK) < 5)
 		// touchHandler = new SingleTouchHandler(view, scaleX, scaleY);
 		// else
@@ -129,9 +132,10 @@ public class Main extends MyCanvas implements Runnable {
 					case Define.ST_MENU_CAMPAING:
 						
 					case Define.ST_MENU_ON_LINE_START:
-					case Define.ST_MENU_ON_LINE_NEW_ACCOUNT:
+					case Define.ST_MENU_ON_LINE_CREATE_USER:
 					case Define.ST_MENU_ON_LINE_LOGIN:
 					case Define.ST_MENU_ON_LINE_LIST:
+					case Define.ST_MENU_ON_LINE_CREATE_HOST:
 					case Define.ST_MENU_ON_LINE_HOST:
 					
 					case Define.ST_TEST:
@@ -203,9 +207,10 @@ public class Main extends MyCanvas implements Runnable {
 		         case Define.ST_MENU_CAMPAING:
 		        	 
 		         case Define.ST_MENU_ON_LINE_START:
-				 case Define.ST_MENU_ON_LINE_NEW_ACCOUNT:
+				 case Define.ST_MENU_ON_LINE_CREATE_USER:
 				 case Define.ST_MENU_ON_LINE_LOGIN:
 				 case Define.ST_MENU_ON_LINE_LIST:
+				 case Define.ST_MENU_ON_LINE_CREATE_HOST:
 				 case Define.ST_MENU_ON_LINE_HOST:
 		        	 
 		         case Define.ST_TEST:
@@ -430,7 +435,7 @@ public class Main extends MyCanvas implements Runnable {
 		}
 		//*/
 		if(_isLoadGraphics){
-			main.startClock();
+			instance.startClock();
 			GfxManager.loadGFX(_iNewState);
 		}
 
@@ -442,7 +447,7 @@ public class Main extends MyCanvas implements Runnable {
 		else
 			ModeGame.init(state);
 		
-		main.stopClock();
+		instance.stopClock();
 		isLoading = false;
 	}
 	
@@ -469,7 +474,7 @@ public class Main extends MyCanvas implements Runnable {
 	private static Thread tClockThread;
 	private static final String TEXT = "Loading...";
 
-	private void startClock() {
+	public void startClock() {
 
 		System.out.println("Start clock run");
 		isClock = true;
@@ -500,7 +505,7 @@ public class Main extends MyCanvas implements Runnable {
 		}
 	}
 
-	private void stopClock() {
+	public void stopClock() {
 		System.out.println("Stop clock run");
 		if (isClock) {
 			isClock = false;

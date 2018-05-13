@@ -10,6 +10,10 @@ public class SceneData implements Serializable{
 	private int map;
 	private int playerIndex;
 	private int turnCount;
+	
+	private String nextPlayer;
+	private int playerCount;
+	
 	List<PlayerData> playerDataList;
 	
 	public int getMap() {
@@ -35,6 +39,18 @@ public class SceneData implements Serializable{
 	}
 	public void setPlayerDataList(List<PlayerData> playerDataList) {
 		this.playerDataList = playerDataList;
+	}
+	public String getNextPlayer() {
+		return nextPlayer;
+	}
+	public void setNextPlayer(String nextPlayer) {
+		this.nextPlayer = nextPlayer;
+	}
+	public int getPlayerCount() {
+		return playerCount;
+	}
+	public void setPlayerCount(int playerCount) {
+		this.playerCount = playerCount;
 	}
 	
 	
