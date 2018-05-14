@@ -95,6 +95,7 @@ public class ModeMenu {
 						Main.changeState(Define.ST_MENU_MAIN, false);
 						break;
 					case Define.ST_MENU_SELECT_MAP:
+					case Define.ST_MENU_ON_LINE_CREATE_HOST:
 						selectMapBox.cancel();
 						break;
 					case Define.ST_MENU_CONFIG_MAP:
@@ -218,30 +219,6 @@ public class ModeMenu {
 					}
 					*/
 					
-					//Lectura onLine
-					HttpURLConnection connection = null;
-					try {
-
-						// open URL connection
-						//URL url = new URL("http://192.168.1.110:8080/KingServer/mapTestServlet2");//local
-						URL url = new URL("http://172.104.228.65:8080/KingServer/mapTestServlet2");//online
-						connection = (HttpURLConnection) url.openConnection();
-						connection.setRequestProperty("Content-Type",
-								"application/octet-stream");
-						connection.setRequestMethod("GET");
-						connection.setDoInput(true);
-						connection.setDoOutput(false);
-						connection.setUseCaches(false);
-
-						ObjectInputStream objIn = new ObjectInputStream(
-								connection.getInputStream());
-						dataPackage = (SceneData) objIn.readObject();
-						objIn.close();
-
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					
 					GameState.getInstance().init(GameState.GAME_MODE_CAMPAING, dataPackage);
 					Main.changeState(Define.ST_GAME_CONTINUE, true);
 					reset();
@@ -314,15 +291,7 @@ public class ModeMenu {
 					null, GfxManager.imgNotificationBox, GfxManager.imgNotificationBox, 
 					Define.SIZEX2, Define.SIZEY2, 
 					RscManager.allText[RscManager.TXT_SELECT_MAP],
-					new String[]{
-							"OCCITANE     (2-Player) Small", 
-							"SIX KINGDOMS (6-Player) Big",
-							"TEST 1x1     (2-Player) Med",
-							"TEST 2x2     (2-Player) Med",
-							"TEST 4x4     (2-Player) Med",
-							"TEST 8x8     (2-Player) Med",
-							"TEST 16x16   (2-Player) Med"
-							}, 
+					DataKingdom.SCENARY_LIST,
 					Font.FONT_BIG, Font.FONT_SMALL){
 				
 				@Override
@@ -409,63 +378,31 @@ public class ModeMenu {
 					 
 					  if(!getTextPassword().equals(getTextRepPassword())){
 						 NotificationBox.getInstance().addMessage(RscManager.allText[RscManager.TXT_PASS_NO_MATCH]);
-					}
+					  }
 					  else{
-						 String result = "";
-						 String msg = "";
 						 //Escrutura online
 						 UserData userData = new UserData();
 						 userData.setName(getTextName());
 						 userData.setPassword(getTextPassword());
 						 HttpURLConnection connection = null;
 						 
+						 String msg = "";
 						 Main.getInstance().startClock();
 						 
-							try {
-								URL url = new URL(Define.SERVER_URL + "createUserServlet");//online
-								connection = (HttpURLConnection) url.openConnection();
-								connection.setRequestProperty("Content-Type", "application/octet-stream");
-								connection.setRequestMethod("POST");
-								connection.setDoInput(true);
-								connection.setDoOutput(true);
-								connection.setUseCaches(false);
-
-								// send object
-								ObjectOutputStream objOut = new ObjectOutputStream(
-										connection.getOutputStream());
-								objOut.writeObject(userData);
-								objOut.flush();
-								objOut.close();
-
-								BufferedReader in = new BufferedReader(new InputStreamReader(
-										connection.getInputStream()));
-
-								String str = "";
-								while ((str = in.readLine()) != null) {
-									result += str;// + "\n";
-								}
-								in.close();
-
-								System.out.println(result);
-								connection.disconnect();
-
-							} catch (Exception ex) {
-								ex.printStackTrace();
-								result = "Connection error";
-							}	
-							
-						Main.getInstance().stopClock();
+						 String result = Main.getInstance().sendDataOnline(userData, "createUserServlet");
 						 
-						if(result.equals("Connection error")){
+						 Main.getInstance().stopClock();
+						 
+						 if(result.equals("Connection error")){
 							msg = RscManager.allText[RscManager.TXT_CONNECTION_ERROR];
-						}
-						else if(result.equals("Server error")){
+						 }
+						 else if(result.equals("Server error")){
 							msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
-						}
-						else if(result.equals("User error")){
+						 }
+						 else if(result.equals("User error")){
 							msg = RscManager.allText[RscManager.TXT_TRY_ANOTHER_NAME];
-						}
-						else if(result.equals("Succes")){
+						 }
+						 else if(result.equals("Succes")){
 							msg = RscManager.allText[RscManager.TXT_ACCOUNT_CREATED];
 							 
 							GameState.getInstance().setName(getTextName());
@@ -501,9 +438,6 @@ public class ModeMenu {
 				 @Override
 				 public void onSendForm() {
 					 super.onSendForm();
-					 
-					 String result = "";
-					 String msg = "";
 					 //Escrutura online
 					 UserData userData = new UserData();
 					 userData.setName(getTextName());
@@ -512,63 +446,33 @@ public class ModeMenu {
 					 
 					 Main.getInstance().startClock();
 					 
-						try {
-							URL url = new URL(Define.SERVER_URL + "getUserServlet");
-							connection = (HttpURLConnection) url.openConnection();
-							connection.setRequestProperty("Content-Type", "application/octet-stream");
-							connection.setRequestMethod("POST");
-							connection.setDoInput(true);
-							connection.setDoOutput(true);
-							connection.setUseCaches(false);
-
-							// send object
-							ObjectOutputStream objOut = new ObjectOutputStream(
-									connection.getOutputStream());
-							objOut.writeObject(userData);
-							objOut.flush();
-							objOut.close();
-
-							BufferedReader in = new BufferedReader(new InputStreamReader(
-									connection.getInputStream()));
-
-							String str = "";
-							while ((str = in.readLine()) != null) {
-								result += str;// + "\n";
-							}
-							in.close();
-
-							System.out.println(result);
-							connection.disconnect();
-
-						} catch (Exception ex) {
-							ex.printStackTrace();
-							result = "Connection error";
-						}	
-						
-					Main.getInstance().stopClock();
+					 String msg = "";
+					 String result = Main.getInstance().sendDataOnline(userData, "getUserServlet");
 					 
-					if(result.equals("Connection error")){
-						msg = RscManager.allText[RscManager.TXT_CONNECTION_ERROR];
-					}
-					else if(result.equals("Server error")){
-						msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
-					}
-					else if(result.equals("User error")){
-						msg = RscManager.allText[RscManager.TXT_INCORRECT_USER_NAME];
-					}
-					else if(result.equals("Succes")){
-						msg = RscManager.allText[RscManager.TXT_CONNECTED_BY] + " " + getTextName();
-						 
-						GameState.getInstance().setName(getTextName());
-						GameState.getInstance().setPassword(getTextPassword());
+					 Main.getInstance().stopClock();
+					 
+					 if(result.equals("Connection error")){
+						 msg = RscManager.allText[RscManager.TXT_CONNECTION_ERROR];
+					 }
+					 else if(result.equals("Server error")){
+						 msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
+					 }
+					 else if(result.equals("User error")){
+						 msg = RscManager.allText[RscManager.TXT_INCORRECT_USER_NAME];
+					 }
+					 else if(result.equals("Succes")){
+						 msg = RscManager.allText[RscManager.TXT_CONNECTED_BY] + " " + getTextName();
 						
-						//Guardo los datos en la memoria local
-						String d = getTextName() + "\n" + getTextPassword();
-						FileIO.getInstance().saveData(d, Define.DATA_USER, 
+						 GameState.getInstance().setName(getTextName());
+						 GameState.getInstance().setPassword(getTextPassword());
+						
+						 //Guardo los datos en la memoria local
+						 String d = getTextName() + "\n" + getTextPassword();
+						 FileIO.getInstance().saveData(d, Define.DATA_USER, 
 								Settings.getInstance().getActiviy().getApplicationContext());
 						
-						loginUsserSucces = true;
-						cancel();
+						 loginUsserSucces = true;
+						 cancel();
 					}
 					NotificationBox.getInstance().addMessage(msg);
 				 }
@@ -619,6 +523,43 @@ public class ModeMenu {
 			 
 			 break;
 		 case Define.ST_MENU_ON_LINE_CREATE_HOST:
+			 selectMapBox = new ListBox(
+						Define.SIZEX, Define.SIZEY, 
+						null, GfxManager.imgNotificationBox, GfxManager.imgNotificationBox, 
+						Define.SIZEX2, Define.SIZEY2, 
+						RscManager.allText[RscManager.TXT_SELECT_MAP],
+						DataKingdom.SCENARY_LIST,
+						Font.FONT_BIG, Font.FONT_SMALL){
+					
+					@Override
+					public void onFinish(){
+						
+						if(getIndexPressed() != -1){
+							
+							SceneData sceneData = new SceneData();
+							sceneData.setMap(getIndexPressed());
+							sceneData.setNextPlayer(GameState.getInstance().getName());
+							
+							 String msg = "";
+							 String result =  Main.getInstance().sendDataOnline(sceneData, "createScene");
+							 if(result.equals("Connection error")){
+									msg = RscManager.allText[RscManager.TXT_CONNECTION_ERROR];
+								 }
+								 else if(result.equals("Server error")){
+									msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
+								 }
+								 else if(result.equals("User error")){
+									msg = RscManager.allText[RscManager.TXT_TRY_ANOTHER_NAME];
+								 }
+								 else if(result.equals("Succes")){
+									msg = RscManager.allText[RscManager.TXT_GAME_CREATED];
+									cancel();
+								}
+							NotificationBox.getInstance().addMessage(msg);
+						}
+					};
+				};
+				selectMapBox.start();
 			 break;
 		 case Define.ST_MENU_ON_LINE_HOST:
 			 break;

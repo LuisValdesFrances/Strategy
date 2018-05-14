@@ -1,11 +1,21 @@
 package com.luis.strategy;
 
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Random;
 
 /**
  * @author Luis Valdes Frances
  */
+
+
+
 
 import android.app.Activity;
 import android.util.Log;
@@ -19,6 +29,7 @@ import com.luis.lgameengine.implementation.graphics.MyCanvas;
 import com.luis.lgameengine.implementation.input.KeyboardHandler;
 import com.luis.lgameengine.implementation.sound.SndManager;
 import com.luis.strategy.constants.Define;
+import com.luis.strategy.datapackage.scene.SceneData;
 
 public class Main extends MyCanvas implements Runnable {
 
@@ -542,6 +553,66 @@ public class Main extends MyCanvas implements Runnable {
 		}
 		}else{
 			Log.e("error", "No se existe la imagen del reloj de carga");
+		}
+	}
+	
+	public String sendDataOnline(Serializable dataPackage, String URL){
+		HttpURLConnection connection = null;
+		String result = "";
+		try {
+			// open URL connection
+			URL url = new URL(Define.SERVER_URL + URL);
+			connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestProperty("Content-Type", "application/octet-stream");
+			connection.setRequestMethod("POST");
+			connection.setDoInput(true);
+			connection.setDoOutput(true);
+			connection.setUseCaches(false);
+
+			// send object
+			ObjectOutputStream objOut = new ObjectOutputStream(
+					connection.getOutputStream());
+			objOut.writeObject(dataPackage);
+			objOut.flush();
+			objOut.close();
+
+			BufferedReader in = 
+					new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+			String str = "";
+			while ((str = in.readLine()) != null) {
+				result += str + "\n";
+			}
+			in.close();
+
+			System.out.println(result);
+			connection.disconnect();
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = e.getMessage();
+		}
+		return result;
+	}
+	
+	public void reviceData(Serializable dataPackage, String URL){
+		HttpURLConnection connection = null;
+		try {
+			// open URL connection
+			URL url = new URL(Define.SERVER_URL + URL);
+			connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestProperty("Content-Type", "application/octet-stream");
+			connection.setRequestMethod("GET");
+			connection.setDoInput(true);
+			connection.setDoOutput(false);
+			connection.setUseCaches(false);
+
+			ObjectInputStream objIn = 
+					new ObjectInputStream(connection.getInputStream());
+			dataPackage = (SceneData) objIn.readObject();
+			objIn.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

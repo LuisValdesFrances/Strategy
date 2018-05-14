@@ -7,6 +7,8 @@ public class SceneData implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
+	private int sceneId;
+	
 	private int map;
 	private int playerIndex;
 	private int turnCount;
@@ -16,6 +18,13 @@ public class SceneData implements Serializable{
 	
 	List<PlayerData> playerDataList;
 	
+	
+	public int getSceneId() {
+		return sceneId;
+	}
+	public void setSceneId(int sceneId) {
+		this.sceneId = sceneId;
+	}
 	public int getMap() {
 		return map;
 	}

@@ -29,7 +29,6 @@ import com.luis.strategy.gui.FlagButton;
 import com.luis.strategy.gui.SimpleBox;
 import com.luis.strategy.gui.TerrainBox;
 import com.luis.strategy.map.Army;
-import com.luis.strategy.map.Army.IADecision;
 import com.luis.strategy.map.Kingdom;
 import com.luis.strategy.map.GameScene;
 import com.luis.strategy.map.Player;
@@ -55,7 +54,7 @@ public class GameManager {
 	public static Button btnDebugPause;
 	private static boolean isDebugPaused;
 	
-	private static final float IA_WAIT = 0.8f;
+	private static final float IA_WAIT = 1f;
 	
 	private static float IAWaitCount;
 	
@@ -82,6 +81,7 @@ public class GameManager {
 	
 	//SUB-STATE ACTION
 	public int subState;
+	public int lastSubState;
 	public static final int SUB_STATE_ACTION_IA_WAIT_START = 0;
 	public static final int SUB_STATE_ACTION_WAIT = 1;
 	public static final int SUB_STATE_ACTION_SELECT = 2;
@@ -360,8 +360,14 @@ public class GameManager {
 		
 		case STATE_ACTION:
 			switch(subState){
+			
+			
 			case SUB_STATE_ACTION_IA_WAIT_START:
-				if(getCurrentPlayer().getActionIA() != null && IAWaitCount < IA_WAIT){
+				
+				//Si ya estaba esperando, espera menos
+				float t = lastSubState != SUB_STATE_ACTION_WAIT?IA_WAIT:IA_WAIT/2; 
+				
+				if(getCurrentPlayer().getActionIA() != null && IAWaitCount < t){
 					IAWaitCount+=delta;
 				}else{
 					IAWaitCount = 0;
@@ -488,12 +494,7 @@ public class GameManager {
 				break;
 			case SUB_STATE_ACTION_CONQUEST:
 				if(!updateConquest(delta)){
-					Army defeat = getDefeatArmy();
-					if(defeat != null){
-						changeSubState(SUB_STATE_ACTION_SCAPE);
-					}else{
-						changeSubState(SUB_STATE_ACTION_WAIT);
-					}
+					startEscape();
 				}
 				break;
 				
@@ -968,7 +969,7 @@ public class GameManager {
 	}
 	
 	private void changeSubState(int newSubState){
-		
+		lastSubState = subState;
 		btnNext.setDisabled(true);
 		btnCancel.setDisabled(true);
 		
