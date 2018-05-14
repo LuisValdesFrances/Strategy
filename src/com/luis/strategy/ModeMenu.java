@@ -1,12 +1,6 @@
 package com.luis.strategy;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.io.Serializable;
 
 import android.util.Log;
 
@@ -25,6 +19,7 @@ import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.data.DataKingdom;
 import com.luis.strategy.datapackage.scene.SceneData;
+import com.luis.strategy.datapackage.scene.SceneListData;
 import com.luis.strategy.datapackage.user.UserData;
 import com.luis.strategy.gui.ConfigMapBox;
 import com.luis.strategy.gui.CreateUserBox;
@@ -57,7 +52,7 @@ public class ModeMenu {
 	private static Button btnNewAccount;
 	private static Button btnLogin;
 	private static Button btnSearchGame;
-	private static Button btnCreateHost;
+	private static Button btnCreateScene;
 	
 	private static ListBox selectMapBox;
 	private static ConfigMapBox configMapBox;
@@ -95,7 +90,9 @@ public class ModeMenu {
 						Main.changeState(Define.ST_MENU_MAIN, false);
 						break;
 					case Define.ST_MENU_SELECT_MAP:
-					case Define.ST_MENU_ON_LINE_CREATE_HOST:
+					case Define.ST_MENU_ON_LINE_CREATE_SCENE:
+					case Define.ST_MENU_ON_LINE_LIST_ALL_GAME:
+					case Define.ST_MENU_ON_LINE_LIST_WAIT_GAME:
 						selectMapBox.cancel();
 						break;
 					case Define.ST_MENU_CONFIG_MAP:
@@ -262,7 +259,7 @@ public class ModeMenu {
 						GameState.getInstance().setName(d[0]);
 						GameState.getInstance().setPassword(d[1]);
 						NotificationBox.getInstance().addMessage(RscManager.allText[RscManager.TXT_CONNECTED_BY] + " " + d[0]);
-						Main.changeState(Define.ST_MENU_ON_LINE_LIST, false);
+						Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, false);
 					} else{
 						Main.changeState(Define.ST_MENU_ON_LINE_START, false);
 					}
@@ -366,7 +363,7 @@ public class ModeMenu {
 				}
 			};
 
-			Main.changeState(Define.ST_MENU_ON_LINE_LIST, false);
+			Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, false);
 			break;
 			
 		 case Define.ST_MENU_ON_LINE_CREATE_USER:
@@ -384,13 +381,10 @@ public class ModeMenu {
 						 UserData userData = new UserData();
 						 userData.setName(getTextName());
 						 userData.setPassword(getTextPassword());
-						 HttpURLConnection connection = null;
 						 
 						 String msg = "";
 						 Main.getInstance().startClock();
-						 
 						 String result = Main.getInstance().sendDataOnline(userData, "createUserServlet");
-						 
 						 Main.getInstance().stopClock();
 						 
 						 if(result.equals("Connection error")){
@@ -399,7 +393,7 @@ public class ModeMenu {
 						 else if(result.equals("Server error")){
 							msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
 						 }
-						 else if(result.equals("User error")){
+						 else if(result.equals("Query error")){
 							msg = RscManager.allText[RscManager.TXT_TRY_ANOTHER_NAME];
 						 }
 						 else if(result.equals("Succes")){
@@ -424,7 +418,7 @@ public class ModeMenu {
 				 @Override
 				 public void onFinish(){
 					 if(createUsserSucces){
-						 Main.changeState(Define.ST_MENU_ON_LINE_LIST, false);
+						 Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, false);
 					 }else{
 						 Main.changeState(Define.ST_MENU_ON_LINE_START, false);
 					 }
@@ -442,13 +436,10 @@ public class ModeMenu {
 					 UserData userData = new UserData();
 					 userData.setName(getTextName());
 					 userData.setPassword(getTextPassword());
-					 HttpURLConnection connection = null;
-					 
-					 Main.getInstance().startClock();
 					 
 					 String msg = "";
+					 Main.getInstance().startClock();
 					 String result = Main.getInstance().sendDataOnline(userData, "getUserServlet");
-					 
 					 Main.getInstance().stopClock();
 					 
 					 if(result.equals("Connection error")){
@@ -457,7 +448,7 @@ public class ModeMenu {
 					 else if(result.equals("Server error")){
 						 msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
 					 }
-					 else if(result.equals("User error")){
+					 else if(result.equals("Query error")){
 						 msg = RscManager.allText[RscManager.TXT_INCORRECT_USER_NAME];
 					 }
 					 else if(result.equals("Succes")){
@@ -480,7 +471,7 @@ public class ModeMenu {
 				 @Override
 				 public void onFinish(){
 					 if(loginUsserSucces){
-						 Main.changeState(Define.ST_MENU_ON_LINE_LIST, false);
+						 Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, false);
 					 }else{
 						 Main.changeState(Define.ST_MENU_ON_LINE_START, false);
 					 }
@@ -488,7 +479,7 @@ public class ModeMenu {
 			 };
 			 loginBox.start();
 			 break;
-		 case Define.ST_MENU_ON_LINE_LIST:
+		 case Define.ST_MENU_ON_LINE_LIST_ALL_GAME:
 			 
 			 btnSearchGame = new Button(
 						GfxManager.imgButtonSearchBigRelease, 
@@ -502,10 +493,11 @@ public class ModeMenu {
 					@Override
 					public void onButtonPressUp(){
 						reset();
+						Main.changeState(Define.ST_MENU_ON_LINE_LIST_WAIT_GAME, false);
 					}
 				};
 				
-				btnCreateHost = new Button(
+				btnCreateScene = new Button(
 						GfxManager.imgButtonCrossBigRelease, 
 						GfxManager.imgButtonCrossBigFocus, 
 						Define.SIZEX-(int)(GfxManager.imgButtonCrossBigRelease.getWidth()/2)-Define.SIZEY64, 
@@ -517,12 +509,55 @@ public class ModeMenu {
 					@Override
 					public void onButtonPressUp(){
 						reset();
-						Main.changeState(Define.ST_MENU_ON_LINE_CREATE_HOST, false);
+						Main.changeState(Define.ST_MENU_ON_LINE_CREATE_SCENE, false);
 					}
 				};
 			 
 			 break;
-		 case Define.ST_MENU_ON_LINE_CREATE_HOST:
+		 case Define.ST_MENU_ON_LINE_LIST_WAIT_GAME:
+			 Main.getInstance().startClock();
+			 SceneListData sceneListData =  Main.getInstance().reviceSceneListData("getWaitSceneListServlet");
+			 Main.getInstance().stopClock();
+			 
+			if (sceneListData != null) {
+				
+				String[] sceneList = new String[sceneListData.getSceneDataList().size()];
+				for(int i = 0; i < sceneListData.getSceneDataList().size(); i++){
+					sceneList[i] = 
+							DataKingdom.SCENARY_LIST[sceneListData.getSceneDataList().get(i).getMap()] +
+							"(" + sceneListData.getSceneDataList().get(i).getPlayerCount() + ")";
+				}
+				
+				selectMapBox = new ListBox(
+						Define.SIZEX, Define.SIZEY, 
+						null, GfxManager.imgNotificationBox, GfxManager.imgNotificationBox, 
+						Define.SIZEX2, Define.SIZEY2, 
+						RscManager.allText[RscManager.TXT_SELECT_MAP],
+						sceneList,
+						Font.FONT_BIG, Font.FONT_SMALL){
+					
+					@Override
+					public void onFinish(){
+						
+						if(getIndexPressed() != -1){
+							
+							
+						}else{
+							Main.changeState(Define.ST_MENU_MAIN, false);
+						}
+					}
+				};
+				selectMapBox.start();
+				
+				
+				
+			}else{
+				NotificationBox.getInstance().addMessage(RscManager.allText[RscManager.TXT_CONNECTION_ERROR]);
+				Main.changeState(Define.ST_MENU_ON_LINE_START, false);
+			}
+			
+			break;
+		 case Define.ST_MENU_ON_LINE_CREATE_SCENE:
 			 selectMapBox = new ListBox(
 						Define.SIZEX, Define.SIZEY, 
 						null, GfxManager.imgNotificationBox, GfxManager.imgNotificationBox, 
@@ -535,36 +570,43 @@ public class ModeMenu {
 					public void onFinish(){
 						
 						if(getIndexPressed() != -1){
-							
+							boolean succes = false;
 							SceneData sceneData = new SceneData();
 							sceneData.setMap(getIndexPressed());
+							sceneData.setNumPlayer(DataKingdom.INIT_MAP_DATA[getIndexPressed()].length);
 							sceneData.setNextPlayer(GameState.getInstance().getName());
 							
 							 String msg = "";
-							 String result =  Main.getInstance().sendDataOnline(sceneData, "createScene");
+							 Main.getInstance().startClock();
+							 String result =  Main.getInstance().sendDataOnline(sceneData, "createSceneServlet");
+							 Main.getInstance().stopClock();
 							 if(result.equals("Connection error")){
-									msg = RscManager.allText[RscManager.TXT_CONNECTION_ERROR];
-								 }
-								 else if(result.equals("Server error")){
-									msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
-								 }
-								 else if(result.equals("User error")){
-									msg = RscManager.allText[RscManager.TXT_TRY_ANOTHER_NAME];
-								 }
-								 else if(result.equals("Succes")){
-									msg = RscManager.allText[RscManager.TXT_GAME_CREATED];
-									cancel();
-								}
+								msg = RscManager.allText[RscManager.TXT_CONNECTION_ERROR];
+							 }
+							 else if(result.equals("Server error")){
+								msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
+							 }
+							 else if(result.equals("Query error")){
+								msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
+							 }
+							 else if(result.equals("Succes")){
+								msg = RscManager.allText[RscManager.TXT_GAME_CREATED];
+								succes = true;
+							}
 							NotificationBox.getInstance().addMessage(msg);
+							if(succes){
+								Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, false);
+							}else{
+								Main.changeState(Define.ST_MENU_MAIN, false);
+							}
 						}
 					};
 				};
 				selectMapBox.start();
 			 break;
-		 case Define.ST_MENU_ON_LINE_HOST:
-			 break;
-		
-		case Define.ST_TEST:
+		 
+		 
+		 case Define.ST_TEST:
 			break;
 		}
 	}
@@ -638,22 +680,29 @@ public class ModeMenu {
 			 btnBack.update(UserInput.getInstance().getMultiTouchHandler());
 			 loginBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
 			 break;
-		 case Define.ST_MENU_ON_LINE_LIST:
+		 case Define.ST_MENU_ON_LINE_LIST_ALL_GAME:
 			 runMenuBG(Main.getDeltaSec());
 			 btnBack.update(UserInput.getInstance().getMultiTouchHandler());
 			 btnSearchGame.update(UserInput.getInstance().getMultiTouchHandler());
-			 btnCreateHost.update(UserInput.getInstance().getMultiTouchHandler());
+			 btnCreateScene.update(UserInput.getInstance().getMultiTouchHandler());
+			 //if(selectMapBox != null)
+			 //selectMapBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
 			 break;
-		 case Define.ST_MENU_ON_LINE_CREATE_HOST:
+		 case Define.ST_MENU_ON_LINE_LIST_WAIT_GAME:
 			 runMenuBG(Main.getDeltaSec());
 			 btnBack.update(UserInput.getInstance().getMultiTouchHandler());
+			 if(selectMapBox != null)
+				 selectMapBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
 			 break;
-		 case Define.ST_MENU_ON_LINE_HOST:
+		 case Define.ST_MENU_ON_LINE_CREATE_SCENE:
 			 runMenuBG(Main.getDeltaSec());
 			 btnBack.update(UserInput.getInstance().getMultiTouchHandler());
+			 if(selectMapBox != null)
+				 selectMapBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
 			 break;
-			
-        case Define.ST_TEST:
+		
+		 
+		 case Define.ST_TEST:
 			break;
 		}
 		
@@ -746,7 +795,7 @@ public class ModeMenu {
 			 btnBack.draw(_g, 0, 0);
 			 loginBox.draw(_g);
 			 break;
-		 case Define.ST_MENU_ON_LINE_LIST:
+		 case Define.ST_MENU_ON_LINE_LIST_ALL_GAME:
 			 drawMenuBG(_g);
 			 btnBack.draw(_g, 0, 0);
 			 TextManager.drawSimpleText(
@@ -755,18 +804,28 @@ public class ModeMenu {
 					 Define.SIZEX64, 
 					 Define.SIZEY-Define.SIZEY64, Graphics.BOTTOM | Graphics.LEFT);
 			 btnSearchGame.draw(_g, 0, 0);
-			 btnCreateHost.draw(_g,0, 0);
+			 btnCreateScene.draw(_g,0, 0);
+			 if(selectMapBox != null){
+				 selectMapBox.draw(_g, GfxManager.imgBlackBG);
+			 }
 			 break;
-		 case Define.ST_MENU_ON_LINE_CREATE_HOST:
+		 case Define.ST_MENU_ON_LINE_LIST_WAIT_GAME:
 			 drawMenuBG(_g);
 			 btnBack.draw(_g, 0, 0);
+			 if(selectMapBox != null){
+				 selectMapBox.draw(_g, GfxManager.imgBlackBG);
+			 }
 			 break;
-		 case Define.ST_MENU_ON_LINE_HOST:
+		 case Define.ST_MENU_ON_LINE_CREATE_SCENE:
 			 drawMenuBG(_g);
 			 btnBack.draw(_g, 0, 0);
+			 if(selectMapBox != null){
+				 selectMapBox.draw(_g, GfxManager.imgBlackBG);
+			 }
 			 break;
-			
-		case Define.ST_MENU_EXIT:
+		
+		 
+		 case Define.ST_MENU_EXIT:
 			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 			break;
 			

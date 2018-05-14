@@ -2,12 +2,16 @@ package com.luis.strategy;
 
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -16,6 +20,14 @@ import java.util.Random;
 
 
 
+
+
+
+
+
+
+
+import org.apache.http.NameValuePair;
 
 import android.app.Activity;
 import android.util.Log;
@@ -30,6 +42,7 @@ import com.luis.lgameengine.implementation.input.KeyboardHandler;
 import com.luis.lgameengine.implementation.sound.SndManager;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.datapackage.scene.SceneData;
+import com.luis.strategy.datapackage.scene.SceneListData;
 
 public class Main extends MyCanvas implements Runnable {
 
@@ -145,9 +158,9 @@ public class Main extends MyCanvas implements Runnable {
 					case Define.ST_MENU_ON_LINE_START:
 					case Define.ST_MENU_ON_LINE_CREATE_USER:
 					case Define.ST_MENU_ON_LINE_LOGIN:
-					case Define.ST_MENU_ON_LINE_LIST:
-					case Define.ST_MENU_ON_LINE_CREATE_HOST:
-					case Define.ST_MENU_ON_LINE_HOST:
+					case Define.ST_MENU_ON_LINE_LIST_ALL_GAME:
+					case Define.ST_MENU_ON_LINE_LIST_WAIT_GAME:
+					case Define.ST_MENU_ON_LINE_CREATE_SCENE:
 					
 					case Define.ST_TEST:
 					if (!isLoading) {
@@ -220,9 +233,9 @@ public class Main extends MyCanvas implements Runnable {
 		         case Define.ST_MENU_ON_LINE_START:
 				 case Define.ST_MENU_ON_LINE_CREATE_USER:
 				 case Define.ST_MENU_ON_LINE_LOGIN:
-				 case Define.ST_MENU_ON_LINE_LIST:
-				 case Define.ST_MENU_ON_LINE_CREATE_HOST:
-				 case Define.ST_MENU_ON_LINE_HOST:
+				 case Define.ST_MENU_ON_LINE_LIST_ALL_GAME:
+				 case Define.ST_MENU_ON_LINE_LIST_WAIT_GAME:
+				 case Define.ST_MENU_ON_LINE_CREATE_SCENE:
 		        	 
 		         case Define.ST_TEST:
 					ModeMenu.draw(_g);
@@ -581,7 +594,7 @@ public class Main extends MyCanvas implements Runnable {
 
 			String str = "";
 			while ((str = in.readLine()) != null) {
-				result += str + "\n";
+				result += str;// + "\n";
 			}
 			in.close();
 
@@ -594,25 +607,27 @@ public class Main extends MyCanvas implements Runnable {
 		return result;
 	}
 	
-	public void reviceData(Serializable dataPackage, String URL){
+	public SceneListData reviceSceneListData(String URL){
+		SceneListData sceneListData = null;
 		HttpURLConnection connection = null;
 		try {
 			// open URL connection
 			URL url = new URL(Define.SERVER_URL + URL);
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestProperty("Content-Type", "application/octet-stream");
-			connection.setRequestMethod("GET");
+			connection.setRequestMethod("POST");
 			connection.setDoInput(true);
 			connection.setDoOutput(false);
 			connection.setUseCaches(false);
-
-			ObjectInputStream objIn = 
-					new ObjectInputStream(connection.getInputStream());
-			dataPackage = (SceneData) objIn.readObject();
+			
+			ObjectInputStream objIn = new ObjectInputStream(connection.getInputStream());
+			sceneListData = (SceneListData) objIn.readObject();
 			objIn.close();
+			connection.disconnect();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return sceneListData;
 	}
 }

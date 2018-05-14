@@ -1,29 +1,38 @@
 package com.luis.strategy.datapackage.scene;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.List;
 
 public class SceneData implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
-	private int sceneId;
+	private Timestamp id;
+	private String host;
 	
 	private int map;
 	private int playerIndex;
 	private int turnCount;
 	
 	private String nextPlayer;
+	private int numPlayer;
 	private int playerCount;
 	
 	List<PlayerData> playerDataList;
 	
 	
-	public int getSceneId() {
-		return sceneId;
+	public Timestamp getId() {
+		return id;
 	}
-	public void setSceneId(int sceneId) {
-		this.sceneId = sceneId;
+	public void setId(Timestamp id) {
+		this.id = id;
+	}
+	public String getHost() {
+		return host;
+	}
+	public void setHost(String host) {
+		this.host = host;
 	}
 	public int getMap() {
 		return map;
@@ -55,12 +64,20 @@ public class SceneData implements Serializable{
 	public void setNextPlayer(String nextPlayer) {
 		this.nextPlayer = nextPlayer;
 	}
+	public int getNumPlayer() {
+		return numPlayer;
+	}
+	public void setNumPlayer(int numPlayer) {
+		this.numPlayer = numPlayer;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 	public int getPlayerCount() {
 		return playerCount;
 	}
 	public void setPlayerCount(int playerCount) {
 		this.playerCount = playerCount;
 	}
-	
 	
 }

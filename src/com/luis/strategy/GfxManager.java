@@ -388,7 +388,7 @@ public class GfxManager {
 		imgButtonCrossBigRelease = Image.createImage("/cross_big_release.png");
 		imgButtonCrossBigFocus = Image.createImage("/cross_big_focus.png");
 		imgButtonSearchBigRelease = Image.createImage("/search_big_release.png");
-		imgButtonCrossBigRelease = Image.createImage("/search_big_focus.png");
+		imgButtonSearchBigFocus = Image.createImage("/search_big_focus.png");
 		
 		imgButtonKeyboardRelease = Image.createImage("/button_keyboard_release.png");
 		imgButtonKeyboardFocus = Image.createImage("/button_keyboard_focus.png");

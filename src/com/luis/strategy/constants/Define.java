@@ -51,9 +51,9 @@ public class Define {
 	public static final int ST_MENU_ON_LINE_START = 13;
 	public static final int ST_MENU_ON_LINE_CREATE_USER = 14;
 	public static final int ST_MENU_ON_LINE_LOGIN = 15;
-	public static final int ST_MENU_ON_LINE_LIST = 16;
-	public static final int ST_MENU_ON_LINE_CREATE_HOST = 18;
-	public static final int ST_MENU_ON_LINE_HOST = 19;
+	public static final int ST_MENU_ON_LINE_LIST_ALL_GAME = 16;
+	public static final int ST_MENU_ON_LINE_LIST_WAIT_GAME = 17;
+	public static final int ST_MENU_ON_LINE_CREATE_SCENE = 18;
 	
 	public static final int ST_TEST = 50;
 
