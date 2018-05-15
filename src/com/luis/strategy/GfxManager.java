@@ -72,6 +72,8 @@ public class GfxManager {
 	public static Image imgButtonNewArmyFocus;
 	public static Image imgButtonInfoRelease;
 	public static Image imgButtonInfoFocus;
+	public static Image imgButtonMapRelease;
+	public static Image imgButtonMapFocus;
 
 	public static Image imgTextBox;
 	public static Image imgBigBox;
@@ -231,12 +233,9 @@ public class GfxManager {
 				imgCrown = Image.createImage("/crown.png");
 				imgButtonPauseRelease = Image.createImage("/pause_release.png");
 				imgButtonPauseFocus = Image.createImage("/pause_focus.png");
-				imgButtonDebugPauseRelease = Image
-						.createImage("/debug_pause_release.png");
-				imgButtonDebugPauseFocus = Image
-						.createImage("/debug_pause_focus.png");
-				imgButtonCancelRelease = Image
-						.createImage("/cancel_release.png");
+				imgButtonDebugPauseRelease = Image.createImage("/debug_pause_release.png");
+				imgButtonDebugPauseFocus = Image.createImage("/debug_pause_focus.png");
+				imgButtonCancelRelease = Image.createImage("/cancel_release.png");
 				imgButtonCancelFocus = Image.createImage("/cancel_focus.png");
 				imgButtonNextRelease = Image.createImage("/next_release.png");
 				imgButtonNextFocus = Image.createImage("/next_focus.png");
@@ -244,19 +243,14 @@ public class GfxManager {
 				imgButtonOkFocus = Image.createImage("/ok_focus.png");
 				imgButtonCrossRelease = Image.createImage("/cross_release.png");
 				imgButtonCrossFocus = Image.createImage("/cross_focus.png");
-				imgButtonCrossBigRelease = Image
-						.createImage("/cross_big_release.png");
-				imgButtonCrossBigFocus = Image
-						.createImage("/cross_big_focus.png");
+				imgButtonCrossBigRelease = Image.createImage("/cross_big_release.png");
+				imgButtonCrossBigFocus = Image.createImage("/cross_big_focus.png");
 
 				imgButtonDeleteFocus = Image.createImage("/delete_focus.png");
-				imgButtonDeleteRelease = Image
-						.createImage("/delete_release.png");
+				imgButtonDeleteRelease = Image.createImage("/delete_release.png");
 
-				imgButtonNewArmyFocus = Image
-						.createImage("/new_army_focus.png");
-				imgButtonNewArmyRelease = Image
-						.createImage("/new_army_release.png");
+				imgButtonNewArmyFocus = Image.createImage("/new_army_focus.png");
+				imgButtonNewArmyRelease = Image.createImage("/new_army_release.png");
 				imgButtonInfoFocus = Image.createImage("/info_focus.png");
 				imgButtonInfoRelease = Image.createImage("/info_release.png");
 
@@ -264,21 +258,18 @@ public class GfxManager {
 				imgBigBox = Image.createImage("/big_box.png");
 				imgMediumBox = Image.createImage("/medium_box.png");
 				imgSmallBox = Image.createImage("/small_box.png");
-				imgNotificationBox = Image
-						.createImage("/notification_box.png");
-				imgButtonCombatRelease = Image
-						.createImage("/combat_release.png");
+				imgNotificationBox = Image.createImage("/notification_box.png");
+				imgButtonCombatRelease = Image.createImage("/combat_release.png");
 				imgButtonCombatFocus = Image.createImage("/combat_focus.png");
 				imgButtonCardRelease = Image.createImage("/card_release.png");
 				imgButtonCardFocus = Image.createImage("/card_focus.png");
-				imgButtonFlagHelmetRelease = Image
-						.createImage("/flag_helmet_release.png");
-				imgButtonFlagHelmetFocus = Image
-						.createImage("/flag_helmet_focus.png");
-				imgButtonFlagCastleRelease = Image
-						.createImage("/flag_castle_release.png");
-				imgButtonFlagCastleFocus = Image
-						.createImage("/flag_castle_focus.png");
+				imgButtonFlagHelmetRelease = Image.createImage("/flag_helmet_release.png");
+				imgButtonFlagHelmetFocus = Image.createImage("/flag_helmet_focus.png");
+				imgButtonFlagCastleRelease = Image.createImage("/flag_castle_release.png");
+				imgButtonFlagCastleFocus = Image.createImage("/flag_castle_focus.png");
+				
+				imgButtonMapRelease = Image.createImage("/icon_map_release.png");
+				imgButtonMapFocus = Image.createImage("/icon_map_release.png");
 
 				imgFlagList = new ArrayList<Image>();
 				imgFlagSmallList = new ArrayList<Image>();
@@ -440,6 +431,9 @@ public class GfxManager {
 		imgButtonCrossBigFocus = null;
 		imgButtonSearchBigRelease = null;
 		imgButtonCrossBigRelease = null;
+		
+		imgButtonMapRelease = null;
+		imgButtonMapFocus = null;
 		
 		imgInputBox = null;
 		imgTextPointer = null;

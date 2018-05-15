@@ -261,6 +261,22 @@ public class GameScene{
 		this.map = map;
 	}
 
+	public int getNumberPartsW() {
+		return numberPartsW;
+	}
+
+	public void setNumberPartsW(int numberPartsW) {
+		this.numberPartsW = numberPartsW;
+	}
+
+	public int getNumberPartsH() {
+		return numberPartsH;
+	}
+
+	public void setNumberPartsH(int numberPartsH) {
+		this.numberPartsH = numberPartsH;
+	}
+
 	
 	
 	

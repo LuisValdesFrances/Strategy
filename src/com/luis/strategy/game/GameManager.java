@@ -26,6 +26,7 @@ import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.gui.ArmyBox;
 import com.luis.strategy.gui.BattleBox;
 import com.luis.strategy.gui.FlagButton;
+import com.luis.strategy.gui.MapBox;
 import com.luis.strategy.gui.SimpleBox;
 import com.luis.strategy.gui.TerrainBox;
 import com.luis.strategy.map.Army;
@@ -95,16 +96,21 @@ public class GameManager {
 	public static final int SUB_STATE_ACTION_RESOLVE_SCAPE = 10;
 	public static final int SUB_STATE_ARMY_MANAGEMENT = 11;
 	public static final int SUB_STATE_CITY_MANAGEMENT = 12;
-	public static final int SUB_STATE_ACTION_IA_WAIT_END = 13;
+	public static final int SUB_STATE_MAP_MANAGEMENT = 13;
+	public static final int SUB_STATE_ACTION_IA_WAIT_END = 14;
 	
 	//GUI
-	private static Button btnNext;
-	private static Button btnCancel;
-	private static FlagButton btnFlagHelmet;
-	private static FlagButton btnFlagCastle;
+	private Button btnNext;
+	private Button btnCancel;
+	private FlagButton btnFlagHelmet;
+	private FlagButton btnFlagCastle;
+	
+	private Button btnMap;
+	
 	private ArmyBox armyBox;
 	private BattleBox battleBox;
 	private TerrainBox terrainBox;
+	private MapBox mapBox;
 	private SimpleBox economyBox;
 	private SimpleBox resultBox;
 	private SimpleBox discardBox;
@@ -129,7 +135,7 @@ public class GameManager {
 				GfxManager.imgButtonDebugPauseRelease, 
 				GfxManager.imgButtonDebugPauseFocus, 
 				GfxManager.imgButtonDebugPauseRelease.getWidth(), 
-				GfxManager.imgButtonDebugPauseRelease.getHeight()*2,
+				GfxManager.imgButtonDebugPauseRelease.getHeight()*6,
 				null, 0){
 			@Override
 			public void onButtonPressDown(){}
@@ -216,6 +222,23 @@ public class GameManager {
 			}
 		};
 		
+		btnMap = new Button(
+				GfxManager.imgButtonMapRelease,
+				GfxManager.imgButtonMapFocus, 
+				GfxManager.imgButtonDebugPauseRelease.getWidth(), 
+				GfxManager.imgButtonDebugPauseRelease.getHeight()*2,
+				null, 0){
+			@Override
+			public void onButtonPressDown(){}
+			
+			@Override
+			public void onButtonPressUp(){
+				changeSubState(SUB_STATE_MAP_MANAGEMENT);
+				mapBox.start(gameScene.getPlayerList());
+				setDisabled(true);
+			}
+		};
+		
 		armyBox = new ArmyBox(){
 			@Override
 			public void check(){
@@ -256,6 +279,8 @@ public class GameManager {
 					NotificationBox.getInstance().addMessage("New army recruited");
 			}
 		};
+		
+		mapBox = new MapBox(worldConver, gameScene.getNumberPartsW(), gameScene.getNumberPartsH());
 		
 		battleBox = new BattleBox(){
 			@Override
@@ -530,6 +555,11 @@ public class GameManager {
 					changeSubState(SUB_STATE_ACTION_WAIT);
 				}
 				break;
+			case SUB_STATE_MAP_MANAGEMENT:
+				if(!mapBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
+					changeSubState(SUB_STATE_ACTION_WAIT);
+				}
+				break;
 			case SUB_STATE_ACTION_IA_WAIT_END:
 				if(getCurrentPlayer().getActionIA() != null && IAWaitCount < IA_WAIT){
 					IAWaitCount+=delta;
@@ -701,9 +731,10 @@ public class GameManager {
 		
 		btnCancel.update(multiTouchHandler);
 		btnNext.update(multiTouchHandler);
+		btnMap.update(multiTouchHandler);
+		btnDebugPause.update(multiTouchHandler);
 		btnFlagHelmet.update(multiTouchHandler, delta);
 		btnFlagCastle.update(multiTouchHandler, delta);
-		btnDebugPause.update(multiTouchHandler);
 		
 	}
 	
@@ -725,12 +756,14 @@ public class GameManager {
 		discardBox.draw(g);
 		battleBox.draw(g);
 		terrainBox.draw(g);
+		mapBox.draw(g);
 		endGameBox.draw(g);
 		resultBox.draw(g);
 		btnCancel.draw(g, 0, 0);
 		btnNext.draw(g, 0, 0);
 		btnFlagHelmet.draw(g);
 		btnFlagCastle.draw(g);
+		btnMap.draw(g, 0, 0);
 		btnDebugPause.draw(g, 0, 0);
 		NotificationBox.getInstance().draw(g);
 	}
@@ -1005,6 +1038,7 @@ public class GameManager {
 				btnFlagCastle.hide();
 				btnNext.setDisabled(getCurrentPlayer().getActionIA()!=null);
 				btnCancel.setDisabled(true);
+				btnMap.setDisabled(false);
 				cleanArmyAction();
 				//
 				if(getDefeatArmy() != null){
@@ -1073,6 +1107,8 @@ public class GameManager {
 			case SUB_STATE_ARMY_MANAGEMENT:
 				break;
 			case SUB_STATE_CITY_MANAGEMENT:
+				break;
+			case SUB_STATE_MAP_MANAGEMENT:
 				break;
 			case SUB_STATE_ACTION_IA_WAIT_END:
 				IAWaitCount = 0;

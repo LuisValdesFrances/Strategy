@@ -7,6 +7,7 @@ import com.luis.lgameengine.gui.MenuBox;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 import com.luis.strategy.GfxManager;
+import com.luis.strategy.RscManager;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.map.Kingdom;
@@ -49,7 +50,13 @@ public class TerrainBox extends MenuBox{
 		this.terrainIndex = terrainIndex;
 		this.recruited = false;
 		
-		String text[] ={"Plain", "Forest", "Montain", "Small city", "Medium city", "Big city"};
+		String text[] ={
+				RscManager.allText[RscManager.TXT_GAME_PLAIN], 
+				RscManager.allText[RscManager.TXT_GAME_FOREST], 
+				RscManager.allText[RscManager.TXT_GAME_MONTAIN],
+				RscManager.allText[RscManager.TXT_GAME_SMALL_CITY],
+				RscManager.allText[RscManager.TXT_GAME_MEDIUM_CITY],
+				RscManager.allText[RscManager.TXT_GAME_BIG_CITY]};
 		textHeader = text[terrainIndex];
 		textBody = "Defense: " + GameParams.TERRAIN_DEFENSE[terrainIndex];
 		
