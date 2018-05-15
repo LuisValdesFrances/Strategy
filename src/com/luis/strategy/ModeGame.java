@@ -64,8 +64,8 @@ public class ModeGame {
 			btnPause = new Button(
 					GfxManager.imgButtonPauseRelease, 
 					GfxManager.imgButtonPauseFocus, 
-					Define.SIZEX-GfxManager.imgButtonPauseRelease.getWidth(), 
-					GfxManager.imgButtonPauseRelease.getHeight()*2,
+					Define.SIZEX - Define.SIZEX64 - GfxManager.imgButtonPauseRelease.getWidth()/2, 
+					Define.SIZEY8,
 					null, 0){
 				@Override
 				public void onButtonPressDown(){}
@@ -305,7 +305,7 @@ public class ModeGame {
 	public static final int DEBUG_BUTTON_W = Define.SIZEX32;
 	public static final int DEBUG_BUTTON_H = Define.SIZEX32;
 	public static final int DEBUG_BUTTON_X = Define.SIZEX-DEBUG_BUTTON_W-DEBUG_BUTTON_W/2;
-	public static final int DEBUG_BUTTON_Y = Define.SIZEX8;
+	public static final int DEBUG_BUTTON_Y = Define.SIZEY4 - DEBUG_BUTTON_H/2;
 	private static void drawDebugButton(Graphics _g){
 		_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 		if(!showDebugInfo){

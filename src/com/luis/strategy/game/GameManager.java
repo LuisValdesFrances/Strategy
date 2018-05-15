@@ -134,8 +134,8 @@ public class GameManager {
 		btnDebugPause = new Button(
 				GfxManager.imgButtonDebugPauseRelease, 
 				GfxManager.imgButtonDebugPauseFocus, 
-				GfxManager.imgButtonDebugPauseRelease.getWidth(), 
-				GfxManager.imgButtonDebugPauseRelease.getHeight()*6,
+				Define.SIZEX64 + GfxManager.imgButtonDebugPauseRelease.getWidth()/2, 
+				Define.SIZEY4,
 				null, 0){
 			@Override
 			public void onButtonPressDown(){}
@@ -225,17 +225,24 @@ public class GameManager {
 		btnMap = new Button(
 				GfxManager.imgButtonMapRelease,
 				GfxManager.imgButtonMapFocus, 
-				GfxManager.imgButtonDebugPauseRelease.getWidth(), 
-				GfxManager.imgButtonDebugPauseRelease.getHeight()*2,
+				Define.SIZEX64 + GfxManager.imgButtonMapRelease.getWidth()/2, 
+				Define.SIZEY8,
 				null, 0){
 			@Override
 			public void onButtonPressDown(){}
 			
 			@Override
 			public void onButtonPressUp(){
-				changeSubState(SUB_STATE_MAP_MANAGEMENT);
-				mapBox.start(gameScene.getPlayerList());
-				setDisabled(true);
+				if(state == STATE_DEBUG){
+					mapBox.start(gameScene.getPlayerList());
+					btnMap.setDisabled(true);
+				}else{
+					if(getCurrentPlayer().getActionIA() == null && subState == SUB_STATE_ACTION_WAIT){
+						changeSubState(SUB_STATE_MAP_MANAGEMENT);
+						mapBox.start(gameScene.getPlayerList());
+						setDisabled(true);
+					}
+				}
 			}
 		};
 		
@@ -578,6 +585,9 @@ public class GameManager {
 			}
 			break;
 		case STATE_DEBUG:
+			if(!mapBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
+				btnMap.setDisabled(false);
+			}
 			break;
 		}
 		
@@ -916,6 +926,7 @@ public class GameManager {
 		gameScene.clean();
 		btnNext.setDisabled(true);
 		btnCancel.setDisabled(true);
+		btnMap.setDisabled(true);
 		btnFlagHelmet.hide();
 		btnFlagCastle.hide();
 		subState = 0;
@@ -1005,6 +1016,7 @@ public class GameManager {
 		lastSubState = subState;
 		btnNext.setDisabled(true);
 		btnCancel.setDisabled(true);
+		btnMap.setDisabled(true);
 		
 		subState = newSubState;
 		
@@ -1119,6 +1131,7 @@ public class GameManager {
 		case STATE_END:
 			break;
 		case STATE_DEBUG:
+			btnMap.setDisabled(false);
 			break;
 		}
 	}
