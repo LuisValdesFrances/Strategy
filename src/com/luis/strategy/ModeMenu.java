@@ -504,7 +504,7 @@ public class ModeMenu {
 			 break;
 		 case Define.ST_MENU_ON_LINE_LIST_JOIN_GAME:
 			 Main.getInstance().startClock();
-			 SceneListData sceneListData =  Main.getInstance().reviceWaitSceneListData("getWaitSceneListServlet", GameState.getInstance().getName());
+			 SceneListData sceneListData =  Main.getInstance().reviceSceneListData("getWaitSceneListServlet", GameState.getInstance().getName());
 			 Main.getInstance().stopClock();
 			
 			 if (sceneListData != null) {

@@ -572,7 +572,7 @@ public class Main extends MyCanvas implements Runnable {
 	}
 	
 	
-	public String sendUser(String URL, String user, String password){
+	public String sendUser(String URL, String name, String password){
 		HttpURLConnection connection = null;
 		String result = "";
 		try {
@@ -581,7 +581,7 @@ public class Main extends MyCanvas implements Runnable {
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestProperty("Content-Type", "application/octet-stream");
 			connection.setRequestMethod("POST");
-			connection.setRequestProperty("user", user);
+			connection.setRequestProperty("name", name);
 			connection.setRequestProperty("password", password);
 			connection.setDoInput(true);
 			connection.setDoOutput(true);
@@ -711,7 +711,7 @@ public class Main extends MyCanvas implements Runnable {
 		return result;
 	}
 	
-	public SceneListData reviceWaitSceneListData(String URL, String userExclude){
+	public SceneListData reviceSceneListData(String URL, String user){
 		SceneListData sceneListData = null;
 		HttpURLConnection connection = null;
 		try {
@@ -722,7 +722,7 @@ public class Main extends MyCanvas implements Runnable {
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestProperty("Content-Type", "application/octet-stream");
 			connection.setRequestMethod("GET");
-			connection.setRequestProperty("user", userExclude);
+			connection.setRequestProperty("user", user);
 			connection.setDoInput(true);
 			connection.setDoOutput(false);
 			connection.setUseCaches(false);
