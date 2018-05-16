@@ -52,7 +52,7 @@ public class Define {
 	public static final int ST_MENU_ON_LINE_CREATE_USER = 14;
 	public static final int ST_MENU_ON_LINE_LOGIN = 15;
 	public static final int ST_MENU_ON_LINE_LIST_ALL_GAME = 16;
-	public static final int ST_MENU_ON_LINE_LIST_WAIT_GAME = 17;
+	public static final int ST_MENU_ON_LINE_LIST_JOIN_GAME = 17;
 	public static final int ST_MENU_ON_LINE_CREATE_SCENE = 18;
 	
 	public static final int ST_TEST = 50;

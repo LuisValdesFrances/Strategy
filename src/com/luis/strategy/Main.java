@@ -161,7 +161,7 @@ public class Main extends MyCanvas implements Runnable {
 					case Define.ST_MENU_ON_LINE_CREATE_USER:
 					case Define.ST_MENU_ON_LINE_LOGIN:
 					case Define.ST_MENU_ON_LINE_LIST_ALL_GAME:
-					case Define.ST_MENU_ON_LINE_LIST_WAIT_GAME:
+					case Define.ST_MENU_ON_LINE_LIST_JOIN_GAME:
 					case Define.ST_MENU_ON_LINE_CREATE_SCENE:
 					
 					case Define.ST_TEST:
@@ -236,7 +236,7 @@ public class Main extends MyCanvas implements Runnable {
 				 case Define.ST_MENU_ON_LINE_CREATE_USER:
 				 case Define.ST_MENU_ON_LINE_LOGIN:
 				 case Define.ST_MENU_ON_LINE_LIST_ALL_GAME:
-				 case Define.ST_MENU_ON_LINE_LIST_WAIT_GAME:
+				 case Define.ST_MENU_ON_LINE_LIST_JOIN_GAME:
 				 case Define.ST_MENU_ON_LINE_CREATE_SCENE:
 		        	 
 		         case Define.ST_TEST:
@@ -640,7 +640,40 @@ public class Main extends MyCanvas implements Runnable {
 		return result;
 	}
 	
-	public String sendDataPackageXXX(Serializable dataPackage, String URL){
+	public String sendInscription(String URL, String scene, String user){
+		HttpURLConnection connection = null;
+		String result = "";
+		try {
+			// open URL connection
+			URL url = new URL(Define.SERVER_URL + URL);
+			connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestProperty("Content-Type", "application/octet-stream");
+			connection.setRequestMethod("POST");
+			connection.setRequestProperty("scene", scene);
+			connection.setRequestProperty("user", user);
+			connection.setDoInput(true);
+			connection.setDoOutput(true);
+			connection.setUseCaches(false);
+
+			BufferedReader in = 
+					new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+			String str = "";
+			while ((str = in.readLine()) != null) {
+				result += str;// + "\n";
+			}
+			in.close();
+
+			System.out.println(result);
+			connection.disconnect();
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = e.getMessage();
+		}
+		return result;
+	}
+	
+	public String sendDataPackage(Serializable dataPackage, String URL){
 		HttpURLConnection connection = null;
 		String result = "";
 		try {

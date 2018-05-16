@@ -46,6 +46,7 @@ Server error
 Account has been created
 Game has been created
 Connected by
+You have joined the game
 TURN:
 Plain
 Forest
