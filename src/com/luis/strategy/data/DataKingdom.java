@@ -35,6 +35,16 @@ public class DataKingdom {
 															"TEST 16x16   (2-Player) Med"
 															};
 	
+	public static final String[] SCENARY_NAME_LIST = new String[]{
+															"OCCITANE", 
+															"SIX KINGDOMS" ,
+															"TEST 1x1",
+															"TEST 2x2",
+															"TEST 4x4",
+															"TEST 8x8",
+															"TEST 16x16"
+	};
+	
 	public static List<Kingdom> getGenterex(MapObject map){
 		
 		List<Kingdom> kingdomList = new ArrayList<Kingdom>();

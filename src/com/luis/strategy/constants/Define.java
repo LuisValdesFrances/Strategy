@@ -66,7 +66,7 @@ public class Define {
 	
 	
 	//public static final String SERVER_URL = "http://172.104.228.65:8080/KingServer/";//Online
-	public static final String SERVER_URL = "http://192.168.1.110:8080/KingServer/";//Local
+	public static final String SERVER_URL = "http://192.168.26.155:8080/KingServer/";//Local
 	   
 	// Nombre del fichero donde se guardaran y cargaran los datos:
 	public static final String DATA_USER = "strategyDataUser";

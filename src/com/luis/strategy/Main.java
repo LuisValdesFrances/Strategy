@@ -11,12 +11,14 @@ import java.io.OutputStreamWriter;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Random;
 
 /**
  * @author Luis Valdes Frances
  */
+
 
 
 
@@ -607,15 +609,18 @@ public class Main extends MyCanvas implements Runnable {
 		return result;
 	}
 	
-	public SceneListData reviceSceneListData(String URL){
+	public SceneListData reviceWaitSceneListData(String URL, String userExclude){
 		SceneListData sceneListData = null;
 		HttpURLConnection connection = null;
 		try {
 			// open URL connection
-			URL url = new URL(Define.SERVER_URL + URL);
+			//String encodeUrl = Define.SERVER_URL + URL + URLEncoder.encode("?user=" + user);
+			String encodeUrl = Define.SERVER_URL + URL;
+			URL url = new URL(encodeUrl);
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestProperty("Content-Type", "application/octet-stream");
-			connection.setRequestMethod("POST");
+			connection.setRequestMethod("GET");
+			connection.setRequestProperty("user", userExclude);
 			connection.setDoInput(true);
 			connection.setDoOutput(false);
 			connection.setUseCaches(false);

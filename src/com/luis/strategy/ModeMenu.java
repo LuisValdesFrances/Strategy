@@ -516,7 +516,7 @@ public class ModeMenu {
 			 break;
 		 case Define.ST_MENU_ON_LINE_LIST_WAIT_GAME:
 			 Main.getInstance().startClock();
-			 SceneListData sceneListData =  Main.getInstance().reviceSceneListData("getWaitSceneListServlet");
+			 SceneListData sceneListData =  Main.getInstance().reviceWaitSceneListData("getWaitSceneListServlet", GameState.getInstance().getName());
 			 Main.getInstance().stopClock();
 			 
 			if (sceneListData != null) {
@@ -528,14 +528,7 @@ public class ModeMenu {
 							"(" + sceneListData.getSceneDataList().get(i).getPlayerCount() + ")";
 				}
 				
-				selectMapBox = new ListBox(
-						Define.SIZEX, Define.SIZEY, 
-						null, GfxManager.imgNotificationBox, GfxManager.imgNotificationBox, 
-						Define.SIZEX2, Define.SIZEY2, 
-						RscManager.allText[RscManager.TXT_SELECT_MAP],
-						sceneList,
-						Font.FONT_BIG, Font.FONT_SMALL){
-					
+				selectMapBox = new SceneDataListBox(sceneListData){
 					@Override
 					public void onFinish(){
 						
