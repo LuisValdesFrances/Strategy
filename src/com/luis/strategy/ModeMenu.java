@@ -1,7 +1,5 @@
 package com.luis.strategy;
 
-import java.io.Serializable;
-
 import android.util.Log;
 
 import com.luis.lgameengine.gameutils.Settings;
@@ -20,7 +18,6 @@ import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.data.DataKingdom;
 import com.luis.strategy.datapackage.scene.SceneData;
 import com.luis.strategy.datapackage.scene.SceneListData;
-import com.luis.strategy.datapackage.user.UserData;
 import com.luis.strategy.gui.ConfigMapBox;
 import com.luis.strategy.gui.CreateUserBox;
 import com.luis.strategy.gui.LoginBox;
@@ -378,13 +375,9 @@ public class ModeMenu {
 					  }
 					  else{
 						 //Escrutura online
-						 UserData userData = new UserData();
-						 userData.setName(getTextName());
-						 userData.setPassword(getTextPassword());
-						 
 						 String msg = "";
 						 Main.getInstance().startClock();
-						 String result = Main.getInstance().sendDataOnline(userData, "createUserServlet");
+						 String result = Main.getInstance().sendUser("createUserServlet", getTextName(), getTextPassword());
 						 Main.getInstance().stopClock();
 						 
 						 if(result.equals("Connection error")){
@@ -432,14 +425,9 @@ public class ModeMenu {
 				 @Override
 				 public void onSendForm() {
 					 super.onSendForm();
-					 //Escrutura online
-					 UserData userData = new UserData();
-					 userData.setName(getTextName());
-					 userData.setPassword(getTextPassword());
-					 
 					 String msg = "";
 					 Main.getInstance().startClock();
-					 String result = Main.getInstance().sendDataOnline(userData, "getUserServlet");
+					 String result = Main.getInstance().sendUser("loginUserServlet", getTextName(), getTextPassword());
 					 Main.getInstance().stopClock();
 					 
 					 if(result.equals("Connection error")){
@@ -564,14 +552,18 @@ public class ModeMenu {
 						
 						if(getIndexPressed() != -1){
 							boolean succes = false;
-							SceneData sceneData = new SceneData();
-							sceneData.setMap(getIndexPressed());
-							sceneData.setNumPlayer(DataKingdom.INIT_MAP_DATA[getIndexPressed()].length);
-							sceneData.setNextPlayer(GameState.getInstance().getName());
+							
+							String map = "" + getIndexPressed();
+							String numPlayer = "" + DataKingdom.INIT_MAP_DATA[getIndexPressed()].length;
+							String host = GameState.getInstance().getName();
+							String name = "TEST";
+							
 							
 							 String msg = "";
 							 Main.getInstance().startClock();
-							 String result =  Main.getInstance().sendDataOnline(sceneData, "createSceneServlet");
+							 
+							 String result =  Main.getInstance().sendScene("createSceneServlet", map, numPlayer, host, name);
+							 
 							 Main.getInstance().stopClock();
 							 if(result.equals("Connection error")){
 								msg = RscManager.allText[RscManager.TXT_CONNECTION_ERROR];

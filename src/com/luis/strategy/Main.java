@@ -571,7 +571,76 @@ public class Main extends MyCanvas implements Runnable {
 		}
 	}
 	
-	public String sendDataOnline(Serializable dataPackage, String URL){
+	
+	public String sendUser(String URL, String user, String password){
+		HttpURLConnection connection = null;
+		String result = "";
+		try {
+			// open URL connection
+			URL url = new URL(Define.SERVER_URL + URL);
+			connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestProperty("Content-Type", "application/octet-stream");
+			connection.setRequestMethod("POST");
+			connection.setRequestProperty("user", user);
+			connection.setRequestProperty("password", password);
+			connection.setDoInput(true);
+			connection.setDoOutput(true);
+			connection.setUseCaches(false);
+
+			BufferedReader in = 
+					new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+			String str = "";
+			while ((str = in.readLine()) != null) {
+				result += str;// + "\n";
+			}
+			in.close();
+
+			System.out.println(result);
+			connection.disconnect();
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = e.getMessage();
+		}
+		return result;
+	}
+	
+	public String sendScene(String URL, String map, String numPlayer, String host, String name){
+		HttpURLConnection connection = null;
+		String result = "";
+		try {
+			// open URL connection
+			URL url = new URL(Define.SERVER_URL + URL);
+			connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestProperty("Content-Type", "application/octet-stream");
+			connection.setRequestMethod("POST");
+			connection.setRequestProperty("map", map);
+			connection.setRequestProperty("numplayer", numPlayer);
+			connection.setRequestProperty("host", host);
+			connection.setRequestProperty("name", name);
+			connection.setDoInput(true);
+			connection.setDoOutput(true);
+			connection.setUseCaches(false);
+
+			BufferedReader in = 
+					new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+			String str = "";
+			while ((str = in.readLine()) != null) {
+				result += str;// + "\n";
+			}
+			in.close();
+
+			System.out.println(result);
+			connection.disconnect();
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = e.getMessage();
+		}
+		return result;
+	}
+	
+	public String sendDataPackageXXX(Serializable dataPackage, String URL){
 		HttpURLConnection connection = null;
 		String result = "";
 		try {
