@@ -77,13 +77,50 @@ public class GameBuilder {
 	}
 	
 	public GameScene buildStartGameScene(){
-		GameScene gameScene = new GameScene(
-				GameState.getInstance().getMap(),
-				0,//GfxManager.imgMap.getWidth()/2, 
-				0,//GfxManager.imgMap.getHeight()/2,
+		GameScene gameScene = new GameScene(GameState.getInstance()
+				.getMap(),
+				0,// GfxManager.imgMap.getWidth()/2,
+				0,// GfxManager.imgMap.getHeight()/2,
 				DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][0],
-				DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][1]
-				);
+				DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][1]);
+
+		switch (GameState.getInstance().getMap()) {
+		case 0:
+			gameScene.setKingdomList(DataKingdom.getGenterex(gameScene.getMapObject()));
+			break;
+		case 1:
+			gameScene.setKingdomList(DataKingdom.getCrom(gameScene.getMapObject()));
+			break;
+		}
+		
+		List<Player> playerList = new ArrayList<Player>();
+		
+		for(int i = 0; i < GameState.getInstance().getSceneData().getPlayerDataList().size(); i++){
+			PlayerData playerData =  GameState.getInstance().getSceneData().getPlayerDataList().get(i);
+			
+			int k1 = DataKingdom.INIT_MAP_DATA[GameState.getInstance().getMap()][i][0];
+			int k2 = DataKingdom.INIT_MAP_DATA[GameState.getInstance().getMap()][i][1];
+			
+			Player player = new Player(
+					playerData.getName(), 
+					null, 
+					i, 
+					k1);
+			
+			player.setGold(10);
+			player.getKingdomList().add(gameScene.getKingdom(k1));
+			player.getKingdomList().add(gameScene.getKingdom(k2));
+			
+			Army army = new Army(
+					gameScene.getMapObject(), player, gameScene.getKingdom(k1), player.getFlag(), 
+					gameScene.getMapObject().getX(), gameScene.getMapObject().getY(), gameScene.getMapObject().getWidth(), gameScene.getMapObject().getHeight());
+			army.initTroops();
+			player.getArmyList().add(army);
+			
+			playerList.add(player);
+		}
+		
+		gameScene.setPlayerList(playerList);
 		return gameScene;
 	}
 	

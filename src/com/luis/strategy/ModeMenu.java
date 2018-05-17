@@ -18,9 +18,13 @@ import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.data.DataKingdom;
 import com.luis.strategy.datapackage.scene.PreSceneData;
 import com.luis.strategy.datapackage.scene.PreSceneListData;
+import com.luis.strategy.datapackage.scene.SceneData;
+import com.luis.strategy.datapackage.scene.SceneListData;
 import com.luis.strategy.gui.ConfigMapBox;
 import com.luis.strategy.gui.CreateUserBox;
 import com.luis.strategy.gui.LoginBox;
+import com.luis.strategy.gui.PreSceneDataListBox;
+import com.luis.strategy.gui.SceneDataListBox;
 
 public class ModeMenu {
 	
@@ -316,7 +320,7 @@ public class ModeMenu {
 				@Override
 				public void onFinish(){
 					if(getIndexPressed() != -1){
-						Main.changeState(Define.ST_GAME_INIT, true);
+						Main.changeState(Define.ST_GAME_INIT_PASS_AND_PLAY, true);
 					}else{
 						Main.changeState(Define.ST_MENU_SELECT_MAP, false);
 					}
@@ -502,11 +506,8 @@ public class ModeMenu {
 				};
 				
 				
-				
-				
-			/*
 			Main.getInstance().startClock();
-			SceneListData sceneListData = Main.getInstance().reviceSceneListData("getActiveSceneListServlet",GameState.getInstance().getName());
+			SceneListData sceneListData = Main.getInstance().reviceSceneListData("getSceneListServlet", GameState.getInstance().getName());
 			Main.getInstance().stopClock();
 
 			if (sceneListData != null) {
@@ -530,7 +531,6 @@ public class ModeMenu {
 					}
 				}
                 
-				
 				selectMapBox = new SceneDataListBox(sceneListData, sceneList) {
 					@Override
 					public void onFinish() {
@@ -541,29 +541,31 @@ public class ModeMenu {
 							String msg = "";
 							Main.getInstance().startClock();
 							
-							//Recojo el escenario
-							SceneData sceneData = Main.getInstance().reviceSceneData("getSceneController", ""+ getSceneData().getId());
+							//El escenario es nuevo
+							SceneData sceneData = null;
+							if(getSceneData().getState() == 0){
+								sceneData = 
+										Main.getInstance().reviceSceneData("getStartSceneServlet", ""+ getSceneData().getId());
+							}
+							//El escenario NO es nuevo
+							else{
+								sceneData = 
+										Main.getInstance().reviceSceneData("getSceneController", ""+ getSceneData().getId());
+							}
+							
 							Main.getInstance().stopClock();
 							
-							
-							GameState.getInstance().init(GameState.GAME_MODE_CAMPAING, sceneData);
-							Main.changeState(Define.ST_GAME_CONTINUE_ON_LINE, true);
-							
-							
-							
-
 							if(sceneData != null){
+								
+								GameState.getInstance().init(GameState.GAME_MODE_ONLINE, sceneData);
 								msg = RscManager.allText[RscManager.TXT_GAME_LOADED];
 								NotificationBox.getInstance().addMessage(msg);
+								Main.changeState(Define.ST_GAME_INIT_ON_LINE, true);
 							}else{
 								msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
 								NotificationBox.getInstance().addMessage(msg);
 								Main.changeState(Define.ST_MENU_SELECT_GAME, false);
 							}
-							
-							
-							
-							
 							
 						}else{
 							Main.changeState(Define.ST_MENU_SELECT_GAME, false);
@@ -579,7 +581,7 @@ public class ModeMenu {
 						RscManager.allText[RscManager.TXT_CONNECTION_ERROR]);
 				Main.changeState(Define.ST_MENU_ON_LINE_START, false);
 			}
-			 */
+			
 			 break;
 		 
 		 case Define.ST_MENU_ON_LINE_LIST_JOIN_GAME:
@@ -614,11 +616,11 @@ public class ModeMenu {
 							String scene = "" + sceneData.getId();
 							String user = GameState.getInstance().getName();
 							
-							boolean create = false;
+							String create = null;
 							
 							int insCount = (sceneData.getPlayerCount()+1);
 							if(insCount ==  DataKingdom.INIT_MAP_DATA[sceneData.getMap()].length){
-								create = true;
+								create = "create";
 								Log.i("Debug", "Scene " + sceneData.getId() + " ya contiene el total de jugadores");
 							}
 							
@@ -673,11 +675,9 @@ public class ModeMenu {
 							String name = "TEST";
 							
 							
-							 String msg = "";
+							 String msg = null;
 							 Main.getInstance().startClock();
-							 
-							 String result =  Main.getInstance().sendScene("createSceneServlet", map, host, name);
-							 
+							 String result =  Main.getInstance().sendScene("createPreSceneServlet", map, host, name);
 							 Main.getInstance().stopClock();
 							 if(result.equals("Connection error")){
 								msg = RscManager.allText[RscManager.TXT_CONNECTION_ERROR];
@@ -690,10 +690,12 @@ public class ModeMenu {
 							 }
 							 else if(result.equals("Succes")){
 								msg = RscManager.allText[RscManager.TXT_GAME_CREATED];
-							}
-							NotificationBox.getInstance().addMessage(msg);
-							Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, false);
+							 }
+							 if(msg != null){
+								NotificationBox.getInstance().addMessage(msg);
+							 }
 						}
+						Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, false);
 					};
 				};
 				selectMapBox.start();
@@ -935,22 +937,6 @@ public class ModeMenu {
 			_g.setColor(0x000000);
 			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 			_g.fillRect(0, 0, Define.SIZEX, Define.SIZEY);
-			
-			int distW = GfxManager.imgGreenBox.getWidth()/4;
-			int distH = GfxManager.imgGreenBox.getHeight()/4;
-			int totalW = GfxManager.imgGreenBox.getWidth() + distH*2;
-			int totalH = GfxManager.imgGreenBox.getHeight() + distH;
-			
-			_g.drawDistorisionImage(
-					 GfxManager.imgGreenBox, 
-					 
-					 Define.SIZEX2- GfxManager.imgGreenBox.getWidth()/2, 10, 	//Point corner top-left 
-					 Define.SIZEX2+ GfxManager.imgGreenBox.getWidth()/2, 10,  //Point corner top-right
-					 Define.SIZEX2 - totalW/2, 10 + totalH, //Point corner button-left
-					 Define.SIZEX2 + totalW/2, 10 + totalH	//Point corner button-right
-					 );
-			
-			_g.drawImage(GfxManager.imgRedBox, Define.SIZEX2, 10, Graphics.TOP | Graphics.HCENTER);
 			break;
 		}
 		

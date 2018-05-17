@@ -48,6 +48,7 @@ Game has been created
 Connected by
 You have joined the game
 Game loaded
+Send game data...
 TURN:
 Plain
 Forest

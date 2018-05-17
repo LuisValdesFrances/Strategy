@@ -1,7 +1,9 @@
-package com.luis.strategy;
+package com.luis.strategy.gui;
 
 import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gui.ListBox;
+import com.luis.strategy.GfxManager;
+import com.luis.strategy.RscManager;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.datapackage.scene.PreSceneData;
 import com.luis.strategy.datapackage.scene.PreSceneListData;
@@ -25,6 +27,4 @@ public class PreSceneDataListBox extends ListBox{
 	public PreSceneData getPreSceneData(){
 		return preSceneListData.getPreSceneDataList().get(getIndexPressed());
 	}
-	
-
 }

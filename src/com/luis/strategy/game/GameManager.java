@@ -16,6 +16,7 @@ import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.graphics.Image;
 import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 import com.luis.lgameengine.implementation.input.TouchData;
+import com.luis.strategy.GameState;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.Main;
 import com.luis.strategy.ModeGame;
@@ -23,6 +24,8 @@ import com.luis.strategy.RscManager;
 import com.luis.strategy.UserInput;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
+import com.luis.strategy.data.GameBuilder;
+import com.luis.strategy.datapackage.scene.SceneData;
 import com.luis.strategy.gui.ArmyBox;
 import com.luis.strategy.gui.BattleBox;
 import com.luis.strategy.gui.FlagButton;
@@ -996,7 +999,39 @@ public class GameManager {
 					while(getCurrentPlayer().getCapitalkingdom() == null);
 					if(gameScene.getPlayerIndex()==0)
 						gameScene.setTurnCount(gameScene.getTurnCount()+1);
-					changeState(STATE_INCOME);
+					
+					
+					if(GameState.getInstance().getGameMode() == GameState.GAME_MODE_ONLINE){
+						String msg = null;
+						GameState.getInstance().setGameScene(gameScene);
+						SceneData sceneData = GameBuilder.getInstance().buildSceneData(1);
+						Main.getInstance().stopClock();
+						
+						Main.getInstance().startClock();
+						String result = Main.getInstance().sendDataPackage(sceneData, "updateSceneServlet");
+						
+						if(result.equals("Connection error")){
+							msg = RscManager.allText[RscManager.TXT_CONNECTION_ERROR];
+						 }
+						 else if(result.equals("Server error")){
+							msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
+						 }
+						 else if(result.equals("Query error")){
+							msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
+						 }
+						 else if(result.equals("Succes")){
+							msg = RscManager.allText[RscManager.TXT_GAME_CREATED];
+						}
+						if(msg != null){
+							NotificationBox.getInstance().addMessage(msg);
+						}
+						
+						Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, true);
+						
+						
+					}else{
+						changeState(STATE_INCOME);
+					}
 				}
 			}
 			break;

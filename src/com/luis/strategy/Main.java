@@ -31,6 +31,7 @@ import com.luis.lgameengine.implementation.sound.SndManager;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.datapackage.scene.SceneData;
 import com.luis.strategy.datapackage.scene.PreSceneListData;
+import com.luis.strategy.datapackage.scene.SceneListData;
 
 /**
  * @author Luis Valdes Frances
@@ -159,8 +160,8 @@ public class Main extends MyCanvas implements Runnable {
 					}
 					break;
 
-				case Define.ST_GAME_INIT:
-				case Define.ST_GAME_CONTINUE_ON_LINE:
+				case Define.ST_GAME_INIT_PASS_AND_PLAY:
+				case Define.ST_GAME_INIT_ON_LINE:
 				case Define.ST_GAME_RUN:
 				case Define.ST_GAME_PAUSE:
 				case Define.ST_GAME_CONFIRMATION_QUIT:
@@ -231,8 +232,8 @@ public class Main extends MyCanvas implements Runnable {
 		         case Define.ST_TEST:
 					ModeMenu.draw(_g);
 					break;
-		         case Define.ST_GAME_INIT:
-		         case Define.ST_GAME_CONTINUE_ON_LINE:
+		         case Define.ST_GAME_INIT_PASS_AND_PLAY:
+		         case Define.ST_GAME_INIT_ON_LINE:
 		         case Define.ST_GAME_RUN:
 		         case Define.ST_GAME_PAUSE:
 		         case Define.ST_GAME_CONFIRMATION_QUIT:
@@ -438,12 +439,17 @@ public class Main extends MyCanvas implements Runnable {
 		state = _iNewState;
 		///*
 		switch(state){
-			case Define.ST_GAME_INIT:
-			case Define.ST_GAME_CONTINUE_ON_LINE:
+			case Define.ST_GAME_INIT_PASS_AND_PLAY:
+			case Define.ST_GAME_INIT_ON_LINE:
 				GfxManager.deleteMenuGFX();
 				break;
 			case Define.ST_MENU_MAIN:
-				if(lastState >= Define.ST_GAME_INIT ){
+				if(lastState >= Define.ST_GAME_INIT_PASS_AND_PLAY ){
+					GfxManager.deleteGameGFX();
+				}
+				break;
+			case Define.ST_MENU_ON_LINE_LIST_ALL_GAME:
+				if(lastState >= Define.ST_GAME_INIT_PASS_AND_PLAY ){
 					GfxManager.deleteGameGFX();
 				}
 				break;
@@ -457,7 +463,7 @@ public class Main extends MyCanvas implements Runnable {
 		Log.i("INFO", "Estado cambiado a: " + _iNewState);
 		
 		
-		if (_iNewState < Define.ST_GAME_INIT)
+		if (_iNewState < Define.ST_GAME_INIT_PASS_AND_PLAY)
 			ModeMenu.init(state);
 		else
 			ModeGame.init(state);
@@ -628,7 +634,7 @@ public class Main extends MyCanvas implements Runnable {
 		return result;
 	}
 	
-	public String sendInscription(String URL, String scene, String user, boolean create){
+	public String sendInscription(String URL, String scene, String user, String create){
 		HttpURLConnection connection = null;
 		String result = "";
 		try {
@@ -639,7 +645,7 @@ public class Main extends MyCanvas implements Runnable {
 			connection.setRequestMethod("POST");
 			connection.setRequestProperty("scene", scene);
 			connection.setRequestProperty("user", user);
-			connection.setRequestProperty("scene", scene);
+			connection.setRequestProperty("create", create);
 			connection.setDoInput(true);
 			connection.setDoOutput(true);
 			connection.setUseCaches(false);
@@ -727,7 +733,34 @@ public class Main extends MyCanvas implements Runnable {
 		return preSceneListData;
 	}
 	
-	/*
+	public SceneListData reviceSceneListData(String URL, String user){
+		SceneListData sceneListData = null;
+		HttpURLConnection connection = null;
+		try {
+			// open URL connection
+			//String encodeUrl = Define.SERVER_URL + URL + URLEncoder.encode("?user=" + user);
+			String encodeUrl = Define.SERVER_URL + URL;
+			URL url = new URL(encodeUrl);
+			connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestProperty("Content-Type", "application/octet-stream");
+			connection.setRequestMethod("GET");
+			connection.setRequestProperty("user", user);
+			connection.setDoInput(true);
+			connection.setDoOutput(false);
+			connection.setUseCaches(false);
+			
+			ObjectInputStream objIn = new ObjectInputStream(connection.getInputStream());
+			sceneListData = (SceneListData) objIn.readObject();
+			objIn.close();
+			connection.disconnect();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return sceneListData;
+	}
+	
+	
 	public SceneData reviceSceneData(String URL, String scene){
 		SceneData sceneData = null;
 		HttpURLConnection connection = null;
@@ -754,5 +787,4 @@ public class Main extends MyCanvas implements Runnable {
 		}
 		return sceneData;
 	}
-	*/
 }

@@ -58,8 +58,8 @@ public class ModeGame {
 	public static void init(int _iState) {
 		
 		switch(_iState){
-		case Define.ST_GAME_INIT:
-		case Define.ST_GAME_CONTINUE_ON_LINE:
+		case Define.ST_GAME_INIT_PASS_AND_PLAY:
+		case Define.ST_GAME_INIT_ON_LINE:
 			
 			btnPause = new Button(
 					GfxManager.imgButtonPauseRelease, 
@@ -82,20 +82,22 @@ public class ModeGame {
 			
 			gameFrame = 0;
 			
-			if(Main.state == Define.ST_GAME_INIT){
-				
-				GameScene gameScene = GameBuilder.getInstance().buildPassAndPlay();
-				GameState.getInstance().setGameScene(gameScene);
+			
+			
+			GameScene gameScene = null;
+			if(Main.state == Define.ST_GAME_INIT_PASS_AND_PLAY){
+				gameScene = GameBuilder.getInstance().buildPassAndPlay();
 			}
-			else if(Main.state == Define.ST_GAME_CONTINUE_ON_LINE){
-				GameScene gameScene;
+			else if(Main.state == Define.ST_GAME_INIT_ON_LINE){
 				if(GameState.getInstance().getSceneData().getState() == 0){
 					gameScene = GameBuilder.getInstance().buildStartGameScene();
 				}else{
 					gameScene = GameBuilder.getInstance().buildGameScene();
 				}
-				GameState.getInstance().setGameScene(gameScene);
 			}
+			GameState.getInstance().setGameScene(gameScene);
+
+			
 			
 			int mapWidth = GfxManager.imgMapList.get(0).getWidth()*
 					DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][0];
@@ -218,8 +220,8 @@ public class ModeGame {
 
 	public static void update(int _iState) {
 		switch(_iState){
-		case Define.ST_GAME_INIT:
-		case Define.ST_GAME_CONTINUE_ON_LINE:
+		case Define.ST_GAME_INIT_PASS_AND_PLAY:
+		case Define.ST_GAME_INIT_ON_LINE:
 			Main.changeState(Define.ST_GAME_RUN, false);
 			break;
 			
@@ -285,8 +287,8 @@ public class ModeGame {
 	public static void draw(Graphics _g, int _iState) {
 		_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 		switch(_iState){
-		case Define.ST_GAME_INIT:
-		case Define.ST_GAME_CONTINUE_ON_LINE:
+		case Define.ST_GAME_INIT_PASS_AND_PLAY:
+		case Define.ST_GAME_INIT_ON_LINE:
 			break;
 			
 		case Define.ST_GAME_RUN:

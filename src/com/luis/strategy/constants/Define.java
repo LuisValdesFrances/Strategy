@@ -58,15 +58,15 @@ public class Define {
 	public static final int ST_TEST = 50;
 
 	// Game states:
-	public static final int ST_GAME_INIT = 100;
-	public static final int ST_GAME_CONTINUE_ON_LINE = 101;
+	public static final int ST_GAME_INIT_PASS_AND_PLAY = 100;
+	public static final int ST_GAME_INIT_ON_LINE = 101;
 	public static final int ST_GAME_RUN = 102;
 	public static final int ST_GAME_PAUSE = 103;
 	public static final int ST_GAME_CONFIRMATION_QUIT = 104;
 	
 	
 	//public static final String SERVER_URL = "http://172.104.228.65:8080/KingServer/";//Online
-	public static final String SERVER_URL = "http://192.168.26.155:8080/KingServer/";//Local
+	public static final String SERVER_URL = "http://192.168.1.110:8080/KingServer/";//Local
 	   
 	// Nombre del fichero donde se guardaran y cargaran los datos:
 	public static final String DATA_USER = "strategyDataUser";

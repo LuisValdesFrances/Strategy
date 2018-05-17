@@ -9,10 +9,6 @@ import com.luis.strategy.constants.Define;
 
 public class GfxManager {
 	
-	//test
-	public static Image imgGreenBox;
-	public static Image imgRedBox;
-
 	public static Image vImgFontSmall;
 	public static Image vImgFontMedium;
 	public static Image vImgFontBig;
@@ -154,7 +150,8 @@ public class GfxManager {
 			break;
 
 		case Define.ST_MENU_MAIN:
-			if(Main.lastState >= Define.ST_GAME_INIT){
+		case Define.ST_MENU_ON_LINE_LIST_ALL_GAME:
+			if(Main.lastState >= Define.ST_GAME_INIT_PASS_AND_PLAY){
 				try {
 					loadMenuGfx();
 				} catch (IOException ex) {
@@ -167,8 +164,8 @@ public class GfxManager {
 
 			break;
 
-		case Define.ST_GAME_INIT:
-		case Define.ST_GAME_CONTINUE_ON_LINE:
+		case Define.ST_GAME_INIT_PASS_AND_PLAY:
+		case Define.ST_GAME_INIT_ON_LINE:
 			try {
 				//Menu commons
 				imgButtonMenuBigRelease = Image.createImage("/button_menu_big_release.png");
@@ -361,9 +358,6 @@ public class GfxManager {
 	}
 	
 	public static void loadMenuGfx() throws IOException{
-		
-		imgGreenBox = Image.createImage("/test/greenBox.png");
-		imgRedBox = Image.createImage("/test/redBox.png");
 		
 		imgButtonMenuBigRelease = Image.createImage("/button_menu_big_release.png");
 		imgButtonMenuBigFocus = Image.createImage("/button_menu_big_focus.png");
