@@ -38,10 +38,10 @@ public class GameBuilder {
 
 		switch (GameState.getInstance().getMap()) {
 		case 0:
-			gameScene.setKingdomList(DataKingdom.getGenterex(gameScene.getMap()));
+			gameScene.setKingdomList(DataKingdom.getGenterex(gameScene.getMapObject()));
 			break;
 		case 1:
-			gameScene.setKingdomList(DataKingdom.getCrom(gameScene.getMap()));
+			gameScene.setKingdomList(DataKingdom.getCrom(gameScene.getMapObject()));
 			break;
 		}
 		
@@ -64,8 +64,8 @@ public class GameBuilder {
 			player.getKingdomList().add(gameScene.getKingdom(k2));
 			
 			Army army = new Army(
-					gameScene.getMap(), player, gameScene.getKingdom(k1), player.getFlag(), 
-					gameScene.getMap().getX(), gameScene.getMap().getY(), gameScene.getMap().getWidth(), gameScene.getMap().getHeight());
+					gameScene.getMapObject(), player, gameScene.getKingdom(k1), player.getFlag(), 
+					gameScene.getMapObject().getX(), gameScene.getMapObject().getY(), gameScene.getMapObject().getWidth(), gameScene.getMapObject().getHeight());
 			army.initTroops();
 			player.getArmyList().add(army);
 			
@@ -73,6 +73,17 @@ public class GameBuilder {
 		}
 		
 		gameScene.setPlayerList(playerList);
+		return gameScene;
+	}
+	
+	public GameScene buildStartGameScene(){
+		GameScene gameScene = new GameScene(
+				GameState.getInstance().getMap(),
+				0,//GfxManager.imgMap.getWidth()/2, 
+				0,//GfxManager.imgMap.getHeight()/2,
+				DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][0],
+				DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][1]
+				);
 		return gameScene;
 	}
 	
@@ -85,21 +96,21 @@ public class GameBuilder {
 				DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][0],
 				DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][1]
 				);
-		gameScene.setTurnCount(GameState.getInstance().getDataPackage().getTurnCount());
-		gameScene.setPlayerIndex(GameState.getInstance().getDataPackage().getPlayerIndex());
+		gameScene.setTurnCount(GameState.getInstance().getSceneData().getTurnCount());
+		gameScene.setPlayerIndex(GameState.getInstance().getSceneData().getPlayerIndex());
 		
 		List<Player>playerList = new ArrayList<Player>();
 		
 		switch(GameState.getInstance().getMap()){
     	case 0:
-    		gameScene.setKingdomList(DataKingdom.getGenterex(gameScene.getMap()));
+    		gameScene.setKingdomList(DataKingdom.getGenterex(gameScene.getMapObject()));
             break;
     	case 1:
-    		gameScene.setKingdomList(DataKingdom.getCrom(gameScene.getMap()));
+    		gameScene.setKingdomList(DataKingdom.getCrom(gameScene.getMapObject()));
     		break;
     	}
 		
-		for(PlayerData playerData: GameState.getInstance().getDataPackage().getPlayerDataList()){
+		for(PlayerData playerData: GameState.getInstance().getSceneData().getPlayerDataList()){
 			
 			String name = playerData.getName();
 			boolean isIA = playerData.isIA();
@@ -123,8 +134,8 @@ public class GameBuilder {
 				k.setState(armyData.getKingdom().getState());
 				
 				Army army = new Army(
-						gameScene.getMap(), player, k, player.getFlag(), 
-						gameScene.getMap().getX(), gameScene.getMap().getY(), gameScene.getMap().getWidth(), gameScene.getMap().getHeight());
+						gameScene.getMapObject(), player, k, player.getFlag(), 
+						gameScene.getMapObject().getX(), gameScene.getMapObject().getY(), gameScene.getMapObject().getWidth(), gameScene.getMapObject().getHeight());
 				for(TroopData td : armyData.getTroopList()){
 					Troop troop = new Troop(td.getType(), td.isSubject());
 					army.getTroopList().add(troop);
@@ -139,11 +150,13 @@ public class GameBuilder {
 		return gameScene;
 	}
 	
-	public SceneData buildSceneData(){
-		SceneData dataPackage = new SceneData();
-		dataPackage.setMap(GameState.getInstance().getGameScene().getId());
-		dataPackage.setPlayerIndex(GameState.getInstance().getGameScene().getPlayerIndex());
-		dataPackage.setTurnCount(GameState.getInstance().getGameScene().getTurnCount());
+	public SceneData buildSceneData(int state){
+		SceneData sceneData = GameState.getInstance().getSceneData();
+		
+		sceneData.setPlayerIndex(GameState.getInstance().getGameScene().getPlayerIndex());
+		sceneData.setNextPlayer(GameState.getInstance().getGameScene().getPlayerList().get(sceneData.getPlayerIndex()).getName());
+		sceneData.setTurnCount(GameState.getInstance().getGameScene().getTurnCount());
+		sceneData.setState(state);
 		
 		List<PlayerData> playerDataList = new ArrayList<PlayerData>();
 		for(Player p : GameState.getInstance().getGameScene().getPlayerList()){
@@ -191,9 +204,9 @@ public class GameBuilder {
 		}
 		
 		//Añado las lista de jugadores
-		dataPackage.setPlayerDataList(playerDataList);
+		sceneData.setPlayerDataList(playerDataList);
 		
-		return dataPackage;
+		return sceneData;
 	}
 
 }

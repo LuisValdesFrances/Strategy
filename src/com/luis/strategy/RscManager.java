@@ -60,8 +60,9 @@ public class RscManager {
 	public static final int TXT_GAME_CREATED= TXT_ACCOUNT_CREATED+1;
 	public static final int TXT_CONNECTED_BY= TXT_GAME_CREATED+1;
 	public static final int TXT_HAVE_JOINED= TXT_CONNECTED_BY+1;
+	public static final int TXT_GAME_LOADED= TXT_HAVE_JOINED+1;
 	
-	public static final int TXT_GAME_TURN= TXT_HAVE_JOINED+1;
+	public static final int TXT_GAME_TURN= TXT_GAME_LOADED+1;
 	public static final int TXT_GAME_PLAIN= TXT_GAME_TURN+1;
 	public static final int TXT_GAME_FOREST= TXT_GAME_PLAIN+1;
 	public static final int TXT_GAME_MONTAIN= TXT_GAME_FOREST+1;

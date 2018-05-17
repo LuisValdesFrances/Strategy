@@ -13,7 +13,7 @@ public class GameState {
 	
 	//Game serial data
 	private GameScene gameScene;
-	private SceneData dataPackage;
+	private SceneData sceneData;
 	
 	//User configuration
 	private String name;
@@ -35,11 +35,11 @@ public class GameState {
 		}
 	}
 	
-	public void init(int gameMode, SceneData dataPackage){
+	public void init(int gameMode, SceneData sceneData){
 		this.gameMode = gameMode;
-		this.dataPackage = dataPackage;
-		this.map = dataPackage.getMap();
-		playerConfList = new PlayerConf[dataPackage.getPlayerDataList().size()];
+		this.sceneData = sceneData;
+		this.map = sceneData.getMap();
+		playerConfList = new PlayerConf[sceneData.getPlayerDataList().size()];
 		for (int i = 0; i < playerConfList.length; i++) {
 			playerConfList[i] = new PlayerConf();
 		}
@@ -61,13 +61,12 @@ public class GameState {
 		this.gameScene = gameScene;
 	}
 
-	
-	public SceneData getDataPackage() {
-		return dataPackage;
+	public SceneData getSceneData() {
+		return sceneData;
 	}
 
-	public void setDataPackage(SceneData dataPackage) {
-		this.dataPackage = dataPackage;
+	public void setSceneData(SceneData sceneData) {
+		this.sceneData = sceneData;
 	}
 
 	public static GameState getGameState() {

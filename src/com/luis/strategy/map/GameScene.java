@@ -14,7 +14,8 @@ import com.luis.strategy.constants.GameParams;
 
 public class GameScene{
 	
-	private int mapId;
+	
+	private int map;
 	private int playerIndex;
 	private int turnCount;
 	
@@ -24,16 +25,16 @@ public class GameScene{
 	private int numberPartsW;
 	private int numberPartsH;
 	
-	private MapObject map;
+	private MapObject mapObject;
 	
 	public GameScene(
-			int mapId,
+			int map,
 			int mapX, int mapY,
 			int numberPartsW, int numberPartsH) {
-		this.mapId = mapId;
+		this.map = map;
 		this.numberPartsW = numberPartsW;
 		this.numberPartsH = numberPartsH;
-		map = new MapObject(
+		mapObject = new MapObject(
 				null,
 				mapX, mapY, GfxManager.imgMapList.get(0).getWidth()*numberPartsW, GfxManager.imgMapList.get(0).getWidth()*numberPartsH,
 				mapX, mapY, GfxManager.imgMapList.get(0).getWidth()*numberPartsW, GfxManager.imgMapList.get(0).getWidth()*numberPartsH) {
@@ -87,12 +88,12 @@ public class GameScene{
 				
 				if(worldConver.isObjectInGameLayout(
 						gameCamera.getPosX(), gameCamera.getPosY(), 
-						map.getX()+x*pW, map.getY()+y*pH, 
+						mapObject.getX()+x*pW, mapObject.getY()+y*pH, 
 						pW, pH)){
 				
 					g.drawImage(GfxManager.imgMapList.get(i),
-							worldConver.getConversionDrawX(gameCamera.getPosX(), map.getX()+x*pW),
-							worldConver.getConversionDrawY(gameCamera.getPosY(), map.getY()+y*pH),
+							worldConver.getConversionDrawX(gameCamera.getPosX(), mapObject.getX()+x*pW),
+							worldConver.getConversionDrawY(gameCamera.getPosY(), mapObject.getY()+y*pH),
 							Graphics.TOP | Graphics.LEFT
 							);
 				}
@@ -205,12 +206,12 @@ public class GameScene{
 	}
 
 	
-	public int getId() {
-		return mapId;
+	public int getMap() {
+		return map;
 	}
 
-	public void setId(int id) {
-		this.mapId = id;
+	public void setMap(int map) {
+		this.map = map;
 	}
 
 	public List<Player> getPlayerList() {
@@ -253,12 +254,12 @@ public class GameScene{
 		this.turnCount = turnCount;
 	}
 
-	public MapObject getMap() {
-		return map;
+	public MapObject getMapObject() {
+		return mapObject;
 	}
 
-	public void setMap(MapObject map) {
-		this.map = map;
+	public void setMapObject(MapObject mapObject) {
+		this.mapObject = mapObject;
 	}
 
 	public int getNumberPartsW() {

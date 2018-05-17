@@ -171,7 +171,7 @@ public class Main extends MyCanvas implements Runnable {
 					break;
 
 				case Define.ST_GAME_INIT:
-				case Define.ST_GAME_CONTINUE:
+				case Define.ST_GAME_CONTINUE_ON_LINE:
 				case Define.ST_GAME_RUN:
 				case Define.ST_GAME_PAUSE:
 				case Define.ST_GAME_CONFIRMATION_QUIT:
@@ -243,7 +243,7 @@ public class Main extends MyCanvas implements Runnable {
 					ModeMenu.draw(_g);
 					break;
 		         case Define.ST_GAME_INIT:
-		         case Define.ST_GAME_CONTINUE:
+		         case Define.ST_GAME_CONTINUE_ON_LINE:
 		         case Define.ST_GAME_RUN:
 		         case Define.ST_GAME_PAUSE:
 		         case Define.ST_GAME_CONFIRMATION_QUIT:
@@ -450,7 +450,7 @@ public class Main extends MyCanvas implements Runnable {
 		///*
 		switch(state){
 			case Define.ST_GAME_INIT:
-			case Define.ST_GAME_CONTINUE:
+			case Define.ST_GAME_CONTINUE_ON_LINE:
 				GfxManager.deleteMenuGFX();
 				break;
 			case Define.ST_MENU_MAIN:
@@ -736,5 +736,32 @@ public class Main extends MyCanvas implements Runnable {
 			e.printStackTrace();
 		}
 		return sceneListData;
+	}
+	
+	public SceneData reviceSceneData(String URL, String scene){
+		SceneData sceneData = null;
+		HttpURLConnection connection = null;
+		try {
+			// open URL connection
+			//String encodeUrl = Define.SERVER_URL + URL + URLEncoder.encode("?user=" + user);
+			String encodeUrl = Define.SERVER_URL + URL;
+			URL url = new URL(encodeUrl);
+			connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestProperty("Content-Type", "application/octet-stream");
+			connection.setRequestMethod("GET");
+			connection.setRequestProperty("scene", scene);
+			connection.setDoInput(true);
+			connection.setDoOutput(false);
+			connection.setUseCaches(false);
+			
+			ObjectInputStream objIn = new ObjectInputStream(connection.getInputStream());
+			sceneData = (SceneData) objIn.readObject();
+			objIn.close();
+			connection.disconnect();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return sceneData;
 	}
 }

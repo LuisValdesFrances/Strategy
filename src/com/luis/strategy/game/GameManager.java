@@ -270,11 +270,11 @@ public class GameManager {
 				getCurrentPlayer().setGold(getCurrentPlayer().getGold()-GameParams.ARMY_COST);
 				
 				Army army = new Army(
-						gameScene.getMap(), 
+						gameScene.getMapObject(), 
 						getCurrentPlayer(),
 						getKingdom(),
 						getCurrentPlayer().getFlag(), 
-						gameScene.getMap().getX(), gameScene.getMap().getY(), gameScene.getMap().getWidth(), gameScene.getMap().getHeight());
+						gameScene.getMapObject().getX(), gameScene.getMapObject().getY(), gameScene.getMapObject().getWidth(), gameScene.getMapObject().getHeight());
 				army.initTroops();
 				army.setState(Army.STATE_OFF);
 				getCurrentPlayer().getArmyList().add(army);
@@ -1059,7 +1059,7 @@ public class GameManager {
 				if(getCurrentPlayer().getActionIA() != null){
 					
 					//Management
-					getCurrentPlayer().getActionIA().management(worldConver, gameCamera, gameScene.getMap(), gameScene.getPlayerList());
+					getCurrentPlayer().getActionIA().management(worldConver, gameCamera, gameScene.getMapObject(), gameScene.getPlayerList());
 					
 					//Activo los ejercitos uno a uno
 					Army iaArmy = getCurrentPlayer().getActionIA().getActiveArmy(gameScene.getPlayerList());

@@ -7,19 +7,19 @@ public class SceneData implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
-	private int id;
+	private int id;//Fijo
 	
-	private String host;
-	private int map;
+	private String host;//Fijo (Eliminar -> es inutil)
+	private int map;//Fijo
+	private int numPlayer;//Fijo (Eliminar -> se puede obtener a partur del mapa)
 	
-	private String nextPlayer;
-	private int numPlayer;
-	private int playerCount;
+	private String nextPlayer;//Variable
+	private int playerCount;//Variable
+	private int playerIndex;//Variable
+	private int turnCount;//Variable
+	private int state;
 	
-	private int playerIndex;
-	private int turnCount;
-	
-	List<PlayerData> playerDataList;
+	List<PlayerData> playerDataList;//Variable
 	
 	
 	public int getId() {
@@ -75,6 +75,12 @@ public class SceneData implements Serializable{
 	}
 	public void setPlayerCount(int playerCount) {
 		this.playerCount = playerCount;
+	}
+	public int getState() {
+		return state;
+	}
+	public void setState(int state) {
+		this.state = state;
 	}
 	
 }

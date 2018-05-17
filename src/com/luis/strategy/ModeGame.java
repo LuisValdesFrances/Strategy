@@ -59,7 +59,7 @@ public class ModeGame {
 		
 		switch(_iState){
 		case Define.ST_GAME_INIT:
-		case Define.ST_GAME_CONTINUE:
+		case Define.ST_GAME_CONTINUE_ON_LINE:
 			
 			btnPause = new Button(
 					GfxManager.imgButtonPauseRelease, 
@@ -87,8 +87,13 @@ public class ModeGame {
 				GameScene gameScene = GameBuilder.getInstance().buildPassAndPlay();
 				GameState.getInstance().setGameScene(gameScene);
 			}
-			else if(Main.state == Define.ST_GAME_CONTINUE){
-				GameScene gameScene = GameBuilder.getInstance().buildGameScene();
+			else if(Main.state == Define.ST_GAME_CONTINUE_ON_LINE){
+				GameScene gameScene;
+				if(GameState.getInstance().getSceneData().getState() == 0){
+					gameScene = GameBuilder.getInstance().buildStartGameScene();
+				}else{
+					gameScene = GameBuilder.getInstance().buildGameScene();
+				}
 				GameState.getInstance().setGameScene(gameScene);
 			}
 			
@@ -214,7 +219,7 @@ public class ModeGame {
 	public static void update(int _iState) {
 		switch(_iState){
 		case Define.ST_GAME_INIT:
-		case Define.ST_GAME_CONTINUE:
+		case Define.ST_GAME_CONTINUE_ON_LINE:
 			Main.changeState(Define.ST_GAME_RUN, false);
 			break;
 			
@@ -281,7 +286,7 @@ public class ModeGame {
 		_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 		switch(_iState){
 		case Define.ST_GAME_INIT:
-		case Define.ST_GAME_CONTINUE:
+		case Define.ST_GAME_CONTINUE_ON_LINE:
 			break;
 			
 		case Define.ST_GAME_RUN:

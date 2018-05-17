@@ -213,8 +213,8 @@ public class ModeMenu {
 					}
 					*/
 					
-					GameState.getInstance().init(GameState.GAME_MODE_CAMPAING, dataPackage);
-					Main.changeState(Define.ST_GAME_CONTINUE, true);
+					//GameState.getInstance().init(GameState.GAME_MODE_CAMPAING, dataPackage);
+					//Main.changeState(Define.ST_GAME_CONTINUE, true);
 					reset();
 				}
 			};
@@ -500,11 +500,89 @@ public class ModeMenu {
 						Main.changeState(Define.ST_MENU_ON_LINE_CREATE_SCENE, false);
 					}
 				};
+				
+				
+				
+				
+				
+			Main.getInstance().startClock();
+			SceneListData sceneListData = Main.getInstance().reviceSceneListData("getActiveSceneListServlet",GameState.getInstance().getName());
+			Main.getInstance().stopClock();
+
+			if (sceneListData != null) {
+
+				String[] sceneList = new String[sceneListData.getSceneDataList().size()];
+				
+				boolean[] disableList = new boolean[sceneListData.getSceneDataList().size()];
+				for (int i = 0; i < sceneListData.getSceneDataList().size(); i++) {
+					disableList[i] = 
+							!sceneListData.getSceneDataList().get(i).getNextPlayer().equals(GameState.getInstance().getName());
+				}
+				
+				for (int i = 0; i < sceneListData.getSceneDataList().size(); i++) {
+					if(disableList[i]){
+						sceneList[i] = DataKingdom.SCENARY_NAME_LIST[sceneListData.getSceneDataList().get(i).getMap()]
+								+ " NEXT "
+								+ sceneListData.getSceneDataList().get(i).getNextPlayer();
+					}else{
+						sceneList[i] = DataKingdom.SCENARY_NAME_LIST[sceneListData.getSceneDataList().get(i).getMap()]
+								+ " YOUR TURN";
+					}
+				}
+                
+				
+				selectMapBox = new SceneDataListBox(sceneListData, sceneList) {
+					@Override
+					public void onFinish() {
+
+						
+						if (getIndexPressed() != -1) {
+							
+							String msg = "";
+							Main.getInstance().startClock();
+							
+							//Recojo el escenario
+							SceneData sceneData = Main.getInstance().reviceSceneData("getSceneController", ""+ getSceneData().getId());
+							Main.getInstance().stopClock();
+							
+							
+							GameState.getInstance().init(GameState.GAME_MODE_CAMPAING, sceneData);
+							Main.changeState(Define.ST_GAME_CONTINUE_ON_LINE, true);
+							
+							
+							
+
+							if(sceneData != null){
+								msg = RscManager.allText[RscManager.TXT_GAME_LOADED];
+								NotificationBox.getInstance().addMessage(msg);
+							}else{
+								msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
+								NotificationBox.getInstance().addMessage(msg);
+								Main.changeState(Define.ST_MENU_SELECT_GAME, false);
+							}
+							
+							
+							
+							
+							
+						}else{
+							Main.changeState(Define.ST_MENU_SELECT_GAME, false);
+						}
+					}
+				};
+				selectMapBox.setDisabledOptions(disableList);
+				selectMapBox.start();
+
+			} else {
+				NotificationBox.getInstance().addMessage(
+						RscManager.allText[RscManager.TXT_CONNECTION_ERROR]);
+				Main.changeState(Define.ST_MENU_ON_LINE_START, false);
+			}
 			 
 			 break;
 		 case Define.ST_MENU_ON_LINE_LIST_JOIN_GAME:
 			 Main.getInstance().startClock();
-			 SceneListData sceneListData =  Main.getInstance().reviceSceneListData("getWaitSceneListServlet", GameState.getInstance().getName());
+			 sceneListData =  Main.getInstance().reviceSceneListData("getWaitSceneListServlet", GameState.getInstance().getName());
 			 Main.getInstance().stopClock();
 			
 			 if (sceneListData != null) {
@@ -512,11 +590,15 @@ public class ModeMenu {
 				String[] sceneList = new String[sceneListData.getSceneDataList().size()];
 				for(int i = 0; i < sceneListData.getSceneDataList().size(); i++){
 					sceneList[i] = 
-							DataKingdom.SCENARY_LIST[sceneListData.getSceneDataList().get(i).getMap()] +
-							"(" + sceneListData.getSceneDataList().get(i).getPlayerCount() + ")";
+							DataKingdom.SCENARY_NAME_LIST[sceneListData.getSceneDataList().get(i).getMap()] +
+							" (" +
+							sceneListData.getSceneDataList().get(i).getPlayerCount() + 
+							"/" + 
+							sceneListData.getSceneDataList().get(i).getNumPlayer() + 
+							")";
 				}
 				
-				selectMapBox = new SceneDataListBox(sceneListData){
+				selectMapBox = new SceneDataListBox(sceneListData, sceneList){
 					@Override
 					public void onFinish(){
 						
@@ -685,14 +767,16 @@ public class ModeMenu {
 			 btnBack.update(UserInput.getInstance().getMultiTouchHandler());
 			 btnSearchGame.update(UserInput.getInstance().getMultiTouchHandler());
 			 btnCreateScene.update(UserInput.getInstance().getMultiTouchHandler());
-			 //if(selectMapBox != null)
-			 //selectMapBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
+			 if(selectMapBox != null){
+				 selectMapBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
+			 }
 			 break;
 		 case Define.ST_MENU_ON_LINE_LIST_JOIN_GAME:
 			 runMenuBG(Main.getDeltaSec());
 			 btnBack.update(UserInput.getInstance().getMultiTouchHandler());
-			 if(selectMapBox != null)
+			 if(selectMapBox != null){
 				 selectMapBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
+			 }
 			 break;
 		 case Define.ST_MENU_ON_LINE_CREATE_SCENE:
 			 runMenuBG(Main.getDeltaSec());
