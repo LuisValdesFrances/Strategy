@@ -16,8 +16,8 @@ import com.luis.strategy.GameState.PlayerConf;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.data.DataKingdom;
-import com.luis.strategy.datapackage.scene.SceneData;
-import com.luis.strategy.datapackage.scene.SceneListData;
+import com.luis.strategy.datapackage.scene.PreSceneData;
+import com.luis.strategy.datapackage.scene.PreSceneListData;
 import com.luis.strategy.gui.ConfigMapBox;
 import com.luis.strategy.gui.CreateUserBox;
 import com.luis.strategy.gui.LoginBox;
@@ -199,7 +199,7 @@ public class ModeMenu {
 				@Override
 				public void onButtonPressUp(){
 					
-					SceneData dataPackage = null;
+					//SceneData dataPackage = null;
 					/*
 					//Lectura local
 					try{
@@ -504,7 +504,7 @@ public class ModeMenu {
 				
 				
 				
-				
+			/*
 			Main.getInstance().startClock();
 			SceneListData sceneListData = Main.getInstance().reviceSceneListData("getActiveSceneListServlet",GameState.getInstance().getName());
 			Main.getInstance().stopClock();
@@ -572,59 +572,72 @@ public class ModeMenu {
 				};
 				selectMapBox.setDisabledOptions(disableList);
 				selectMapBox.start();
+				
 
 			} else {
 				NotificationBox.getInstance().addMessage(
 						RscManager.allText[RscManager.TXT_CONNECTION_ERROR]);
 				Main.changeState(Define.ST_MENU_ON_LINE_START, false);
 			}
-			 
+			 */
 			 break;
+		 
 		 case Define.ST_MENU_ON_LINE_LIST_JOIN_GAME:
 			 Main.getInstance().startClock();
-			 sceneListData =  Main.getInstance().reviceSceneListData("getWaitSceneListServlet", GameState.getInstance().getName());
+			 PreSceneListData preSceneListData =  Main.getInstance().revicePreSceneListData("getPreSceneListServlet", GameState.getInstance().getName());
 			 Main.getInstance().stopClock();
 			
-			 if (sceneListData != null) {
-				
-				String[] sceneList = new String[sceneListData.getSceneDataList().size()];
-				for(int i = 0; i < sceneListData.getSceneDataList().size(); i++){
-					sceneList[i] = 
-							DataKingdom.SCENARY_NAME_LIST[sceneListData.getSceneDataList().get(i).getMap()] +
+			 if (preSceneListData != null) {
+				 
+				 
+				String[] textList = new String[preSceneListData.getPreSceneDataList().size()];
+				for(int i = 0; i < preSceneListData.getPreSceneDataList().size(); i++){
+					
+					int numPlayer = DataKingdom.INIT_MAP_DATA[preSceneListData.getPreSceneDataList().get(i).getMap()].length;
+					
+					textList[i] = 
+							DataKingdom.SCENARY_NAME_LIST[preSceneListData.getPreSceneDataList().get(i).getMap()] +
 							" (" +
-							sceneListData.getSceneDataList().get(i).getPlayerCount() + 
+							preSceneListData.getPreSceneDataList().get(i).getPlayerCount() + 
 							"/" + 
-							sceneListData.getSceneDataList().get(i).getNumPlayer() + 
+							numPlayer + 
 							")";
 				}
 				
-				selectMapBox = new SceneDataListBox(sceneListData, sceneList){
+				selectMapBox = new PreSceneDataListBox(preSceneListData, textList){
 					@Override
 					public void onFinish(){
 						
 						if(getIndexPressed() != -1){
-							SceneData sceneData = getSceneData();
+							PreSceneData sceneData = getPreSceneData();
 							
 							String scene = "" + sceneData.getId();
 							String user = GameState.getInstance().getName();
 							
-							 String msg = "";
-							 Main.getInstance().startClock();
-							 String result = Main.getInstance().sendInscription("createInscriptionServlet", scene, user);
-							 Main.getInstance().stopClock();
+							boolean create = false;
+							
+							int insCount = (sceneData.getPlayerCount()+1);
+							if(insCount ==  DataKingdom.INIT_MAP_DATA[sceneData.getMap()].length){
+								create = true;
+								Log.i("Debug", "Scene " + sceneData.getId() + " ya contiene el total de jugadores");
+							}
+							
+							String msg = "";
+							Main.getInstance().startClock();
+							String result = Main.getInstance().sendInscription("createInscriptionServlet", scene, user, create);
+							Main.getInstance().stopClock();
 							 
-							 if(result.equals("Connection error")){
-								 msg = RscManager.allText[RscManager.TXT_CONNECTION_ERROR];
-							 }
-							 else if(result.equals("Server error")){
-								 msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
-							 }
-							 else if(result.equals("Query error")){
-								 msg = RscManager.allText[RscManager.TXT_INCORRECT_USER_NAME];
-							 }
-							 else if(result.equals("Succes")){
-								 msg = RscManager.allText[RscManager.TXT_HAVE_JOINED];
-								 
+							if(result.equals("Connection error")){
+								msg = RscManager.allText[RscManager.TXT_CONNECTION_ERROR];
+							}
+							else if(result.equals("Server error")){
+								msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
+							}
+							else if(result.equals("Query error")){
+								msg = RscManager.allText[RscManager.TXT_INCORRECT_USER_NAME];
+							}
+							else if(result.equals("Succes")){
+								msg = RscManager.allText[RscManager.TXT_HAVE_JOINED];
 							}
 							NotificationBox.getInstance().addMessage(msg);
 						}
@@ -656,7 +669,6 @@ public class ModeMenu {
 						if(getIndexPressed() != -1){
 							
 							String map = "" + getIndexPressed();
-							String numPlayer = "" + DataKingdom.INIT_MAP_DATA[getIndexPressed()].length;
 							String host = GameState.getInstance().getName();
 							String name = "TEST";
 							
@@ -664,7 +676,7 @@ public class ModeMenu {
 							 String msg = "";
 							 Main.getInstance().startClock();
 							 
-							 String result =  Main.getInstance().sendScene("createSceneServlet", map, numPlayer, host, name);
+							 String result =  Main.getInstance().sendScene("createSceneServlet", map, host, name);
 							 
 							 Main.getInstance().stopClock();
 							 if(result.equals("Connection error")){
@@ -896,6 +908,11 @@ public class ModeMenu {
 		 case Define.ST_MENU_ON_LINE_LIST_JOIN_GAME:
 			 drawMenuBG(_g);
 			 btnBack.draw(_g, 0, 0);
+			 TextManager.drawSimpleText(
+					 _g, Font.FONT_SMALL, 
+					 RscManager.allText[RscManager.TXT_GAME_PLAYER] + " " + GameState.getInstance().getName(), 
+					 Define.SIZEX64, 
+					 Define.SIZEY-Define.SIZEY64, Graphics.BOTTOM | Graphics.LEFT);
 			 if(selectMapBox != null){
 				 selectMapBox.draw(_g, GfxManager.imgBlackBG);
 			 }

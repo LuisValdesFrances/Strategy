@@ -15,20 +15,6 @@ import java.net.URLEncoder;
 import java.util.List;
 import java.util.Random;
 
-/**
- * @author Luis Valdes Frances
- */
-
-
-
-
-
-
-
-
-
-
-
 import org.apache.http.NameValuePair;
 
 import android.app.Activity;
@@ -44,8 +30,11 @@ import com.luis.lgameengine.implementation.input.KeyboardHandler;
 import com.luis.lgameengine.implementation.sound.SndManager;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.datapackage.scene.SceneData;
-import com.luis.strategy.datapackage.scene.SceneListData;
+import com.luis.strategy.datapackage.scene.PreSceneListData;
 
+/**
+ * @author Luis Valdes Frances
+ */
 public class Main extends MyCanvas implements Runnable {
 
 	public static Main instance;
@@ -605,7 +594,7 @@ public class Main extends MyCanvas implements Runnable {
 		return result;
 	}
 	
-	public String sendScene(String URL, String map, String numPlayer, String host, String name){
+	public String sendScene(String URL, String map, String host, String name){
 		HttpURLConnection connection = null;
 		String result = "";
 		try {
@@ -615,7 +604,6 @@ public class Main extends MyCanvas implements Runnable {
 			connection.setRequestProperty("Content-Type", "application/octet-stream");
 			connection.setRequestMethod("POST");
 			connection.setRequestProperty("map", map);
-			connection.setRequestProperty("numplayer", numPlayer);
 			connection.setRequestProperty("host", host);
 			connection.setRequestProperty("name", name);
 			connection.setDoInput(true);
@@ -640,7 +628,7 @@ public class Main extends MyCanvas implements Runnable {
 		return result;
 	}
 	
-	public String sendInscription(String URL, String scene, String user){
+	public String sendInscription(String URL, String scene, String user, boolean create){
 		HttpURLConnection connection = null;
 		String result = "";
 		try {
@@ -651,6 +639,7 @@ public class Main extends MyCanvas implements Runnable {
 			connection.setRequestMethod("POST");
 			connection.setRequestProperty("scene", scene);
 			connection.setRequestProperty("user", user);
+			connection.setRequestProperty("scene", scene);
 			connection.setDoInput(true);
 			connection.setDoOutput(true);
 			connection.setUseCaches(false);
@@ -711,8 +700,8 @@ public class Main extends MyCanvas implements Runnable {
 		return result;
 	}
 	
-	public SceneListData reviceSceneListData(String URL, String user){
-		SceneListData sceneListData = null;
+	public PreSceneListData revicePreSceneListData(String URL, String user){
+		PreSceneListData preSceneListData = null;
 		HttpURLConnection connection = null;
 		try {
 			// open URL connection
@@ -728,16 +717,17 @@ public class Main extends MyCanvas implements Runnable {
 			connection.setUseCaches(false);
 			
 			ObjectInputStream objIn = new ObjectInputStream(connection.getInputStream());
-			sceneListData = (SceneListData) objIn.readObject();
+			preSceneListData = (PreSceneListData) objIn.readObject();
 			objIn.close();
 			connection.disconnect();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return sceneListData;
+		return preSceneListData;
 	}
 	
+	/*
 	public SceneData reviceSceneData(String URL, String scene){
 		SceneData sceneData = null;
 		HttpURLConnection connection = null;
@@ -764,4 +754,5 @@ public class Main extends MyCanvas implements Runnable {
 		}
 		return sceneData;
 	}
+	*/
 }
