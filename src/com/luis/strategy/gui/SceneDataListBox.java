@@ -24,6 +24,14 @@ public class SceneDataListBox extends ListBox{
 		this.sceneListData = sceneListData;
 	}
 	
+	public void refresh(String[] textOptions){
+		super.refresh(
+				GfxManager.imgNotificationBox,
+				GfxManager.imgNotificationBox, 
+				textOptions, 
+				Font.FONT_SMALL);
+	}
+	
 	public Serializable getSceneListData() {
 		return sceneListData;
 	}

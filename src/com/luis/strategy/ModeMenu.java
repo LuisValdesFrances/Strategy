@@ -24,7 +24,6 @@ import com.luis.strategy.gui.ConfigMapBox;
 import com.luis.strategy.gui.CreateUserBox;
 import com.luis.strategy.gui.LoginBox;
 import com.luis.strategy.gui.SceneDataListBox;
-import com.luis.strategy.gui.SceneDataListBox;
 
 public class ModeMenu {
 	
@@ -56,6 +55,8 @@ public class ModeMenu {
 	private static Button btnCreateScene;
 	
 	private static ListBox selectMapBox;
+	private static ListBox selectPreSceneBox;
+	private static ListBox selectSceneBox;
 	private static ConfigMapBox configMapBox;
 	private static CreateUserBox createUserBox;
 	private static LoginBox loginBox;
@@ -91,10 +92,16 @@ public class ModeMenu {
 						Main.changeState(Define.ST_MENU_MAIN, false);
 						break;
 					case Define.ST_MENU_SELECT_MAP:
-					case Define.ST_MENU_ON_LINE_CREATE_SCENE:
-					case Define.ST_MENU_ON_LINE_LIST_ALL_GAME:
-					case Define.ST_MENU_ON_LINE_LIST_JOIN_GAME:
 						selectMapBox.cancel();
+						break;
+					case Define.ST_MENU_ON_LINE_CREATE_SCENE:
+						selectMapBox.cancel();
+						break;
+					case Define.ST_MENU_ON_LINE_LIST_ALL_GAME:
+						selectSceneBox.cancel();
+						break;
+					case Define.ST_MENU_ON_LINE_LIST_JOIN_GAME:
+						selectPreSceneBox.cancel();
 						break;
 					case Define.ST_MENU_CONFIG_MAP:
 						configMapBox.cancel();
@@ -535,7 +542,7 @@ public class ModeMenu {
 					}
 				}
                 
-				selectMapBox = new SceneDataListBox(sceneListData, sceneList) {
+				selectSceneBox = new SceneDataListBox(sceneListData, sceneList) {
 					@Override
 					public void onFinish() {
 
@@ -579,8 +586,8 @@ public class ModeMenu {
 						}
 					}
 				};
-				selectMapBox.setDisabledList(disableList);
-				selectMapBox.start();
+				selectSceneBox.setDisabledList(disableList);
+				selectSceneBox.start();
 				
 				updateScenes();
 			
@@ -615,7 +622,7 @@ public class ModeMenu {
 							")";
 				}
 				
-				selectMapBox = new SceneDataListBox(preSceneListData, textList){
+				selectPreSceneBox = new SceneDataListBox(preSceneListData, textList){
 					@Override
 					public void onFinish(){
 						
@@ -656,7 +663,7 @@ public class ModeMenu {
 						Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, false);
 					}
 				};
-				selectMapBox.start();
+				selectPreSceneBox.start();
 				updatePreScenes();
 				
 				
@@ -791,15 +798,15 @@ public class ModeMenu {
 			 btnBack.update(UserInput.getInstance().getMultiTouchHandler());
 			 btnSearchGame.update(UserInput.getInstance().getMultiTouchHandler());
 			 btnCreateScene.update(UserInput.getInstance().getMultiTouchHandler());
-			 if(selectMapBox != null){
-				 selectMapBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
+			 if(selectSceneBox != null){
+				 selectSceneBox .update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
 			 }
 			 break;
 		 case Define.ST_MENU_ON_LINE_LIST_JOIN_GAME:
 			 runMenuBG(Main.getDeltaSec());
 			 btnBack.update(UserInput.getInstance().getMultiTouchHandler());
-			 if(selectMapBox != null){
-				 selectMapBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
+			 if(selectPreSceneBox != null){
+				 selectPreSceneBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
 			 }
 			 break;
 		 case Define.ST_MENU_ON_LINE_CREATE_SCENE:
@@ -913,8 +920,8 @@ public class ModeMenu {
 					 Define.SIZEY-Define.SIZEY64, Graphics.BOTTOM | Graphics.LEFT);
 			 btnSearchGame.draw(_g, 0, 0);
 			 btnCreateScene.draw(_g,0, 0);
-			 if(selectMapBox != null){
-				 selectMapBox.draw(_g, GfxManager.imgBlackBG);
+			 if(selectSceneBox != null){
+				 selectSceneBox.draw(_g, GfxManager.imgBlackBG);
 			 }
 			 break;
 		 case Define.ST_MENU_ON_LINE_LIST_JOIN_GAME:
@@ -925,8 +932,8 @@ public class ModeMenu {
 					 RscManager.allText[RscManager.TXT_GAME_PLAYER] + " " + GameState.getInstance().getName(), 
 					 Define.SIZEX64, 
 					 Define.SIZEY-Define.SIZEY64, Graphics.BOTTOM | Graphics.LEFT);
-			 if(selectMapBox != null){
-				 selectMapBox.draw(_g, GfxManager.imgBlackBG);
+			 if(selectPreSceneBox != null){
+				 selectPreSceneBox.draw(_g, GfxManager.imgBlackBG);
 			 }
 			 break;
 		 case Define.ST_MENU_ON_LINE_CREATE_SCENE:
@@ -1104,20 +1111,45 @@ public class ModeMenu {
 			@Override
 			public void run() {
 				super.run();
-				//while(Main.state == Define.ST_MENU_ON_LINE_LIST_ALL_GAME){
+				
+				while(Main.state == Define.ST_MENU_ON_LINE_LIST_ALL_GAME){
 					
 					try {
-						Thread.sleep(30000);
+						Thread.sleep(10000);
 						//Log.i("Debug", "Actualizando lista de scenes...");
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
 					
-					if(Main.state == Define.ST_MENU_ON_LINE_LIST_ALL_GAME){
-						Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, false);
+					SceneListData sceneListData = Main.getInstance().reviceSceneListData("getSceneListServlet", GameState.getInstance().getName());
+					if (sceneListData != null) {
+
+						String[] sceneList = new String[sceneListData.getSceneDataList().size()];
+						
+						boolean[] disableList = new boolean[sceneListData.getSceneDataList().size()];
+						for (int i = 0; i < sceneListData.getSceneDataList().size(); i++) {
+							disableList[i] = 
+									!sceneListData.getSceneDataList().get(i).getNextPlayer().equals(GameState.getInstance().getName());
+						}
+						
+						for (int i = 0; i < sceneListData.getSceneDataList().size(); i++) {
+							if(disableList[i]){
+								sceneList[i] = 
+										""+sceneListData.getSceneDataList().get(i).getId() + " - " +
+										DataKingdom.SCENARY_NAME_LIST[sceneListData.getSceneDataList().get(i).getMap()] +
+										" NEXT " +
+										sceneListData.getSceneDataList().get(i).getNextPlayer();
+							}else{
+								sceneList[i] = 
+										""+sceneListData.getSceneDataList().get(i).getId() + " - " +
+										DataKingdom.SCENARY_NAME_LIST[sceneListData.getSceneDataList().get(i).getMap()]
+										+ " YOUR TURN";
+							}
+						}
+					selectSceneBox.refresh(null);
 					}
 				}
-			//}
+			}
 		};
 		sceneUpdate.start();
 	}
@@ -1127,19 +1159,33 @@ public class ModeMenu {
 			@Override
 			public void run() {
 				super.run();
-				//while(Main.state == Define.ST_MENU_ON_LINE_LIST_JOIN_GAME){
+					
+				while(Main.state == Define.ST_MENU_ON_LINE_LIST_JOIN_GAME){
 					
 					try {
-						Thread.sleep(30000);
+						Thread.sleep(10000);
 						//Log.i("Debug", "Actualizando lista de scenes...");
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
 					
-					if(Main.state == Define.ST_MENU_ON_LINE_LIST_JOIN_GAME){
-						Main.changeState(Define.ST_MENU_ON_LINE_LIST_JOIN_GAME, false);
-					}
-				//}
+					PreSceneListData preSceneListData =  Main.getInstance().revicePreSceneListData("getPreSceneListServlet", GameState.getInstance().getName());
+					if (preSceneListData != null) {
+						String[] textList = new String[preSceneListData.getPreSceneDataList().size()];
+						for(int i = 0; i < preSceneListData.getPreSceneDataList().size(); i++){
+							int numPlayer = DataKingdom.INIT_MAP_DATA[preSceneListData.getPreSceneDataList().get(i).getMap()].length;
+							textList[i] = 
+									""+preSceneListData.getPreSceneDataList().get(i).getId() + " - " +
+									DataKingdom.SCENARY_NAME_LIST[preSceneListData.getPreSceneDataList().get(i).getMap()] +
+									" (" +
+									preSceneListData.getPreSceneDataList().get(i).getPlayerCount() + 
+									"/" + 
+									numPlayer + 
+									")";
+							}
+						selectSceneBox.refresh(textList);
+						}
+				}
 			}
 		};
 		preSceneUpdate.start();
