@@ -1,18 +1,18 @@
 package com.luis.strategy.gui;
 
+import java.io.Serializable;
+
 import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gui.ListBox;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.RscManager;
 import com.luis.strategy.constants.Define;
-import com.luis.strategy.datapackage.scene.SceneData;
-import com.luis.strategy.datapackage.scene.SceneListData;
 
 public class SceneDataListBox extends ListBox{
+	
+	private Serializable sceneListData;
 
-	private SceneListData sceneListData;
-
-	public SceneDataListBox(SceneListData sceneListData, String[] textOptions) {
+	public SceneDataListBox(Serializable sceneListData, String[] textOptions) {
 		
 		super(Define.SIZEX, Define.SIZEY, null, 
 				GfxManager.imgNotificationBox, GfxManager.imgNotificationBox, 
@@ -24,7 +24,13 @@ public class SceneDataListBox extends ListBox{
 		this.sceneListData = sceneListData;
 	}
 	
-	public SceneData getSceneData(){
-		return sceneListData.getSceneDataList().get(getIndexPressed());
+	public Serializable getSceneListData() {
+		return sceneListData;
 	}
+
+	public void setSceneListData(Serializable sceneListData) {
+		this.sceneListData = sceneListData;
+	}
+	
+	
 }
