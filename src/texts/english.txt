@@ -68,7 +68,7 @@ Defeat
 Victory
 Big Victory
 The army from player 
- has been destroyed.
+has been destroyed.
 Atacante pierde 
 Defensor pierde 
  bajas.
@@ -77,7 +77,7 @@ ECONOMY
 Earning
 Salary
 Cost of troops exceedes your tresaure. Discard troops.
- is the winner!
+is the winner!
 Do you want discard this troop of
 for
 coins

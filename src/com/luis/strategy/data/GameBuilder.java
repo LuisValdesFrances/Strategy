@@ -201,7 +201,7 @@ public class GameBuilder {
 			pd.setId(p.getId());
 			pd.setName(p.getName());
 			pd.setGold(p.getGold());
-			pd.setCapitalKingdom(p.getCapitalkingdom().getId());
+			pd.setCapitalKingdom(p.getCapitalkingdom() != null ? p.getCapitalkingdom().getId(): -1);
 			pd.setFlag(p.getFlag());
 			pd.setIA(p.getActionIA() != null);
 			

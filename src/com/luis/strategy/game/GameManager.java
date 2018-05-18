@@ -22,6 +22,7 @@ import com.luis.strategy.Main;
 import com.luis.strategy.ModeGame;
 import com.luis.strategy.RscManager;
 import com.luis.strategy.UserInput;
+import com.luis.strategy.connection.OnlineInputOutput;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.data.GameBuilder;
@@ -340,7 +341,15 @@ public class GameManager {
 			@Override
 			public void onFinish() {
 				super.onFinish();
-				Main.changeState(Define.ST_MENU_MAIN, false);
+				
+				
+				if(GameState.getInstance().getGameMode() == GameState.GAME_MODE_ONLINE){
+					sendGameData(2);
+					//Envio notificaciones
+					Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, true);
+				}else{
+					Main.changeState(Define.ST_MENU_MAIN, true);
+				}
 			}
 		};
 		discardBox = new SimpleBox(GfxManager.imgNotificationBox, false, false){
@@ -1002,33 +1011,8 @@ public class GameManager {
 					
 					
 					if(GameState.getInstance().getGameMode() == GameState.GAME_MODE_ONLINE){
-						String msg = null;
-						GameState.getInstance().setGameScene(gameScene);
-						SceneData sceneData = GameBuilder.getInstance().buildSceneData(1);
-						Main.getInstance().stopClock();
-						
-						Main.getInstance().startClock();
-						String result = Main.getInstance().sendDataPackage(sceneData, "updateSceneServlet");
-						
-						if(result.equals("Connection error")){
-							msg = RscManager.allText[RscManager.TXT_CONNECTION_ERROR];
-						 }
-						 else if(result.equals("Server error")){
-							msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
-						 }
-						 else if(result.equals("Query error")){
-							msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
-						 }
-						 else if(result.equals("Succes")){
-							msg = RscManager.allText[RscManager.TXT_GAME_CREATED];
-						}
-						if(msg != null){
-							NotificationBox.getInstance().addMessage(msg);
-						}
-						
+						sendGameData(1);
 						Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, true);
-						
-						
 					}else{
 						changeState(STATE_INCOME);
 					}
@@ -1038,12 +1022,39 @@ public class GameManager {
 		case STATE_FINISH:
 			endGameBox.start(
 					RscManager.allText[RscManager.TXT_GAME_VICTORY], 
-					RscManager.allText[RscManager.TXT_GAME_PLAYER] + getWinner().getName() + " " +
+					RscManager.allText[RscManager.TXT_GAME_PLAYER] + " " + getWinner().getName() + " " +
 							RscManager.allText[RscManager.TXT_GAME_IS_WINNER]);
 			break;
 		case STATE_DEBUG:
 			btnDebugPause.setDisabled(false);
 			break;
+		}
+	}
+	
+	private void sendGameData(int state){
+		String msg = null;
+		GameState.getInstance().setGameScene(gameScene);
+		SceneData sceneData = GameBuilder.getInstance().buildSceneData(state);
+		
+		Main.getInstance().startClock();
+		String result = 
+				OnlineInputOutput.getInstance().sendDataPackage(sceneData, "updateSceneServlet");
+		Main.getInstance().stopClock();
+		
+		if(result.equals("Connection error")){
+			msg = RscManager.allText[RscManager.TXT_CONNECTION_ERROR];
+		 }
+		 else if(result.equals("Server error")){
+			msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
+		 }
+		 else if(result.equals("Query error")){
+			msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
+		 }
+		 else if(result.equals("Succes")){
+			msg = RscManager.allText[RscManager.TXT_SEND_DATA];
+		}
+		if(msg != null){
+			NotificationBox.getInstance().addMessage(msg);
 		}
 	}
 	
@@ -1551,7 +1562,7 @@ public class GameManager {
 				textH = RscManager.allText[RscManager.TXT_GAME_BIG_VICTORY];
 				textB = 
 						RscManager.allText[RscManager.TXT_GAME_THE_ARMY_FROM_PLAYER] + 
-						defeated.getPlayer().getName() + 
+						defeated.getPlayer().getName() + " " +
 						RscManager.allText[RscManager.TXT_GAME_HAS_BEEN_DESTROYED];
 				textN2=textB;
 			}else{

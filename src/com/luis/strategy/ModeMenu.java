@@ -13,6 +13,7 @@ import com.luis.lgameengine.implementation.fileio.FileIO;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.graphics.Image;
 import com.luis.strategy.GameState.PlayerConf;
+import com.luis.strategy.connection.OnlineInputOutput;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.data.DataKingdom;
@@ -388,7 +389,7 @@ public class ModeMenu {
 						 //Escrutura online
 						 String msg = "";
 						 Main.getInstance().startClock();
-						 String result = Main.getInstance().sendUser("createUserServlet", getTextName(), getTextPassword());
+						 String result = OnlineInputOutput.getInstance().sendUser("createUserServlet", getTextName(), getTextPassword());
 						 Main.getInstance().stopClock();
 						 
 						 if(result.equals("Connection error")){
@@ -438,7 +439,7 @@ public class ModeMenu {
 					 super.onSendForm();
 					 String msg = "";
 					 Main.getInstance().startClock();
-					 String result = Main.getInstance().sendUser("loginUserServlet", getTextName(), getTextPassword());
+					 String result = OnlineInputOutput.getInstance().sendUser("loginUserServlet", getTextName(), getTextPassword());
 					 Main.getInstance().stopClock();
 					 
 					 if(result.equals("Connection error")){
@@ -514,7 +515,7 @@ public class ModeMenu {
 				
 				
 			Main.getInstance().startClock();
-			SceneListData sceneListData = Main.getInstance().reviceSceneListData("getSceneListServlet", GameState.getInstance().getName());
+			SceneListData sceneListData = OnlineInputOutput.getInstance().reviceSceneListData("getSceneListServlet", GameState.getInstance().getName());
 			Main.getInstance().stopClock();
 
 			if (sceneListData != null) {
@@ -559,12 +560,12 @@ public class ModeMenu {
 							SceneData sceneData = null;
 							if(sd.getState() == 0){
 								sceneData = 
-										Main.getInstance().reviceSceneData("getStartSceneServlet", ""+ sd.getId());
+										OnlineInputOutput.getInstance().reviceSceneData("getStartSceneServlet", ""+ sd.getId());
 							}
 							//El escenario NO es nuevo
 							else{
 								sceneData = 
-										Main.getInstance().reviceSceneData("getSceneController", ""+ sd.getId());
+										OnlineInputOutput.getInstance().reviceSceneData("getSceneController", ""+ sd.getId());
 							}
 							
 							Main.getInstance().stopClock();
@@ -601,7 +602,8 @@ public class ModeMenu {
 		 
 		 case Define.ST_MENU_ON_LINE_LIST_JOIN_GAME:
 			 Main.getInstance().startClock();
-			 PreSceneListData preSceneListData =  Main.getInstance().revicePreSceneListData("getPreSceneListServlet", GameState.getInstance().getName());
+			 PreSceneListData preSceneListData =  
+					 OnlineInputOutput.getInstance().revicePreSceneListData("getPreSceneListServlet", GameState.getInstance().getName());
 			 Main.getInstance().stopClock();
 			
 			 if (preSceneListData != null) {
@@ -643,7 +645,8 @@ public class ModeMenu {
 							
 							String msg = "";
 							Main.getInstance().startClock();
-							String result = Main.getInstance().sendInscription("createInscriptionServlet", scene, user, create);
+							String result = 
+									OnlineInputOutput.getInstance().sendInscription("createInscriptionServlet", scene, user, create);
 							Main.getInstance().stopClock();
 							 
 							if(result.equals("Connection error")){
@@ -694,7 +697,8 @@ public class ModeMenu {
 							
 							 String msg = null;
 							 Main.getInstance().startClock();
-							 String result =  Main.getInstance().sendScene("createPreSceneServlet", map, host, name);
+							 String result =  
+									 OnlineInputOutput.getInstance().sendScene("createPreSceneServlet", map, host, name);
 							 Main.getInstance().stopClock();
 							 if(result.equals("Connection error")){
 								msg = RscManager.allText[RscManager.TXT_CONNECTION_ERROR];
@@ -1115,16 +1119,18 @@ public class ModeMenu {
 				while(Main.state == Define.ST_MENU_ON_LINE_LIST_ALL_GAME){
 					
 					try {
-						Thread.sleep(10000);
+						Thread.sleep(5000);
 						//Log.i("Debug", "Actualizando lista de scenes...");
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
 					
-					SceneListData sceneListData = Main.getInstance().reviceSceneListData("getSceneListServlet", GameState.getInstance().getName());
-					if (sceneListData != null) {
-
-						String[] sceneList = new String[sceneListData.getSceneDataList().size()];
+					SceneListData sceneListData = 
+							OnlineInputOutput.getInstance().reviceSceneListData("getSceneListServlet", GameState.getInstance().getName());
+					if (sceneListData != null && sceneListData.getSceneDataList().size() > 0 &&
+							Main.state == Define.ST_MENU_ON_LINE_LIST_ALL_GAME && selectSceneBox != null) {
+						Log.i("Debug", "Actualizando selectSceneBox " + Main.iFrame);
+						String[] textList = new String[sceneListData.getSceneDataList().size()];
 						
 						boolean[] disableList = new boolean[sceneListData.getSceneDataList().size()];
 						for (int i = 0; i < sceneListData.getSceneDataList().size(); i++) {
@@ -1132,21 +1138,24 @@ public class ModeMenu {
 									!sceneListData.getSceneDataList().get(i).getNextPlayer().equals(GameState.getInstance().getName());
 						}
 						
+						//elimino las escenas que tengan al player como jugador sin capital
+						
 						for (int i = 0; i < sceneListData.getSceneDataList().size(); i++) {
 							if(disableList[i]){
-								sceneList[i] = 
+								textList[i] = 
 										""+sceneListData.getSceneDataList().get(i).getId() + " - " +
 										DataKingdom.SCENARY_NAME_LIST[sceneListData.getSceneDataList().get(i).getMap()] +
 										" NEXT " +
 										sceneListData.getSceneDataList().get(i).getNextPlayer();
 							}else{
-								sceneList[i] = 
+								textList[i] = 
 										""+sceneListData.getSceneDataList().get(i).getId() + " - " +
 										DataKingdom.SCENARY_NAME_LIST[sceneListData.getSceneDataList().get(i).getMap()]
 										+ " YOUR TURN";
 							}
 						}
-					selectSceneBox.refresh(null);
+					selectSceneBox.refresh(sceneListData, RscManager.allText[RscManager.TXT_SELECT_MAP], textList);
+					selectSceneBox.setDisabledList(disableList);
 					}
 				}
 			}
@@ -1154,6 +1163,7 @@ public class ModeMenu {
 		sceneUpdate.start();
 	}
 	
+	private static PreSceneListData preSceneListData;
 	private static void updatePreScenes() {
 		preSceneUpdate = new Thread() {
 			@Override
@@ -1163,14 +1173,17 @@ public class ModeMenu {
 				while(Main.state == Define.ST_MENU_ON_LINE_LIST_JOIN_GAME){
 					
 					try {
-						Thread.sleep(10000);
+						Thread.sleep(5000);
 						//Log.i("Debug", "Actualizando lista de scenes...");
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
 					
-					PreSceneListData preSceneListData =  Main.getInstance().revicePreSceneListData("getPreSceneListServlet", GameState.getInstance().getName());
-					if (preSceneListData != null) {
+					preSceneListData =  
+							OnlineInputOutput.getInstance().revicePreSceneListData("getPreSceneListServlet", GameState.getInstance().getName());
+					if (preSceneListData != null && preSceneListData.getPreSceneDataList().size() > 0 &&
+							Main.state == Define.ST_MENU_ON_LINE_LIST_JOIN_GAME && selectPreSceneBox != null) {
+						Log.i("Debug", "Actualizando selectPreSceneBox " + Main.iFrame);
 						String[] textList = new String[preSceneListData.getPreSceneDataList().size()];
 						for(int i = 0; i < preSceneListData.getPreSceneDataList().size(); i++){
 							int numPlayer = DataKingdom.INIT_MAP_DATA[preSceneListData.getPreSceneDataList().get(i).getMap()].length;
@@ -1183,7 +1196,7 @@ public class ModeMenu {
 									numPlayer + 
 									")";
 							}
-						selectSceneBox.refresh(textList);
+						selectPreSceneBox.refresh(preSceneListData, RscManager.allText[RscManager.TXT_SELECT_MAP], textList);
 						}
 				}
 			}

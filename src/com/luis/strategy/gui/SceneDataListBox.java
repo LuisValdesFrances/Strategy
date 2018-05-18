@@ -12,6 +12,16 @@ public class SceneDataListBox extends ListBox{
 	
 	private Serializable sceneListData;
 
+	public SceneDataListBox() {
+		super(Define.SIZEX, Define.SIZEY, null, 
+				GfxManager.imgNotificationBox, GfxManager.imgNotificationBox, 
+				Define.SIZEX2, Define.SIZEY2, 
+				RscManager.allText[RscManager.TXT_SELECT_MAP], 
+				null,
+				Font.FONT_BIG, Font.FONT_SMALL);
+		
+	}
+	
 	public SceneDataListBox(Serializable sceneListData, String[] textOptions) {
 		
 		super(Define.SIZEX, Define.SIZEY, null, 
@@ -24,12 +34,16 @@ public class SceneDataListBox extends ListBox{
 		this.sceneListData = sceneListData;
 	}
 	
-	public void refresh(String[] textOptions){
+	@Override
+	public void refresh(Serializable sceneListData, String textHeader, String[] textOptions){
 		super.refresh(
 				GfxManager.imgNotificationBox,
 				GfxManager.imgNotificationBox, 
+				textHeader,
+				Font.FONT_BIG,
 				textOptions, 
 				Font.FONT_SMALL);
+		this.sceneListData = sceneListData;
 	}
 	
 	public Serializable getSceneListData() {
