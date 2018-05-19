@@ -122,6 +122,7 @@ public class GameBuilder {
 			playerList.add(player);
 		}
 		
+		/*//Deben de venir ordenados por fecha de inscripción del servidor
 		//Ordeno los players para que, en caso de una nueva partida, sea el host el primero
 		if(GameState.getInstance().getSceneData().getState() == 0){
 			for(int i = 0; i < playerList.size(); i++){
@@ -133,7 +134,7 @@ public class GameBuilder {
 				}
 			}
 		}
-		
+		*/
 		gameScene.setPlayerList(playerList);
 		return gameScene;
 	}

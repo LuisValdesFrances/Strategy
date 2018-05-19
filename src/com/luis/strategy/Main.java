@@ -438,7 +438,7 @@ public class Main extends MyCanvas implements Runnable {
 		}
 		//*/
 		if(_isLoadGraphics){
-			instance.startClock();
+			instance.startClock(TYPE_CLOCK);
 			GfxManager.loadGFX(_iNewState);
 		}
 
@@ -469,20 +469,27 @@ public class Main extends MyCanvas implements Runnable {
 	// Show clock variables:
     private static final int SPEED_TIME_ANIMATION = 200;
 	private static final int FRAMES = 4;
-	private static long lClCurrentTime;
-	private static long lClLastCurrentTime;
-	public static int iFrameClock;
-	public static boolean isClock = false;
+	
+	public static final int TYPE_CLOCK = 0;
+	public static final int TYPE_EARTH = 1;
+	
+	private long lClCurrentTime;
+	private long lClLastCurrentTime;
+	public int iFrameClock;
+	public boolean isClock = false;
 	public static Image imgClock;
-	private static Thread tClockThread;
+	public static Image imgEarth;
+	private Thread tClockThread;
 	private static final String TEXT = "Loading...";
+	private int type;
 
-	public void startClock() {
+	public void startClock(int type) {
 
 		System.out.println("Start clock run");
-		isClock = true;
-		iFrameClock = 0;
-		lClCurrentTime = 0;
+		this.isClock = true;
+		this.iFrameClock = 0;
+		this.lClCurrentTime = 0;
+		this.type = type;
 		tClockThread = new Thread() {
 
 			public void run() {
@@ -519,27 +526,36 @@ public class Main extends MyCanvas implements Runnable {
 	private void drawClock(Graphics _g) {
 
 		if (isClock) {
-			if (imgClock == null){
+			if (type == TYPE_CLOCK && imgClock == null){
 				try{
-				imgClock = Image.createImage("/clock.png");
-				}catch(Exception e){
-					Log.e("error", "No se encuentra la imagen del reloj de carga");
-				}
+					imgClock = Image.createImage("/clock.png");
+					}catch(Exception e){
+						Log.e("error", "No se encuentra la imagen de carga");
+					}
+			}else if (type == TYPE_EARTH && imgEarth == null){
+				try{
+					imgEarth = Image.createImage("/earth.png");
+					}catch(Exception e){
+						Log.e("error", "No se encuentra la imagen de carga");
+					}
 			}
-			if(imgClock != null){
+			
+			Image img = type == TYPE_CLOCK? imgClock : imgEarth;
+			
+			if(img != null){
 			_g.setColor(COLOR_BLACK);
 			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-			_g.fillRect(0, Define.SIZEY2 - imgClock.getHeight(), Define.SIZEX, imgClock.getHeight());
+			_g.fillRect(0, Define.SIZEY2 - img.getHeight(), Define.SIZEX, img.getHeight());
 			_g.setClip(
-					Define.SIZEX2 - ((imgClock.getWidth() / FRAMES) >> 1),
-					Define.SIZEY2 - imgClock.getHeight(),
-					imgClock.getWidth() / FRAMES,
-					imgClock.getHeight());
+					Define.SIZEX2 - ((img.getWidth() / FRAMES) >> 1),
+					Define.SIZEY2 - img.getHeight(),
+					img.getWidth() / FRAMES,
+					img.getHeight());
 			_g.drawImage(
-					imgClock,
-					Define.SIZEX2 - ((imgClock.getWidth() / FRAMES) >> 1)
-							- ((imgClock.getWidth() / FRAMES) * iFrameClock),
-					Define.SIZEY2 - imgClock.getHeight(), 0);
+					img,
+					Define.SIZEX2 - ((img.getWidth() / FRAMES) >> 1)
+							- ((img.getWidth() / FRAMES) * iFrameClock),
+					Define.SIZEY2 - img.getHeight(), 0);
 
 			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 		}

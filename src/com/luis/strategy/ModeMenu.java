@@ -388,14 +388,11 @@ public class ModeMenu {
 					  else{
 						 //Escrutura online
 						 String msg = "";
-						 Main.getInstance().startClock();
+						 Main.getInstance().startClock(Main.TYPE_EARTH);
 						 String result = OnlineInputOutput.getInstance().sendUser("createUserServlet", getTextName(), getTextPassword());
 						 Main.getInstance().stopClock();
 						 
-						 if(result.equals("Connection error")){
-							msg = RscManager.allText[RscManager.TXT_CONNECTION_ERROR];
-						 }
-						 else if(result.equals("Server error")){
+						 if(result.equals("Server error")){
 							msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
 						 }
 						 else if(result.equals("Query error")){
@@ -414,6 +411,8 @@ public class ModeMenu {
 							
 							createUsserSucces = true;
 							cancel();
+						}else{
+							msg = RscManager.allText[RscManager.TXT_CONNECTION_ERROR];
 						}
 						
 						NotificationBox.getInstance().addMessage(msg);
@@ -438,14 +437,11 @@ public class ModeMenu {
 				 public void onSendForm() {
 					 super.onSendForm();
 					 String msg = "";
-					 Main.getInstance().startClock();
+					 Main.getInstance().startClock(Main.TYPE_EARTH);
 					 String result = OnlineInputOutput.getInstance().sendUser("loginUserServlet", getTextName(), getTextPassword());
 					 Main.getInstance().stopClock();
 					 
-					 if(result.equals("Connection error")){
-						 msg = RscManager.allText[RscManager.TXT_CONNECTION_ERROR];
-					 }
-					 else if(result.equals("Server error")){
+					if(result.equals("Server error")){
 						 msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
 					 }
 					 else if(result.equals("Query error")){
@@ -464,6 +460,8 @@ public class ModeMenu {
 						
 						 loginUsserSucces = true;
 						 cancel();
+					}else{
+						msg = RscManager.allText[RscManager.TXT_CONNECTION_ERROR];
 					}
 					NotificationBox.getInstance().addMessage(msg);
 				 }
@@ -484,8 +482,8 @@ public class ModeMenu {
 			 btnSearchGame = new Button(
 						GfxManager.imgButtonSearchBigRelease, 
 						GfxManager.imgButtonSearchBigFocus, 
-						Define.SIZEX-(int)(GfxManager.imgButtonSearchBigRelease.getWidth()/2)-Define.SIZEY64, 
-						(int)(GfxManager.imgButtonSearchBigRelease.getHeight()/2)-Define.SIZEY64,
+						Define.SIZEX - (GfxManager.imgButtonSearchBigRelease.getWidth()/2) - Define.SIZEY64, 
+						(GfxManager.imgButtonSearchBigRelease.getHeight()/2) + Define.SIZEY64,
 						null, -1){
 					@Override
 					public void onButtonPressDown(){}
@@ -500,8 +498,8 @@ public class ModeMenu {
 				btnCreateScene = new Button(
 						GfxManager.imgButtonCrossBigRelease, 
 						GfxManager.imgButtonCrossBigFocus, 
-						Define.SIZEX-(int)(GfxManager.imgButtonCrossBigRelease.getWidth()/2)-Define.SIZEY64, 
-						Define.SIZEY-(int)(GfxManager.imgButtonCrossBigRelease.getHeight()/2)-Define.SIZEY64,
+						Define.SIZEX - (GfxManager.imgButtonCrossBigRelease.getWidth()/2)-Define.SIZEY64, 
+						Define.SIZEY - (GfxManager.imgButtonCrossBigRelease.getHeight()/2)-Define.SIZEY64,
 						null, -1){
 					@Override
 					public void onButtonPressDown(){}
@@ -514,7 +512,7 @@ public class ModeMenu {
 				};
 				
 				
-			Main.getInstance().startClock();
+			Main.getInstance().startClock(Main.TYPE_EARTH);
 			SceneListData sceneListData = OnlineInputOutput.getInstance().reviceSceneListData("getSceneListServlet", GameState.getInstance().getName());
 			Main.getInstance().stopClock();
 
@@ -554,7 +552,7 @@ public class ModeMenu {
 							SceneData sd = sceneListData.getSceneDataList().get(getIndexPressed());
 							
 							String msg = "";
-							Main.getInstance().startClock();
+							Main.getInstance().startClock(Main.TYPE_EARTH);
 							
 							//El escenario es nuevo
 							SceneData sceneData = null;
@@ -601,7 +599,7 @@ public class ModeMenu {
 			 break;
 		 
 		 case Define.ST_MENU_ON_LINE_LIST_JOIN_GAME:
-			 Main.getInstance().startClock();
+			 Main.getInstance().startClock(Main.TYPE_EARTH);
 			 PreSceneListData preSceneListData =  
 					 OnlineInputOutput.getInstance().revicePreSceneListData("getPreSceneListServlet", GameState.getInstance().getName());
 			 Main.getInstance().stopClock();
@@ -644,15 +642,12 @@ public class ModeMenu {
 							}
 							
 							String msg = "";
-							Main.getInstance().startClock();
+							Main.getInstance().startClock(Main.TYPE_EARTH);
 							String result = 
 									OnlineInputOutput.getInstance().sendInscription("createInscriptionServlet", scene, user, create);
 							Main.getInstance().stopClock();
 							 
-							if(result.equals("Connection error")){
-								msg = RscManager.allText[RscManager.TXT_CONNECTION_ERROR];
-							}
-							else if(result.equals("Server error")){
+							if(result.equals("Server error")){
 								msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
 							}
 							else if(result.equals("Query error")){
@@ -660,6 +655,9 @@ public class ModeMenu {
 							}
 							else if(result.equals("Succes")){
 								msg = RscManager.allText[RscManager.TXT_HAVE_JOINED];
+							}
+							else{
+								msg = RscManager.allText[RscManager.TXT_CONNECTION_ERROR];
 							}
 							NotificationBox.getInstance().addMessage(msg);
 						}
@@ -696,14 +694,11 @@ public class ModeMenu {
 							
 							
 							 String msg = null;
-							 Main.getInstance().startClock();
+							 Main.getInstance().startClock(Main.TYPE_EARTH);
 							 String result =  
 									 OnlineInputOutput.getInstance().sendScene("createPreSceneServlet", map, host, name);
 							 Main.getInstance().stopClock();
-							 if(result.equals("Connection error")){
-								msg = RscManager.allText[RscManager.TXT_CONNECTION_ERROR];
-							 }
-							 else if(result.equals("Server error")){
+							 if(result.equals("Server error")){
 								msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
 							 }
 							 else if(result.equals("Query error")){
@@ -711,6 +706,9 @@ public class ModeMenu {
 							 }
 							 else if(result.equals("Succes")){
 								msg = RscManager.allText[RscManager.TXT_GAME_CREATED];
+							 }
+							 else{
+								 msg = RscManager.allText[RscManager.TXT_CONNECTION_ERROR];
 							 }
 							 if(msg != null){
 								NotificationBox.getInstance().addMessage(msg);

@@ -340,9 +340,7 @@ public class GameManager {
 		endGameBox = new SimpleBox(GfxManager.imgSmallBox, true, false){
 			@Override
 			public void onFinish() {
-				super.onFinish();
-				
-				
+				super.onWaitFinish();
 				if(GameState.getInstance().getGameMode() == GameState.GAME_MODE_ONLINE){
 					sendGameData(2);
 					//Envio notificaciones
@@ -1032,8 +1030,8 @@ public class GameManager {
 	}
 	
 	private void sendGameData(int state){
-		DataSender sender = new DataSender(gameScene, state);
-		sender.start();
+		DataSender sender = new DataSender();
+		sender.send(gameScene, state);
 	}
 	
 	private void changeSubState(int newSubState){

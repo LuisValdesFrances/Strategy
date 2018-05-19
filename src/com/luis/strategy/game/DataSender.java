@@ -2,30 +2,27 @@ package com.luis.strategy.game;
 
 import com.luis.lgameengine.gui.NotificationBox;
 import com.luis.strategy.GameState;
+import com.luis.strategy.Main;
 import com.luis.strategy.RscManager;
 import com.luis.strategy.connection.OnlineInputOutput;
 import com.luis.strategy.data.GameBuilder;
 import com.luis.strategy.datapackage.scene.SceneData;
 import com.luis.strategy.map.GameScene;
 
-public class DataSender extends Thread{
+public class DataSender{
 
-	private int state;
-	private GameScene gameScene;
-	public DataSender(GameScene gameScene, int state){
-		this.gameScene = gameScene;
-		this.state = state;
+	public DataSender(){
 	}
-	@Override
-	public void run() {
+	
+	public void send(GameScene gameScene, int state) {
 		String msg = null;
 		GameState.getInstance().setGameScene(gameScene);
 		SceneData sceneData = GameBuilder.getInstance().buildSceneData(state);
 		
-		//Main.getInstance().startClock();
+		Main.getInstance().startClock(Main.TYPE_EARTH);
 		String result = 
 				OnlineInputOutput.getInstance().sendDataPackage(sceneData, "updateSceneServlet");
-		//Main.getInstance().stopClock();
+		Main.getInstance().stopClock();
 		
 		if(result.equals("Connection error")){
 			msg = RscManager.allText[RscManager.TXT_CONNECTION_ERROR];
