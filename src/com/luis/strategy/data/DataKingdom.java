@@ -20,15 +20,16 @@ public class DataKingdom {
 		{
 		{{1,2}, {7,8}},
 		{{1,2}, {14,15}, {19,21}, {25,26}, {36,37}, {51,53}},
+		{{1,2}, {7,8}, {3,4}},
 		};
 	
-	public static final int[][] MAP_PARTS = {{4,2}, {4,4}
+	public static final int[][] MAP_PARTS = {{4,2}, {4,4}, {4,2}
 	};
 
 	public static final String[] SCENARY_LIST = new String[]{
 															"OCCITANE     (2-Player) Small", 
 															"SIX KINGDOMS (6-Player) Big",
-															"TEST 1x1     (2-Player) Med",
+															"TEST 3 PLAY  (3-Player) Med",
 															"TEST 2x2     (2-Player) Med",
 															"TEST 4x4     (2-Player) Med",
 															"TEST 8x8     (2-Player) Med",
@@ -37,8 +38,8 @@ public class DataKingdom {
 	
 	public static final String[] SCENARY_NAME_LIST = new String[]{
 															"OCCITANE", 
-															"SIX KINGDOMS" ,
-															"TEST 1x1",
+															"SIX KINGDOMS",
+															"TEST 3 PLAY",
 															"TEST 2x2",
 															"TEST 4x4",
 															"TEST 8x8",

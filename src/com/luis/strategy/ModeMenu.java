@@ -545,7 +545,7 @@ public class ModeMenu {
                 
 				selectSceneBox = new SceneDataListBox(sceneListData, sceneList) {
 					@Override
-					public void onFinish() {
+					public void onWaitFinish() {
 
 						
 						if (getIndexPressed() != -1) {
@@ -626,7 +626,7 @@ public class ModeMenu {
 				
 				selectPreSceneBox = new SceneDataListBox(preSceneListData, textList){
 					@Override
-					public void onFinish(){
+					public void onWaitFinish(){
 						
 						if(getIndexPressed() != -1){
 							PreSceneListData preSceneListData = (PreSceneListData)getSceneListData();
@@ -686,7 +686,7 @@ public class ModeMenu {
 						Font.FONT_BIG, Font.FONT_SMALL){
 					
 					@Override
-					public void onFinish(){
+					public void onWaitFinish(){
 						
 						if(getIndexPressed() != -1){
 							
@@ -1127,7 +1127,7 @@ public class ModeMenu {
 					
 					SceneListData sceneListData = 
 							OnlineInputOutput.getInstance().reviceSceneListData("getSceneListServlet", GameState.getInstance().getName());
-					if (sceneListData != null && sceneListData.getSceneDataList().size() > 0 &&
+					if (sceneListData != null &&
 							Main.state == Define.ST_MENU_ON_LINE_LIST_ALL_GAME && selectSceneBox != null) {
 						Log.i("Debug", "Actualizando selectSceneBox " + Main.iFrame);
 						String[] textList = new String[sceneListData.getSceneDataList().size()];
@@ -1137,8 +1137,6 @@ public class ModeMenu {
 							disableList[i] = 
 									!sceneListData.getSceneDataList().get(i).getNextPlayer().equals(GameState.getInstance().getName());
 						}
-						
-						//elimino las escenas que tengan al player como jugador sin capital
 						
 						for (int i = 0; i < sceneListData.getSceneDataList().size(); i++) {
 							if(disableList[i]){
@@ -1181,7 +1179,7 @@ public class ModeMenu {
 					
 					preSceneListData =  
 							OnlineInputOutput.getInstance().revicePreSceneListData("getPreSceneListServlet", GameState.getInstance().getName());
-					if (preSceneListData != null && preSceneListData.getPreSceneDataList().size() > 0 &&
+					if (preSceneListData != null &&
 							Main.state == Define.ST_MENU_ON_LINE_LIST_JOIN_GAME && selectPreSceneBox != null) {
 						Log.i("Debug", "Actualizando selectPreSceneBox " + Main.iFrame);
 						String[] textList = new String[preSceneListData.getPreSceneDataList().size()];

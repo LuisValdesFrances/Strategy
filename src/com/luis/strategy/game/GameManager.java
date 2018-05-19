@@ -1032,30 +1032,8 @@ public class GameManager {
 	}
 	
 	private void sendGameData(int state){
-		String msg = null;
-		GameState.getInstance().setGameScene(gameScene);
-		SceneData sceneData = GameBuilder.getInstance().buildSceneData(state);
-		
-		Main.getInstance().startClock();
-		String result = 
-				OnlineInputOutput.getInstance().sendDataPackage(sceneData, "updateSceneServlet");
-		Main.getInstance().stopClock();
-		
-		if(result.equals("Connection error")){
-			msg = RscManager.allText[RscManager.TXT_CONNECTION_ERROR];
-		 }
-		 else if(result.equals("Server error")){
-			msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
-		 }
-		 else if(result.equals("Query error")){
-			msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
-		 }
-		 else if(result.equals("Succes")){
-			msg = RscManager.allText[RscManager.TXT_SEND_DATA];
-		}
-		if(msg != null){
-			NotificationBox.getInstance().addMessage(msg);
-		}
+		DataSender sender = new DataSender(gameScene, state);
+		sender.start();
 	}
 	
 	private void changeSubState(int newSubState){

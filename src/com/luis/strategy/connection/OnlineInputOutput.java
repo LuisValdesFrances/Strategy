@@ -8,12 +8,14 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import com.luis.strategy.constants.Define;
 import com.luis.strategy.datapackage.scene.PreSceneListData;
 import com.luis.strategy.datapackage.scene.SceneData;
 import com.luis.strategy.datapackage.scene.SceneListData;
 
 public class OnlineInputOutput {
+	
+	public static final String SERVER_URL = "http://172.104.228.65:8080/KingServer/";//Online
+	//public static final String SERVER_URL = "http://192.168.1.110:8080/KingServer/";//Local
 	
 	private static OnlineInputOutput instance;
 	
@@ -29,7 +31,7 @@ public class OnlineInputOutput {
 		String result = "";
 		try {
 			// open URL connection
-			URL url = new URL(Define.SERVER_URL + URL);
+			URL url = new URL(SERVER_URL + URL);
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestProperty("Content-Type", "application/octet-stream");
 			connection.setRequestMethod("POST");
@@ -61,7 +63,7 @@ public class OnlineInputOutput {
 		String result = "";
 		try {
 			// open URL connection
-			URL url = new URL(Define.SERVER_URL + URL);
+			URL url = new URL(SERVER_URL + URL);
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestProperty("Content-Type", "application/octet-stream");
 			connection.setRequestMethod("POST");
@@ -94,7 +96,7 @@ public class OnlineInputOutput {
 		String result = "";
 		try {
 			// open URL connection
-			URL url = new URL(Define.SERVER_URL + URL);
+			URL url = new URL(SERVER_URL + URL);
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestProperty("Content-Type", "application/octet-stream");
 			connection.setRequestMethod("POST");
@@ -128,7 +130,7 @@ public class OnlineInputOutput {
 		String result = "";
 		try {
 			// open URL connection
-			URL url = new URL(Define.SERVER_URL + URL);
+			URL url = new URL(SERVER_URL + URL);
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestProperty("Content-Type", "application/octet-stream");
 			connection.setRequestMethod("POST");
@@ -162,7 +164,7 @@ public class OnlineInputOutput {
 		String result = "";
 		try {
 			// open URL connection
-			URL url = new URL(Define.SERVER_URL + URL);
+			URL url = new URL(SERVER_URL + URL);
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestProperty("Content-Type", "application/octet-stream");
 			connection.setRequestMethod("POST");
@@ -200,8 +202,8 @@ public class OnlineInputOutput {
 		HttpURLConnection connection = null;
 		try {
 			// open URL connection
-			//String encodeUrl = Define.SERVER_URL + URL + URLEncoder.encode("?user=" + user);
-			String encodeUrl = Define.SERVER_URL + URL;
+			//String encodeUrl = SERVER_URL + URL + URLEncoder.encode("?user=" + user);
+			String encodeUrl = SERVER_URL + URL;
 			URL url = new URL(encodeUrl);
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestProperty("Content-Type", "application/octet-stream");
@@ -228,7 +230,7 @@ public class OnlineInputOutput {
 		try {
 			// open URL connection
 			//String encodeUrl = Define.SERVER_URL + URL + URLEncoder.encode("?user=" + user);
-			String encodeUrl = Define.SERVER_URL + URL;
+			String encodeUrl = SERVER_URL + URL;
 			URL url = new URL(encodeUrl);
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestProperty("Content-Type", "application/octet-stream");
@@ -256,7 +258,7 @@ public class OnlineInputOutput {
 		try {
 			// open URL connection
 			//String encodeUrl = Define.SERVER_URL + URL + URLEncoder.encode("?user=" + user);
-			String encodeUrl = Define.SERVER_URL + URL;
+			String encodeUrl = SERVER_URL + URL;
 			URL url = new URL(encodeUrl);
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestProperty("Content-Type", "application/octet-stream");

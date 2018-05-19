@@ -38,6 +38,7 @@ public class GameBuilder {
 
 		switch (GameState.getInstance().getMap()) {
 		case 0:
+		case 2:
 			gameScene.setKingdomList(DataKingdom.getGenterex(gameScene.getMapObject()));
 			break;
 		case 1:
@@ -86,6 +87,7 @@ public class GameBuilder {
 
 		switch (GameState.getInstance().getMap()) {
 		case 0:
+		case 2:
 			gameScene.setKingdomList(DataKingdom.getGenterex(gameScene.getMapObject()));
 			break;
 		case 1:
@@ -120,6 +122,18 @@ public class GameBuilder {
 			playerList.add(player);
 		}
 		
+		//Ordeno los players para que, en caso de una nueva partida, sea el host el primero
+		if(GameState.getInstance().getSceneData().getState() == 0){
+			for(int i = 0; i < playerList.size(); i++){
+				if(i > 0 && playerList.get(i).getName().equals(GameState.getInstance().getName())){
+					Player first = playerList.get(i);
+					Player aux = playerList.get(0);
+					playerList.set(0, first);
+					playerList.set(i, aux);
+				}
+			}
+		}
+		
 		gameScene.setPlayerList(playerList);
 		return gameScene;
 	}
@@ -140,6 +154,7 @@ public class GameBuilder {
 		
 		switch(GameState.getInstance().getMap()){
     	case 0:
+    	case 2:
     		gameScene.setKingdomList(DataKingdom.getGenterex(gameScene.getMapObject()));
             break;
     	case 1:

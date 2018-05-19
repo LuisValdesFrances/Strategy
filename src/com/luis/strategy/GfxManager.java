@@ -175,6 +175,7 @@ public class GfxManager {
 				imgMapList = new ArrayList<Image>();
 				switch (GameState.getInstance().getMap()) {
 				case 0:
+				case 2:
 					imgMapList.add(Image.createImage("/maps/genterex_1.png"));
 					imgMapList.add(Image.createImage("/maps/genterex_2.png"));
 					imgMapList.add(Image.createImage("/maps/genterex_3.png"));
