@@ -72,12 +72,12 @@ You lost the game
 lost the game
 Your army loses
 Your army win
-Your army has destroyed the enemy
-Your army has been destroyed
-Atacante pierde
-Defensor pierde
-bajas.
-New army recruited.
+The attacker has destroyed the enemy
+The attacker has been destroyed
+Attacker loses
+Defender loses
+casualties
+New army recruited
 ECONOMY
 Earning
 Salary
