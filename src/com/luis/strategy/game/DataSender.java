@@ -1,5 +1,8 @@
 package com.luis.strategy.game;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.luis.lgameengine.gui.NotificationBox;
 import com.luis.strategy.GameState;
 import com.luis.strategy.Main;
@@ -11,10 +14,17 @@ import com.luis.strategy.map.GameScene;
 
 public class DataSender{
 
+	private List<Notification> notificationList;
+	
 	public DataSender(){
+		notificationList = new ArrayList<Notification>();
 	}
 	
-	public void send(GameScene gameScene, int state) {
+	public void addNotification(String user, String message){
+		notificationList.add(new Notification(user, message));
+	}
+	
+	public void sendGameScene(GameScene gameScene, int state) {
 		String msg = null;
 		GameState.getInstance().setGameScene(gameScene);
 		SceneData sceneData = GameBuilder.getInstance().buildSceneData(state);
@@ -41,5 +51,60 @@ public class DataSender{
 		}
 		
 	}
-
+	
+	/*
+	public void sendNotification(final String user, final String message){
+		if(GameState.getInstance().getGameMode() == GameState.GAME_MODE_ONLINE){
+			Thread thread = new Thread(){
+				@Override
+				public void run(){
+					OnlineInputOutput.getInstance().sendNotifiation(
+							OnlineInputOutput.URL_CREATE_NOTIFICATION, 
+							""+GameState.getInstance().getSceneData().getId(), 
+							user, 
+							message);
+				}
+			};
+			thread.start();
+		}
+	}
+	*/
+	
+	
+	public void sendGameNotifications(){
+		for(Notification n : notificationList){
+			OnlineInputOutput.getInstance().sendNotifiation(
+					OnlineInputOutput.URL_CREATE_NOTIFICATION, 
+					""+GameState.getInstance().getSceneData().getId(), 
+					n.user, 
+					n.message);
+		}
+		/*
+		Thread thread = new Thread(){
+			@Override
+			public void run(){
+				for(Notification n : notificationList){
+				OnlineInputOutput.getInstance().sendNotifiation(
+						OnlineInputOutput.URL_CREATE_NOTIFICATION, 
+						""+GameState.getInstance().getSceneData().getId(), 
+						n.user, 
+						n.message);
+			}
+			}
+		};
+		thread.start();
+		
+		*/
+	}
+	
+	class Notification{
+		
+		public Notification(String user, String message) {
+			super();
+			this.user = user;
+			this.message = message;
+		}
+		String user;
+		String message;
+	}
 }

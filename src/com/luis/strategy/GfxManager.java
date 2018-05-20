@@ -31,6 +31,8 @@ public class GfxManager {
 	public static Image imgButtonArrowNextRelease;
 	public static Image imgButtonArrowNextFocus;
 	
+	public static Image imgButtonInvisible;
+	
 	public static Image imgButtonKeyboardRelease;
 	public static Image imgButtonKeyboardFocus;
 	public static Image imgButtonKeyboardReleaseSp;
@@ -376,10 +378,14 @@ public class GfxManager {
 		imgButtonSearchBigRelease = Image.createImage("/search_big_release.png");
 		imgButtonSearchBigFocus = Image.createImage("/search_big_focus.png");
 		
+		imgButtonInvisible = Image.createImage("/button_invisible.png");
+		
 		imgButtonKeyboardRelease = Image.createImage("/button_keyboard_release.png");
 		imgButtonKeyboardFocus = Image.createImage("/button_keyboard_focus.png");
 		imgButtonKeyboardReleaseSp = Image.createImage("/button_keyboard_release_sp.png");
 		imgButtonKeyboardFocusSp = Image.createImage("/button_keyboard_focus_sp.png");
+		imgButtonCancelRelease = Image.createImage("/cancel_release.png");
+		imgButtonCancelFocus = Image.createImage("/cancel_focus.png");
 		
 		imgMainBG = Image.createImage("/main_bg.png");
 		imgSwordBG = Image.createImage("/sword_bg.png");
@@ -400,6 +406,8 @@ public class GfxManager {
 		imgFlagList.add(Image.createImage("/flag7.png"));
 		imgFlagList.add(Image.createImage("/flag8.png"));
 		
+		imgMediumBox = Image.createImage("/medium_box.png");
+		
 		imgNotificationBox = Image
 				.createImage("/notification_box.png");
 	}
@@ -417,6 +425,8 @@ public class GfxManager {
 		imgButtonArrowNextRelease = null;
 		imgButtonArrowNextFocus = null;
 		
+		imgMediumBox = null;
+		
 		imgButtonKeyboardRelease = null;
 		imgButtonKeyboardFocus = null;
 		imgButtonKeyboardReleaseSp = null;
@@ -429,6 +439,10 @@ public class GfxManager {
 		
 		imgButtonMapRelease = null;
 		imgButtonMapFocus = null;
+		
+		imgButtonInvisible = null;
+		imgButtonCancelRelease = null;
+		imgButtonCancelFocus = null;
 		
 		imgInputBox = null;
 		imgTextPointer = null;

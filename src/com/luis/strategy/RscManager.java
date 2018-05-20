@@ -47,8 +47,9 @@ public class RscManager {
 	public static final int TXT_QUIT= TXT_CONTINUE_GAME+1;
 	public static final int TXT_NEW_RECORD= TXT_QUIT+1;
 	public static final int TXT_RETURN_MENU= TXT_NEW_RECORD+1;
+	public static final int TXT_NOTIFICATIONS= TXT_RETURN_MENU+1;
 	
-	public static final int TXT_NAME= TXT_RETURN_MENU+1;
+	public static final int TXT_NAME= TXT_NOTIFICATIONS+1;
 	public static final int TXT_PASS= TXT_NAME+1;
 	public static final int TXT_REPEAT_PASS= TXT_PASS+1;
 	public static final int TXT_PASS_NO_MATCH= TXT_REPEAT_PASS+1;

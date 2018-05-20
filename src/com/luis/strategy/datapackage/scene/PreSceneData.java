@@ -13,6 +13,7 @@ public class PreSceneData implements Serializable{
     private int id;
     private int map;
     private String name;
+    private String host;
     private int playerCount;
 
     public int getId() {
@@ -39,7 +40,15 @@ public class PreSceneData implements Serializable{
         this.name = name;
     }
 
-    public int getPlayerCount() {
+    public String getHost() {
+		return host;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
+	}
+
+	public int getPlayerCount() {
         return playerCount;
     }
 

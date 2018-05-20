@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import com.luis.strategy.datapackage.scene.NotificationListData;
 import com.luis.strategy.datapackage.scene.PreSceneListData;
 import com.luis.strategy.datapackage.scene.SceneData;
 import com.luis.strategy.datapackage.scene.SceneListData;
@@ -19,6 +20,10 @@ public class OnlineInputOutput {
 	
 	private static OnlineInputOutput instance;
 	
+	public static final String URL_CREATE_NOTIFICATION = "createNotificationServlet";
+	public static final String URL_GET_NOTIFICATION_LIST = "getNotificationListServlet";
+	public static final String URL_GET_SCENE_LIST = "getSceneListServlet";
+	
 	public static OnlineInputOutput getInstance(){
 		if(instance == null){
 			instance = new OnlineInputOutput();
@@ -26,7 +31,7 @@ public class OnlineInputOutput {
 		return instance;
 	}
 	
-	public String sendNotifiation(String URL, String addressee, String message){
+	public String sendNotifiation(String URL, String scene, String user, String message){
 		HttpURLConnection connection = null;
 		String result = "";
 		try {
@@ -35,7 +40,8 @@ public class OnlineInputOutput {
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestProperty("Content-Type", "application/octet-stream");
 			connection.setRequestMethod("POST");
-			connection.setRequestProperty("addressee", addressee);
+			connection.setRequestProperty("scene", scene);
+			connection.setRequestProperty("user", user);
 			connection.setRequestProperty("message", message);
 			connection.setDoInput(true);
 			connection.setDoOutput(true);
@@ -58,6 +64,33 @@ public class OnlineInputOutput {
 		}
 		return result;
 	}
+	
+	public NotificationListData reviceNotificationListData(String user){
+		NotificationListData notificationListData = null;
+		HttpURLConnection connection = null;
+		try {
+			// open URL connection
+			String encodeUrl = SERVER_URL + URL_GET_NOTIFICATION_LIST;
+			URL url = new URL(encodeUrl);
+			connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestProperty("Content-Type", "application/octet-stream");
+			connection.setRequestMethod("GET");
+			connection.setRequestProperty("user", user);
+			connection.setDoInput(true);
+			connection.setDoOutput(false);
+			connection.setUseCaches(false);
+			
+			ObjectInputStream objIn = new ObjectInputStream(connection.getInputStream());
+			notificationListData = (NotificationListData) objIn.readObject();
+			objIn.close();
+			connection.disconnect();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return notificationListData;
+	}
+	
 	public String sendUser(String URL, String name, String password){
 		HttpURLConnection connection = null;
 		String result = "";
@@ -224,13 +257,13 @@ public class OnlineInputOutput {
 		return preSceneListData;
 	}
 	
-	public SceneListData reviceSceneListData(String URL, String user){
+	public SceneListData reviceSceneListData(String user){
 		SceneListData sceneListData = null;
 		HttpURLConnection connection = null;
 		try {
 			// open URL connection
 			//String encodeUrl = Define.SERVER_URL + URL + URLEncoder.encode("?user=" + user);
-			String encodeUrl = SERVER_URL + URL;
+			String encodeUrl = SERVER_URL + URL_GET_SCENE_LIST;
 			URL url = new URL(encodeUrl);
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestProperty("Content-Type", "application/octet-stream");

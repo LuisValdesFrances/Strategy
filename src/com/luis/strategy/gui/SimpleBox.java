@@ -46,8 +46,8 @@ public class SimpleBox extends MenuBox{
 		start();
 	}
 	
-	public void draw(Graphics g){
-		super.draw(g, GfxManager.imgBlackBG);
+	public void draw(Graphics g, Image imgBG){
+		super.draw(g, imgBG);
 		if(state != STATE_UNACTIVE){
 			TextManager.draw(g, Font.FONT_SMALL, textBody, 
 					getX() + (int)modPosX, 

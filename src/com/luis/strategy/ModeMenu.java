@@ -17,6 +17,7 @@ import com.luis.strategy.connection.OnlineInputOutput;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.data.DataKingdom;
+import com.luis.strategy.datapackage.scene.NotificationListData;
 import com.luis.strategy.datapackage.scene.PreSceneData;
 import com.luis.strategy.datapackage.scene.PreSceneListData;
 import com.luis.strategy.datapackage.scene.SceneData;
@@ -54,17 +55,18 @@ public class ModeMenu {
 	private static Button btnLogin;
 	private static Button btnSearchGame;
 	private static Button btnCreateScene;
+	private static Button btnCancel;
 	
 	private static ListBox selectMapBox;
 	private static ListBox selectPreSceneBox;
 	private static ListBox selectSceneBox;
+	private static ListBox notificationBox;
 	private static ConfigMapBox configMapBox;
 	private static CreateUserBox createUserBox;
 	private static LoginBox loginBox;
 	
 	private static boolean createUsserSucces;
 	private static boolean loginUsserSucces;
-	
 	
 	public static void init(int _iMenuState){
 		Log.i("Info", "Init State: "+ _iMenuState);
@@ -423,6 +425,9 @@ public class ModeMenu {
 				 public void onFinish(){
 					 if(createUsserSucces){
 						 Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, false);
+						 
+						 //Valido los datos guardados contra el servidor(De momento no es necesario porque si el nombre es incorrecto)
+						 
 					 }else{
 						 Main.changeState(Define.ST_MENU_ON_LINE_START, false);
 					 }
@@ -479,6 +484,43 @@ public class ModeMenu {
 			 break;
 		 case Define.ST_MENU_ON_LINE_LIST_ALL_GAME:
 			 
+			 //Notificaciones
+			 NotificationListData notificationListData = 
+			 	OnlineInputOutput.getInstance().reviceNotificationListData(GameState.getInstance().getName());
+			 
+			 if(notificationListData.getNotificationDataList().size() > 0){
+				 String[] notificationList = new String[notificationListData.getNotificationDataList().size()];
+				 for(int i = 0; i < notificationListData.getNotificationDataList().size(); i++){
+					 notificationList[i] = notificationListData.getNotificationDataList().get(i).getMessage();
+				 }
+				 notificationBox = new ListBox(
+							Define.SIZEX, Define.SIZEY, 
+							GfxManager.imgMediumBox, 
+							GfxManager.imgButtonInvisible, GfxManager.imgButtonInvisible, 
+							Define.SIZEX2, Define.SIZEY2, 
+							RscManager.allText[RscManager.TXT_NOTIFICATIONS],
+							notificationList,
+							Font.FONT_MEDIUM, Font.FONT_SMALL);
+				 notificationBox.setDisabledList();
+				 for(Button button : notificationBox.getBtnList()){
+					 button.setIgnoreAlpha(true);
+				 }
+				 notificationBox.start();
+				 
+				 btnCancel = new Button(
+						 GfxManager.imgButtonCancelRelease, 
+						 GfxManager.imgButtonCancelRelease, 
+						 notificationBox.getX()-notificationBox.getWidth()/2, 
+						 notificationBox.getY()-notificationBox.getHeight()/2, 
+						 null, -1){
+					 @Override
+					 public void onButtonPressUp(){
+						 setDisabled(true);
+						 notificationBox.cancel();
+						 //Eviar notificaciones leidas
+					 }
+				 };
+			 }
 			 btnSearchGame = new Button(
 						GfxManager.imgButtonSearchBigRelease, 
 						GfxManager.imgButtonSearchBigFocus, 
@@ -513,12 +555,12 @@ public class ModeMenu {
 				
 				
 			Main.getInstance().startClock(Main.TYPE_EARTH);
-			SceneListData sceneListData = OnlineInputOutput.getInstance().reviceSceneListData("getSceneListServlet", GameState.getInstance().getName());
+			SceneListData sceneListData = OnlineInputOutput.getInstance().reviceSceneListData(GameState.getInstance().getName());
 			Main.getInstance().stopClock();
 
 			if (sceneListData != null) {
 
-				String[] sceneList = new String[sceneListData.getSceneDataList().size()];
+				String[] textList = new String[sceneListData.getSceneDataList().size()];
 				
 				boolean[] disableList = new boolean[sceneListData.getSceneDataList().size()];
 				for (int i = 0; i < sceneListData.getSceneDataList().size(); i++) {
@@ -527,21 +569,18 @@ public class ModeMenu {
 				}
 				
 				for (int i = 0; i < sceneListData.getSceneDataList().size(); i++) {
+					textList[i] = ""+
+							sceneListData.getSceneDataList().get(i).getId() + " - " +
+							DataKingdom.SCENARY_NAME_LIST[sceneListData.getSceneDataList().get(i).getMap()] +
+							" - ";
 					if(disableList[i]){
-						sceneList[i] = 
-								""+sceneListData.getSceneDataList().get(i).getId() + " - " +
-								DataKingdom.SCENARY_NAME_LIST[sceneListData.getSceneDataList().get(i).getMap()] +
-								" NEXT " +
-								sceneListData.getSceneDataList().get(i).getNextPlayer();
+						textList[i] += "NEXT " + sceneListData.getSceneDataList().get(i).getNextPlayer();
 					}else{
-						sceneList[i] = 
-								""+sceneListData.getSceneDataList().get(i).getId() + " - " +
-								DataKingdom.SCENARY_NAME_LIST[sceneListData.getSceneDataList().get(i).getMap()]
-								+ " YOUR TURN";
+						textList[i] += "YOUR TURN";
 					}
 				}
                 
-				selectSceneBox = new SceneDataListBox(sceneListData, sceneList) {
+				selectSceneBox = new SceneDataListBox(sceneListData, textList) {
 					@Override
 					public void onWaitFinish() {
 
@@ -612,14 +651,13 @@ public class ModeMenu {
 					
 					int numPlayer = DataKingdom.INIT_MAP_DATA[preSceneListData.getPreSceneDataList().get(i).getMap()].length;
 					
-					textList[i] = 
-							""+preSceneListData.getPreSceneDataList().get(i).getId() + " - " +
+					textList[i] = ""+
+							preSceneListData.getPreSceneDataList().get(i).getId() + "-" +
+							preSceneListData.getPreSceneDataList().get(i).getHost() + " " +
 							DataKingdom.SCENARY_NAME_LIST[preSceneListData.getPreSceneDataList().get(i).getMap()] +
-							" (" +
+							" - " +
 							preSceneListData.getPreSceneDataList().get(i).getPlayerCount() + 
-							"/" + 
-							numPlayer + 
-							")";
+							"/" + numPlayer;
 				}
 				
 				selectPreSceneBox = new SceneDataListBox(preSceneListData, textList){
@@ -800,8 +838,16 @@ public class ModeMenu {
 			 btnBack.update(UserInput.getInstance().getMultiTouchHandler());
 			 btnSearchGame.update(UserInput.getInstance().getMultiTouchHandler());
 			 btnCreateScene.update(UserInput.getInstance().getMultiTouchHandler());
-			 if(selectSceneBox != null){
-				 selectSceneBox .update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
+			 if(notificationBox != null){
+				 notificationBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
+				 btnCancel.update(UserInput.getInstance().getMultiTouchHandler());
+				 if(!notificationBox.isActive()){
+					 if(selectSceneBox != null)
+						 selectSceneBox .update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
+				 }
+			 }else{
+				 if(selectSceneBox != null)
+					 selectSceneBox .update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
 			 }
 			 break;
 		 case Define.ST_MENU_ON_LINE_LIST_JOIN_GAME:
@@ -924,6 +970,10 @@ public class ModeMenu {
 			 btnCreateScene.draw(_g,0, 0);
 			 if(selectSceneBox != null){
 				 selectSceneBox.draw(_g, GfxManager.imgBlackBG);
+			 }
+			 if(notificationBox != null){
+				 notificationBox.draw(_g, GfxManager.imgBlackBG);
+				 btnCancel.draw(_g, (int)notificationBox.getModPosX(),0);
 			 }
 			 break;
 		 case Define.ST_MENU_ON_LINE_LIST_JOIN_GAME:
@@ -1124,7 +1174,7 @@ public class ModeMenu {
 					}
 					
 					SceneListData sceneListData = 
-							OnlineInputOutput.getInstance().reviceSceneListData("getSceneListServlet", GameState.getInstance().getName());
+							OnlineInputOutput.getInstance().reviceSceneListData(GameState.getInstance().getName());
 					if (sceneListData != null &&
 							Main.state == Define.ST_MENU_ON_LINE_LIST_ALL_GAME && selectSceneBox != null) {
 						Log.i("Debug", "Actualizando selectSceneBox " + Main.iFrame);
@@ -1137,17 +1187,14 @@ public class ModeMenu {
 						}
 						
 						for (int i = 0; i < sceneListData.getSceneDataList().size(); i++) {
+							textList[i] = ""+
+									sceneListData.getSceneDataList().get(i).getId() + " - " +
+									DataKingdom.SCENARY_NAME_LIST[sceneListData.getSceneDataList().get(i).getMap()] +
+									" - ";
 							if(disableList[i]){
-								textList[i] = 
-										""+sceneListData.getSceneDataList().get(i).getId() + " - " +
-										DataKingdom.SCENARY_NAME_LIST[sceneListData.getSceneDataList().get(i).getMap()] +
-										" NEXT " +
-										sceneListData.getSceneDataList().get(i).getNextPlayer();
+								textList[i] += "NEXT " + sceneListData.getSceneDataList().get(i).getNextPlayer();
 							}else{
-								textList[i] = 
-										""+sceneListData.getSceneDataList().get(i).getId() + " - " +
-										DataKingdom.SCENARY_NAME_LIST[sceneListData.getSceneDataList().get(i).getMap()]
-										+ " YOUR TURN";
+								textList[i] += "YOUR TURN";
 							}
 						}
 					selectSceneBox.refresh(sceneListData, RscManager.allText[RscManager.TXT_SELECT_MAP], textList);
@@ -1183,14 +1230,13 @@ public class ModeMenu {
 						String[] textList = new String[preSceneListData.getPreSceneDataList().size()];
 						for(int i = 0; i < preSceneListData.getPreSceneDataList().size(); i++){
 							int numPlayer = DataKingdom.INIT_MAP_DATA[preSceneListData.getPreSceneDataList().get(i).getMap()].length;
-							textList[i] = 
-									""+preSceneListData.getPreSceneDataList().get(i).getId() + " - " +
+							textList[i] = ""+
+									preSceneListData.getPreSceneDataList().get(i).getId() + "-" +
+									preSceneListData.getPreSceneDataList().get(i).getHost() + " " +
 									DataKingdom.SCENARY_NAME_LIST[preSceneListData.getPreSceneDataList().get(i).getMap()] +
-									" (" +
+									" - " +
 									preSceneListData.getPreSceneDataList().get(i).getPlayerCount() + 
-									"/" + 
-									numPlayer + 
-									")";
+									"/" + numPlayer;
 							}
 						selectPreSceneBox.refresh(preSceneListData, RscManager.allText[RscManager.TXT_SELECT_MAP], textList);
 						}

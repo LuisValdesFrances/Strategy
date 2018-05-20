@@ -35,6 +35,7 @@ Continue
 Quit
 New record:
 Do you want return to menu?
+Notifications
 Name
 Password
 Repeat pass

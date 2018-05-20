@@ -244,7 +244,7 @@ public class ArmyBox extends MenuBox{
 			}
 			
 			if(deleteButtonList != null && deleteButtonList.size() > 0){
-				confirmationBox.draw(g);
+				confirmationBox.draw(g, GfxManager.imgBlackBG);
 			}
 			
 			if(crossButton != null)

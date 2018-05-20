@@ -22,11 +22,9 @@ import com.luis.strategy.Main;
 import com.luis.strategy.ModeGame;
 import com.luis.strategy.RscManager;
 import com.luis.strategy.UserInput;
-import com.luis.strategy.connection.OnlineInputOutput;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
-import com.luis.strategy.data.GameBuilder;
-import com.luis.strategy.datapackage.scene.SceneData;
+import com.luis.strategy.data.DataKingdom;
 import com.luis.strategy.gui.ArmyBox;
 import com.luis.strategy.gui.BattleBox;
 import com.luis.strategy.gui.FlagButton;
@@ -55,6 +53,8 @@ public class GameManager {
 				//Si la victima es el jugador, se desactivan los triggers automaticos
 				(getEnemyAtKingdom(getCurrentPlayer()) == null || (getEnemyAtKingdom(getCurrentPlayer()) != null && getEnemyAtKingdom(getCurrentPlayer()).getPlayer().getActionIA() != null));
 	}
+	
+	public DataSender dataSender;
 	
 	public static Button btnDebugPause;
 	private static boolean isDebugPaused;
@@ -133,6 +133,7 @@ public class GameManager {
 		this.cameraTargetX=0;//worldConver.getCentlayoutX();
 		this.cameraTargetY=0;//=worldConver.getCentlayoutY();
 		
+		this.dataSender = new DataSender();
 		MenuElement.bgAlpha = GameParams.BG_BLACK_ALPHA;
 		
 		btnDebugPause = new Button(
@@ -342,7 +343,7 @@ public class GameManager {
 			public void onFinish() {
 				super.onWaitFinish();
 				if(GameState.getInstance().getGameMode() == GameState.GAME_MODE_ONLINE){
-					sendGameData(2);
+					dataSender.sendGameScene(gameScene, 2);
 					//Envio notificaciones
 					Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, true);
 				}else{
@@ -658,8 +659,8 @@ public class GameManager {
 			gameScene.drawTarget(gameBuffer.getGraphics(), worldConver, gameCamera);
 		
 		
-		 float totalW = (float)gameBuffer.getWidth()*distorsion;
-		 float totalH = (float)gameBuffer.getHeight()*distorsion;
+		 //float totalW = (float)gameBuffer.getWidth()*distorsion;
+		 //float totalH = (float)gameBuffer.getHeight()*distorsion;
 		 
 		 //Army
 		 for(int i = 0; i < gameScene.getPlayerList().size(); i++){
@@ -771,14 +772,14 @@ public class GameManager {
 		g.drawImage(GfxManager.imgGameHud, 0, Define.SIZEY, Graphics.BOTTOM | Graphics.LEFT);
 		drawGold(g);
 		
-		economyBox.draw(g);
+		economyBox.draw(g, GfxManager.imgBlackBG);
 		armyBox.draw(g);
-		discardBox.draw(g);
+		discardBox.draw(g, null);
 		battleBox.draw(g);
 		terrainBox.draw(g);
 		mapBox.draw(g);
-		endGameBox.draw(g);
-		resultBox.draw(g);
+		endGameBox.draw(g, GfxManager.imgBlackBG);
+		resultBox.draw(g, GfxManager.imgBlackBG);
 		btnCancel.draw(g, 0, 0);
 		btnNext.draw(g, 0, 0);
 		btnFlagHelmet.draw(g);
@@ -1009,7 +1010,17 @@ public class GameManager {
 					
 					
 					if(GameState.getInstance().getGameMode() == GameState.GAME_MODE_ONLINE){
-						sendGameData(1);
+						//Notification online
+						String message = 
+								GameState.getInstance().getSceneData().getId() + "-" +
+										DataKingdom.SCENARY_NAME_LIST[GameState.getInstance().getMap()] + " " +
+										RscManager.allText[RscManager.TXT_GAME_TURN] + (gameScene.getTurnCount()+1);
+						
+						dataSender.addNotification(getCurrentPlayer().getName(), message);
+						dataSender.sendGameScene(gameScene, 1);
+						dataSender.sendGameNotifications();
+						
+						
 						Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, true);
 					}else{
 						changeState(STATE_INCOME);
@@ -1027,11 +1038,6 @@ public class GameManager {
 			btnDebugPause.setDisabled(false);
 			break;
 		}
-	}
-	
-	private void sendGameData(int state){
-		DataSender sender = new DataSender();
-		sender.send(gameScene, state);
 	}
 	
 	private void changeSubState(int newSubState){
@@ -1600,20 +1606,26 @@ public class GameManager {
 		//Notificaciones:
 		if(!showResultBox){
 			NotificationBox.getInstance().addMessage(textN1);
-			if(!textN2.equals(""))
-				NotificationBox.getInstance().addMessage(textN2);
+		}
+		if(!textN2.equals("")){
+			NotificationBox.getInstance().addMessage(textN2);
+			dataSender.addNotification(getCurrentPlayer().getName(), textN2);
 		}
 		if(changeCapital){
-			NotificationBox.getInstance().addMessage(
+			String message = 
 					RscManager.allText[RscManager.TXT_GAME_PLAYER] + defeatPlayer.getName() +
-					" change his capital");
+					" change his capital";
 			cameraTargetX = defeatPlayer.getCapitalkingdom().getAbsoluteX();
 			cameraTargetY = defeatPlayer.getCapitalkingdom().getAbsoluteY();
+			NotificationBox.getInstance().addMessage(message);
+			dataSender.addNotification(getCurrentPlayer().getName(), message);
 		}
 		if(deletePlayer){
-			NotificationBox.getInstance().addMessage(
+			String message = 
 					RscManager.allText[RscManager.TXT_GAME_PLAYER] + defeatPlayer.getName() +
-					RscManager.allText[RscManager.TXT_GAME_HAS_BEEN_DESTROYED]);
+					RscManager.allText[RscManager.TXT_GAME_HAS_BEEN_DESTROYED];
+			NotificationBox.getInstance().addMessage(message);
+			dataSender.addNotification(getCurrentPlayer().getName(), message);
 		}
 		
 		
