@@ -1011,10 +1011,7 @@ public class GameManager {
 					
 					if(GameState.getInstance().getGameMode() == GameState.GAME_MODE_ONLINE){
 						//Notification online
-						String message = 
-								GameState.getInstance().getSceneData().getId() + "-" +
-										DataKingdom.SCENARY_NAME_LIST[GameState.getInstance().getMap()] + " " +
-										RscManager.allText[RscManager.TXT_GAME_TURN] + (gameScene.getTurnCount()+1);
+						String message = RscManager.allText[RscManager.TXT_GAME_TURN] + (gameScene.getTurnCount()+1);
 						
 						dataSender.addNotification(getCurrentPlayer().getName(), message);
 						dataSender.sendGameScene(gameScene, 1);
@@ -1499,27 +1496,30 @@ public class GameManager {
 		
 		String textH = "";
 		String textB = "";
-		String textN1 = "";
-		String textN2 = "";
+		
+		boolean attackerWins=false;
+		boolean attackerLost=false;
+		boolean attackerHasDestroyed=false;
+		boolean arrackerHasBeendestroyed=false;
+		
+		
 		textH=RscManager.allText[RscManager.TXT_GAME_RESULT];
 		switch(result){
 			case 0: 
-				textB=RscManager.allText[RscManager.TXT_GAME_BIG_DEFEAT];
+				textH=RscManager.allText[RscManager.TXT_GAME_BIG_DEFEAT];
 				break;
 			case 1: 
-				textB=RscManager.allText[RscManager.TXT_GAME_DEFEAT];
+				textH=RscManager.allText[RscManager.TXT_GAME_DEFEAT];
 				break;
 			case 2: 
-				textB=RscManager.allText[RscManager.TXT_GAME_VICTORY];
+				textH=RscManager.allText[RscManager.TXT_GAME_VICTORY];
 				break;
 			case 3: 
-				textB=RscManager.allText[RscManager.TXT_GAME_BIG_VICTORY];
+				textH=RscManager.allText[RscManager.TXT_GAME_BIG_VICTORY];
 				break;
 		}
 		
-		textN1=textB;
-		
-		////Hay ejercito enemigo
+		//Hay ejercito enemigo
 		if(enemy != null){
 			//Resolucion del combate
 			Army defeated = null;
@@ -1541,12 +1541,16 @@ public class GameManager {
 				
 				removeArmy(defeated);
 				
-				textH = RscManager.allText[RscManager.TXT_GAME_BIG_VICTORY];
-				textB = 
-						RscManager.allText[RscManager.TXT_GAME_THE_ARMY_FROM_PLAYER] + 
-						defeated.getPlayer().getName() + " " +
-						RscManager.allText[RscManager.TXT_GAME_HAS_BEEN_DESTROYED];
-				textN2=textB;
+				//Masacre al defensor
+				if(defeated.getPlayer().getId() != getCurrentPlayer().getId()){
+					attackerHasDestroyed = true;
+					textB = RscManager.allText[RscManager.TXT_GAME_ATTACKER_HAS_DESTROYED];
+				}
+				//Masacrea al atacante
+				else{
+					arrackerHasBeendestroyed = true;
+					textB = RscManager.allText[RscManager.TXT_GAME_ATTACKER_HAS_BEEN_DESTROYED];
+				}
 			}else{
 				defeated.setDefeat(true);
 				//Daño
@@ -1561,20 +1565,24 @@ public class GameManager {
 				}
 				getSelectedArmy().setDamage(casualtiesFromEnemy);
 				enemy.setDamage(casualtiesFromArmy);
-				textH = RscManager.allText[RscManager.TXT_GAME_DEFEAT];
 				textB = 
-						RscManager.allText[RscManager.TXT_GAME_ATTACKER_LOST] + 
-						casualtiesFromEnemy + RscManager.allText[RscManager.TXT_GAME_LOSSES] + " " +
-						RscManager.allText[RscManager.TXT_GAME_DEFENSER_LOST] + 
-						casualtiesFromArmy + RscManager.allText[RscManager.TXT_GAME_LOSSES];
-				textN2=textB;
+						RscManager.allText[RscManager.TXT_GAME_ATTACKER_LOST] + " " +
+						casualtiesFromEnemy + " " + RscManager.allText[RscManager.TXT_GAME_LOSSES] + " " +
+						RscManager.allText[RscManager.TXT_GAME_DEFENSER_LOST] + " " + 
+						casualtiesFromArmy + " " + RscManager.allText[RscManager.TXT_GAME_LOSSES];
+				
+				if(defeated.getPlayer().getId() != getCurrentPlayer().getId()){
+					attackerWins = true;
+				}else{
+					attackerLost = true;
+				}
+				
 			}
 			//Si el atacante gana, le quita el territorio al defensor
 			if(getSelectedArmy() != null && result > 1){
 				getSelectedArmy().getKingdom().setState(0);//control
 				getSelectedArmy().getKingdom().setTarget(-1);
 			}
-			
 		}
 		
 		//No hay ejercito enemigo pues se combate en un territorio vacio
@@ -1603,30 +1611,78 @@ public class GameManager {
 			}
 		}
 		
+		if(changeCapital){
+			cameraTargetX = defeatPlayer.getCapitalkingdom().getAbsoluteX();
+			cameraTargetY = defeatPlayer.getCapitalkingdom().getAbsoluteY();
+		}
+		
 		//Notificaciones:
-		if(!showResultBox){
-			NotificationBox.getInstance().addMessage(textN1);
+		/*
+		 * boolean atackerWin;
+		boolean atackerLost;
+		boolean defenserWin;
+		boolean defenserLost;
+		boolean atackerDestroy;
+		boolean defenderDestroy;
+		 */
+		
+		
+		
+		if(attackerWins){
+			String message = RscManager.allText[RscManager.TXT_GAME_ATTACKER_WINS];
+			if(!showResultBox){
+				NotificationBox.getInstance().addMessage(message);
+			}
+			if(enemy != null)
+				dataSender.addNotification(enemy.getPlayer().getName(), message);
 		}
-		if(!textN2.equals("")){
-			NotificationBox.getInstance().addMessage(textN2);
-			dataSender.addNotification(getCurrentPlayer().getName(), textN2);
+		if(attackerLost){
+			String message = RscManager.allText[RscManager.TXT_GAME_ATTACKER_DEFEAT];
+			if(!showResultBox){
+				NotificationBox.getInstance().addMessage(message);
+			}
+			if(enemy != null)
+				dataSender.addNotification(enemy.getPlayer().getName(), message);
 		}
+		if(attackerHasDestroyed){
+			String message = RscManager.allText[RscManager.TXT_GAME_ATTACKER_HAS_DESTROYED];
+			if(!showResultBox){
+				NotificationBox.getInstance().addMessage(message);
+			}
+			if(enemy != null)
+				dataSender.addNotification(enemy.getPlayer().getName(), message);
+		}
+		if(arrackerHasBeendestroyed){
+			String message = RscManager.allText[RscManager.TXT_GAME_ATTACKER_HAS_BEEN_DESTROYED];
+			if(!showResultBox){
+				NotificationBox.getInstance().addMessage(message);
+			}
+			if(enemy != null)
+				dataSender.addNotification(enemy.getPlayer().getName(), message);
+		}
+		
 		if(changeCapital){
 			String message = 
 					RscManager.allText[RscManager.TXT_GAME_PLAYER] + defeatPlayer.getName() +
-					" change his capital";
-			cameraTargetX = defeatPlayer.getCapitalkingdom().getAbsoluteX();
-			cameraTargetY = defeatPlayer.getCapitalkingdom().getAbsoluteY();
+					RscManager.allText[RscManager.TXT_GAME_CHANGE_HIS_CAPITAL];
 			NotificationBox.getInstance().addMessage(message);
-			dataSender.addNotification(getCurrentPlayer().getName(), message);
+			
+			message = 
+					RscManager.allText[RscManager.TXT_GAME_CHANGE_HIS_CAPITAL];
+			dataSender.addNotification(defeatPlayer.getName(), message);
+			
 		}
 		if(deletePlayer){
 			String message = 
-					RscManager.allText[RscManager.TXT_GAME_PLAYER] + defeatPlayer.getName() +
-					RscManager.allText[RscManager.TXT_GAME_HAS_BEEN_DESTROYED];
+					RscManager.allText[RscManager.TXT_GAME_PLAYER] + " " + defeatPlayer.getName() +
+					RscManager.allText[RscManager.TXT_GAME_LOST_GAME];
 			NotificationBox.getInstance().addMessage(message);
-			dataSender.addNotification(getCurrentPlayer().getName(), message);
+			
+			message = 
+					RscManager.allText[RscManager.TXT_GAME_YOU_LOST_GAME];
+			dataSender.addNotification(defeatPlayer.getName(), message);
 		}
+		
 		
 		
 		if(showResultBox){
@@ -1694,8 +1750,16 @@ public class GameManager {
 		
 		//Ia ataca libre
 		
-		//Para ver la opcion de escapar, debe de haber un defensor, territorio al que escapar y el defensor no debe de ser la IA
+		/**
+		Para ver la opcion de escapar:
+		-No es una partida on line
+		-Debe de haber un defensor
+		-Territorio al que escapar
+		-El defensor no debe de ser la IA
+		*/
 		boolean scapeOption =
+				GameState.getInstance().getGameMode() != GameState.GAME_MODE_ONLINE
+				&&
 				getEnemyAtKingdom(getCurrentPlayer()) != null  //Hay un defensor
 				&&
 				getBorderKingdom(getEnemyAtKingdom(getCurrentPlayer())) != null //Hay espacio para el defensor

@@ -8,6 +8,8 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import com.luis.strategy.GameState;
+import com.luis.strategy.data.DataKingdom;
 import com.luis.strategy.datapackage.scene.NotificationListData;
 import com.luis.strategy.datapackage.scene.PreSceneListData;
 import com.luis.strategy.datapackage.scene.SceneData;
@@ -22,6 +24,7 @@ public class OnlineInputOutput {
 	
 	public static final String URL_CREATE_NOTIFICATION = "createNotificationServlet";
 	public static final String URL_GET_NOTIFICATION_LIST = "getNotificationListServlet";
+	public static final String URL_UPDATE_NOTIFICATION = "updateNotificationSceneServlet";
 	public static final String URL_GET_SCENE_LIST = "getSceneListServlet";
 	
 	public static OnlineInputOutput getInstance(){
@@ -34,6 +37,12 @@ public class OnlineInputOutput {
 	public String sendNotifiation(String URL, String scene, String user, String message){
 		HttpURLConnection connection = null;
 		String result = "";
+		
+		//Añado la informacion del escenario al mensaje
+		message = 
+				GameState.getInstance().getSceneData().getId() + "-" +
+				DataKingdom.SCENARY_NAME_LIST[GameState.getInstance().getMap()] + " " + message;
+		
 		try {
 			// open URL connection
 			URL url = new URL(SERVER_URL + URL);

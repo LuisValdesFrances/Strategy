@@ -84,9 +84,15 @@ public class RscManager {
 	public static final int TXT_GAME_DEFEAT= TXT_GAME_BIG_DEFEAT+1;
 	public static final int TXT_GAME_VICTORY= TXT_GAME_DEFEAT+1;
 	public static final int TXT_GAME_BIG_VICTORY= TXT_GAME_VICTORY+1;
-	public static final int TXT_GAME_THE_ARMY_FROM_PLAYER= TXT_GAME_BIG_VICTORY+1;
-	public static final int TXT_GAME_HAS_BEEN_DESTROYED= TXT_GAME_THE_ARMY_FROM_PLAYER+1;
-	public static final int TXT_GAME_ATTACKER_LOST= TXT_GAME_HAS_BEEN_DESTROYED+1;
+	public static final int TXT_GAME_YOU_LOST_GAME= TXT_GAME_BIG_VICTORY+1;
+	public static final int TXT_GAME_LOST_GAME= TXT_GAME_YOU_LOST_GAME+1;
+	
+	public static final int TXT_GAME_ATTACKER_WINS= TXT_GAME_LOST_GAME+1;
+	public static final int TXT_GAME_ATTACKER_DEFEAT= TXT_GAME_ATTACKER_WINS+1;
+	public static final int TXT_GAME_ATTACKER_HAS_DESTROYED= TXT_GAME_ATTACKER_DEFEAT+1;
+	public static final int TXT_GAME_ATTACKER_HAS_BEEN_DESTROYED= TXT_GAME_ATTACKER_HAS_DESTROYED+1;
+	
+	public static final int TXT_GAME_ATTACKER_LOST= TXT_GAME_ATTACKER_HAS_BEEN_DESTROYED+1;
 	public static final int TXT_GAME_DEFENSER_LOST= TXT_GAME_ATTACKER_LOST+1;
 	public static final int TXT_GAME_LOSSES= TXT_GAME_DEFENSER_LOST+1;
 	public static final int TXT_GAME_NEW_ARMY= TXT_GAME_LOSSES+1;
@@ -95,8 +101,10 @@ public class RscManager {
 	public static final int TXT_GAME_SALARY= TXT_GAME_EARNING+1;
 	public static final int TXT_GAME_COST_OF_TROOPS= TXT_GAME_SALARY+1;
 	public static final int TXT_GAME_IS_WINNER= TXT_GAME_COST_OF_TROOPS+1;
+	public static final int TXT_GAME_CHANGE_HIS_CAPITAL = TXT_GAME_IS_WINNER+1;
+	public static final int TXT_GAME_CHANGE_YOUR_CAPITAL = TXT_GAME_CHANGE_HIS_CAPITAL+1;
 	
-	public static final int TXT_GAME_DO_YOU_WANT_DISCARD= TXT_GAME_IS_WINNER+1;
+	public static final int TXT_GAME_DO_YOU_WANT_DISCARD= TXT_GAME_CHANGE_YOUR_CAPITAL+1;
 	public static final int TXT_GAME_FOR= TXT_GAME_DO_YOU_WANT_DISCARD+1;
 	public static final int TXT_GAME_COINS= TXT_GAME_FOR+1;
 	public static final int TXT_GAME_INTERROGATION_ICON= TXT_GAME_COINS+1;

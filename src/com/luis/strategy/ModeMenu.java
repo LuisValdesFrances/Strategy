@@ -485,41 +485,50 @@ public class ModeMenu {
 		 case Define.ST_MENU_ON_LINE_LIST_ALL_GAME:
 			 
 			 //Notificaciones
+			 Main.getInstance().startClock(Main.TYPE_EARTH);
 			 NotificationListData notificationListData = 
 			 	OnlineInputOutput.getInstance().reviceNotificationListData(GameState.getInstance().getName());
-			 
+			 Main.getInstance().stopClock();
 			 if(notificationListData.getNotificationDataList().size() > 0){
-				 String[] notificationList = new String[notificationListData.getNotificationDataList().size()];
-				 for(int i = 0; i < notificationListData.getNotificationDataList().size(); i++){
-					 notificationList[i] = notificationListData.getNotificationDataList().get(i).getMessage();
-				 }
-				 notificationBox = new ListBox(
-							Define.SIZEX, Define.SIZEY, 
-							GfxManager.imgMediumBox, 
-							GfxManager.imgButtonInvisible, GfxManager.imgButtonInvisible, 
-							Define.SIZEX2, Define.SIZEY2, 
-							RscManager.allText[RscManager.TXT_NOTIFICATIONS],
-							notificationList,
-							Font.FONT_MEDIUM, Font.FONT_SMALL);
-				 notificationBox.setDisabledList();
-				 for(Button button : notificationBox.getBtnList()){
-					 button.setIgnoreAlpha(true);
-				 }
-				 notificationBox.start();
 				 
-				 btnCancel = new Button(
-						 GfxManager.imgButtonCancelRelease, 
-						 GfxManager.imgButtonCancelRelease, 
-						 notificationBox.getX()-notificationBox.getWidth()/2, 
-						 notificationBox.getY()-notificationBox.getHeight()/2, 
-						 null, -1){
-					 @Override
-					 public void onButtonPressUp(){
-						 setDisabled(true);
-						 notificationBox.cancel();
-						 //Eviar notificaciones leidas
+				 //Si vengo del juego, no muestro notificaciones
+				 if(Main.lastState < Define.ST_GAME_INIT_PASS_AND_PLAY){
+					 String[] notificationList = new String[notificationListData.getNotificationDataList().size()];
+					 for(int i = 0; i < notificationListData.getNotificationDataList().size(); i++){
+						 notificationList[i] = notificationListData.getNotificationDataList().get(i).getMessage();
 					 }
-				 };
+					 notificationBox = new ListBox(
+								Define.SIZEX, Define.SIZEY, 
+								GfxManager.imgMediumBox, 
+								GfxManager.imgButtonInvisible, GfxManager.imgButtonInvisible, 
+								Define.SIZEX2, Define.SIZEY2, 
+								RscManager.allText[RscManager.TXT_NOTIFICATIONS],
+								notificationList,
+								Font.FONT_MEDIUM, Font.FONT_SMALL);
+					 notificationBox.setDisabledList();
+					 for(Button button : notificationBox.getBtnList()){
+						 button.setIgnoreAlpha(true);
+					 }
+					 notificationBox.start();
+					 
+					 btnCancel = new Button(
+							 GfxManager.imgButtonCancelRelease, 
+							 GfxManager.imgButtonCancelRelease, 
+							 notificationBox.getX()-notificationBox.getWidth()/2, 
+							 notificationBox.getY()-notificationBox.getHeight()/2, 
+							 null, -1){
+						 @Override
+						 public void onButtonPressUp(){
+							 setDisabled(true);
+							 if(Main.state == Define.ST_MENU_ON_LINE_LIST_ALL_GAME){
+								 notificationBox.cancel();
+							 }
+						 }
+					 };
+				 }
+				 
+				 //Enviar notificaciones leidas
+				 updateNotifications(notificationListData);
 			 }
 			 btnSearchGame = new Button(
 						GfxManager.imgButtonSearchBigRelease, 
@@ -1244,5 +1253,15 @@ public class ModeMenu {
 			}
 		};
 		preSceneUpdate.start();
+	}
+	
+	public static void updateNotifications(final NotificationListData notificationListData){
+		Thread t = new Thread(){
+			 @Override
+			 public void run(){
+				 OnlineInputOutput.getInstance().sendDataPackage(notificationListData, OnlineInputOutput.URL_UPDATE_NOTIFICATION);
+			 }
+		 };
+		 t.start();
 	}
 }

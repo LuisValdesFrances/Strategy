@@ -68,17 +68,23 @@ Big Defeat
 Defeat
 Victory
 Big Victory
-The army from player 
-has been destroyed.
-Atacante pierde 
-Defensor pierde 
- bajas.
+You lost the game
+lost the game
+Your army loses
+Your army win
+Your army has destroyed the enemy
+Your army has been destroyed
+Atacante pierde
+Defensor pierde
+bajas.
 New army recruited.
 ECONOMY
 Earning
 Salary
 Cost of troops exceedes your tresaure. Discard troops.
 is the winner!
+change his capital
+change your capital
 Do you want discard this troop of
 for
 coins
