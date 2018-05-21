@@ -606,12 +606,12 @@ public class ModeMenu {
 							SceneData sceneData = null;
 							if(sd.getState() == 0){
 								sceneData = 
-										OnlineInputOutput.getInstance().reviceSceneData("getStartSceneServlet", ""+ sd.getId());
+										OnlineInputOutput.getInstance().reviceSceneData(OnlineInputOutput.URL_GET_START_SCENE, ""+ sd.getId());
 							}
 							//El escenario NO es nuevo
 							else{
 								sceneData = 
-										OnlineInputOutput.getInstance().reviceSceneData("getSceneController", ""+ sd.getId());
+										OnlineInputOutput.getInstance().reviceSceneData(OnlineInputOutput.URL_GET_SCENE, ""+ sd.getId());
 							}
 							
 							Main.getInstance().stopClock();
@@ -743,7 +743,7 @@ public class ModeMenu {
 							 String msg = null;
 							 Main.getInstance().startClock(Main.TYPE_EARTH);
 							 String result =  
-									 OnlineInputOutput.getInstance().sendScene("createPreSceneServlet", map, host, name);
+									 OnlineInputOutput.getInstance().sendPreScene("createPreSceneServlet", map, host, name);
 							 Main.getInstance().stopClock();
 							 if(result.equals("Server error")){
 								msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
@@ -1259,7 +1259,7 @@ public class ModeMenu {
 		Thread t = new Thread(){
 			 @Override
 			 public void run(){
-				 OnlineInputOutput.getInstance().sendDataPackage(notificationListData, OnlineInputOutput.URL_UPDATE_NOTIFICATION);
+				 OnlineInputOutput.getInstance().sendDataPackage(OnlineInputOutput.URL_UPDATE_NOTIFICATION, notificationListData);
 			 }
 		 };
 		 t.start();

@@ -32,7 +32,7 @@ public class DataSender{
 		
 		Main.getInstance().startClock(Main.TYPE_EARTH);
 		String result = 
-				OnlineInputOutput.getInstance().sendDataPackage(sceneData, "updateSceneServlet");
+				OnlineInputOutput.getInstance().sendDataPackage(OnlineInputOutput.URL_UPDATE_SCENE, sceneData);
 		Main.getInstance().stopClock();
 		
 		if(result.equals("Connection error")){
