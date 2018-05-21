@@ -24,7 +24,6 @@ import com.luis.strategy.RscManager;
 import com.luis.strategy.UserInput;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
-import com.luis.strategy.data.DataKingdom;
 import com.luis.strategy.gui.ArmyBox;
 import com.luis.strategy.gui.BattleBox;
 import com.luis.strategy.gui.FlagButton;
@@ -217,13 +216,22 @@ public class GameManager {
 			
 			@Override
 			public void onButtonPressUp(){
-				changeSubState(SUB_STATE_ARMY_MANAGEMENT);
+				boolean isCurrentPlayer = !isDebugPaused && isSelectedArmyFromCurrentPlayer(getSelectedArmy());
+				boolean isDiscardMode = !isDebugPaused && state==STATE_DISCARD;
 				armyBox.start(
 						getSelectedArmy(), 
-						isSelectedArmyFromCurrentPlayer(getSelectedArmy()),
-						state==STATE_DISCARD);
+						isCurrentPlayer,
+						isDiscardMode);
 				btnFlagHelmet.hide();
 				hide();
+				
+				
+				if(isDebugPaused){
+					changeState(STATE_ACTION);
+					changeSubState(SUB_STATE_ARMY_MANAGEMENT);
+				}else{
+					changeSubState(SUB_STATE_ARMY_MANAGEMENT);
+				}
 			}
 		};
 		
@@ -565,7 +573,11 @@ public class GameManager {
 			case SUB_STATE_ARMY_MANAGEMENT:
 				//Si no queda ninguna caja en primer plano
 				if(!armyBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
-					changeSubState(SUB_STATE_ACTION_WAIT);
+					if(isDebugPaused){
+						changeState(STATE_DEBUG);
+					}else{
+						changeSubState(SUB_STATE_ACTION_WAIT);
+					}
 				}
 				break;
 			case SUB_STATE_CITY_MANAGEMENT:
@@ -599,6 +611,30 @@ public class GameManager {
 			if(!mapBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
 				btnMap.setDisabled(false);
 			}
+			
+			
+			for(int i = 0; i < gameScene.getPlayerList().size(); i++){
+				for(Army army: gameScene.getPlayerList().get(i).getArmyList()){
+					if(army.isSelect()){
+						army.getButton().reset();
+						cleanArmyAction();
+						setSelectedArmy(army);
+						btnFlagCastle.start();
+						//Camara se posiciona en el seleccionado
+						cameraTargetX = getSelectedArmy().getAbsoluteX();
+						cameraTargetY = getSelectedArmy().getAbsoluteY();
+						if(i == gameScene.getPlayerIndex() && army.getState() == Army.STATE_ON){
+							btnFlagHelmet.start();
+							setDataTarget(getSelectedArmy());
+							changeSubState(SUB_STATE_ACTION_SELECT);
+						}else{
+							btnFlagHelmet.hide();
+						}
+					}
+				}
+			}
+			
+			
 			break;
 		}
 		
