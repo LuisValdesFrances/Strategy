@@ -216,6 +216,15 @@ public class ArmyBuyBox {
 	}
 	
 	public void onBuy(){}
+	
+	public void cancel(){
+		if(state == STATE_SHOW || state == STATE_NEXT || state == STATE_LAST){
+			buttonBuy.setDisabled(true);
+			buttonLeft.setDisabled(true);
+			buttonRight.setDisabled(true);
+			state = STATE_END;
+		}
+	}
 
 	public int getIndex() {
 		return index;

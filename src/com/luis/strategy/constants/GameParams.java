@@ -27,10 +27,11 @@ public class GameParams {
 	public static final int SIEGE = 3;
 	
 	public static final int ARMY_COST = 20;
-	public static final int[] TROOP_COST = 			new int[]{5, 8, 3, 7};
+	public static final int[] TROOP_COST = 			new int[]{5, 8, 3, 7};//aun no
 	
 	//Minino de tropas por ejercito (No se pagan)
 	public static final int[] TROOP_START = 		new int[]{3, 0, 0, 0, 0};
+	public static final int MAX_NUMBER_OF_TROOPS = 14;
 	
 	//GAME CONFIG:
 	public static final float CAMERA_SPEED = 180f;//Pixeles por segundo

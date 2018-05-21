@@ -54,6 +54,12 @@ public class ArmyBox extends MenuBox{
 					army.getPlayer().setGold(army.getPlayer().getGold()-GameParams.TROOP_COST[this.getIndex()]);
 					army.getTroopList().add(new Troop(this.getIndex(), false));
 					updateTroops();
+					
+					
+					if(army.getTroopList().size() == GameParams.MAX_NUMBER_OF_TROOPS){
+						armyBuyBox.cancel();
+						crossButton.setDisabled(true);
+					}
 				}
 			}
 		};
@@ -99,7 +105,7 @@ public class ArmyBox extends MenuBox{
 		
 		updateTroops();
 		
-		if(isCurrentPlayer){
+		if(isCurrentPlayer && a.getTroopList().size() < GameParams.MAX_NUMBER_OF_TROOPS){
 			crossButton = new Button(
 					GfxManager.imgButtonCrossBigRelease, 
 					GfxManager.imgButtonCrossBigFocus, 

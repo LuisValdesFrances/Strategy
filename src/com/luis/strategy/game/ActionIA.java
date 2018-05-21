@@ -103,7 +103,9 @@ public class ActionIA {
 		do{
 			canBuy = false;
 			for(Army army : player.getArmyList()){
-				if(player.hasKingom(army.getKingdom()) && army.getKingdom().isACity()){
+				if(		army.getTroopList().size() < GameParams.MAX_NUMBER_OF_TROOPS &&
+						player.hasKingom(army.getKingdom()) && 
+						army.getKingdom().isACity()){
 					canBuy = true;
 					int troop = Main.getRandom(0, GameParams.SIEGE);
 					//Si sigo teniendo presupuesto, compro:
