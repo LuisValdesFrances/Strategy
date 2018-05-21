@@ -649,7 +649,7 @@ public class ModeMenu {
 		 case Define.ST_MENU_ON_LINE_LIST_JOIN_GAME:
 			 Main.getInstance().startClock(Main.TYPE_EARTH);
 			 PreSceneListData preSceneListData =  
-					 OnlineInputOutput.getInstance().revicePreSceneListData("getPreSceneListServlet", GameState.getInstance().getName());
+					 OnlineInputOutput.getInstance().revicePreSceneListData(OnlineInputOutput.URL_GET_PRE_SCENE_LIST, GameState.getInstance().getName());
 			 Main.getInstance().stopClock();
 			
 			 if (preSceneListData != null) {
@@ -1232,7 +1232,7 @@ public class ModeMenu {
 					}
 					
 					preSceneListData =  
-							OnlineInputOutput.getInstance().revicePreSceneListData("getPreSceneListServlet", GameState.getInstance().getName());
+							OnlineInputOutput.getInstance().revicePreSceneListData(OnlineInputOutput.URL_GET_PRE_SCENE_LIST, GameState.getInstance().getName());
 					if (preSceneListData != null &&
 							Main.state == Define.ST_MENU_ON_LINE_LIST_JOIN_GAME && selectPreSceneBox != null) {
 						Log.i("Debug", "Actualizando selectPreSceneBox " + Main.iFrame);

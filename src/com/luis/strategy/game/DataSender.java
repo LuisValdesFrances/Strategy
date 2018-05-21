@@ -8,6 +8,7 @@ import com.luis.strategy.GameState;
 import com.luis.strategy.Main;
 import com.luis.strategy.RscManager;
 import com.luis.strategy.connection.OnlineInputOutput;
+import com.luis.strategy.data.DataKingdom;
 import com.luis.strategy.data.GameBuilder;
 import com.luis.strategy.datapackage.scene.SceneData;
 import com.luis.strategy.map.GameScene;
@@ -73,11 +74,16 @@ public class DataSender{
 	
 	public void sendGameNotifications(){
 		for(Notification n : notificationList){
+			
+			String message = 
+					GameState.getInstance().getSceneData().getId() + "-" +
+					DataKingdom.SCENARY_NAME_LIST[GameState.getInstance().getMap()] + " " + n.message;
+			
 			OnlineInputOutput.getInstance().sendNotifiation(
 					OnlineInputOutput.URL_CREATE_NOTIFICATION, 
 					""+GameState.getInstance().getSceneData().getId(), 
 					n.user, 
-					n.message);
+					message);
 		}
 		/*
 		Thread thread = new Thread(){
