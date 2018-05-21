@@ -27,7 +27,7 @@ public class GameParams {
 	public static final int SIEGE = 3;
 	
 	public static final int ARMY_COST = 220;
-	public static final int[] TROOP_COST = 			new int[]{60, 100, 40, 90};//aun no
+	public static final int[] TROOP_COST = 			new int[]{70, 120, 50, 110};//aun no
 	
 	//Minino de tropas por ejercito (No se pagan)
 	public static final int[] TROOP_START = 		new int[]{3, 0, 0, 0, 0};
