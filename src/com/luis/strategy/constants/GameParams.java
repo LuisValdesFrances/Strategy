@@ -18,7 +18,7 @@ public class GameParams {
 	
 	public static final int[] TERRAIN_DEFENSE =		new int[]{3, 5, 8, 10, 15, 25, 8};
 	//Ganancias reportadas por el territorio
-	public static final int[] TERRAIN_TAX =			new int[]{5, 3, 1, 2, 4, 8, 1};
+	public static final int[] TERRAIN_TAX =			new int[]{50, 30, 10, 20, 40, 80, 10};
 	
 	//Id tropa
 	public static final int INFANTRY = 0;
@@ -26,8 +26,8 @@ public class GameParams {
 	public static final int HARASSERES = 2;
 	public static final int SIEGE = 3;
 	
-	public static final int ARMY_COST = 20;
-	public static final int[] TROOP_COST = 			new int[]{5, 8, 3, 7};//aun no
+	public static final int ARMY_COST = 220;
+	public static final int[] TROOP_COST = 			new int[]{60, 100, 40, 90};//aun no
 	
 	//Minino de tropas por ejercito (No se pagan)
 	public static final int[] TROOP_START = 		new int[]{3, 0, 0, 0, 0};
