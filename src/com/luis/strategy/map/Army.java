@@ -104,6 +104,7 @@ public class Army extends MapObject{
 			}
 			break;
 		case STATE_OFF:
+			super.update(multiTouchHandler, worldConver, gameCamera);
 			spriteList.get(anim).setFrame(0);
 			break;
 		case STATE_MOVE:
