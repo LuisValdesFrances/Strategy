@@ -30,7 +30,8 @@ public class BattleBox extends MenuBox{
 	
 	private int kingdomFlag;
 	
-	private boolean scape;
+	//Controla si al terminar la ventana, se debe de resolver alguna accion de la batalla, como la huida
+	private boolean scapeOptions;
 	
 	public BattleBox(){
 		
@@ -85,7 +86,7 @@ public class BattleBox extends MenuBox{
 		this.armyAtack = armyAtack;
 		this.armyDefense = armyDefense;
 		this.kingdomFlag = kingdomFlag;
-		this.scape = scapeOption;
+		this.scapeOptions = scapeOption;
 		this.autoPlay = autoPlay;
 		
 		if(cancelOption || scapeOption){
@@ -335,13 +336,10 @@ public class BattleBox extends MenuBox{
 		return battleDiceBox.getResult();
 	}
 
-	public boolean isScape() {
-		return scape;
+	public boolean isScapeOptions() {
+		return scapeOptions;
 	}
 
-	public void setScape(boolean scape) {
-		this.scape = scape;
-	}
 	
 	
 

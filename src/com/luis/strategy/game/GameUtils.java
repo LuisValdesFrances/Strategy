@@ -34,8 +34,8 @@ public class GameUtils {
 		int h1 = GfxManager.imgArmyIdle.getHeight()/8;
 		int x2 = army.getKingdom().getAbsoluteX();
 		int y2 = army.getKingdom().getAbsoluteY();
-		int w2 = GfxManager.imgTargetDomain.getWidth()/4;
-		int h2 = GfxManager.imgTargetDomain.getHeight()/4;
+		int w2 = GfxManager.imgTargetDomain.getWidth()/8;
+		int h2 = GfxManager.imgTargetDomain.getHeight()/8;
 		
 		return x1+w1/2>x2-w2/2 && x1-w1/2<x2+w2 && y1+h1/2>y2-h2/2 && y1-h1/2<y2+h2;
 	}

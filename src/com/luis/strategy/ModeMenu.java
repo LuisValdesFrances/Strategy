@@ -691,7 +691,7 @@ public class ModeMenu {
 							String msg = "";
 							Main.getInstance().startClock(Main.TYPE_EARTH);
 							String result = 
-									OnlineInputOutput.getInstance().sendInscription("createInscriptionServlet", scene, user, create);
+									OnlineInputOutput.getInstance().sendInscription(OnlineInputOutput.URL_CREATE_INSCRIPTION, scene, user, create);
 							Main.getInstance().stopClock();
 							 
 							if(result.equals("Server error")){
@@ -743,7 +743,7 @@ public class ModeMenu {
 							 String msg = null;
 							 Main.getInstance().startClock(Main.TYPE_EARTH);
 							 String result =  
-									 OnlineInputOutput.getInstance().sendPreScene("createPreSceneServlet", map, host, name);
+									 OnlineInputOutput.getInstance().sendPreScene(OnlineInputOutput.URL_CREATE_PRE_SCENE, map, host, name);
 							 Main.getInstance().stopClock();
 							 if(result.equals("Server error")){
 								msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];

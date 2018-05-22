@@ -20,14 +20,18 @@ public class OnlineInputOutput {
 	
 	private static OnlineInputOutput instance;
 	
+	public static final String URL_CREATE_INSCRIPTION = "createInscriptionServlet";
+	public static final String URL_CREATE_PRE_SCENE = "createPreSceneServlet";
 	public static final String URL_CREATE_NOTIFICATION = "createNotificationServlet";
-	public static final String URL_GET_NOTIFICATION_LIST = "getNotificationListServlet";
-	public static final String URL_UPDATE_NOTIFICATION = "updateNotificationSceneServlet";
-	public static final String URL_GET_SCENE_LIST = "getSceneListServlet";
+	
 	public static final String URL_GET_PRE_SCENE_LIST = "getPreSceneListServlet";
-	public static final String URL_UPDATE_SCENE = "updateSceneServlet";
+	public static final String URL_GET_SCENE_LIST = "getSceneListServlet";
 	public static final String URL_GET_START_SCENE = "getStartSceneServlet";
 	public static final String URL_GET_SCENE = "getSceneController";
+	public static final String URL_GET_NOTIFICATION_LIST = "getNotificationListServlet";
+	
+	public static final String URL_UPDATE_NOTIFICATION = "updateNotificationSceneServlet";
+	public static final String URL_UPDATE_SCENE = "updateSceneServlet";
 	
 	public static OnlineInputOutput getInstance(){
 		if(instance == null){

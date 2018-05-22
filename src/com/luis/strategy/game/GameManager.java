@@ -46,8 +46,11 @@ public class GameManager {
 	public float distorsion = 1.14f;
 	private static final boolean MODE_3D = true;
 	
-	//
-	public boolean isAutoPlay(){
+	/**
+	 * Condicion para no mostrar las ventanas de decisión, propio de cuando juega la IA
+	 * @return
+	 */
+	private boolean isAutoPlay(){
 		return 
 				getCurrentPlayer().getActionIA() != null &&
 				//Si la victima es el jugador, se desactivan los triggers automaticos
@@ -157,12 +160,11 @@ public class GameManager {
 			}
 		};
 		
-		int modImageFrame = GfxManager.imgGameHud.getHeight()/8;
 		btnNext = new Button(
 				GfxManager.imgButtonNextRelease, 
 				GfxManager.imgButtonNextFocus, 
 				Define.SIZEX2, 
-				Define.SIZEY-GfxManager.imgGameHud.getHeight()/2 + modImageFrame,
+				Define.SIZEY-GfxManager.imgGameHud.getHeight()/2 + GfxManager.imgGameHud.getHeight()/8,
 				null, 0){
 			@Override
 			public void onButtonPressDown(){}
@@ -178,14 +180,29 @@ public class GameManager {
 				GfxManager.imgButtonCancelRelease, 
 				GfxManager.imgButtonCancelFocus, 
 				Define.SIZEX2- GfxManager.imgButtonCancelRelease.getWidth()*2, 
-				Define.SIZEY-GfxManager.imgGameHud.getHeight()/2 + modImageFrame,
+				Define.SIZEY-GfxManager.imgGameHud.getHeight()/2 + GfxManager.imgGameHud.getHeight()/8,
 				null, 0){
 			@Override
 			public void onButtonPressDown(){}
 			
 			@Override
 			public void onButtonPressUp(){
-				cancelAction();
+				if(state == STATE_ACTION){
+					btnCancel.setDisabled(true);
+					switch(subState){
+					case SUB_STATE_ACTION_WAIT:
+					case SUB_STATE_ACTION_SELECT:
+						btnFlagHelmet.hide();
+						btnFlagCastle.hide();
+						//Quito todos lo indicadores de target
+						for(Kingdom k: gameScene.getKingdomList()){
+							k.setTarget(-1);
+						}
+						changeSubState(SUB_STATE_ACTION_WAIT);
+						break;
+					}
+				}
+				
 				reset();
 			}
 		};
@@ -311,11 +328,11 @@ public class GameManager {
 					resolveCombat(battleBox.getResult());
 					break;
 				case 1:
-					if(isScape()){
+					if(isScapeOptions()){
 						Army defeated = getEnemyAtKingdom(getCurrentPlayer());
 						defeated.setDefeat(true);
 						NotificationBox.getInstance().addMessage(getCurrentPlayer().getName() + " scape!");
-						startEscape();
+						endBattle();
 					}else{
 						changeSubState(SUB_STATE_ACTION_WAIT);
 					}
@@ -330,7 +347,7 @@ public class GameManager {
 				if(startConquest){
 					changeSubState(SUB_STATE_ACTION_CONQUEST);
 				}else{
-					startEscape();
+					endBattle();
 				}
 			}
 		};
@@ -360,6 +377,7 @@ public class GameManager {
 				}
 			}
 		};
+		
 		discardBox = new SimpleBox(GfxManager.imgNotificationBox, false, false){
 			@Override
 			public void onFinish() {
@@ -462,7 +480,7 @@ public class GameManager {
 							cameraTargetY = getSelectedArmy().getAbsoluteY();
 							if(i == gameScene.getPlayerIndex() && army.getState() == Army.STATE_ON){
 								btnFlagHelmet.start();
-								setDataTarget(getSelectedArmy());
+								insertTargetUnMap(getSelectedArmy());
 								changeSubState(SUB_STATE_ACTION_SELECT);
 							}else{
 								btnFlagHelmet.hide();
@@ -536,7 +554,7 @@ public class GameManager {
 				break;
 			case SUB_STATE_ACTION_CONQUEST:
 				if(!updateConquest(delta)){
-					startEscape();
+					endBattle();
 				}
 				break;
 				
@@ -607,7 +625,7 @@ public class GameManager {
 						cameraTargetY = getSelectedArmy().getAbsoluteY();
 						if(i == gameScene.getPlayerIndex() && army.getState() == Army.STATE_ON){
 							btnFlagHelmet.start();
-							setDataTarget(getSelectedArmy());
+							insertTargetUnMap(getSelectedArmy());
 							changeSubState(SUB_STATE_ACTION_SELECT);
 						}else{
 							btnFlagHelmet.hide();
@@ -868,7 +886,7 @@ public class GameManager {
 		}
 	}
 	
-	private void setDataTarget(Army army){
+	private void insertTargetUnMap(Army army){
 		
 		//Quito todos lo indicadores de target
 		for(Kingdom k: gameScene.getKingdomList()){
@@ -924,33 +942,6 @@ public class GameManager {
 		}
 	}
 
-	private void cancelAction(){
-		btnCancel.setDisabled(true);
-		switch(state){
-		case STATE_INCOME:
-			
-			break;
-		case STATE_ECONOMY:
-			
-			break;
-		case STATE_ACTION:
-			
-			switch(subState){
-			case SUB_STATE_ACTION_WAIT:
-			case SUB_STATE_ACTION_SELECT:
-				btnFlagHelmet.hide();
-				btnFlagCastle.hide();
-				//Quito todos lo indicadores de target
-				for(Kingdom k: gameScene.getKingdomList()){
-					k.setTarget(-1);
-				}
-				changeSubState(SUB_STATE_ACTION_WAIT);
-				break;
-			}
-			break;
-		}
-	}
-	
 	private void changeState(int newState){
 		UserInput.getInstance().getMultiTouchHandler().resetTouch();
 		cleanArmyAction();
@@ -1115,7 +1106,7 @@ public class GameManager {
 						//Camara se posiciona en el seleccionado
 						cameraTargetX = getSelectedArmy().getAbsoluteX();
 						cameraTargetY = getSelectedArmy().getAbsoluteY();
-						setDataTarget(getSelectedArmy());
+						insertTargetUnMap(getSelectedArmy());
 						changeSubState(SUB_STATE_ACTION_SELECT);
 					//Cuando no me quedan mas ejercitos, cambio de estado
 					}else{
@@ -1436,7 +1427,7 @@ public class GameManager {
 		}
 	}
 	
-	private void startEscape(){
+	private void endBattle(){
 		
 		Army defeat = getDefeatArmy();
 		if(defeat != null){
@@ -1712,7 +1703,7 @@ public class GameManager {
 			if(startConquest){
 				changeSubState(SUB_STATE_ACTION_CONQUEST);
 			}else{
-				startEscape();
+				endBattle();
 			}
 		}
 	}
@@ -1764,6 +1755,7 @@ public class GameManager {
 	private void resolveMovement(){
 		//getSelectedArmy().setX(getSelectedArmy().getKingdom().getX());
 		//getSelectedArmy().setY(getSelectedArmy().getKingdom().getY());
+		
 		getSelectedArmy().getKingdom().setTarget(-1);
 		getSelectedArmy().changeState(Army.STATE_OFF);
 		
@@ -1823,7 +1815,7 @@ public class GameManager {
 					Army defeated = getEnemyAtKingdom(getCurrentPlayer());
 					defeated.setDefeat(true);
 					NotificationBox.getInstance().addMessage(getDefeatArmy().getPlayer().getName() + " scape!");
-					startEscape();
+					endBattle();
 				
 				}else{
 					//Para batallas, el tipo de box es el primer elemento del territorio
