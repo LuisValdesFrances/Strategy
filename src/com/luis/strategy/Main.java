@@ -5,6 +5,7 @@ import java.util.Random;
 import android.app.Activity;
 import android.util.Log;
 
+import com.luis.strategy.R;
 import com.luis.lgameengine.gameutils.GamePerformance;
 import com.luis.lgameengine.gameutils.Settings;
 import com.luis.lgameengine.gameutils.fonts.Font;
@@ -76,6 +77,28 @@ public class Main extends MyCanvas implements Runnable {
 
 	public static final int INDEX_DATA_LANGUAGE = 0;
 	public static final int INDEX_DATA_RECORD = 1;
+	
+	
+	//Sound
+	 public static final byte MUSIC_INTRO = 0;
+	 public static final byte MUSIC_GAME = 1;
+	 public static final byte MUSIC_GAMEOVER = 2;
+	 public static final byte MUSIC_WIN = 3;
+	 
+	 public static final int MUSIC_LIST [] =
+	 {
+		 R.raw.introduccion
+	 };
+	
+	   private static final int FX_FILE [] = {
+//	       R.raw.fx_bar,
+//	       R.raw.fx_bar_destroy,
+//	       R.raw.fx_block,
+//	       R.raw.fx_confirm,
+//	       R.raw.fx_laser,
+	      
+	   };
+	 public static final int[] FX_LIST = null;
 
 	public static int iLanguage;
 	
@@ -88,7 +111,7 @@ public class Main extends MyCanvas implements Runnable {
 		// touchHandler = new MultiTouchHandler(view, scaleX, scaleY);
 		
 		UserInput.getInstance().init(multiTouchHandler, keyboardHandler);
-		SndManager.inicialize(activity);
+		SndManager.getInstance().inicialize(activity, MUSIC_LIST, FX_LIST);
 		isGameRun = true;
 	}
 
@@ -369,7 +392,7 @@ public class Main extends MyCanvas implements Runnable {
 //		if (iState >= Define.ST_GAME_INIT)
 //			Main.changeState(Define.ST_GAME_PAUSE,false);
 
-		SndManager.pauseMusic();
+		SndManager.getInstance().pauseMusic();
 		Log.i("INFO", "Llamada a pause()");
 	}
 
@@ -377,14 +400,14 @@ public class Main extends MyCanvas implements Runnable {
 		//if (MyCanvas.isPause) 
 		{
 			//MyCanvas.isPause = false;
-			SndManager.unpauseMusic();
+			SndManager.getInstance().unpauseMusic();
 			Log.i("INFO", "Llamada a unPause()");
 		}
 	}
 
 	public void stop() {
-		SndManager.stopMusic();
-		SndManager.flushSndManager();
+		SndManager.getInstance().stopMusic();
+		SndManager.getInstance().flushSndManager();
 	}
 
 	private static boolean isLoading;

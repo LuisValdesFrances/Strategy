@@ -12,6 +12,7 @@ import com.luis.lgameengine.gui.NotificationBox;
 import com.luis.lgameengine.implementation.fileio.FileIO;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.graphics.Image;
+import com.luis.lgameengine.implementation.sound.SndManager;
 import com.luis.strategy.GameState.PlayerConf;
 import com.luis.strategy.connection.OnlineInputOutput;
 import com.luis.strategy.constants.Define;
@@ -137,6 +138,8 @@ public class ModeMenu {
 			NotificationBox.getInstance().init(
 					Define.SIZEX, Define.SIZEY, 
 					null, NotificationBox.DURATION_LONG);
+			
+			SndManager.getInstance().playMusic(Main.MUSIC_INTRO, false);
 
 			break;
 		case Define.ST_MENU_ASK_SOUND:
@@ -1058,9 +1061,9 @@ public class ModeMenu {
     }
 	
 	public static long startTime;
-	public static final long ST_TIME_LOGO_1 = 1200;
-	public static final long ST_TIME_LOGO_2 = 800;
-	public static final long ST_TIME_LOGO_3 = 1200;
+	public static final long ST_TIME_LOGO_1 = 3000;
+	public static final long ST_TIME_LOGO_2 = 2000;
+	public static final long ST_TIME_LOGO_3 = 1000;
 	
 	public static final long ST_TIME_MAIN = 1200;
 	
