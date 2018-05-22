@@ -3,11 +3,12 @@ package com.luis.strategy;
 
 import com.luis.lgameengine.gameutils.Settings;
 
+import android.app.ActionBar;
 import android.app.Activity;
-import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
@@ -19,42 +20,70 @@ import android.widget.RelativeLayout;
 
 public class MainActivity extends Activity{
 	
-	private Thread vGameThread;
-	private Main vMain;
+	private Thread gameThread;
+	private Main main;
 	
 	
 	
-	//Screen do not sleep:
-	public static PowerManager ms_PowerManager;
-    public static PowerManager.WakeLock ms_WakeLock;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//setContentView(R.layout.activity_main);
-		//requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 		WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
+		int currentApiVersion = android.os.Build.VERSION.SDK_INT;
+
+        final int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        
+        // This work only for android 4.4+
+        if(currentApiVersion >= Build.VERSION_CODES.KITKAT){
+
+            getWindow().getDecorView().setSystemUiVisibility(flags);
+
+            // Code below is to handle presses of Volume up or Volume down.
+            // Without this, after pressing volume buttons, the navigation bar will
+            // show up and won't hide
+            final View decorView = getWindow().getDecorView();
+            decorView
+                    .setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener()
+                    {
+                        @Override
+                        public void onSystemUiVisibilityChange(int visibility)
+                        {
+                            if((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0)
+                            {
+                                decorView.setSystemUiVisibility(flags);
+                            }
+                        }
+                    });
+        }
+		
+		
 		Log.i("Debug", "lGameEngine INIT");
 		Settings.getInstance().init(this);
-		vMain = new Main(this);
+		
+		main = new Main(this);
 		
 		// Rescale surface view to layout size:
 		RelativeLayout layout = new RelativeLayout(this);
-		layout.addView(vMain, Settings.getInstance().getRealWidth(), Settings.getInstance().getRealHeight());
+		layout.addView(main, Settings.getInstance().getRealWidth(), Settings.getInstance().getRealHeight());
 		setContentView(layout);
-		//setContentView(vMain);
+		
+		
+		//main.setLayoutParams(new ActionBar.LayoutParams(Settings.getInstance().getRealWidth(), Settings.getInstance().getRealHeight()));
+		//setContentView(main);
 		
 		Log.i("Debug", "lGameEngine START");
-		vGameThread = new Thread(vMain);
-		vGameThread.start();
-		
-		//Screen not sleep:
-		ms_PowerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-		ms_WakeLock = ms_PowerManager.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
+		gameThread = new Thread(main);
+		gameThread.start();
 		
 		//this.finish();
 		
@@ -63,9 +92,7 @@ public class MainActivity extends Activity{
 	@Override
 	public void onResume(){
 		super.onResume();
-		vMain.unPause();
-		if(ms_WakeLock != null)
-			ms_WakeLock.acquire();
+		main.unPause();
 	}
 	
 	@Override
@@ -76,19 +103,18 @@ public class MainActivity extends Activity{
 	@Override
 	public void onPause(){
 		super.onPause();
-		vMain.pause();
-		if(ms_WakeLock != null)
-			ms_WakeLock.release();
+		main.pause();
 	}
+	
 	@Override
 	public void onDestroy(){
 		super.onDestroy();
 		try {
-			vGameThread.join();
+			gameThread.join();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		Log.i("INFO", "Thread stoped with exit!");
+		Log.i("Debug", "Thread stoped with exit!");
 	}
 	
 	

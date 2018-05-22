@@ -43,7 +43,8 @@ public class GameManager {
 	
 	//
 	private Image gameBuffer;
-	public float distorsion = 1.12f;
+	public float distorsion = 1.14f;
+	private static final boolean MODE_3D = true;
 	
 	//
 	public boolean isAutoPlay(){
@@ -516,17 +517,7 @@ public class GameManager {
 					cameraTargetY = getSelectedArmy().getAbsoluteY();
 				}
 				
-				//Colision
-				int x1 = getSelectedArmy().getAbsoluteX();
-				int y1 = getSelectedArmy().getAbsoluteY();
-				int w1 = GfxManager.imgArmyIdle.getWidth()/28;
-				int h1 = GfxManager.imgArmyIdle.getHeight()/8;
-				int x2 = getSelectedArmy().getKingdom().getAbsoluteX();
-				int y2 = getSelectedArmy().getKingdom().getAbsoluteY();
-				int w2 = GfxManager.imgTargetDomain.getWidth()/4;
-				int h2 = GfxManager.imgTargetDomain.getHeight()/4;
-				
-				if(x1+w1/2>x2-w2/2 && x1-w1/2<x2+w2 && y1+h1/2>y2-h2/2 && y1-h1/2<y2+h2){
+				if(GameUtils.getInstance().checkArmyColision(getSelectedArmy())){
 					changeSubState(SUB_STATE_ACTION_RESOLVE_MOVE);
 				}
 				break;
@@ -557,16 +548,7 @@ public class GameManager {
 				}
 				
 				//Colision
-				x1 = getDefeatArmy().getAbsoluteX();
-				y1 = getDefeatArmy().getAbsoluteY();
-				w1 = GfxManager.imgArmyIdle.getWidth()/28;
-				h1 = GfxManager.imgArmyIdle.getHeight()/8;
-				x2 = getDefeatArmy().getKingdom().getAbsoluteX();
-				y2 = getDefeatArmy().getKingdom().getAbsoluteY();
-				w2 = GfxManager.imgTargetDomain.getWidth()/4;
-				h2 = GfxManager.imgTargetDomain.getHeight()/4;
-					
-				if(x1+w1/2>x2-w2/2 && x1-w1/2<x2+w2 && y1+h1/2>y2-h2/2 && y1-h1/2<y2+h2){
+				if(GameUtils.getInstance().checkArmyColision(getDefeatArmy())){
 					changeSubState(SUB_STATE_ACTION_RESOLVE_SCAPE);
 				}
 				break;
@@ -695,8 +677,6 @@ public class GameManager {
 			gameScene.drawTarget(gameBuffer.getGraphics(), worldConver, gameCamera);
 		
 		
-		 //float totalW = (float)gameBuffer.getWidth()*distorsion;
-		 //float totalH = (float)gameBuffer.getHeight()*distorsion;
 		 
 		 //Army
 		 for(int i = 0; i < gameScene.getPlayerList().size(); i++){
@@ -708,16 +688,20 @@ public class GameManager {
 						 distorsion, distorsion, gameScene);
 			 }
 		 }
-		 /*
-		 g.drawDistorisionImage(
-				 gameBuffer, 
-				 (int)worldConver.getCentGameLayoutX() - gameBuffer.getWidth()/2 , (int)worldConver.getCentGameLayoutY() - gameBuffer.getHeight()/2, //Point corner top-left 
-				 (int)worldConver.getCentGameLayoutX() + gameBuffer.getWidth()/2 , (int)worldConver.getCentGameLayoutY() - gameBuffer.getHeight()/2, //Point corner top-right
-				 (int)worldConver.getCentGameLayoutX() - (int)totalW/2, (int)worldConver.getCentGameLayoutY() - gameBuffer.getHeight()/2 + (int)totalH,  //Point corner button-left
-				 (int)worldConver.getCentGameLayoutX() + (int)totalW/2, (int)worldConver.getCentGameLayoutY() - gameBuffer.getHeight()/2 + (int)totalH	 //Point corner button-right
-				 );
-		*/
-		g.drawImage(gameBuffer, Define.SIZEX2, Define.SIZEY2-GfxManager.imgGameHud.getHeight()/2, Graphics.VCENTER | Graphics.HCENTER);
+		 
+		 if(MODE_3D){
+			 float totalW = (float)gameBuffer.getWidth()*distorsion;
+			 float totalH = (float)gameBuffer.getHeight()*distorsion;
+			 g.drawDistorisionImage(
+					 gameBuffer, 
+					 (int)worldConver.getCentGameLayoutX() - gameBuffer.getWidth()/2 , (int)worldConver.getCentGameLayoutY() - gameBuffer.getHeight()/2, //Point corner top-left 
+					 (int)worldConver.getCentGameLayoutX() + gameBuffer.getWidth()/2 , (int)worldConver.getCentGameLayoutY() - gameBuffer.getHeight()/2, //Point corner top-right
+					 (int)worldConver.getCentGameLayoutX() - (int)totalW/2, (int)worldConver.getCentGameLayoutY() - gameBuffer.getHeight()/2 + (int)totalH,  //Point corner button-left
+					 (int)worldConver.getCentGameLayoutX() + (int)totalW/2, (int)worldConver.getCentGameLayoutY() - gameBuffer.getHeight()/2 + (int)totalH	 //Point corner button-right
+					 );
+		 }else{
+			 g.drawImage(gameBuffer, Define.SIZEX2, Define.SIZEY2-GfxManager.imgGameHud.getHeight()/2, Graphics.VCENTER | Graphics.HCENTER);
+		 }
 		
 		
 		//Fin buffer
@@ -1900,126 +1884,6 @@ public class GameManager {
 					}
 				}
 			}
-			
-			
-			
-			
-			
-			
-			
-			/*
-			//Si el territorio es mio
-			if(getCurrentPlayer().hasKingom(getSelectedArmy().getKingdom())){
-				//Si hay un ejercito enemigo
-				if(getEnemyAtKingdom(getCurrentPlayer()) != null){
-					
-					//Si hay un efercito de la IA y decide huir
-					if(
-							getEnemyAtKingdom(getCurrentPlayer()).getPlayer().getActionIA() != null //Es un ejercito de la IA
-							&& getBorderKingdom(getEnemyAtKingdom(getCurrentPlayer())) != null //Tiene territorios adyancentes libres
-							&& getEnemyAtKingdom(getCurrentPlayer()).getPlayer().getActionIA().
-							scape(getSelectedArmy(), getEnemyAtKingdom(getCurrentPlayer()))){//Ha elegido huir
-						
-						Army defeated = getEnemyAtKingdom(getCurrentPlayer());
-						defeated.setDefeat(true);
-						NotificationBox.getInstance().addMessage(getDefeatArmy().getPlayer().getName() + " scape!");
-						startEscape();
-					
-					}else{
-						//Para batallas, el tipo de box es el primer elemento del territorio
-						if(
-								getSelectedArmy().getPlayer().getActionIA() != null && 
-								getEnemyAtKingdom(getCurrentPlayer()).getPlayer().getActionIA() != null){
-							
-							combat(getSelectedArmy().getKingdom().getTerrainList().get(0), 
-									getSelectedArmy(),
-									getEnemyAtKingdom(getCurrentPlayer()));
-							
-						}else{
-							battleBox.start(
-									getSelectedArmy().getKingdom().getTerrainList().get(0), 
-									getSelectedArmy(),
-									getEnemyAtKingdom(getCurrentPlayer()),
-									-1,
-									cancelOption, scapeOption, isAutoPlay());
-							changeSubState(SUB_STATE_ACTION_COMBAT_ANIM);
-						}
-					}
-				}else{
-					getSelectedArmy().getKingdom().setTarget(-1);
-					getSelectedArmy().changeState(Army.STATE_OFF);
-					changeSubState(SUB_STATE_ACTION_WAIT);
-				}
-			}else{
-				
-				//Si hay un ejercito enemigo
-				if(getEnemyAtKingdom(getCurrentPlayer()) != null){
-					
-					//Si hay el efercito es de la IA y decide huir
-					if(
-							getEnemyAtKingdom(getCurrentPlayer()).getPlayer().getActionIA() != null //Es un ejercito de la IA
-							&& getBorderKingdom(getEnemyAtKingdom(getCurrentPlayer())) != null //Tiene territorios adyancentes libres
-							&& getEnemyAtKingdom(getCurrentPlayer()).getPlayer().getActionIA().
-							scape(getSelectedArmy(), getEnemyAtKingdom(getCurrentPlayer()))){//Ha elegido huir
-						
-						Army defeated = getEnemyAtKingdom(getCurrentPlayer());
-						defeated.setDefeat(true);
-						NotificationBox.getInstance().addMessage(getDefeatArmy().getPlayer().getName() + " scape!");
-						startEscape();
-						
-					}else{
-						//Para batallas, el tipo de box es el primer elemento del territorio
-						if(
-								getSelectedArmy().getPlayer().getActionIA() != null && 
-								getEnemyAtKingdom(getCurrentPlayer()).getPlayer().getActionIA() != null){
-							
-							combat(getSelectedArmy().getKingdom().getTerrainList().get(0), 
-									getSelectedArmy(),
-									getEnemyAtKingdom(getCurrentPlayer()));
-						}else{
-							//Si el que recibe ataque es la IA, ya ha decidido no huir, con lo que sehabilito esta opcion
-							battleBox.start(
-									getSelectedArmy().getKingdom().getTerrainList().get(0), 
-									getSelectedArmy(),
-									getEnemyAtKingdom(getCurrentPlayer()),
-									-1,
-									cancelOption, scapeOption, isAutoPlay());
-							
-							changeSubState(SUB_STATE_ACTION_COMBAT_ANIM);
-						}
-					}
-				//Movimiento a territorios vacios
-				}else{
-					
-					//Si es la IA, solo se muestra la ventana de combate si se va a producir un combate
-					if(getCurrentPlayer().getActionIA() != null){
-						if(
-							getSelectedArmy().getIaDecision().getDecision() == ActionIA.DECISION_ATACK
-							||
-							getSelectedArmy().getIaDecision().getDecision() == ActionIA.DECISION_MOVE_AND_ATACK
-						){
-							combat(getSelectedArmy().getKingdom().getTerrainList().get(0), 
-									getSelectedArmy(),
-									null);
-						}else{
-							getSelectedArmy().getKingdom().setTarget(-1);
-							getSelectedArmy().changeState(Army.STATE_OFF);
-							changeSubState(SUB_STATE_ACTION_WAIT);
-						}
-					}else{
-						int kingdomState = getSelectedArmy().getKingdom().getState();
-						battleBox.start(
-								getSelectedArmy().getKingdom().getTerrainList().get(kingdomState), 
-								getSelectedArmy(),
-								null,
-								getPlayerByKingdom(getSelectedArmy().getKingdom()) != null?
-								getPlayerByKingdom(getSelectedArmy().getKingdom()).getFlag():GfxManager.imgFlagBigList.size()-1,
-								cancelOption, scapeOption, isAutoPlay());
-						changeSubState(SUB_STATE_ACTION_COMBAT_ANIM);
-					}
-				}
-			}
-			*/
 		}
 	}
 	
