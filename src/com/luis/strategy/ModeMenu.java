@@ -1139,7 +1139,6 @@ public class ModeMenu {
 				return false;
 			}
 		}
-		Log.i("Debug", "state " + statePresentation + ": "+alpha);
 		return true;
 	}
 	

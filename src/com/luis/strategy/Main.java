@@ -82,27 +82,21 @@ public class Main extends MyCanvas implements Runnable {
 	
 	
 	//Sound
-	 public static final byte MUSIC_INTRO = 0;
-	 public static final byte MUSIC_MAP = 1;
-	 public static final byte MUSIC_START_BATLE = 2;
+	public static final byte MUSIC_INTRO = 0;
+	public static final byte MUSIC_MAP = 1;
+	public static final byte MUSIC_START_BATLE = 2;
 	 
-	 public static final int MUSIC_LIST [] =
-	 {
-		 R.raw.intro,
-		 R.raw.map,
-		 R.raw.battle_start
+	private static final int MUSIC_LIST [] = {
+		R.raw.intro,
+		R.raw.map,
+		R.raw.battle_start
 	 };
 	
-	   private static final int FX_FILE [] = {
-//	       R.raw.fx_bar,
-//	       R.raw.fx_bar_destroy,
-//	       R.raw.fx_block,
-//	       R.raw.fx_confirm,
-//	       R.raw.fx_laser,
-	      
-	   };
-	 public static final int[] FX_LIST = null;
-
+	private static final int FX_FILE [] = {
+	    R.raw.fx_button,
+	    R.raw.fx_piece
+	};
+	 
 	public static int iLanguage;
 	
 	public Main(Activity activity) {
@@ -114,7 +108,7 @@ public class Main extends MyCanvas implements Runnable {
 		// touchHandler = new MultiTouchHandler(view, scaleX, scaleY);
 		
 		UserInput.getInstance().init(multiTouchHandler, keyboardHandler);
-		SndManager.getInstance().inicialize(activity, MUSIC_LIST, FX_LIST);
+		SndManager.getInstance().inicialize(activity, MUSIC_LIST, FX_FILE);
 		isGameRun = true;
 	}
 
