@@ -83,13 +83,13 @@ public class Main extends MyCanvas implements Runnable {
 	
 	//Sound
 	 public static final byte MUSIC_INTRO = 0;
-	 public static final byte MUSIC_GAME = 1;
-	 public static final byte MUSIC_GAMEOVER = 2;
-	 public static final byte MUSIC_WIN = 3;
+	 public static final byte MUSIC_MAP = 1;
+	 public static final byte MUSIC_START_BATLE = 2;
 	 
 	 public static final int MUSIC_LIST [] =
 	 {
 		 R.raw.intro,
+		 R.raw.map,
 		 R.raw.battle_start
 	 };
 	

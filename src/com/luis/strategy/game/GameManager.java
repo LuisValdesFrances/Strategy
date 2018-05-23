@@ -16,6 +16,7 @@ import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.graphics.Image;
 import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 import com.luis.lgameengine.implementation.input.TouchData;
+import com.luis.lgameengine.implementation.sound.SndManager;
 import com.luis.strategy.GameState;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.Main;
@@ -323,6 +324,7 @@ public class GameManager {
 		battleBox = new BattleBox(){
 			@Override
 			public void onFinish(){
+				SndManager.getInstance().playMusic(Main.MUSIC_MAP, true);
 				switch(this.getIndexPressed()){
 				case 0:
 					resolveCombat(battleBox.getResult());
@@ -1834,6 +1836,7 @@ public class GameManager {
 								getEnemyAtKingdom(getCurrentPlayer()),
 								-1,
 								cancelOption, scapeOption, isAutoPlay());
+						SndManager.getInstance().playMusic(Main.MUSIC_START_BATLE, true);
 						changeSubState(SUB_STATE_ACTION_COMBAT_ANIM);
 					}
 				}

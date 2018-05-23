@@ -11,18 +11,18 @@ public class RscManager {
 	
 	
 	public static final int TXT_BLANK = 0;
-	public static final byte CITA_1 = TXT_BLANK+1;
-	public static final byte CITA_2 = CITA_1+1;
-	public static final byte CITA_3 = CITA_2+1;
-	public static final byte CITA_4 = CITA_3+1;
+	public static final byte TXT_CITA_1 = TXT_BLANK+1;
+	public static final byte TXT_CITA_2 = TXT_CITA_1+1;
+	public static final byte TXT_CITA_3 = TXT_CITA_2+1;
+	public static final byte TXT_CITA_4 = TXT_CITA_3+1;
 	
-	public static final byte AUTOR_1 = CITA_4+1;
-	public static final byte AUTOR_2 = AUTOR_1+1;
-	public static final byte AUTOR_3 = AUTOR_2+1;
-	public static final byte AUTOR_4 = AUTOR_3+1;
+	public static final byte TXT_AUTOR_1 = TXT_CITA_4+1;
+	public static final byte TXT_AUTOR_2 = TXT_AUTOR_1+1;
+	public static final byte TXT_AUTOR_3 = TXT_AUTOR_2+1;
+	public static final byte TXT_AUTOR_4 = TXT_AUTOR_3+1;
 	
 	//Language text
-	public static final int TXT_ENGLISH = AUTOR_4+1;
+	public static final int TXT_ENGLISH = TXT_AUTOR_4+1;
 	public static final int TXT_SPANISH = TXT_ENGLISH+1;
 	public static final int TXT_CATALA = TXT_SPANISH+1;
 	

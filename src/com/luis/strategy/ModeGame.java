@@ -19,6 +19,7 @@ import com.luis.lgameengine.gameutils.gameworld.GfxEffects;
 import com.luis.lgameengine.gameutils.gameworld.ParticleManager;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.implementation.graphics.Graphics;
+import com.luis.lgameengine.implementation.sound.SndManager;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.data.DataKingdom;
 import com.luis.strategy.data.GameBuilder;
@@ -115,6 +116,9 @@ public class ModeGame {
 			gameCamera = new GameCamera(worldConver, 0, 0, 
 					GamePerformance.getInstance().getFrameMult(Main.targetFPS));
 			gameManager = new GameManager(worldConver, gameCamera, GameState.getInstance().getGameScene());
+			
+			
+			SndManager.getInstance().playMusic(Main.MUSIC_MAP, true);
 			
 			break;
 		

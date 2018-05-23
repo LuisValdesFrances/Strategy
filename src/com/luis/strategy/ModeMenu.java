@@ -83,17 +83,8 @@ public class ModeMenu {
 			
 			alpha = 255;
         	startTime = System.currentTimeMillis();
-        	cita = Main.getRandom(0, 3);
-			author = RscManager.AUTOR_1+cita;
-			
-			break;
-        case Define.ST_MENU_LOGO:
-        	
-			
-        	startTime = System.currentTimeMillis();
-    		statePresentation = ST_PRESENTATION_1;
-			alpha = 255;
-			logoAlpha = 255;
+        	cita = Main.getRandom(RscManager.TXT_CITA_1, RscManager.TXT_CITA_4);
+			author = RscManager.TXT_CITA_4+cita;
 			
 			btnBack = new Button(GfxManager.imgButtonArrowBackRelease, GfxManager.imgButtonArrowBackFocus,
 					Define.SIZEX32+GfxManager.imgButtonArrowBackRelease.getWidth()/2,
@@ -150,9 +141,14 @@ public class ModeMenu {
 			NotificationBox.getInstance().init(
 					Define.SIZEX, Define.SIZEY, 
 					null, NotificationBox.DURATION_LONG);
+			break;
+        case Define.ST_MENU_LOGO:
+        	
 			
-			SndManager.getInstance().playMusic(Main.MUSIC_INTRO, false);
-
+        	startTime = System.currentTimeMillis();
+    		statePresentation = ST_PRESENTATION_1;
+			alpha = 255;
+			logoAlpha = 255;
 			break;
 		case Define.ST_MENU_ASK_SOUND:
 		case Define.ST_MENU_ASK_LANGUAGE:
@@ -1098,14 +1094,14 @@ public class ModeMenu {
     }
 	
 	public static long startTime;
-	public static final long ST_TIME_CITA_1 = 2000;
-	public static final long ST_TIME_CITA_2 = 3000;
+	public static final long ST_TIME_CITA_1 = 1000;
+	public static final long ST_TIME_CITA_2 = 4000;
 	public static final long ST_TIME_CITA_3 = 2000;
 	
 	
-	public static final long ST_TIME_LOGO_1 = 1500;
+	public static final long ST_TIME_LOGO_1 = 1000;
 	public static final long ST_TIME_LOGO_2 = 1000;
-	public static final long ST_TIME_LOGO_3 = 1500;
+	public static final long ST_TIME_LOGO_3 = 1000;
 	
 	public static final long ST_TIME_MAIN = 1200;
 	
@@ -1129,6 +1125,10 @@ public class ModeMenu {
 			if(System.currentTimeMillis()>startTime+time2){
 				statePresentation = ST_PRESENTATION_3;
 				startTime = System.currentTimeMillis();
+				
+				if(Main.state == Define.ST_MENU_START){
+					SndManager.getInstance().playMusic(Main.MUSIC_INTRO, false);
+				}
 				
 			}
 			break;
