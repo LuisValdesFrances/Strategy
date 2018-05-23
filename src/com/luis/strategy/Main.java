@@ -11,7 +11,7 @@ import com.luis.lgameengine.gameutils.Settings;
 import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.graphics.Image;
-import com.luis.lgameengine.implementation.graphics.MyCanvas;
+import com.luis.lgameengine.implementation.graphics.LCanvas;
 import com.luis.lgameengine.implementation.input.KeyboardHandler;
 import com.luis.lgameengine.implementation.sound.SndManager;
 import com.luis.strategy.constants.Define;
@@ -19,7 +19,7 @@ import com.luis.strategy.constants.Define;
 /**
  * @author Luis Valdes Frances
  */
-public class Main extends MyCanvas implements Runnable {
+public class Main extends LCanvas implements Runnable {
 	
 	public static boolean debug = false;
 
