@@ -20,6 +20,8 @@ import com.luis.strategy.constants.Define;
  * @author Luis Valdes Frances
  */
 public class Main extends MyCanvas implements Runnable {
+	
+	public static boolean debug = false;
 
 	public static Main instance;
 	public static Main getInstance(){
@@ -87,7 +89,8 @@ public class Main extends MyCanvas implements Runnable {
 	 
 	 public static final int MUSIC_LIST [] =
 	 {
-		 R.raw.introduccion
+		 R.raw.intro,
+		 R.raw.battle_start
 	 };
 	
 	   private static final int FX_FILE [] = {
@@ -119,7 +122,7 @@ public class Main extends MyCanvas implements Runnable {
 		Log.i("INFO", "initMain run");
 		targetFPS = GamePerformance.getInstance().getOptimalFrames();//30;
 		minDurationFrame = 1000 / targetFPS;
-		changeState(Define.ST_MENU_LOGO,true);
+		changeState(Define.ST_MENU_START, true);
 	}
 
 	
@@ -138,6 +141,7 @@ public class Main extends MyCanvas implements Runnable {
 				updateChangeState();
 			}else{
 				switch (state) {
+					case Define.ST_MENU_START:
 					case Define.ST_MENU_LOGO:
 					case Define.ST_MENU_ASK_LANGUAGE:
 					case Define.ST_MENU_ASK_SOUND:
@@ -213,6 +217,7 @@ public class Main extends MyCanvas implements Runnable {
 	protected void paint(Graphics _g) {
 		if (!isClock) {
 			switch (state) {
+				 case Define.ST_MENU_START:
 				 case Define.ST_MENU_LOGO:
 		         case Define.ST_MENU_ASK_LANGUAGE:
 		         case Define.ST_MENU_ASK_SOUND:

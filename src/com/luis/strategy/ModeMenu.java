@@ -35,6 +35,9 @@ public class ModeMenu {
 	public static final int NUMBER_OPTS_MAIN_MENU = 4;
 	public static final int NUMBER_OPTS_MORE_MENU = 2;
 	
+	public static int cita;
+	public static int author;
+	
 	public static int iLanguageSelect;
 	public static int iSoundSelect;
 	
@@ -72,16 +75,25 @@ public class ModeMenu {
 	public static void init(int _iMenuState){
 		Log.i("Info", "Init State: "+ _iMenuState);
 		switch (_iMenuState) {
-        case Define.ST_MENU_LOGO:
-        	
-        	MenuElement.bgAlpha = (int)(GameParams.BG_BLACK_ALPHA*0.5);
-			
-    		iStateLogo = ST_LOGO_1;
-			alpha = 0;
-			logoAlpha = 255;
-			startTime = System.currentTimeMillis();
+		
+		case Define.ST_MENU_START:
 			Font.init(GfxManager.vImgFontSmall, GfxManager.vImgFontMedium, GfxManager.vImgFontBig);
 			RscManager.loadLanguage(Main.iLanguage);
+			MenuElement.bgAlpha = (int)(GameParams.BG_BLACK_ALPHA*0.5);
+			
+			alpha = 255;
+        	startTime = System.currentTimeMillis();
+        	cita = Main.getRandom(0, 3);
+			author = RscManager.AUTOR_1+cita;
+			
+			break;
+        case Define.ST_MENU_LOGO:
+        	
+			
+        	startTime = System.currentTimeMillis();
+    		statePresentation = ST_PRESENTATION_1;
+			alpha = 255;
+			logoAlpha = 255;
 			
 			btnBack = new Button(GfxManager.imgButtonArrowBackRelease, GfxManager.imgButtonArrowBackFocus,
 					Define.SIZEX32+GfxManager.imgButtonArrowBackRelease.getWidth()/2,
@@ -779,8 +791,15 @@ public class ModeMenu {
 	public static void update(){
 		
 		switch (Main.state) {
+		case Define.ST_MENU_START:
+			if(!runPresentation(ST_TIME_CITA_1, ST_TIME_CITA_2, ST_TIME_CITA_3) || Main.debug){
+				Main.changeState(Define.ST_MENU_LOGO, false);
+			}
+			break;
 		case Define.ST_MENU_LOGO:
-			runLogo();
+			if(!runPresentation(ST_TIME_LOGO_1, ST_TIME_LOGO_2, ST_TIME_LOGO_3) || Main.debug){
+				Main.changeState(Define.ST_MENU_MAIN, false);
+			}
 			break;
 		case Define.ST_MENU_ASK_LANGUAGE:
 			break;
@@ -887,12 +906,32 @@ public class ModeMenu {
 	public static void draw(Graphics _g){
 		
 		switch (Main.state) {
+		case Define.ST_MENU_START:
+			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+			_g.setColor(Main.COLOR_BLACK);
+			_g.fillRect(0, 0, Define.SIZEX, Define.SIZEY);
+			
+			TextManager.draw(_g, Font.FONT_SMALL, RscManager.allText[cita], 
+					Define.SIZEX2, Define.SIZEY2-Define.SIZEY8, 
+					(int)(Define.SIZEX*0.75), TextManager.ALING_CENTER, -1);
+			
+			TextManager.draw(_g, Font.FONT_SMALL, RscManager.allText[author], 
+					Define.SIZEX2, Define.SIZEY2+Define.SIZEY8, 
+					Define.SIZEX, TextManager.ALING_CENTER, -1);
+			
+			_g.setAlpha(alpha);
+			_g.drawImage(GfxManager.imgBlackBG, 0, 0, Graphics.TOP | Graphics.LEFT);
+			_g.setAlpha(255);
+			break;
 		case Define.ST_MENU_LOGO:
 			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 			_g.setColor(Main.COLOR_BLACK);
 			_g.fillRect(0, 0, Define.SIZEX, Define.SIZEY);
-			_g.setAlpha(alpha);
+			
 			_g.drawImage(GfxManager.vImgLogo, Define.SIZEX2, Define.SIZEY2, Graphics.VCENTER|Graphics.HCENTER);
+			
+			_g.setAlpha(alpha);
+			_g.drawImage(GfxManager.imgBlackBG, 0, 0, Graphics.TOP | Graphics.LEFT);
 			_g.setAlpha(255);
              
 			break;
@@ -908,11 +947,9 @@ public class ModeMenu {
 			drawMenuBG(_g);
 			btnCampaign.draw(_g, 0, 0);
 			btnMultiPlayer.draw(_g, 0, 0);
-			if(alpha > 0){
-				_g.setAlpha(alpha);
-				_g.drawImage(GfxManager.imgBlackBG, 0, 0, Graphics.TOP | Graphics.LEFT);
-				_g.setAlpha(255);
-			}
+			_g.setAlpha(alpha);
+			_g.drawImage(GfxManager.imgBlackBG, 0, 0, Graphics.TOP | Graphics.LEFT);
+			_g.setAlpha(255);
 			break;
 			
 		case Define.ST_MENU_OPTIONS:
@@ -1061,45 +1098,49 @@ public class ModeMenu {
     }
 	
 	public static long startTime;
-	public static final long ST_TIME_LOGO_1 = 3000;
-	public static final long ST_TIME_LOGO_2 = 2000;
-	public static final long ST_TIME_LOGO_3 = 1000;
+	public static final long ST_TIME_CITA_1 = 2000;
+	public static final long ST_TIME_CITA_2 = 3000;
+	public static final long ST_TIME_CITA_3 = 2000;
+	
+	
+	public static final long ST_TIME_LOGO_1 = 1500;
+	public static final long ST_TIME_LOGO_2 = 1000;
+	public static final long ST_TIME_LOGO_3 = 1500;
 	
 	public static final long ST_TIME_MAIN = 1200;
 	
-	public static int iStateLogo;
-	public static final int ST_LOGO_1 = 0;
-	public static final int ST_LOGO_2 = 2;
-	public static final int ST_LOGO_3 = 3;
+	public static int statePresentation;
+	public static final int ST_PRESENTATION_1 = 0;
+	public static final int ST_PRESENTATION_2 = 2;
+	public static final int ST_PRESENTATION_3 = 3;
 	public static int alpha;
 	
-	public static void runLogo(){
-		switch(iStateLogo){
-		case ST_LOGO_1:
-			alpha = (int)(((System.currentTimeMillis() - startTime)*255)/ST_TIME_LOGO_1);
-			if(alpha >= 255){
-				alpha = 255;
-				iStateLogo = ST_LOGO_2;
+	public static boolean runPresentation(long time1, long time2, long time3){
+		switch(statePresentation){
+		case ST_PRESENTATION_1:
+			alpha = 255-(int)(((System.currentTimeMillis() - startTime)*255)/time1);
+			if(alpha <= 0){
+				alpha = 0;
+				statePresentation = ST_PRESENTATION_2;
 				startTime = System.currentTimeMillis();
 			}
 			break;
-		case ST_LOGO_2:
-			if(System.currentTimeMillis()>startTime+ST_TIME_LOGO_2){
-				iStateLogo = ST_LOGO_3;
+		case ST_PRESENTATION_2:
+			if(System.currentTimeMillis()>startTime+time2){
+				statePresentation = ST_PRESENTATION_3;
 				startTime = System.currentTimeMillis();
 				
 			}
 			break;
-		case ST_LOGO_3:
-			alpha = 255- (int)(((System.currentTimeMillis() - startTime)*255)/ST_TIME_LOGO_3);
-			if(alpha <= 0){
-				alpha = 0;
-				Main.changeState(Define.ST_MENU_MAIN, true);
+		case ST_PRESENTATION_3:
+			alpha = (int)(((System.currentTimeMillis() - startTime)*255)/time3);
+			if(alpha >= 255){
+				alpha = 255;
+				return false;
 			}
-			
-			break;
 		}
-		//Log.i("Info", "iLevelAlpha: "+iLevelAlpha);
+		Log.i("Debug", "state " + statePresentation + ": "+alpha);
+		return true;
 	}
 	
 	public static float cloudFarBGX;
@@ -1112,7 +1153,7 @@ public class ModeMenu {
 	public static void runMenuBG(float delta){
 		
 		alpha = 255-((int)(((System.currentTimeMillis() - startTime)*255)/ST_TIME_MAIN));
-		if(alpha <= 0){
+		if(alpha < 0){
 			alpha = 0;
 		}
 		
@@ -1155,7 +1196,7 @@ public class ModeMenu {
 				GfxManager.imgTitle.getHeight()/2 + Define.SIZEY32, 
 				Graphics.VCENTER | Graphics.HCENTER);
 		
-		g.setAlpha(255);;
+		g.setAlpha(255);
 		
 		g.drawImage(GfxManager.imgCloudBG, (int)cloudFarBGX, (int)cloudFarBGY, Graphics.VCENTER | Graphics.HCENTER);
 		g.setImageSize(1.2f, 1.2f);

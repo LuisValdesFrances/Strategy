@@ -13,6 +13,7 @@ public class GfxManager {
 	public static Image vImgFontMedium;
 	public static Image vImgFontBig;
 
+	public static Image imgBlackBG;
 	public static Image vImgLogo;
 	public static Image imgMainBG;
 	public static Image imgSwordBG;
@@ -42,8 +43,6 @@ public class GfxManager {
 	public static Image imgTextPointer;
 
 	// Game images:
-	public static Image imgGameBG;
-	public static Image imgBlackBG;
 	public static Image imgTextBG;
 
 	public static Image imgPadWest;
@@ -131,13 +130,14 @@ public class GfxManager {
 	public static void loadGFX(int _iNewState) {
 
 		switch (_iNewState) {
-		case Define.ST_MENU_LOGO:
+		case Define.ST_MENU_START:
 			try {
 				// Load fonts
 				vImgFontSmall = Image.createImage("/font_small.png");
 				vImgFontMedium = Image.createImage("/font_medium.png");
 				vImgFontBig = Image.createImage("/font_big.png");
 
+				imgBlackBG = Image.createImage("/black_bg.png");
 				vImgLogo = Image.createImage("/4away.png");
 
 				loadMenuGfx();
@@ -208,8 +208,7 @@ public class GfxManager {
 				}
 				
 				imgTextBG = Image.createImage("/text_bg.png");
-				imgBlackBG = Image.createImage("/black_bg.png");
-
+				
 				imgPadWest = Image.createImage("/pad_left.png");
 				imgPadEast = Image.createImage("/pad_right.png");
 				
@@ -450,7 +449,6 @@ public class GfxManager {
 		imgMainBG = null;
 		imgSwordBG = null;
 		imgCloudBG = null;
-		imgBlackBG = null;
 		imgTitle = null;
 		
 		imgFlagList = null;
@@ -468,7 +466,6 @@ public class GfxManager {
 		imgMapList = null;
 		
 		imgTextBG = null;
-		imgBlackBG = null;
 
 		imgPadWest = null;
 		imgPadEast = null;

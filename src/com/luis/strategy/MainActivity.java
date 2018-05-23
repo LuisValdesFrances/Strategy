@@ -5,8 +5,11 @@ import com.luis.lgameengine.gameutils.Settings;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
+import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -23,6 +26,9 @@ public class MainActivity extends Activity{
 	private Thread gameThread;
 	private Main main;
 	
+	private PowerManager powerManager;
+	private PowerManager.WakeLock wakeLock;
+	
 	
 	
 	@Override
@@ -30,9 +36,9 @@ public class MainActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		//setContentView(R.layout.activity_main);
 		
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-		WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
 		int currentApiVersion = android.os.Build.VERSION.SDK_INT;
 
@@ -81,9 +87,14 @@ public class MainActivity extends Activity{
 		//main.setLayoutParams(new ActionBar.LayoutParams(Settings.getInstance().getRealWidth(), Settings.getInstance().getRealHeight()));
 		//setContentView(main);
 		
-		Log.i("Debug", "lGameEngine START");
+		Log.i("Debug", "Game loop START");
 		gameThread = new Thread(main);
 		gameThread.start();
+		
+		
+		//Screen no sleep
+		powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+		wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
 		
 		//this.finish();
 		
@@ -92,6 +103,9 @@ public class MainActivity extends Activity{
 	@Override
 	public void onResume(){
 		super.onResume();
+		if(wakeLock != null){
+			wakeLock.acquire();
+		}
 		main.unPause();
 	}
 	
@@ -103,6 +117,9 @@ public class MainActivity extends Activity{
 	@Override
 	public void onPause(){
 		super.onPause();
+		if(wakeLock != null){
+			wakeLock.acquire();
+		}
 		main.pause();
 	}
 	

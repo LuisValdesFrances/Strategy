@@ -33,27 +33,28 @@ public class Define {
 	public static final int FX_POINT = 8;
 
 	// Menu States:
-	public static final int ST_MENU_LOGO = 0;
-	public static final int ST_MENU_ASK_LANGUAGE = 1;
-	public static final int ST_MENU_ASK_SOUND = 2;
+	public static final int ST_MENU_START = 0;
+	public static final int ST_MENU_LOGO = 1;
+	public static final int ST_MENU_ASK_LANGUAGE = 2;
+	public static final int ST_MENU_ASK_SOUND = 3;
 
-	public static final int ST_MENU_MAIN = 3;
-	public static final int ST_MENU_OPTIONS = 4;
-	public static final int ST_MENU_MORE = 5;
-	public static final int ST_MENU_EXIT = 6;
-	public static final int ST_MENU_HELP = 7;
-	public static final int ST_MENU_ABOUT = 8;
-	public static final int ST_MENU_SELECT_GAME = 9;
-	public static final int ST_MENU_SELECT_MAP = 10;
-	public static final int ST_MENU_CONFIG_MAP = 11;
-	public static final int ST_MENU_CAMPAING = 12;
+	public static final int ST_MENU_MAIN = 4;
+	public static final int ST_MENU_OPTIONS = 5;
+	public static final int ST_MENU_MORE = 6;
+	public static final int ST_MENU_EXIT = 7;
+	public static final int ST_MENU_HELP = 8;
+	public static final int ST_MENU_ABOUT = 9;
+	public static final int ST_MENU_SELECT_GAME = 10;
+	public static final int ST_MENU_SELECT_MAP = 11;
+	public static final int ST_MENU_CONFIG_MAP = 12;
+	public static final int ST_MENU_CAMPAING = 13;
 	
-	public static final int ST_MENU_ON_LINE_START = 13;
-	public static final int ST_MENU_ON_LINE_CREATE_USER = 14;
-	public static final int ST_MENU_ON_LINE_LOGIN = 15;
-	public static final int ST_MENU_ON_LINE_LIST_ALL_GAME = 16;
-	public static final int ST_MENU_ON_LINE_LIST_JOIN_GAME = 17;
-	public static final int ST_MENU_ON_LINE_CREATE_SCENE = 18;
+	public static final int ST_MENU_ON_LINE_START = 14;
+	public static final int ST_MENU_ON_LINE_CREATE_USER = 15;
+	public static final int ST_MENU_ON_LINE_LOGIN = 16;
+	public static final int ST_MENU_ON_LINE_LIST_ALL_GAME = 17;
+	public static final int ST_MENU_ON_LINE_LIST_JOIN_GAME = 18;
+	public static final int ST_MENU_ON_LINE_CREATE_SCENE = 19;
 	
 	public static final int ST_TEST = 50;
 

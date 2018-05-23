@@ -4,12 +4,25 @@ public class RscManager {
 	
 	public static String[] allText;
 	
+	
 	public static final byte ENGLISH = 0;
 	public static final byte SPANISH = 1;
 	public static final byte CATALA = 2;
-	//Language text
+	
+	
 	public static final int TXT_BLANK = 0;
-	public static final int TXT_ENGLISH = TXT_BLANK+1;
+	public static final byte CITA_1 = TXT_BLANK+1;
+	public static final byte CITA_2 = CITA_1+1;
+	public static final byte CITA_3 = CITA_2+1;
+	public static final byte CITA_4 = CITA_3+1;
+	
+	public static final byte AUTOR_1 = CITA_4+1;
+	public static final byte AUTOR_2 = AUTOR_1+1;
+	public static final byte AUTOR_3 = AUTOR_2+1;
+	public static final byte AUTOR_4 = AUTOR_3+1;
+	
+	//Language text
+	public static final int TXT_ENGLISH = AUTOR_4+1;
 	public static final int TXT_SPANISH = TXT_ENGLISH+1;
 	public static final int TXT_CATALA = TXT_SPANISH+1;
 	
@@ -133,7 +146,7 @@ public class RscManager {
 //				System.out.println("Cargado " + ms_sAllTexts[i]);
 //			 }
 		} catch (Exception e) {
-			System.out.println("No se han podido cargar los textos");
+			e.printStackTrace();
 		}
 	}
 	
