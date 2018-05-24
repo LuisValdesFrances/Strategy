@@ -39,7 +39,7 @@ public class ArmyBox extends MenuBox{
 		super(Define.SIZEX, Define.SIZEY, GfxManager.imgBigBox, null, null,
 				Define.SIZEX2, Define.SIZEY2-GfxManager.imgGameHud.getHeight()/2,
 				null,
-				null, Font.FONT_MEDIUM, Font.FONT_SMALL, Main.FX_SELECT, Main.FX_NEXT);
+				null, Font.FONT_MEDIUM, Font.FONT_SMALL, -1, Main.FX_NEXT);
 		
 		btnList.add(new Button(
 				GfxManager.imgButtonCancelRelease,
@@ -50,16 +50,10 @@ public class ArmyBox extends MenuBox{
 				-1){
 			
 			@Override
-			public void onButtonPressDown() {
-				super.onButtonPressDown();
-				SndManager.getInstance().playFX(Main.FX_SELECT, 0);
-			}
+			public void onButtonPressDown() {}
 			
 			@Override
-			public void onButtonPressUp() {
-				super.onButtonPressUp();
-				SndManager.getInstance().playFX(Main.FX_BACK, 0);
-			}
+			public void onButtonPressUp() {}
 		});
 		
 		armyBuyBox = new ArmyBuyBox(){
@@ -129,10 +123,7 @@ public class ArmyBox extends MenuBox{
 					null, -1){
 				
 				@Override
-				public void onButtonPressDown() {
-					super.onButtonPressDown();
-					SndManager.getInstance().playFX(Main.FX_SELECT, 0);
-				}
+				public void onButtonPressDown() {}
 				
 				@Override
 				public void onButtonPressUp() {

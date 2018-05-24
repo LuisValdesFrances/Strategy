@@ -21,7 +21,7 @@ import com.luis.strategy.constants.Define;
  */
 public class Main extends LCanvas implements Runnable {
 	
-	public static boolean debug = true;
+	public static boolean debug = false;
 
 	public static Main instance;
 	public static Main getInstance(){
@@ -98,7 +98,8 @@ public class Main extends LCanvas implements Runnable {
 	public static final byte FX_FANFARRIA_END = 8;
 	public static final byte FX_BATTLE = 9;
 	public static final byte FX_SELECT_ARMY = 10;
-	public static final byte FX_COINS = 11;
+	public static final byte FX_MARCH = 11;
+	public static final byte FX_COINS = 12;
 	 
 	private static final int MUSIC_LIST [] = {
 		R.raw.intro,
@@ -118,6 +119,7 @@ public class Main extends LCanvas implements Runnable {
 	    R.raw.fx_fanfarria_end,
 	    R.raw.fx_battle,
 	    R.raw.fx_select_army,
+	    R.raw.fx_march,
 	    R.raw.fx_coins,
 	    
 	};

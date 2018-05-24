@@ -19,7 +19,7 @@ public class SceneDataListBox extends ListBox{
 				Define.SIZEX2, Define.SIZEY2, 
 				RscManager.allText[RscManager.TXT_SELECT_MAP], 
 				null,
-				Font.FONT_BIG, Font.FONT_SMALL, Main.FX_SELECT, Main.FX_NEXT);
+				Font.FONT_BIG, Font.FONT_SMALL, -1, Main.FX_NEXT);
 		
 	}
 	
@@ -30,7 +30,7 @@ public class SceneDataListBox extends ListBox{
 				Define.SIZEX2, Define.SIZEY2, 
 				RscManager.allText[RscManager.TXT_SELECT_MAP], 
 				textOptions,
-				Font.FONT_BIG, Font.FONT_SMALL, Main.FX_SELECT, Main.FX_NEXT);
+				Font.FONT_BIG, Font.FONT_SMALL, -1, Main.FX_NEXT);
 		
 		this.sceneListData = sceneListData;
 	}
@@ -43,7 +43,7 @@ public class SceneDataListBox extends ListBox{
 				textHeader,
 				Font.FONT_BIG,
 				textOptions, 
-				Font.FONT_SMALL, Main.FX_SELECT, Main.FX_NEXT);
+				Font.FONT_SMALL, -1, Main.FX_NEXT);
 		this.sceneListData = sceneListData;
 	}
 	

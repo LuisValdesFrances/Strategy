@@ -37,7 +37,8 @@ public class GameScene{
 		mapObject = new MapObject(
 				null,
 				mapX, mapY, GfxManager.imgMapList.get(0).getWidth()*numberPartsW, GfxManager.imgMapList.get(0).getWidth()*numberPartsH,
-				mapX, mapY, GfxManager.imgMapList.get(0).getWidth()*numberPartsW, GfxManager.imgMapList.get(0).getWidth()*numberPartsH) {
+				mapX, mapY, GfxManager.imgMapList.get(0).getWidth()*numberPartsW, GfxManager.imgMapList.get(0).getWidth()*numberPartsH,
+				-1, -1) {
 		};
 	}
 	

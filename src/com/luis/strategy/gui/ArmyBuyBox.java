@@ -79,10 +79,7 @@ public class ArmyBuyBox {
 				troopY-GfxManager.imgBigTroop.get(0).getHeight()/2, null, -1){
 			
 			@Override
-			public void onButtonPressDown() {
-				super.onButtonPressDown();
-				SndManager.getInstance().playFX(Main.FX_SELECT, 0);
-			}
+			public void onButtonPressDown() {}
 			
 			@Override
 			public void onButtonPressUp() {
@@ -99,10 +96,7 @@ public class ArmyBuyBox {
 				null, -1){
 			
 			@Override
-			public void onButtonPressDown() {
-				super.onButtonPressDown();
-				SndManager.getInstance().playFX(Main.FX_SELECT, 0);
-			}
+			public void onButtonPressDown() {}
 			
 			public void onButtonPressUp() {
 				SndManager.getInstance().playFX(Main.FX_COINS, 0);
@@ -120,10 +114,7 @@ public class ArmyBuyBox {
 				troopY, null, -1){
 			
 			@Override
-			public void onButtonPressDown() {
-				super.onButtonPressDown();
-				SndManager.getInstance().playFX(Main.FX_SELECT, 0);
-			}
+			public void onButtonPressDown() {}
 			
 			public void onButtonPressUp() {
 				reset();
@@ -139,10 +130,7 @@ public class ArmyBuyBox {
 				troopY, null, -1){
 			
 			@Override
-			public void onButtonPressDown() {
-				super.onButtonPressDown();
-				SndManager.getInstance().playFX(Main.FX_SELECT, 0);
-			}
+			public void onButtonPressDown() {}
 			
 			public void onButtonPressUp() {
 				reset();

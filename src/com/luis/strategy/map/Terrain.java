@@ -3,6 +3,7 @@ package com.luis.strategy.map;
 import com.luis.lgameengine.gameutils.gameworld.GameCamera;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.implementation.input.MultiTouchHandler;
+import com.luis.strategy.Main;
 
 
 public class Terrain extends MapObject{
@@ -15,7 +16,8 @@ public class Terrain extends MapObject{
 			float x, float y, int width, int height,
 			float mapX, float mapY,
 			int mapWidth, int mapHeight, int type, boolean conquest) {
-		super(map, x, y, width, height, mapX, mapY, mapWidth, mapHeight);
+		super(map, x, y, width, height, mapX, mapY, mapWidth, mapHeight, 
+				-1, Main.FX_NEXT);
 		this.type = type;
 		this.conquest = conquest;
 	}

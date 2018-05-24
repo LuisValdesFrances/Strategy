@@ -4,6 +4,7 @@ import com.luis.lgameengine.gameutils.gameworld.GameCamera;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.gui.Button;
 import com.luis.lgameengine.implementation.input.MultiTouchHandler;
+import com.luis.lgameengine.implementation.sound.SndManager;
 
 public abstract class MapObject{
 	
@@ -32,7 +33,8 @@ public abstract class MapObject{
 	public MapObject(
 			MapObject map,
 			float x, float y, int width, int height, 
-			float mapX, float mapY, int mapWidth, int mapHeight) {
+			float mapX, float mapY, int mapWidth, int mapHeight,
+			final int onDownSoundIndex, final int onUpSoundIndex) {
 		super();
 		this.map = map;
 		this.x = x;
@@ -48,11 +50,15 @@ public abstract class MapObject{
 		
 		this.button = new Button(width, height, -1, -1){
 			@Override
-			public void onButtonPressUp() {
-				select = true;
+			public void onButtonPressDown(){
+				SndManager.getInstance().playFX(onDownSoundIndex, 0);
 			};
 			@Override
-			public void onButtonPressDown(){};
+			public void onButtonPressUp() {
+				SndManager.getInstance().playFX(onUpSoundIndex, 0);
+				reset();
+				select = true;
+			};
 			
 			@Override
 			public void reset(){

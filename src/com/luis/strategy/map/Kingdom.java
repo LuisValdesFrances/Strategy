@@ -31,7 +31,7 @@ public class Kingdom extends MapObject{
 			map, 
 			x, y, 
 			GfxManager.imgTargetDomain.getWidth(), GfxManager.imgTargetDomain.getHeight(), 
-			mapX, mapY, mapWidth, mapHeight);
+			mapX, mapY, mapWidth, mapHeight, -1, -1);
 		this.mapX = mapX;
 		this.mapY = mapY;
 		this.mapWidth = mapWidth;

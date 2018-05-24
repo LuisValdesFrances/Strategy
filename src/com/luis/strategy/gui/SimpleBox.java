@@ -20,7 +20,7 @@ public class SimpleBox extends MenuBox{
 		super(
 			Define.SIZEX, Define.SIZEY, imgBox, null, null, 
 			Define.SIZEX2, Define.SIZEY2,
-			null,null, Font.FONT_MEDIUM, Font.FONT_SMALL, Main.FX_SELECT, Main.FX_NEXT);
+			null,null, Font.FONT_MEDIUM, Font.FONT_SMALL, -1, Main.FX_NEXT);
 		
 		if(includeButton)
 			btnList.add(new Button(
@@ -33,7 +33,7 @@ public class SimpleBox extends MenuBox{
 				@Override
 				public void onButtonPressDown() {
 					super.onButtonPressDown();
-						SndManager.getInstance().playFX(Main.FX_SELECT, 0);
+						SndManager.getInstance().playFX(-1, 0);
 				}
 				@Override
 				public void onButtonPressUp() {
@@ -52,7 +52,7 @@ public class SimpleBox extends MenuBox{
 				@Override
 				public void onButtonPressDown() {
 					super.onButtonPressDown();
-						SndManager.getInstance().playFX(Main.FX_SELECT, 0);
+						SndManager.getInstance().playFX(-1, 0);
 				}
 				@Override
 				public void onButtonPressUp() {

@@ -91,9 +91,7 @@ public class ModeMenu {
 					Define.SIZEY32+GfxManager.imgButtonArrowBackRelease.getHeight()/2,
 					null, -1){
 				@Override
-				public void onButtonPressDown(){
-					SndManager.getInstance().playFX(Main.FX_SELECT, 0);
-				}
+				public void onButtonPressDown(){}
 				@Override
 				public void onButtonPressUp() {
 					SndManager.getInstance().playFX(Main.FX_BACK, 0);
@@ -135,9 +133,7 @@ public class ModeMenu {
 					null, -1){
 				
 				@Override
-				public void onButtonPressDown(){
-					SndManager.getInstance().playFX(Main.FX_SELECT, 0);
-				}
+				public void onButtonPressDown(){}
 				@Override
 				public void onButtonPressUp() {
 					SndManager.getInstance().playFX(Main.FX_NEXT, 0);
@@ -186,9 +182,7 @@ public class ModeMenu {
 						Define.SIZEY-(int)(GfxManager.imgButtonMenuBigRelease.getHeight()*1.5)-Define.SIZEY64,
 						RscManager.allText[RscManager.TXT_CAMPAING], Font.FONT_MEDIUM){
 					@Override
-					public void onButtonPressDown(){
-						SndManager.getInstance().playFX(Main.FX_SELECT, 0);
-					}
+					public void onButtonPressDown(){}
 					
 					@Override
 					public void onButtonPressUp(){
@@ -204,9 +198,7 @@ public class ModeMenu {
 						Define.SIZEY-(int)(GfxManager.imgButtonMenuBigRelease.getHeight()/2)-Define.SIZEY64,
 						RscManager.allText[RscManager.TXT_MULTI_PLAYER], Font.FONT_MEDIUM){
 					@Override
-					public void onButtonPressDown(){
-						SndManager.getInstance().playFX(Main.FX_SELECT, 0);
-					}
+					public void onButtonPressDown(){}
 					
 					@Override
 					public void onButtonPressUp(){
@@ -240,9 +232,7 @@ public class ModeMenu {
 					Define.SIZEY-(int)(GfxManager.imgButtonMenuBigRelease.getHeight()*1.5)-Define.SIZEY64,
 					RscManager.allText[RscManager.TXT_CONTINUE], Font.FONT_MEDIUM){
 				@Override
-				public void onButtonPressDown(){
-					SndManager.getInstance().playFX(Main.FX_SELECT, 0);
-				}
+				public void onButtonPressDown(){}
 				
 				@Override
 				public void onButtonPressUp(){
@@ -273,9 +263,7 @@ public class ModeMenu {
 					Define.SIZEY-(int)(GfxManager.imgButtonMenuBigRelease.getHeight()/2)-Define.SIZEY64,
 					RscManager.allText[RscManager.TXT_START], Font.FONT_MEDIUM){
 				@Override
-				public void onButtonPressDown(){
-					SndManager.getInstance().playFX(Main.FX_SELECT, 0);
-				}
+				public void onButtonPressDown(){}
 				
 				@Override
 				public void onButtonPressUp(){
@@ -293,9 +281,7 @@ public class ModeMenu {
 					Define.SIZEY-(int)(GfxManager.imgButtonMenuBigRelease.getHeight()*1.5)-Define.SIZEY64,
 					RscManager.allText[RscManager.TXT_ON_LINE], Font.FONT_MEDIUM){
 				@Override
-				public void onButtonPressDown(){
-					SndManager.getInstance().playFX(Main.FX_SELECT, 0);
-				}
+				public void onButtonPressDown(){}
 				
 				@Override
 				public void onButtonPressUp(){
@@ -323,9 +309,7 @@ public class ModeMenu {
 					Define.SIZEY-(int)(GfxManager.imgButtonMenuBigRelease.getHeight()/2)-Define.SIZEY64,
 					RscManager.allText[RscManager.TXT_PASS_AND_PLAY], Font.FONT_MEDIUM){
 				@Override
-				public void onButtonPressDown(){
-					SndManager.getInstance().playFX(Main.FX_SELECT, 0);
-				}
+				public void onButtonPressDown(){}
 				
 				@Override
 				public void onButtonPressUp(){
@@ -343,7 +327,7 @@ public class ModeMenu {
 					RscManager.allText[RscManager.TXT_SELECT_MAP],
 					DataKingdom.SCENARY_LIST,
 					Font.FONT_BIG, Font.FONT_SMALL,
-					Main.FX_SELECT, Main.FX_NEXT){
+					-1, Main.FX_NEXT){
 				
 				@Override
 				public void onFinish(){
@@ -392,9 +376,7 @@ public class ModeMenu {
 					Define.SIZEY - (int) (GfxManager.imgButtonMenuBigRelease.getHeight() * 1.5) - Define.SIZEY64,
 					RscManager.allText[RscManager.TXT_NEW_ACOUNT], Font.FONT_MEDIUM) {
 				@Override
-				public void onButtonPressDown(){
-					SndManager.getInstance().playFX(Main.FX_SELECT, 0);
-				}
+				public void onButtonPressDown(){}
 
 				@Override
 				public void onButtonPressUp() {
@@ -409,9 +391,7 @@ public class ModeMenu {
 					Define.SIZEY - (int) (GfxManager.imgButtonMenuBigRelease.getHeight() / 2) - Define.SIZEY64,
 					RscManager.allText[RscManager.TXT_LOGIN], Font.FONT_MEDIUM) {
 				@Override
-				public void onButtonPressDown(){
-					SndManager.getInstance().playFX(Main.FX_SELECT, 0);
-				}
+				public void onButtonPressDown(){}
 
 				@Override
 				public void onButtonPressUp() {
@@ -552,7 +532,7 @@ public class ModeMenu {
 								RscManager.allText[RscManager.TXT_NOTIFICATIONS],
 								notificationList,
 								Font.FONT_MEDIUM, Font.FONT_SMALL,
-								Main.FX_SELECT, Main.FX_NEXT);
+								-1, Main.FX_NEXT);
 					 notificationBox.setDisabledList();
 					 for(Button button : notificationBox.getBtnList()){
 						 button.setIgnoreAlpha(true);
@@ -585,9 +565,7 @@ public class ModeMenu {
 						(GfxManager.imgButtonSearchBigRelease.getHeight()/2) + Define.SIZEY64,
 						null, -1){
 				 	@Override
-					public void onButtonPressDown(){
-				 		SndManager.getInstance().playFX(Main.FX_SELECT, 0);
-					}
+					public void onButtonPressDown(){}
 					
 					@Override
 					public void onButtonPressUp(){
@@ -604,9 +582,7 @@ public class ModeMenu {
 						Define.SIZEY - (GfxManager.imgButtonCrossBigRelease.getHeight()/2)-Define.SIZEY64,
 						null, -1){
 					@Override
-					public void onButtonPressDown(){
-						SndManager.getInstance().playFX(Main.FX_SELECT, 0);
-					}
+					public void onButtonPressDown(){}
 					
 					@Override
 					public void onButtonPressUp(){
@@ -783,7 +759,7 @@ public class ModeMenu {
 						RscManager.allText[RscManager.TXT_SELECT_MAP],
 						DataKingdom.SCENARY_LIST,
 						Font.FONT_BIG, Font.FONT_SMALL,
-						Main.FX_SELECT, Main.FX_NEXT){
+						-1, Main.FX_NEXT){
 					
 					@Override
 					public void onWaitFinish(){
@@ -1144,7 +1120,7 @@ public class ModeMenu {
 	
 	
 	public static final long ST_TIME_LOGO_1 = 1000;
-	public static final long ST_TIME_LOGO_2 = 1000;
+	public static final long ST_TIME_LOGO_2 = 800;
 	public static final long ST_TIME_LOGO_3 = 1000;
 	
 	public static final long ST_TIME_MAIN = 1200;

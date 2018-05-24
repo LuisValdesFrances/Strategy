@@ -8,7 +8,6 @@ import com.luis.lgameengine.gui.Keyboard;
 import com.luis.lgameengine.gui.MenuBox;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.input.MultiTouchHandler;
-import com.luis.lgameengine.implementation.sound.SndManager;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.Main;
 import com.luis.strategy.RscManager;
@@ -47,7 +46,7 @@ public class CreateUserBox extends MenuBox{
 				null,
 				Define.SIZEX2, Define.SIZEY2,
 				null, null,
-				-1, -1, Main.FX_SELECT, Main.FX_NEXT);
+				-1, -1, -1, Main.FX_NEXT);
 		keyboard = new Keyboard(
 				Define.SIZEX2, 
 				Define.SIZEY-GfxManager.imgButtonKeyboardRelease.getHeight()*2, 
@@ -57,10 +56,7 @@ public class CreateUserBox extends MenuBox{
 				Main.FX_SELECT){
 			
 			@Override
-			public void onButtonPressDown() {
-				super.onButtonPressDown();
-				SndManager.getInstance().playFX(Main.FX_SELECT, 0);
-			};
+			public void onButtonPressDown() {}
 			@Override
 			public void onButtonPressUp() {}
 		};

@@ -9,6 +9,7 @@ import com.luis.lgameengine.gameutils.gameworld.SpriteImage;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.input.MultiTouchHandler;
+import com.luis.lgameengine.implementation.sound.SndManager;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.Main;
 import com.luis.strategy.constants.Define;
@@ -59,7 +60,8 @@ public class Army extends MapObject{
 			map,
 			kingdom.getX(), kingdom.getY(),
 			GfxManager.imgArmyIdle.getWidth()/9, GfxManager.imgArmyIdle.getHeight(), 
-			mapX, mapY, mapWidth, mapHeight);
+			mapX, mapY, mapWidth, mapHeight,
+			-1, Main.FX_SELECT_ARMY);
 		this.id = idCount++;
 		this.player = player;
 		this.troopList = new ArrayList<Troop>();
@@ -271,6 +273,7 @@ public class Army extends MapObject{
 		case STATE_ATACK: 
 			anim = ANIN_ATACK;
 			spriteList.get(anim).resetAnimation(0);
+			SndManager.getInstance().playFX(Main.FX_SWORD, 0);
 			break;
 		case STATE_OFF:
 			anim = ANIN_IDLE;
