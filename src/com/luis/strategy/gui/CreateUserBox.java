@@ -47,22 +47,25 @@ public class CreateUserBox extends MenuBox{
 				null,
 				Define.SIZEX2, Define.SIZEY2,
 				null, null,
-				-1, -1, Main.FX_BUTTON);
+				-1, -1, Main.FX_SELECT, Main.FX_NEXT);
 		keyboard = new Keyboard(
 				Define.SIZEX2, 
 				Define.SIZEY-GfxManager.imgButtonKeyboardRelease.getHeight()*2, 
 				GfxManager.imgButtonKeyboardRelease, GfxManager.imgButtonKeyboardFocus, 
 				GfxManager.imgButtonKeyboardReleaseSp, GfxManager.imgButtonKeyboardFocusSp,
-				Font.FONT_BIG, Font.FONT_SMALL){
+				Font.FONT_BIG, Font.FONT_SMALL,
+				Main.FX_SELECT){
 			
 			@Override
 			public void onButtonPressDown() {
 				super.onButtonPressDown();
-				SndManager.getInstance().playFX(Main.FX_TAMBOR, 0);
+				SndManager.getInstance().playFX(Main.FX_SELECT, 0);
 			};
 			@Override
 			public void onButtonPressUp() {}
 		};
+		
+		
 		textName = new String("");
 		textPassword = new String("");
 		textRepPassword = new String("");

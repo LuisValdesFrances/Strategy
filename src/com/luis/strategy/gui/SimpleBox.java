@@ -4,6 +4,7 @@ import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gameutils.fonts.TextManager;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.graphics.Image;
+import com.luis.lgameengine.implementation.sound.SndManager;
 import com.luis.lgameengine.gui.Button;
 import com.luis.lgameengine.gui.MenuBox;
 import com.luis.strategy.GfxManager;
@@ -19,7 +20,7 @@ public class SimpleBox extends MenuBox{
 		super(
 			Define.SIZEX, Define.SIZEY, imgBox, null, null, 
 			Define.SIZEX2, Define.SIZEY2,
-			null,null, Font.FONT_MEDIUM, Font.FONT_SMALL, Main.FX_BUTTON);
+			null,null, Font.FONT_MEDIUM, Font.FONT_SMALL, Main.FX_SELECT, Main.FX_NEXT);
 		
 		if(includeButton)
 			btnList.add(new Button(
@@ -28,7 +29,17 @@ public class SimpleBox extends MenuBox{
 					screenWidth/2, 
 					screenHeight/2 + GfxManager.imgSmallBox.getHeight()/2, 
 					null, 
-					-1){});
+					-1){
+				@Override
+				public void onButtonPressDown() {
+					super.onButtonPressDown();
+						SndManager.getInstance().playFX(Main.FX_SELECT, 0);
+				}
+				@Override
+				public void onButtonPressUp() {
+					SndManager.getInstance().playFX(Main.FX_NEXT, 0);
+				};
+			});
 		
 		if(includeCancelButton)
 			btnList.add(new Button(
@@ -37,7 +48,17 @@ public class SimpleBox extends MenuBox{
 					screenWidth/2-GfxManager.imgSmallBox.getWidth()/2, 
 					screenHeight/2 - GfxManager.imgSmallBox.getHeight()/2, 
 					null, 
-					-1){});
+					-1){
+				@Override
+				public void onButtonPressDown() {
+					super.onButtonPressDown();
+						SndManager.getInstance().playFX(Main.FX_SELECT, 0);
+				}
+				@Override
+				public void onButtonPressUp() {
+					SndManager.getInstance().playFX(Main.FX_BACK, 0);
+				};
+			});
 	}
 	
 	

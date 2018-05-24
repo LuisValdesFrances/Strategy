@@ -21,7 +21,7 @@ import com.luis.strategy.constants.Define;
  */
 public class Main extends LCanvas implements Runnable {
 	
-	public static boolean debug = false;
+	public static boolean debug = true;
 
 	public static Main instance;
 	public static Main getInstance(){
@@ -87,15 +87,18 @@ public class Main extends LCanvas implements Runnable {
 	public static final byte MUSIC_START_BATTLE = 2;
 	
 	//FX
-	public static final byte FX_BUTTON = 0;
-	public static final byte FX_TAMBOR = 1;
-	public static final byte FX_SWORD = 2;
-	public static final byte FX_SWORD_BLOOD = 3;
-	public static final byte FX_SWORD_STRONG = 4;
-	public static final byte FX_FAIL = 5;
-	public static final byte FX_FANFARRIA_START = 6;
-	public static final byte FX_FANFARRIA_END = 7;
-	public static final byte FX_BATTLE = 8;
+	public static final byte FX_NEXT = 0;
+	public static final byte FX_BACK = 1;
+	public static final byte FX_SELECT = 2;
+	public static final byte FX_SWORD = 3;
+	public static final byte FX_SWORD_BLOOD = 4;
+	public static final byte FX_SWORD_STRONG = 5;
+	public static final byte FX_FAIL = 6;
+	public static final byte FX_FANFARRIA_START = 7;
+	public static final byte FX_FANFARRIA_END = 8;
+	public static final byte FX_BATTLE = 9;
+	public static final byte FX_SELECT_ARMY = 10;
+	public static final byte FX_COINS = 11;
 	 
 	private static final int MUSIC_LIST [] = {
 		R.raw.intro,
@@ -104,8 +107,9 @@ public class Main extends LCanvas implements Runnable {
 	 };
 	
 	private static final int FX_FILE [] = {
-	    R.raw.fx_button,
-	    R.raw.fx_tambor,
+	    R.raw.fx_next,
+	    R.raw.fx_back,
+	    R.raw.fx_select,
 	    R.raw.fx_sword,
 	    R.raw.fx_sword_blood,
 	    R.raw.fx_sword_strong,
@@ -113,6 +117,9 @@ public class Main extends LCanvas implements Runnable {
 	    R.raw.fx_fanfarria_start,
 	    R.raw.fx_fanfarria_end,
 	    R.raw.fx_battle,
+	    R.raw.fx_select_army,
+	    R.raw.fx_coins,
+	    
 	};
 	 
 	public static int iLanguage;

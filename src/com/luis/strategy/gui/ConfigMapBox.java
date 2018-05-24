@@ -6,12 +6,14 @@ import java.util.List;
 
 
 
+
 import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gameutils.fonts.TextManager;
 import com.luis.lgameengine.gui.Button;
 import com.luis.lgameengine.gui.ListBox;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.input.MultiTouchHandler;
+import com.luis.lgameengine.implementation.sound.SndManager;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.Main;
 import com.luis.strategy.RscManager;
@@ -33,7 +35,7 @@ public class ConfigMapBox extends ListBox{
 			Define.SIZEX2, Define.SIZEY2, 
 			RscManager.allText[RscManager.TXT_CONFIG_MAP],
 			new String[pcList.length], 
-			Font.FONT_BIG, Font.FONT_MEDIUM, Main.FX_BUTTON);
+			Font.FONT_BIG, Font.FONT_MEDIUM, Main.FX_SELECT, Main.FX_NEXT);
 		
 		this.playerConfList = pcList;
 		playerList = new ArrayList<String>();
@@ -49,11 +51,22 @@ public class ConfigMapBox extends ListBox{
 			playerList.add(playerName);
 			
 			playerFlagBtnList.add(
-					new Button(
+				new Button(
 				GfxManager.imgButtonMenuSmallRelease, GfxManager.imgButtonMenuSmallFocus, 
 				Define.SIZEX - Define.SIZEX32 - GfxManager.imgButtonMenuMediumRelease.getWidth()/2,
 				btnList.get(i).getY(), 
-				null, -1));
+				null, -1){
+					@Override
+					public void onButtonPressDown() {
+						super.onButtonPressDown();
+							SndManager.getInstance().playFX(Main.FX_SELECT, 0);
+					}
+					@Override
+					public void onButtonPressUp() {
+						SndManager.getInstance().playFX(Main.FX_NEXT, 0);
+					};
+				}
+				);
 			
 			availableFlagList.set(i, false);
 		}

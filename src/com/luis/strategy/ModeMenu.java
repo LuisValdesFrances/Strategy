@@ -92,10 +92,12 @@ public class ModeMenu {
 					null, -1){
 				@Override
 				public void onButtonPressDown(){
-					SndManager.getInstance().playFX(Main.FX_BUTTON, 0);
+					SndManager.getInstance().playFX(Main.FX_SELECT, 0);
 				}
 				@Override
 				public void onButtonPressUp() {
+					SndManager.getInstance().playFX(Main.FX_BACK, 0);
+					reset();
 					switch(Main.state){
 					case Define.ST_MENU_SELECT_GAME:
 					case Define.ST_MENU_CAMPAING:
@@ -134,10 +136,12 @@ public class ModeMenu {
 				
 				@Override
 				public void onButtonPressDown(){
-					SndManager.getInstance().playFX(Main.FX_BUTTON, 0);
+					SndManager.getInstance().playFX(Main.FX_SELECT, 0);
 				}
 				@Override
 				public void onButtonPressUp() {
+					SndManager.getInstance().playFX(Main.FX_NEXT, 0);
+					reset();
 					switch(Main.state){
 					case Define.ST_MENU_CONFIG_MAP:
 						configMapBox.setIndexPressed(0);
@@ -183,11 +187,12 @@ public class ModeMenu {
 						RscManager.allText[RscManager.TXT_CAMPAING], Font.FONT_MEDIUM){
 					@Override
 					public void onButtonPressDown(){
-						SndManager.getInstance().playFX(Main.FX_BUTTON, 0);
+						SndManager.getInstance().playFX(Main.FX_SELECT, 0);
 					}
 					
 					@Override
 					public void onButtonPressUp(){
+						SndManager.getInstance().playFX(Main.FX_NEXT, 0);
 						Main.changeState(Define.ST_MENU_CAMPAING, false);
 						reset();
 					}
@@ -200,18 +205,19 @@ public class ModeMenu {
 						RscManager.allText[RscManager.TXT_MULTI_PLAYER], Font.FONT_MEDIUM){
 					@Override
 					public void onButtonPressDown(){
-						SndManager.getInstance().playFX(Main.FX_BUTTON, 0);
+						SndManager.getInstance().playFX(Main.FX_SELECT, 0);
 					}
 					
 					@Override
 					public void onButtonPressUp(){
+						SndManager.getInstance().playFX(Main.FX_NEXT, 0);
 						reset();
 						Main.changeState(Define.ST_MENU_SELECT_GAME, false);
 					}
 				};
 				
 				btnCampaign.setDisabled(true);
-			}else{
+			}else if(Main.lastState > Define.ST_GAME_INIT_PASS_AND_PLAY){
 				SndManager.getInstance().stopMusic();
 				SndManager.getInstance().playFX(Main.FX_BATTLE, -1);
 			}
@@ -235,12 +241,12 @@ public class ModeMenu {
 					RscManager.allText[RscManager.TXT_CONTINUE], Font.FONT_MEDIUM){
 				@Override
 				public void onButtonPressDown(){
-					SndManager.getInstance().playFX(Main.FX_BUTTON, 0);
+					SndManager.getInstance().playFX(Main.FX_SELECT, 0);
 				}
 				
 				@Override
 				public void onButtonPressUp(){
-					
+					SndManager.getInstance().playFX(Main.FX_NEXT, 0);
 					//SceneData dataPackage = null;
 					/*
 					//Lectura local
@@ -268,12 +274,12 @@ public class ModeMenu {
 					RscManager.allText[RscManager.TXT_START], Font.FONT_MEDIUM){
 				@Override
 				public void onButtonPressDown(){
-					SndManager.getInstance().playFX(Main.FX_BUTTON, 0);
+					SndManager.getInstance().playFX(Main.FX_SELECT, 0);
 				}
 				
 				@Override
 				public void onButtonPressUp(){
-					
+					SndManager.getInstance().playFX(Main.FX_NEXT, 0);
 					reset();
 				}
 			};
@@ -288,11 +294,12 @@ public class ModeMenu {
 					RscManager.allText[RscManager.TXT_ON_LINE], Font.FONT_MEDIUM){
 				@Override
 				public void onButtonPressDown(){
-					SndManager.getInstance().playFX(Main.FX_BUTTON, 0);
+					SndManager.getInstance().playFX(Main.FX_SELECT, 0);
 				}
 				
 				@Override
 				public void onButtonPressUp(){
+					SndManager.getInstance().playFX(Main.FX_NEXT, 0);
 					reset();
 					String data = FileIO.getInstance().loadData(Define.DATA_USER, 
 							Settings.getInstance().getActiviy().getApplicationContext());
@@ -317,11 +324,12 @@ public class ModeMenu {
 					RscManager.allText[RscManager.TXT_PASS_AND_PLAY], Font.FONT_MEDIUM){
 				@Override
 				public void onButtonPressDown(){
-					SndManager.getInstance().playFX(Main.FX_BUTTON, 0);
+					SndManager.getInstance().playFX(Main.FX_SELECT, 0);
 				}
 				
 				@Override
 				public void onButtonPressUp(){
+					SndManager.getInstance().playFX(Main.FX_NEXT, 0);
 					Main.changeState(Define.ST_MENU_SELECT_MAP, false);
 					reset();
 				}
@@ -335,7 +343,7 @@ public class ModeMenu {
 					RscManager.allText[RscManager.TXT_SELECT_MAP],
 					DataKingdom.SCENARY_LIST,
 					Font.FONT_BIG, Font.FONT_SMALL,
-					Main.FX_BUTTON){
+					Main.FX_SELECT, Main.FX_NEXT){
 				
 				@Override
 				public void onFinish(){
@@ -385,11 +393,12 @@ public class ModeMenu {
 					RscManager.allText[RscManager.TXT_NEW_ACOUNT], Font.FONT_MEDIUM) {
 				@Override
 				public void onButtonPressDown(){
-					SndManager.getInstance().playFX(Main.FX_BUTTON, 0);
+					SndManager.getInstance().playFX(Main.FX_SELECT, 0);
 				}
 
 				@Override
 				public void onButtonPressUp() {
+					SndManager.getInstance().playFX(Main.FX_NEXT, 0);
 					Main.changeState(Define.ST_MENU_ON_LINE_CREATE_USER, false);
 					reset();
 				}
@@ -401,11 +410,12 @@ public class ModeMenu {
 					RscManager.allText[RscManager.TXT_LOGIN], Font.FONT_MEDIUM) {
 				@Override
 				public void onButtonPressDown(){
-					SndManager.getInstance().playFX(Main.FX_BUTTON, 0);
+					SndManager.getInstance().playFX(Main.FX_SELECT, 0);
 				}
 
 				@Override
 				public void onButtonPressUp() {
+					SndManager.getInstance().playFX(Main.FX_NEXT, 0);
 					Main.changeState(Define.ST_MENU_ON_LINE_LOGIN, false);
 					reset();
 				}
@@ -542,7 +552,7 @@ public class ModeMenu {
 								RscManager.allText[RscManager.TXT_NOTIFICATIONS],
 								notificationList,
 								Font.FONT_MEDIUM, Font.FONT_SMALL,
-								Main.FX_BUTTON);
+								Main.FX_SELECT, Main.FX_NEXT);
 					 notificationBox.setDisabledList();
 					 for(Button button : notificationBox.getBtnList()){
 						 button.setIgnoreAlpha(true);
@@ -576,11 +586,12 @@ public class ModeMenu {
 						null, -1){
 				 	@Override
 					public void onButtonPressDown(){
-						SndManager.getInstance().playFX(Main.FX_BUTTON, 0);
+				 		SndManager.getInstance().playFX(Main.FX_SELECT, 0);
 					}
 					
 					@Override
 					public void onButtonPressUp(){
+						SndManager.getInstance().playFX(Main.FX_NEXT, 0);
 						reset();
 						Main.changeState(Define.ST_MENU_ON_LINE_LIST_JOIN_GAME, false);
 					}
@@ -594,11 +605,12 @@ public class ModeMenu {
 						null, -1){
 					@Override
 					public void onButtonPressDown(){
-						SndManager.getInstance().playFX(Main.FX_BUTTON, 0);
+						SndManager.getInstance().playFX(Main.FX_SELECT, 0);
 					}
 					
 					@Override
 					public void onButtonPressUp(){
+						SndManager.getInstance().playFX(Main.FX_NEXT, 0);
 						reset();
 						Main.changeState(Define.ST_MENU_ON_LINE_CREATE_SCENE, false);
 					}
@@ -771,7 +783,7 @@ public class ModeMenu {
 						RscManager.allText[RscManager.TXT_SELECT_MAP],
 						DataKingdom.SCENARY_LIST,
 						Font.FONT_BIG, Font.FONT_SMALL,
-						Main.FX_BUTTON){
+						Main.FX_SELECT, Main.FX_NEXT){
 					
 					@Override
 					public void onWaitFinish(){

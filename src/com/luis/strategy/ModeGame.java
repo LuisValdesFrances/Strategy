@@ -200,7 +200,7 @@ public class ModeGame {
 							RscManager.allText[RscManager.TXT_QUIT]
 					},
 					Font.FONT_MEDIUM, Font.FONT_MEDIUM, 
-					Main.FX_BUTTON){
+					Main.FX_SELECT, Main.FX_NEXT){
 				@Override
 				public void onFinish(){}
 			};
@@ -215,7 +215,7 @@ public class ModeGame {
 					RscManager.allText[RscManager.TXT_RETURN_MENU],
 					new String[]{RscManager.allText[RscManager.TXT_NO], RscManager.allText[RscManager.TXT_YES]},
 					Font.FONT_MEDIUM, Font.FONT_MEDIUM, 
-					Main.FX_BUTTON){
+					Main.FX_SELECT, Main.FX_NEXT){
 				@Override
 				public void onFinish(){}
 			};

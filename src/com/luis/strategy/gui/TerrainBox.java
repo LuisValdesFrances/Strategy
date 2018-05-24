@@ -6,6 +6,7 @@ import com.luis.lgameengine.gui.Button;
 import com.luis.lgameengine.gui.MenuBox;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.input.MultiTouchHandler;
+import com.luis.lgameengine.implementation.sound.SndManager;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.Main;
 import com.luis.strategy.RscManager;
@@ -24,7 +25,7 @@ public class TerrainBox extends MenuBox{
 		super(Define.SIZEX, Define.SIZEY, GfxManager.imgMediumBox, null, null,
 				Define.SIZEX2, Define.SIZEY2-GfxManager.imgGameHud.getHeight()/2,
 				null,
-				null, Font.FONT_MEDIUM, Font.FONT_SMALL, Main.FX_BUTTON);
+				null, Font.FONT_MEDIUM, Font.FONT_SMALL, Main.FX_SELECT, Main.FX_BACK);
 		
 		btnList.add(new Button(
 				GfxManager.imgButtonCancelRelease,
@@ -32,7 +33,19 @@ public class TerrainBox extends MenuBox{
 				getX() - GfxManager.imgMediumBox.getWidth()/2, 
 				getY() - GfxManager.imgMediumBox.getHeight()/2, 
 				null, 
-				-1){});
+				-1){
+			@Override
+			public void onButtonPressDown() {
+				super.onButtonPressDown();
+				SndManager.getInstance().playFX(Main.FX_SELECT, 0);
+			}
+			
+			@Override
+			public void onButtonPressUp() {
+				super.onButtonPressUp();
+				SndManager.getInstance().playFX(Main.FX_BACK, 0);
+			}
+		});
 		}
 	
 	private int headY;

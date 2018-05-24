@@ -10,7 +10,9 @@ import com.luis.lgameengine.gui.MenuElement;
 import com.luis.lgameengine.gui.NotificationBox;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.input.MultiTouchHandler;
+import com.luis.lgameengine.implementation.sound.SndManager;
 import com.luis.strategy.GfxManager;
+import com.luis.strategy.Main;
 import com.luis.strategy.RscManager;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
@@ -75,7 +77,16 @@ public class ArmyBuyBox {
 				GfxManager.imgButtonCancelRelease, GfxManager.imgButtonCancelFocus, 
 				troopX-GfxManager.imgBigTroop.get(0).getWidth()/2, 
 				troopY-GfxManager.imgBigTroop.get(0).getHeight()/2, null, -1){
+			
+			@Override
+			public void onButtonPressDown() {
+				super.onButtonPressDown();
+				SndManager.getInstance().playFX(Main.FX_SELECT, 0);
+			}
+			
+			@Override
 			public void onButtonPressUp() {
+				SndManager.getInstance().playFX(Main.FX_BACK, 0);
 				if(state==STATE_SHOW){
 					state = STATE_END;
 				}
@@ -86,12 +97,20 @@ public class ArmyBuyBox {
 				troopX+GfxManager.imgBigTroop.get(0).getWidth()/2-GfxManager.imgButtonCrossBigRelease.getWidth()/4, 
 				troopY+GfxManager.imgBigTroop.get(0).getHeight()/2-GfxManager.imgButtonCrossBigRelease.getHeight()/4, 
 				null, -1){
+			
+			@Override
+			public void onButtonPressDown() {
+				super.onButtonPressDown();
+				SndManager.getInstance().playFX(Main.FX_SELECT, 0);
+			}
+			
 			public void onButtonPressUp() {
+				SndManager.getInstance().playFX(Main.FX_COINS, 0);
+				buttonBuy.reset();
 				String text = "New troop has been acquired";
 				NotificationBox.getInstance().addMessage(text);
 				onBuy();
 				buttonBuy.setDisabled(army.getPlayer().getGold() < GameParams.TROOP_COST[index]);
-				buttonBuy.reset();
 			};
 		};
 		
@@ -99,6 +118,13 @@ public class ArmyBuyBox {
 				GfxManager.imgPadWest, GfxManager.imgPadWest, 
 				troopX-GfxManager.imgBigTroop.get(0).getWidth()/2-GfxManager.imgPadWest.getWidth(), 
 				troopY, null, -1){
+			
+			@Override
+			public void onButtonPressDown() {
+				super.onButtonPressDown();
+				SndManager.getInstance().playFX(Main.FX_SELECT, 0);
+			}
+			
 			public void onButtonPressUp() {
 				reset();
 				index = index+1%(descTroopList.size()-1);
@@ -111,6 +137,13 @@ public class ArmyBuyBox {
 				GfxManager.imgPadEast, GfxManager.imgPadEast, 
 				troopX+GfxManager.imgBigTroop.get(0).getWidth()/2+GfxManager.imgPadWest.getWidth(), 
 				troopY, null, -1){
+			
+			@Override
+			public void onButtonPressDown() {
+				super.onButtonPressDown();
+				SndManager.getInstance().playFX(Main.FX_SELECT, 0);
+			}
+			
 			public void onButtonPressUp() {
 				reset();
 				index = index-1;

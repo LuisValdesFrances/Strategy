@@ -168,10 +168,14 @@ public class GameManager {
 				Define.SIZEY-GfxManager.imgGameHud.getHeight()/2 + GfxManager.imgGameHud.getHeight()/8,
 				null, 0){
 			@Override
-			public void onButtonPressDown(){}
+			public void onButtonPressDown(){
+				super.onButtonPressDown();
+				SndManager.getInstance().playFX(Main.FX_SELECT, 0);
+			}
 			
 			@Override
 			public void onButtonPressUp(){
+				SndManager.getInstance().playFX(Main.FX_NEXT, 0);
 				changeState(state+1);
 				reset();
 			}
@@ -184,10 +188,14 @@ public class GameManager {
 				Define.SIZEY-GfxManager.imgGameHud.getHeight()/2 + GfxManager.imgGameHud.getHeight()/8,
 				null, 0){
 			@Override
-			public void onButtonPressDown(){}
+			public void onButtonPressDown(){
+				super.onButtonPressDown();
+				SndManager.getInstance().playFX(Main.FX_SELECT, 0);
+			}
 			
 			@Override
 			public void onButtonPressUp(){
+				SndManager.getInstance().playFX(Main.FX_BACK, 0);
 				if(state == STATE_ACTION){
 					btnCancel.setDisabled(true);
 					switch(subState){
@@ -488,6 +496,7 @@ public class GameManager {
 								btnFlagHelmet.start();
 								insertTargetUnMap(getSelectedArmy());
 								changeSubState(SUB_STATE_ACTION_SELECT);
+								SndManager.getInstance().playFX(Main.FX_SELECT_ARMY, 0);
 							}else{
 								btnFlagHelmet.hide();
 							}
@@ -524,6 +533,7 @@ public class GameManager {
 								k.setTarget(-1);
 							}
 						}
+						SndManager.getInstance().playFX(Main.FX_SWORD, 0);
 						if(move){
 							getSelectedArmy().changeState(Army.STATE_MOVE);
 							changeSubState(SUB_STATE_ACTION_MOVE);

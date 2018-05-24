@@ -46,6 +46,8 @@ public class BattleDiceBox {
 	private int diceDifficult;
 	private boolean[] result;
 	
+	private boolean callToFX;
+	
 	private ResultIconPropierties[] resultIcon;
 	
 	public BattleDiceBox() {
@@ -75,6 +77,13 @@ public class BattleDiceBox {
 				shieldIconX, 
 				iconSep*shieldIconY.length + GfxManager.imgShieldIcon.getHeight()*(shieldIconY.length-1) + GfxManager.imgShieldIcon.getHeight()/2 , 
 				null, -1){
+			@Override
+			public void onButtonPressDown() {
+				super.onButtonPressDown();
+				SndManager.getInstance().playFX(Main.FX_SWORD, 0);
+			}
+			
+			@Override
 			public void onButtonPressUp() {
 				state++;
 				onCombat();
@@ -108,23 +117,16 @@ public class BattleDiceBox {
 	}
 	
 	private void combat() {
+		callToFX = true;
 		this.diceValue = Main.getRandom(1, GameParams.ROLL_SYSTEM);
 		if(diceValue == GameParams.ROLL_SYSTEM){
 			NotificationBox.getInstance().addMessage("Critical!");
 			result[stateCombat] = true;
-			SndManager.getInstance().playFX(Main.FX_SWORD_STRONG, 0);
 		}else if(diceValue == 1){
 			NotificationBox.getInstance().addMessage("Blunder!");
 			result[stateCombat] = false;
-			SndManager.getInstance().playFX(Main.FX_FAIL, 0);
 		}else{
 			result[stateCombat] = diceValue >= diceDifficult;
-		}
-		
-		if(result[stateCombat]){
-			SndManager.getInstance().playFX(Main.FX_SWORD_BLOOD, 0);
-		}else{
-			SndManager.getInstance().playFX(Main.FX_SWORD, 0);
 		}
 	}
 
@@ -151,13 +153,22 @@ public class BattleDiceBox {
 								resultIcon[i].modSize -= (resultIcon[i].modSize*8f)*delta;
 								resultIcon[i].modAlpha = (int) ((resultIcon[i].modSize*255f)/ResultIconPropierties.MAX_SIZE);
 							}
-							if(resultIcon[i].modSize <= 0){
+							if(resultIcon[i].modSize <= 0.01f){
 								resultIcon[i].modAlpha = 0;
 								resultIcon[i].modSize = 0f;
+								
 							}
 						}
 					}
 					//buttonCombat.setDisabled(modPosDice < 0 || resultIcon[stateCombat].modSize > 0);
+					if(callToFX){
+						callToFX = false;
+						if(result[stateCombat]){
+							SndManager.getInstance().playFX(Main.FX_SWORD_STRONG, 0);
+						}else{
+							SndManager.getInstance().playFX(Main.FX_SWORD_BLOOD, 0);
+						}
+					}
 				}
 				
 				if(autoPlay && resultIcon[stateCombat].modAlpha == 0 && modPosDice == 0){

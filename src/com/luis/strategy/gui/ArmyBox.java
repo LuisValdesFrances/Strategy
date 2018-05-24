@@ -8,6 +8,7 @@ import android.util.Log;
 import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.input.MultiTouchHandler;
+import com.luis.lgameengine.implementation.sound.SndManager;
 import com.luis.lgameengine.gui.Button;
 import com.luis.lgameengine.gui.MenuBox;
 import com.luis.strategy.GfxManager;
@@ -38,7 +39,7 @@ public class ArmyBox extends MenuBox{
 		super(Define.SIZEX, Define.SIZEY, GfxManager.imgBigBox, null, null,
 				Define.SIZEX2, Define.SIZEY2-GfxManager.imgGameHud.getHeight()/2,
 				null,
-				null, Font.FONT_MEDIUM, Font.FONT_SMALL, Main.FX_BUTTON);
+				null, Font.FONT_MEDIUM, Font.FONT_SMALL, Main.FX_SELECT, Main.FX_NEXT);
 		
 		btnList.add(new Button(
 				GfxManager.imgButtonCancelRelease,
@@ -46,7 +47,20 @@ public class ArmyBox extends MenuBox{
 				getX() - GfxManager.imgBigBox.getWidth()/2, 
 				getY() - GfxManager.imgBigBox.getHeight()/2, 
 				null, 
-				-1){});
+				-1){
+			
+			@Override
+			public void onButtonPressDown() {
+				super.onButtonPressDown();
+				SndManager.getInstance().playFX(Main.FX_SELECT, 0);
+			}
+			
+			@Override
+			public void onButtonPressUp() {
+				super.onButtonPressUp();
+				SndManager.getInstance().playFX(Main.FX_BACK, 0);
+			}
+		});
 		
 		armyBuyBox = new ArmyBuyBox(){
 			@Override
@@ -113,8 +127,16 @@ public class ArmyBox extends MenuBox{
 					getX()+GfxManager.imgBigBox.getWidth()/2-GfxManager.imgButtonCrossBigRelease.getWidth()/4, 
 					getY()+GfxManager.imgBigBox.getHeight()/2-GfxManager.imgButtonCrossBigRelease.getHeight()/4, 
 					null, -1){
+				
+				@Override
+				public void onButtonPressDown() {
+					super.onButtonPressDown();
+					SndManager.getInstance().playFX(Main.FX_SELECT, 0);
+				}
+				
 				@Override
 				public void onButtonPressUp() {
+					SndManager.getInstance().playFX(Main.FX_NEXT, 0);
 					reset();
 					armyBuyBox.start(army);
 				}
