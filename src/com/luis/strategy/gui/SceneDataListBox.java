@@ -5,6 +5,7 @@ import java.io.Serializable;
 import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gui.ListBox;
 import com.luis.strategy.GfxManager;
+import com.luis.strategy.Main;
 import com.luis.strategy.RscManager;
 import com.luis.strategy.constants.Define;
 
@@ -18,7 +19,7 @@ public class SceneDataListBox extends ListBox{
 				Define.SIZEX2, Define.SIZEY2, 
 				RscManager.allText[RscManager.TXT_SELECT_MAP], 
 				null,
-				Font.FONT_BIG, Font.FONT_SMALL);
+				Font.FONT_BIG, Font.FONT_SMALL, Main.FX_BUTTON);
 		
 	}
 	
@@ -29,7 +30,7 @@ public class SceneDataListBox extends ListBox{
 				Define.SIZEX2, Define.SIZEY2, 
 				RscManager.allText[RscManager.TXT_SELECT_MAP], 
 				textOptions,
-				Font.FONT_BIG, Font.FONT_SMALL);
+				Font.FONT_BIG, Font.FONT_SMALL, Main.FX_BUTTON);
 		
 		this.sceneListData = sceneListData;
 	}
@@ -42,7 +43,7 @@ public class SceneDataListBox extends ListBox{
 				textHeader,
 				Font.FONT_BIG,
 				textOptions, 
-				Font.FONT_SMALL);
+				Font.FONT_SMALL, Main.FX_BUTTON);
 		this.sceneListData = sceneListData;
 	}
 	

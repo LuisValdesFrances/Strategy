@@ -7,6 +7,7 @@ import com.luis.lgameengine.implementation.graphics.Image;
 import com.luis.lgameengine.gui.Button;
 import com.luis.lgameengine.gui.MenuBox;
 import com.luis.strategy.GfxManager;
+import com.luis.strategy.Main;
 import com.luis.strategy.constants.Define;
 
 public class SimpleBox extends MenuBox{
@@ -18,7 +19,7 @@ public class SimpleBox extends MenuBox{
 		super(
 			Define.SIZEX, Define.SIZEY, imgBox, null, null, 
 			Define.SIZEX2, Define.SIZEY2,
-			null,null, Font.FONT_MEDIUM, Font.FONT_SMALL);
+			null,null, Font.FONT_MEDIUM, Font.FONT_SMALL, Main.FX_BUTTON);
 		
 		if(includeButton)
 			btnList.add(new Button(

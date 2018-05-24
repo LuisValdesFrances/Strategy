@@ -324,7 +324,8 @@ public class GameManager {
 		battleBox = new BattleBox(){
 			@Override
 			public void onFinish(){
-				SndManager.getInstance().playMusic(Main.MUSIC_MAP, true);
+				super.onFinish();
+				
 				switch(this.getIndexPressed()){
 				case 0:
 					resolveCombat(battleBox.getResult());
@@ -339,6 +340,9 @@ public class GameManager {
 						changeSubState(SUB_STATE_ACTION_WAIT);
 					}
 					break;
+				}
+				if(SndManager.getInstance().getCurrentClip() == Main.MUSIC_START_BATTLE){
+					SndManager.getInstance().playMusic(Main.MUSIC_MAP, true);
 				}
 			}
 		};
@@ -1189,6 +1193,12 @@ public class GameManager {
 		presentationText = text;
 		presentationShowCount = 0;
 		presentationModX = -Define.SIZEX;
+		
+		if(getCurrentPlayer().getActionIA() != null){
+			SndManager.getInstance().playFX(Main.FX_FANFARRIA_START, 0);
+		}else{
+			SndManager.getInstance().playFX(Main.FX_FANFARRIA_END, 0);
+		}
 	}
 	
 	private boolean updatePresentation(float delta){
@@ -1836,8 +1846,8 @@ public class GameManager {
 								getEnemyAtKingdom(getCurrentPlayer()),
 								-1,
 								cancelOption, scapeOption, isAutoPlay());
-						SndManager.getInstance().playMusic(Main.MUSIC_START_BATLE, true);
 						changeSubState(SUB_STATE_ACTION_COMBAT_ANIM);
+						SndManager.getInstance().playMusic(Main.MUSIC_START_BATTLE, true);
 					}
 				}
 			}else{

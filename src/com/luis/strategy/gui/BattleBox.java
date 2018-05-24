@@ -4,6 +4,7 @@ import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gameutils.fonts.TextManager;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.input.MultiTouchHandler;
+import com.luis.lgameengine.implementation.sound.SndManager;
 import com.luis.lgameengine.gui.Button;
 import com.luis.lgameengine.gui.MenuBox;
 import com.luis.strategy.GfxManager;
@@ -30,6 +31,8 @@ public class BattleBox extends MenuBox{
 	
 	private int kingdomFlag;
 	
+	private int fxLoopId;//Guarda el id del sonido que inicia con la caja
+	
 	//Controla si al terminar la ventana, se debe de resolver alguna accion de la batalla, como la huida
 	private boolean scapeOptions;
 	
@@ -38,7 +41,7 @@ public class BattleBox extends MenuBox{
 		super(Define.SIZEX, Define.SIZEY, GfxManager.imgBigBox, null, null,
 				Define.SIZEX2, Define.SIZEY2-GfxManager.imgGameHud.getHeight()/2,
 				"Balance of power",
-				null, Font.FONT_MEDIUM, Font.FONT_SMALL);
+				null, Font.FONT_MEDIUM, Font.FONT_SMALL, Main.FX_BUTTON);
 		
 		
 		btnList.add(new Button(
@@ -48,6 +51,11 @@ public class BattleBox extends MenuBox{
 				getY() + GfxManager.imgBigBox.getHeight()/2, 
 				null, 
 				-1){
+			@Override
+					public void onButtonPressDown() {
+						super.onButtonPressDown();
+						SndManager.getInstance().playFX(Main.FX_TAMBOR, 0);
+					}
 			@Override
 			public void onButtonPressUp(){
 				reset();
@@ -107,7 +115,16 @@ public class BattleBox extends MenuBox{
 		}else{
 			cancelButton = null;
 		}
+		
+		fxLoopId = SndManager.getInstance().playFX(Main.FX_BATTLE, -1);
 	}
+	
+	@Override
+	public void onFinish() {
+		super.onFinish();
+		SndManager.getInstance().stopFX(fxLoopId);
+	};
+	
 	
 	@Override
 	public boolean update(MultiTouchHandler touchHandler, float delta){

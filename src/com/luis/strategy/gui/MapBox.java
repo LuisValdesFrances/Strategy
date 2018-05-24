@@ -9,6 +9,7 @@ import com.luis.lgameengine.gui.MenuBox;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.graphics.Image;
 import com.luis.strategy.GfxManager;
+import com.luis.strategy.Main;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.map.Kingdom;
@@ -26,7 +27,7 @@ public class MapBox extends MenuBox{
 		super(Define.SIZEX, Define.SIZEY, GfxManager.imgMediumBox, null, null,
 				Define.SIZEX2, Define.SIZEY2-GfxManager.imgGameHud.getHeight()/2,
 				null,
-				null, Font.FONT_MEDIUM, Font.FONT_SMALL);
+				null, Font.FONT_MEDIUM, Font.FONT_SMALL, Main.FX_BUTTON);
 		
 		btnList.add(new Button(
 						GfxManager.imgButtonCancelRelease,

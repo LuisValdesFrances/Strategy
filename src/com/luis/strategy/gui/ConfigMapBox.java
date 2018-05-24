@@ -5,6 +5,7 @@ import java.util.List;
 
 
 
+
 import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gameutils.fonts.TextManager;
 import com.luis.lgameengine.gui.Button;
@@ -12,6 +13,7 @@ import com.luis.lgameengine.gui.ListBox;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 import com.luis.strategy.GfxManager;
+import com.luis.strategy.Main;
 import com.luis.strategy.RscManager;
 import com.luis.strategy.GameState.PlayerConf;
 import com.luis.strategy.constants.Define;
@@ -31,7 +33,7 @@ public class ConfigMapBox extends ListBox{
 			Define.SIZEX2, Define.SIZEY2, 
 			RscManager.allText[RscManager.TXT_CONFIG_MAP],
 			new String[pcList.length], 
-			Font.FONT_BIG, Font.FONT_MEDIUM);
+			Font.FONT_BIG, Font.FONT_MEDIUM, Main.FX_BUTTON);
 		
 		this.playerConfList = pcList;
 		playerList = new ArrayList<String>();

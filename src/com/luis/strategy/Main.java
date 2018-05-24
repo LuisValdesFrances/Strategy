@@ -84,7 +84,18 @@ public class Main extends LCanvas implements Runnable {
 	//Sound
 	public static final byte MUSIC_INTRO = 0;
 	public static final byte MUSIC_MAP = 1;
-	public static final byte MUSIC_START_BATLE = 2;
+	public static final byte MUSIC_START_BATTLE = 2;
+	
+	//FX
+	public static final byte FX_BUTTON = 0;
+	public static final byte FX_TAMBOR = 1;
+	public static final byte FX_SWORD = 2;
+	public static final byte FX_SWORD_BLOOD = 3;
+	public static final byte FX_SWORD_STRONG = 4;
+	public static final byte FX_FAIL = 5;
+	public static final byte FX_FANFARRIA_START = 6;
+	public static final byte FX_FANFARRIA_END = 7;
+	public static final byte FX_BATTLE = 8;
 	 
 	private static final int MUSIC_LIST [] = {
 		R.raw.intro,
@@ -94,7 +105,14 @@ public class Main extends LCanvas implements Runnable {
 	
 	private static final int FX_FILE [] = {
 	    R.raw.fx_button,
-	    R.raw.fx_piece
+	    R.raw.fx_tambor,
+	    R.raw.fx_sword,
+	    R.raw.fx_sword_blood,
+	    R.raw.fx_sword_strong,
+	    R.raw.fx_fail,
+	    R.raw.fx_fanfarria_start,
+	    R.raw.fx_fanfarria_end,
+	    R.raw.fx_battle,
 	};
 	 
 	public static int iLanguage;

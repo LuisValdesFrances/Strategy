@@ -11,6 +11,7 @@ import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 import com.luis.lgameengine.gui.Button;
 import com.luis.lgameengine.gui.MenuBox;
 import com.luis.strategy.GfxManager;
+import com.luis.strategy.Main;
 import com.luis.strategy.RscManager;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
@@ -37,7 +38,7 @@ public class ArmyBox extends MenuBox{
 		super(Define.SIZEX, Define.SIZEY, GfxManager.imgBigBox, null, null,
 				Define.SIZEX2, Define.SIZEY2-GfxManager.imgGameHud.getHeight()/2,
 				null,
-				null, Font.FONT_MEDIUM, Font.FONT_SMALL);
+				null, Font.FONT_MEDIUM, Font.FONT_SMALL, Main.FX_BUTTON);
 		
 		btnList.add(new Button(
 				GfxManager.imgButtonCancelRelease,

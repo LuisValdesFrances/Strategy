@@ -7,6 +7,7 @@ import com.luis.lgameengine.gui.MenuElement;
 import com.luis.lgameengine.gui.NotificationBox;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.input.MultiTouchHandler;
+import com.luis.lgameengine.implementation.sound.SndManager;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.Main;
 import com.luis.strategy.constants.Define;
@@ -81,17 +82,7 @@ public class BattleDiceBox {
 				if(state >= STATE_COMBAT_1 && state <= STATE_COMBAT_3){
 					modPosDice = -Define.SIZEX;
 					stateCombat++;
-					diceValue = Main.getRandom(1, GameParams.ROLL_SYSTEM);
-					
-					if(diceValue == GameParams.ROLL_SYSTEM){
-						NotificationBox.getInstance().addMessage("Critical!");
-						result[stateCombat] = true;
-					}else if(diceValue == 1){
-						NotificationBox.getInstance().addMessage("Blunder!");
-						result[stateCombat] = false;
-					}else{
-						result[stateCombat] = diceValue >= diceDifficult;
-					}
+					combat();
 				}
 			};
 		};
@@ -112,19 +103,31 @@ public class BattleDiceBox {
 			resultIcon[i] = new ResultIconPropierties();
 		}
 		
+		combat();
+		
+	}
+	
+	private void combat() {
 		this.diceValue = Main.getRandom(1, GameParams.ROLL_SYSTEM);
 		if(diceValue == GameParams.ROLL_SYSTEM){
 			NotificationBox.getInstance().addMessage("Critical!");
 			result[stateCombat] = true;
+			SndManager.getInstance().playFX(Main.FX_SWORD_STRONG, 0);
 		}else if(diceValue == 1){
 			NotificationBox.getInstance().addMessage("Blunder!");
 			result[stateCombat] = false;
+			SndManager.getInstance().playFX(Main.FX_FAIL, 0);
 		}else{
 			result[stateCombat] = diceValue >= diceDifficult;
 		}
-		result[stateCombat] = diceValue >= diceDifficult;
+		
+		if(result[stateCombat]){
+			SndManager.getInstance().playFX(Main.FX_SWORD_BLOOD, 0);
+		}else{
+			SndManager.getInstance().playFX(Main.FX_SWORD, 0);
+		}
 	}
-	
+
 	public boolean update(MultiTouchHandler touchHandler, float delta){
 		if(state != STATE_UNACTIVE){
 			switch(state){

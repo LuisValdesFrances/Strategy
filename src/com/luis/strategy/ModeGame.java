@@ -199,7 +199,8 @@ public class ModeGame {
 							RscManager.allText[RscManager.TXT_OPTIONS],
 							RscManager.allText[RscManager.TXT_QUIT]
 					},
-					Font.FONT_MEDIUM, Font.FONT_MEDIUM){
+					Font.FONT_MEDIUM, Font.FONT_MEDIUM, 
+					Main.FX_BUTTON){
 				@Override
 				public void onFinish(){}
 			};
@@ -213,7 +214,8 @@ public class ModeGame {
 					Define.SIZEX2, Define.SIZEY2,
 					RscManager.allText[RscManager.TXT_RETURN_MENU],
 					new String[]{RscManager.allText[RscManager.TXT_NO], RscManager.allText[RscManager.TXT_YES]},
-					Font.FONT_MEDIUM, Font.FONT_MEDIUM){
+					Font.FONT_MEDIUM, Font.FONT_MEDIUM, 
+					Main.FX_BUTTON){
 				@Override
 				public void onFinish(){}
 			};
