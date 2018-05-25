@@ -55,7 +55,12 @@ public class Main extends LCanvas implements Runnable {
 
 	public static int state;
 	public static int lastState;
-
+	private boolean isPaused;
+	
+	public boolean isPaused() {
+		return isPaused;
+	}
+	
 	public static final int COLOR_BLACK = 0x00000000;
 	public static final int COLOR_GREEN    = 0xff0ee50e;
 	public static final int COLOR_RED      = 0xffA02020;
@@ -100,6 +105,7 @@ public class Main extends LCanvas implements Runnable {
 	public static final byte FX_SELECT_ARMY = 10;
 	public static final byte FX_MARCH = 11;
 	public static final byte FX_COINS = 12;
+	public static final byte FX_START_GAME = 13;
 	 
 	private static final int MUSIC_LIST [] = {
 		R.raw.intro,
@@ -121,6 +127,7 @@ public class Main extends LCanvas implements Runnable {
 	    R.raw.fx_select_army,
 	    R.raw.fx_march,
 	    R.raw.fx_coins,
+	    R.raw.fx_start_game,
 	    
 	};
 	 
@@ -418,16 +425,18 @@ public class Main extends LCanvas implements Runnable {
 //		if (iState >= Define.ST_GAME_INIT)
 //			Main.changeState(Define.ST_GAME_PAUSE,false);
 
-		SndManager.getInstance().pauseMusic();
 		Log.i("INFO", "Llamada a pause()");
+		isPaused = true;
+		SndManager.getInstance().pauseMusic();
 	}
 
 	public void unPause() {
 		//if (MyCanvas.isPause) 
 		{
 			//MyCanvas.isPause = false;
-			SndManager.getInstance().unpauseMusic();
 			Log.i("INFO", "Llamada a unPause()");
+			isPaused = false;
+			SndManager.getInstance().unpauseMusic();
 		}
 	}
 

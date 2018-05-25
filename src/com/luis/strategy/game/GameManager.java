@@ -327,6 +327,9 @@ public class GameManager {
 			@Override
 			public void onFinish(){
 				super.onFinish();
+				if(SndManager.getInstance().getCurrentClip() == Main.MUSIC_START_BATTLE){
+					SndManager.getInstance().playMusic(Main.MUSIC_MAP, true);
+				}
 				
 				switch(this.getIndexPressed()){
 				case 0:
@@ -342,9 +345,6 @@ public class GameManager {
 						changeSubState(SUB_STATE_ACTION_WAIT);
 					}
 					break;
-				}
-				if(SndManager.getInstance().getCurrentClip() == Main.MUSIC_START_BATTLE){
-					SndManager.getInstance().playMusic(Main.MUSIC_MAP, true);
 				}
 			}
 		};
@@ -403,6 +403,11 @@ public class GameManager {
 		switch(state){
 		case STATE_INCOME:
 			if(!updatePresentation(delta)){
+				
+				if(gameScene.getPlayerIndex() == 0 && gameScene.getTurnCount() == 0){
+					SndManager.getInstance().playMusic(Main.MUSIC_MAP, true);
+				}
+				
 				changeState(STATE_ECONOMY);
 			}
 			break;
@@ -1198,11 +1203,8 @@ public class GameManager {
 		presentationShowCount = 0;
 		presentationModX = -Define.SIZEX;
 		
-		if(getCurrentPlayer().getActionIA() != null){
-			SndManager.getInstance().playFX(Main.FX_FANFARRIA_START, 0);
-		}else{
-			SndManager.getInstance().playFX(Main.FX_FANFARRIA_END, 0);
-		}
+		//Sound here
+		SndManager.getInstance().playFX(Main.FX_START_GAME, 0);
 	}
 	
 	private boolean updatePresentation(float delta){
@@ -1257,6 +1259,13 @@ public class GameManager {
 		this.startConquest = false;
 		this.modAlphaConquest = 255;
 		this.modSizeConquest = MAX_SIZE_CONSQUEST;
+		
+		if(getCurrentPlayer().getActionIA() != null){
+			SndManager.getInstance().playFX(Main.FX_FANFARRIA_START, 0);
+		}else{
+			SndManager.getInstance().playFX(Main.FX_FANFARRIA_END, 0);
+		}
+		
 	}
 	
 	private boolean updateConquest(float delta){
@@ -1713,7 +1722,7 @@ public class GameManager {
 		
 		
 		if(showResultBox){
-			resultBox.start(textH, textB);
+			resultBox.start(textB.length() > 0 ?textH:null, textB.length() > 0 ?textB:textH);
 			changeSubState(SUB_STATE_ACTION_RESULT);
 		}else{
 			if(startConquest){

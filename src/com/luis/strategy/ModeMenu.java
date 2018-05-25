@@ -164,6 +164,7 @@ public class ModeMenu {
 		case Define.ST_MENU_MAIN:
 			
 			if(Main.lastState < Define.ST_MENU_MAIN){
+				
 				alpha = 255;
 				startTime = System.currentTimeMillis();
 				
@@ -210,8 +211,7 @@ public class ModeMenu {
 				
 				btnCampaign.setDisabled(true);
 			}else if(Main.lastState > Define.ST_GAME_INIT_PASS_AND_PLAY){
-				SndManager.getInstance().stopMusic();
-				SndManager.getInstance().playFX(Main.FX_BATTLE, -1);
+				SndManager.getInstance().playMusic(Main.MUSIC_INTRO, true);
 			}
 			
 			break;
@@ -1147,9 +1147,8 @@ public class ModeMenu {
 				startTime = System.currentTimeMillis();
 				
 				if(Main.state == Define.ST_MENU_START){
-					SndManager.getInstance().playMusic(Main.MUSIC_INTRO, false);
+					SndManager.getInstance().playMusic(Main.MUSIC_INTRO, true);
 				}
-				
 			}
 			break;
 		case ST_PRESENTATION_3:
@@ -1175,8 +1174,6 @@ public class ModeMenu {
 		if(alpha < 0){
 			alpha = 0;
 		}
-		
-		
 		if(cloudFarBGX < -GfxManager.imgCloudBG.getWidth()/2){
 			cloudFarBGX = Define.SIZEX + (GfxManager.imgCloudBG.getWidth()/2);
 		}

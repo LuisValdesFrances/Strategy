@@ -117,6 +117,7 @@ public class ArmyBuyBox {
 			public void onButtonPressDown() {}
 			
 			public void onButtonPressUp() {
+				SndManager.getInstance().playFX(Main.FX_SELECT, 0);
 				reset();
 				index = index+1%(descTroopList.size()-1);
 				index = index > descTroopList.size()-1 ? 0 : index;
@@ -133,6 +134,7 @@ public class ArmyBuyBox {
 			public void onButtonPressDown() {}
 			
 			public void onButtonPressUp() {
+				SndManager.getInstance().playFX(Main.FX_SELECT, 0);
 				reset();
 				index = index-1;
 				index = index < 0 ? descTroopList.size()-1 : index;

@@ -62,6 +62,8 @@ public class ModeGame {
 		case Define.ST_GAME_INIT_PASS_AND_PLAY:
 		case Define.ST_GAME_INIT_ON_LINE:
 			
+			SndManager.getInstance().stopMusic();
+			
 			btnPause = new Button(
 					GfxManager.imgButtonPauseRelease, 
 					GfxManager.imgButtonPauseFocus, 
@@ -116,10 +118,6 @@ public class ModeGame {
 			gameCamera = new GameCamera(worldConver, 0, 0, 
 					GamePerformance.getInstance().getFrameMult(Main.targetFPS));
 			gameManager = new GameManager(worldConver, gameCamera, GameState.getInstance().getGameScene());
-			
-			
-			SndManager.getInstance().playMusic(Main.MUSIC_MAP, true);
-			
 			break;
 		
 		case Define.ST_GAME_RUN:
