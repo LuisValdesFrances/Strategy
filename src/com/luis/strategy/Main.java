@@ -92,23 +92,23 @@ public class Main extends LCanvas implements Runnable {
 	public static final byte MUSIC_START_BATTLE = 2;
 	
 	//FX
-	public static final byte FX_NEXT = 0;
-	public static final byte FX_BACK = 1;
-	public static final byte FX_SELECT = 2;
-	public static final byte FX_SWORD = 3;
-	public static final byte FX_SWORD_BLOOD = 4;
-	public static final byte FX_SWORD_STRONG = 5;
-	public static final byte FX_FAIL = 6;
-	public static final byte FX_FANFARRIA_START = 7;
-	public static final byte FX_FANFARRIA_END = 8;
-	public static final byte FX_BATTLE = 9;
-	public static final byte FX_SELECT_ARMY = 10;
-	public static final byte FX_MARCH = 11;
-	public static final byte FX_COINS = 12;
-	public static final byte FX_START_GAME = 13;
-	public static final byte FX_VICTORY = 14;
-	public static final byte FX_DEFEAT = 15;
-	public static final byte FX_HIT = 16;
+	public static final byte FX_HIT = 0;
+	public static final byte FX_NEXT = 1;
+	public static final byte FX_BACK = 2;
+	public static final byte FX_SELECT = 3;
+	public static final byte FX_SWORD = 4;
+	public static final byte FX_SWORD_BLOOD = 5;
+	public static final byte FX_SWORD_STRONG = 6;
+	public static final byte FX_FAIL = 7;
+	public static final byte FX_FANFARRIA_START = 8;
+	public static final byte FX_FANFARRIA_END = 9;
+	public static final byte FX_BATTLE = 10;
+	public static final byte FX_SELECT_ARMY = 11;
+	public static final byte FX_MARCH = 12;
+	public static final byte FX_COINS = 13;
+	public static final byte FX_START_GAME = 14;
+	public static final byte FX_VICTORY = 15;
+	public static final byte FX_DEFEAT = 16;
 	 
 	private static final int MUSIC_LIST [] = {
 		R.raw.intro,
@@ -117,6 +117,7 @@ public class Main extends LCanvas implements Runnable {
 	 };
 	
 	private static final int FX_FILE [] = {
+		R.raw.fx_hit,
 	    R.raw.fx_next,
 	    R.raw.fx_back,
 	    R.raw.fx_select,
@@ -133,7 +134,6 @@ public class Main extends LCanvas implements Runnable {
 	    R.raw.fx_start_game,
 	    R.raw.fx_victory,
 	    R.raw.fx_defeat,
-	    R.raw.fx_hit,
 	    
 	};
 	 

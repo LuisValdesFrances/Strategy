@@ -151,7 +151,6 @@ public class ModeMenu {
 					Define.SIZEX, Define.SIZEY, 
 					null, NotificationBox.DURATION_LONG);
 			
-			SndManager.getInstance().playFX(Main.FX_HIT, 0);
 			break;
         case Define.ST_MENU_LOGO:
         	startTime = System.currentTimeMillis();
@@ -1116,7 +1115,7 @@ public class ModeMenu {
     }
 	
 	public static long startTime;
-	public static final long ST_TIME_CITA_1 = 2000;
+	public static final long ST_TIME_CITA_1 = 1000;
 	public static final long ST_TIME_CITA_2 = 6000;
 	public static final long ST_TIME_CITA_3 = 2000;
 	
@@ -1145,12 +1144,12 @@ public class ModeMenu {
 			break;
 		case ST_PRESENTATION_2:
 			if(System.currentTimeMillis()>startTime+time2){
-				statePresentation = ST_PRESENTATION_3;
-				startTime = System.currentTimeMillis();
-				
 				if(Main.state == Define.ST_MENU_START){
 					SndManager.getInstance().playMusic(Main.MUSIC_INTRO, true);
 				}
+				statePresentation = ST_PRESENTATION_3;
+				startTime = System.currentTimeMillis();
+				
 			}
 			break;
 		case ST_PRESENTATION_3:
