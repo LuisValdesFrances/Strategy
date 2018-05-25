@@ -106,6 +106,9 @@ public class Main extends LCanvas implements Runnable {
 	public static final byte FX_MARCH = 11;
 	public static final byte FX_COINS = 12;
 	public static final byte FX_START_GAME = 13;
+	public static final byte FX_VICTORY = 14;
+	public static final byte FX_DEFEAT = 15;
+	public static final byte FX_HIT = 16;
 	 
 	private static final int MUSIC_LIST [] = {
 		R.raw.intro,
@@ -128,6 +131,9 @@ public class Main extends LCanvas implements Runnable {
 	    R.raw.fx_march,
 	    R.raw.fx_coins,
 	    R.raw.fx_start_game,
+	    R.raw.fx_victory,
+	    R.raw.fx_defeat,
+	    R.raw.fx_hit,
 	    
 	};
 	 

@@ -1723,6 +1723,13 @@ public class GameManager {
 		
 		if(showResultBox){
 			resultBox.start(textB.length() > 0 ?textH:null, textB.length() > 0 ?textB:textH);
+			
+			if(result == 0 || result == 1){
+				SndManager.getInstance().playFX(Main.FX_DEFEAT, 0);
+			}else{
+				SndManager.getInstance().playFX(Main.FX_VICTORY, 0);
+			}
+			
 			changeSubState(SUB_STATE_ACTION_RESULT);
 		}else{
 			if(startConquest){

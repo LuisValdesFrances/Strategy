@@ -150,6 +150,8 @@ public class ModeMenu {
 			NotificationBox.getInstance().init(
 					Define.SIZEX, Define.SIZEY, 
 					null, NotificationBox.DURATION_LONG);
+			
+			SndManager.getInstance().playFX(Main.FX_HIT, 0);
 			break;
         case Define.ST_MENU_LOGO:
         	startTime = System.currentTimeMillis();
@@ -1114,8 +1116,8 @@ public class ModeMenu {
     }
 	
 	public static long startTime;
-	public static final long ST_TIME_CITA_1 = 1000;
-	public static final long ST_TIME_CITA_2 = 4000;
+	public static final long ST_TIME_CITA_1 = 2000;
+	public static final long ST_TIME_CITA_2 = 6000;
 	public static final long ST_TIME_CITA_3 = 2000;
 	
 	
