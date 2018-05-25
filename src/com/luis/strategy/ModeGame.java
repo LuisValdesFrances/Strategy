@@ -75,6 +75,7 @@ public class ModeGame {
 				
 				@Override
 				public void onButtonPressUp(){
+					SndManager.getInstance().playFX(Main.FX_NEXT, 0);
 					isGamePaused = true;
 					Main.changeState(Define.ST_GAME_PAUSE, false);
 				}
@@ -84,8 +85,6 @@ public class ModeGame {
 			gfxEffects = GfxEffects.getInstance();
 			
 			gameFrame = 0;
-			
-			
 			
 			GameScene gameScene = null;
 			if(Main.state == Define.ST_GAME_INIT_PASS_AND_PLAY){

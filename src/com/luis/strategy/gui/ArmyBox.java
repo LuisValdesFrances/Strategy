@@ -53,7 +53,9 @@ public class ArmyBox extends MenuBox{
 			public void onButtonPressDown() {}
 			
 			@Override
-			public void onButtonPressUp() {}
+			public void onButtonPressUp() {
+				SndManager.getInstance().playFX(Main.FX_BACK, 0);
+			}
 		});
 		
 		armyBuyBox = new ArmyBuyBox(){
@@ -63,7 +65,6 @@ public class ArmyBox extends MenuBox{
 					army.getPlayer().setGold(army.getPlayer().getGold()-GameParams.TROOP_COST[this.getIndex()]);
 					army.getTroopList().add(new Troop(this.getIndex(), false));
 					updateTroops();
-					
 					
 					if(army.getTroopList().size() == GameParams.MAX_NUMBER_OF_TROOPS){
 						armyBuyBox.cancel();
