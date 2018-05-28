@@ -112,6 +112,7 @@ public class GameManager {
 	private SimpleBox resultBox;
 	private SimpleBox discardBox;
 	private SimpleBox endGameBox;
+	private SimpleBox troopExceedBox;
 	
 	public GameManager(WorldConver wc, GameCamera gc, GameScene gs){
 		this.gameBuffer = Image.createImage(
@@ -375,6 +376,17 @@ public class GameManager {
 			}
 		};
 		
+		troopExceedBox = new SimpleBox(GfxManager.imgSmallBox, true, false){
+			@Override
+			public void onFinish() {
+				switch(this.getIndexPressed()){
+				case 1:
+					
+					break;
+				}
+			}
+		};
+		
 		discardBox = new SimpleBox(GfxManager.imgNotificationBox, false, false){
 			@Override
 			public void onFinish() {
@@ -448,7 +460,7 @@ public class GameManager {
 				break;
 			case SUB_STATE_ACTION_WAIT:
 				
-				//Atcualizar iteracion terreno:
+				//Actualizar iteracion terreno:
 				for(Kingdom kingdom : gameScene.getKingdomList()){
 					for(Terrain terrain : kingdom.getTerrainList()){
 						if(terrain.isSelect()){
@@ -523,6 +535,38 @@ public class GameManager {
 						}
 						
 						if(move){
+							
+							
+							
+							
+							
+							
+							
+							
+							//Chequeo si en el target existe un colegui
+							Army friend = null;
+							for(int i = 0; i < getCurrentPlayer().getArmyList().size(); i++){
+								if(
+										getCurrentPlayer().getArmyList().get(i).getKingdom().getId() == getSelectedArmy().getKingdom().getId()
+										&&
+										getCurrentPlayer().getArmyList().get(i).getKingdom().getId() != getSelectedArmy().getId()
+										){
+									friend = getCurrentPlayer().getArmyList().get(i);
+								}
+							}
+							if(friend != null){
+								troopExceedBox.start(null, RscManager.allText[RscManager.TXT_GAME_EXCEED_TROOPS]);
+								
+							}
+							
+							
+							
+							
+							
+							
+							
+							
+							
 							getSelectedArmy().changeState(Army.STATE_MOVE);
 							changeSubState(SUB_STATE_ACTION_MOVE);
 						}else{
@@ -648,6 +692,7 @@ public class GameManager {
 			!economyBox.isActive() &&
 			!resultBox.isActive() &&
 			!endGameBox.isActive() &&
+			!troopExceedBox.isActive() &&
 			!terrainBox.isActive()){
 			updateCamera();
 			if(getCurrentPlayer().getActionIA() == null && state == STATE_ACTION){
@@ -817,6 +862,7 @@ public class GameManager {
 		economyBox.draw(g, GfxManager.imgBlackBG);
 		armyBox.draw(g);
 		discardBox.draw(g, null);
+		troopExceedBox.draw(g, null);
 		battleBox.draw(g);
 		terrainBox.draw(g);
 		mapBox.draw(g);
@@ -1822,8 +1868,6 @@ public class GameManager {
 			}
 			
 		}else{
-			
-			
 			//Si hay un ejercito enemigo
 			if(getEnemyAtKingdom(getCurrentPlayer()) != null){
 				

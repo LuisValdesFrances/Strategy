@@ -113,7 +113,8 @@ public class RscManager {
 	public static final int TXT_GAME_EARNING= TXT_GAME_ECONOMY+1;
 	public static final int TXT_GAME_SALARY= TXT_GAME_EARNING+1;
 	public static final int TXT_GAME_COST_OF_TROOPS= TXT_GAME_SALARY+1;
-	public static final int TXT_GAME_IS_WINNER= TXT_GAME_COST_OF_TROOPS+1;
+	public static final int TXT_GAME_EXCEED_TROOPS= TXT_GAME_COST_OF_TROOPS+1;
+	public static final int TXT_GAME_IS_WINNER= TXT_GAME_EXCEED_TROOPS+1;
 	public static final int TXT_GAME_CHANGE_HIS_CAPITAL = TXT_GAME_IS_WINNER+1;
 	public static final int TXT_GAME_CHANGE_YOUR_CAPITAL = TXT_GAME_CHANGE_HIS_CAPITAL+1;
 	
