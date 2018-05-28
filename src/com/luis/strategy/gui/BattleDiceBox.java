@@ -175,7 +175,7 @@ public class BattleDiceBox {
 					buttonCombat.trigger();
 				}
 				
-				buttonCombat.setDisabled(resultIcon[stateCombat].modAlpha != 0 || modPosDice != 0);
+				buttonCombat.setDisabled(autoPlay  || resultIcon[stateCombat].modAlpha != 0 || modPosDice != 0);
 				buttonCombat.update(touchHandler);
 				
 				break;

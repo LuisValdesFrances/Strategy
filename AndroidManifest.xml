@@ -14,7 +14,7 @@
         android:label="Stratey">
         <activity
             android:name=".MainActivity"
-            android:label="Strategy" 
+            android:label="The king is dead" 
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

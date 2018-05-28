@@ -16,8 +16,7 @@ public class Terrain extends MapObject{
 			float x, float y, int width, int height,
 			float mapX, float mapY,
 			int mapWidth, int mapHeight, int type, boolean conquest) {
-		super(map, x, y, width, height, mapX, mapY, mapWidth, mapHeight, 
-				-1, Main.FX_NEXT);
+		super(map, x, y, width, height, mapX, mapY, mapWidth, mapHeight, -1, Main.FX_NEXT);
 		this.type = type;
 		this.conquest = conquest;
 	}

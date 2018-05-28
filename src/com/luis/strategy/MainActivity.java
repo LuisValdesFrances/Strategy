@@ -3,15 +3,11 @@ package com.luis.strategy;
 
 import com.luis.lgameengine.gameutils.Settings;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
-import android.media.AudioManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.util.Log;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
@@ -39,7 +35,14 @@ public class MainActivity extends Activity{
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
 		Log.i("Debug", "lGameEngine INIT");
-		Settings.getInstance().init(this);
+		Settings.getInstance().init(
+				this, new boolean[]{
+									false,
+									false,
+									true,
+									false
+		}
+		);
 		
 		main = new Main(this);
 		

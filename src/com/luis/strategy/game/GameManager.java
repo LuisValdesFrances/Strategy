@@ -45,18 +45,7 @@ public class GameManager {
 	//
 	private Image gameBuffer;
 	public float distorsion = 1.14f;
-	private static final boolean MODE_3D = true;
-	
-	/**
-	 * Condicion para no mostrar las ventanas de decisión, propio de cuando juega la IA
-	 * @return
-	 */
-	private boolean isAutoPlay(){
-		return 
-				getCurrentPlayer().getActionIA() != null &&
-				//Si la victima es el jugador, se desactivan los triggers automaticos
-				(getEnemyAtKingdom(getCurrentPlayer()) == null || (getEnemyAtKingdom(getCurrentPlayer()) != null && getEnemyAtKingdom(getCurrentPlayer()).getPlayer().getActionIA() != null));
-	}
+	private static final boolean MODE_3D = false;
 	
 	public DataSender dataSender;
 	
@@ -1125,9 +1114,7 @@ public class GameManager {
 						changeSubState(SUB_STATE_ACTION_SELECT);
 					//Cuando no me quedan mas ejercitos, cambio de estado
 					}else{
-						if(isAutoPlay()){
-							changeSubState(SUB_STATE_ACTION_IA_WAIT_END);
-						}
+						changeSubState(SUB_STATE_ACTION_IA_WAIT_END);
 					}
 				}
 				break;
@@ -1510,10 +1497,13 @@ public class GameManager {
 		}
 		resolveCombat(result);
 		
-		if(armyAtack!=null && !armyAtack.isDefeat()){
+		if(armyAtack != null && !armyAtack.isDefeat()){
 			armyAtack.changeState(Army.STATE_ATACK);
+		}else if(armyDefense != null && !armyDefense.isDefeat()){
+			armyDefense.changeState(Army.STATE_ATACK);
 		}
 	}
+	
 	private void resolveCombat(int result){
 		
 		Player defeatPlayer = null;
@@ -1865,7 +1855,7 @@ public class GameManager {
 								getSelectedArmy(),
 								getEnemyAtKingdom(getCurrentPlayer()),
 								-1,
-								cancelOption, scapeOption, isAutoPlay());
+								cancelOption, scapeOption, getCurrentPlayer().getActionIA() != null);
 						changeSubState(SUB_STATE_ACTION_COMBAT_ANIM);
 						SndManager.getInstance().playMusic(Main.MUSIC_START_BATTLE, true);
 					}
@@ -1904,7 +1894,7 @@ public class GameManager {
 								null,
 								getPlayerByKingdom(getSelectedArmy().getKingdom()) != null?
 								getPlayerByKingdom(getSelectedArmy().getKingdom()).getFlag():GfxManager.imgFlagBigList.size()-1,
-								cancelOption, scapeOption, isAutoPlay());
+								cancelOption, scapeOption, getCurrentPlayer().getActionIA() != null);
 						changeSubState(SUB_STATE_ACTION_COMBAT_ANIM);
 					}
 				}

@@ -12,7 +12,6 @@ import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.graphics.Image;
 import com.luis.lgameengine.implementation.graphics.LCanvas;
-import com.luis.lgameengine.implementation.input.KeyboardHandler;
 import com.luis.lgameengine.implementation.sound.SndManager;
 import com.luis.strategy.constants.Define;
 
@@ -50,8 +49,6 @@ public class Main extends LCanvas implements Runnable {
 
 	private static long minDurationFrame;
 	public static boolean isGameRun;
-
-	private KeyboardHandler vKeyData;
 
 	public static int state;
 	public static int lastState;
@@ -287,12 +284,12 @@ public class Main extends LCanvas implements Runnable {
 			
 			if (Main.IS_FPS) {
 				_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-				_g.setTextSize(Font.SYSTEM_SIZE[Settings.getInstance().getNativeResolution()]);
+				_g.setTextSize(Font.SYSTEM_SIZE[Settings.getInstance().getNativeResolutionSet()]);
 				_g.drawText("" + iFramesXSecond + "/" + targetFPS,  0, _g.getTextHeight(), COLOR_RED);
 			}
 			else if (Main.IS_DEBUG) {
 				_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-				_g.setTextSize(Font.SYSTEM_SIZE[Settings.getInstance().getNativeResolution()]);
+				_g.setTextSize(Font.SYSTEM_SIZE[Settings.getInstance().getNativeResolutionSet()]);
 				_g.setAlpha(160);
 				_g.setColor(0x88000000);
 				_g.fillRect(0, 0, Define.SIZEX, _g.getTextHeight() * 4);
@@ -313,7 +310,7 @@ public class Main extends LCanvas implements Runnable {
 			
 			}else if (Main.IS_TOUCH_INPUT_DEBUG){
 				_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-				_g.setTextSize(Font.SYSTEM_SIZE[Settings.getInstance().getNativeResolution()]);
+				_g.setTextSize(Font.SYSTEM_SIZE[Settings.getInstance().getNativeResolutionSet()]);
 				_g.setAlpha(160);
 				_g.setColor(0x88000000);
 				_g.fillRect(0, 0, Define.SIZEX, _g.getTextHeight() * 7);
@@ -351,7 +348,7 @@ public class Main extends LCanvas implements Runnable {
 
 			}else if (Main.IS_KEY_INPUT_DEBUG){
 				_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-				_g.setTextSize(Font.SYSTEM_SIZE[Settings.getInstance().getNativeResolution()]);
+				_g.setTextSize(Font.SYSTEM_SIZE[Settings.getInstance().getNativeResolutionSet()]);
 				_g.setAlpha(160);
 				_g.setColor(0x88000000);
 				_g.fillRect(0, 0, Define.SIZEX, _g.getTextHeight() * 3);
@@ -544,7 +541,6 @@ public class Main extends LCanvas implements Runnable {
 	public static Image imgClock;
 	public static Image imgEarth;
 	private Thread tClockThread;
-	private static final String TEXT = "Loading...";
 	private int type;
 
 	public void startClock(int type) {

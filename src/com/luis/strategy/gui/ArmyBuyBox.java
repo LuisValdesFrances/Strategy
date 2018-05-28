@@ -157,6 +157,10 @@ public class ArmyBuyBox {
 				modPosY -= (modPosY*8f)*delta - 1f;
 				if(modPosY >= 0){
 					modPosY = 0;
+					
+					buttonLeft.setDisabled(false);
+					buttonRight.setDisabled(false);
+					
 					state = STATE_SHOW;
 				}
 				break;
