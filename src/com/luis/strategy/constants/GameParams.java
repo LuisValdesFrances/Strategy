@@ -36,6 +36,7 @@ public class GameParams {
 	//GAME CONFIG:
 	public static final float CAMERA_SPEED = 180f;//Pixeles por segundo
 	public static final int BG_BLACK_ALPHA = 140;
+	public static final int START_GOLD = 10;
 	
 	//ROLL CONFIG
 	public static final int ROLL_SYSTEM = 10;

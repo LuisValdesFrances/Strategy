@@ -69,12 +69,20 @@ public class GameScene{
 		}
 	}
 	
-	public void clean(){
+	public void resetKingdoms(){
+		//Log.i("Debug", "Clean army");
 		for (Kingdom k : kingdomList) {
 			k.getButton().reset();
 			for (Terrain t : k.getTerrainList()) {
 				t.getButton().reset();
 			}
+		}
+	}
+	
+	public void cleanKingdomTarget(){
+		//Log.i("Debug", "Clean army");
+		for (Kingdom k : kingdomList) {
+			k.setTarget(-1);
 		}
 	}
 	

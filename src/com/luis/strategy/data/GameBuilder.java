@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.luis.strategy.GameState;
+import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.datapackage.scene.ArmyData;
 import com.luis.strategy.datapackage.scene.SceneData;
 import com.luis.strategy.datapackage.scene.KingdomData;
@@ -60,7 +61,7 @@ public class GameBuilder {
 							GameState.getInstance().getPlayerConfList()[i].flag, 
 							k1);
 			
-			player.setGold(10);
+			player.setGold(GameParams.START_GOLD);
 			player.getKingdomList().add(gameScene.getKingdom(k1));
 			player.getKingdomList().add(gameScene.getKingdom(k2));
 			
@@ -109,7 +110,7 @@ public class GameBuilder {
 					i, 
 					k1);
 			
-			player.setGold(10);
+			player.setGold(GameParams.START_GOLD);
 			player.getKingdomList().add(gameScene.getKingdom(k1));
 			player.getKingdomList().add(gameScene.getKingdom(k2));
 			

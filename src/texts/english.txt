@@ -90,7 +90,7 @@ ECONOMY
 Earning
 Salary
 Cost of troops exceedes your tresaure. Discard troops.
-El número total de tropas excede el máximo permitido. Se despediran aquellas sobrantes.
+El número total de tropas excede el máximo. Se despediran las sobrantes.
 is the winner!
 change his capital
 change your capital

@@ -132,6 +132,10 @@ public abstract class MapObject{
 		return selected;
 	}
 	
+	public void setSelect(boolean select) {
+		this.select = select;
+	}
+
 	public boolean isSelect() {
 		return select;
 	}

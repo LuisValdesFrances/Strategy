@@ -27,6 +27,7 @@ import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.gui.ArmyBox;
 import com.luis.strategy.gui.BattleBox;
+import com.luis.strategy.gui.DialogBox;
 import com.luis.strategy.gui.FlagButton;
 import com.luis.strategy.gui.MapBox;
 import com.luis.strategy.gui.SimpleBox;
@@ -83,18 +84,19 @@ public class GameManager {
 	public static final int SUB_STATE_ACTION_IA_WAIT_START = 0;
 	public static final int SUB_STATE_ACTION_WAIT = 1;
 	public static final int SUB_STATE_ACTION_SELECT = 2;
-	public static final int SUB_STATE_ACTION_MOVE = 3;
-	public static final int SUB_STATE_ACTION_RESOLVE_MOVE = 4;
-	public static final int SUB_STATE_ACTION_COMBAT_ANIM = 5;
-	public static final int SUB_STATE_ACTION_COMBAT = 6;
-	public static final int SUB_STATE_ACTION_RESULT = 7;
-	public static final int SUB_STATE_ACTION_CONQUEST = 8;
-	public static final int SUB_STATE_ACTION_SCAPE = 9;
-	public static final int SUB_STATE_ACTION_RESOLVE_SCAPE = 10;
-	public static final int SUB_STATE_ARMY_MANAGEMENT = 11;
-	public static final int SUB_STATE_CITY_MANAGEMENT = 12;
-	public static final int SUB_STATE_MAP_MANAGEMENT = 13;
-	public static final int SUB_STATE_ACTION_IA_WAIT_END = 14;
+	public static final int SUB_STATE_ACTION_EXCEED = 3;
+	public static final int SUB_STATE_ACTION_MOVE = 4;
+	public static final int SUB_STATE_ACTION_RESOLVE_MOVE = 5;
+	public static final int SUB_STATE_ACTION_COMBAT_ANIM = 6;
+	public static final int SUB_STATE_ACTION_COMBAT = 7;
+	public static final int SUB_STATE_ACTION_RESULT = 8;
+	public static final int SUB_STATE_ACTION_CONQUEST = 9;
+	public static final int SUB_STATE_ACTION_SCAPE = 10;
+	public static final int SUB_STATE_ACTION_RESOLVE_SCAPE = 11;
+	public static final int SUB_STATE_ARMY_MANAGEMENT = 12;
+	public static final int SUB_STATE_CITY_MANAGEMENT = 13;
+	public static final int SUB_STATE_MAP_MANAGEMENT = 14;
+	public static final int SUB_STATE_ACTION_IA_WAIT_END = 15;
 	
 	//GUI
 	private Button btnNext;
@@ -112,7 +114,10 @@ public class GameManager {
 	private SimpleBox resultBox;
 	private SimpleBox discardBox;
 	private SimpleBox endGameBox;
-	private SimpleBox troopExceedBox;
+	private DialogBox troopExceedBox;
+	
+	//private Army activeArmy;
+	//private Kingdom selectKingdom;
 	
 	public GameManager(WorldConver wc, GameCamera gc, GameScene gs){
 		this.gameBuffer = Image.createImage(
@@ -185,12 +190,11 @@ public class GameManager {
 					switch(subState){
 					case SUB_STATE_ACTION_WAIT:
 					case SUB_STATE_ACTION_SELECT:
+						gameScene.resetKingdoms();
 						btnFlagHelmet.hide();
 						btnFlagCastle.hide();
 						//Quito todos lo indicadores de target
-						for(Kingdom k: gameScene.getKingdomList()){
-							k.setTarget(-1);
-						}
+						gameScene.cleanKingdomTarget();
 						changeSubState(SUB_STATE_ACTION_WAIT);
 						break;
 					}
@@ -376,13 +380,15 @@ public class GameManager {
 			}
 		};
 		
-		troopExceedBox = new SimpleBox(GfxManager.imgSmallBox, true, false){
+		troopExceedBox = new DialogBox(GfxManager.imgSmallBox){
 			@Override
 			public void onFinish() {
-				switch(this.getIndexPressed()){
-				case 1:
-					
-					break;
+				if(this.getIndexPressed() == 0){
+					gameScene.cleanKingdomTarget();
+					cleanArmyAction();
+					changeSubState(SUB_STATE_ACTION_WAIT);
+				}else{
+					changeSubState(SUB_STATE_ACTION_MOVE);
 				}
 			}
 		};
@@ -445,7 +451,6 @@ public class GameManager {
 		case STATE_ACTION:
 			switch(subState){
 			
-			
 			case SUB_STATE_ACTION_IA_WAIT_START:
 				
 				//Si ya estaba esperando, espera menos
@@ -458,6 +463,7 @@ public class GameManager {
 					changeSubState(SUB_STATE_ACTION_WAIT);
 				}
 				break;
+				
 			case SUB_STATE_ACTION_WAIT:
 				
 				//Actualizar iteracion terreno:
@@ -476,7 +482,6 @@ public class GameManager {
 									terrain.getType());
 									
 								changeSubState(SUB_STATE_CITY_MANAGEMENT);
-							
 							}
 						}
 					}
@@ -485,7 +490,6 @@ public class GameManager {
 				for(int i = 0; i < gameScene.getPlayerList().size(); i++){
 					for(Army army: gameScene.getPlayerList().get(i).getArmyList()){
 						if(army.isSelect()){
-							army.getButton().reset();
 							cleanArmyAction();
 							setSelectedArmy(army);
 							btnFlagCastle.start();
@@ -514,66 +518,37 @@ public class GameManager {
 						(getCurrentPlayer().getActionIA() != null && getCurrentPlayer().getActionIA().isKingdomToMove(gameScene, kingdom))
 							
 					){
-						SndManager.getInstance().playFX(Main.FX_MARCH, 0);
-						kingdom.getButton().reset();
 						
 						boolean move = kingdom.getId() != getSelectedArmy().getKingdom().getId();
 						
-						//Si abandono una conquista, se pierde el progreso
-						if(move){
-							getSelectedArmy().getKingdom().setState(0);
-						}
-						
-						//Actualizo el reino del ejercito
-						putArmyAtKingdom(getSelectedArmy(), getSelectedArmy().getKingdom(), kingdom);
-						
-						//Quito todos los otros indicadores de target
-						for(Kingdom k: gameScene.getKingdomList()){
-							if(k.getId() != getSelectedArmy().getKingdom().getId()){
-								k.setTarget(-1);
-							}
-						}
-						
 						if(move){
 							
-							
-							
-							
-							
-							
-							
-							
-							//Chequeo si en el target existe un colegui
-							Army friend = null;
-							for(int i = 0; i < getCurrentPlayer().getArmyList().size(); i++){
-								if(
-										getCurrentPlayer().getArmyList().get(i).getKingdom().getId() == getSelectedArmy().getKingdom().getId()
-										&&
-										getCurrentPlayer().getArmyList().get(i).getKingdom().getId() != getSelectedArmy().getId()
-										){
-									friend = getCurrentPlayer().getArmyList().get(i);
+							if(getCurrentPlayer().getActionIA() != null){
+								kingdom.setSelect(true);
+								changeSubState(SUB_STATE_ACTION_MOVE);
+							}else{
+								//Chequeo si en el target existe un colegui
+								Army neighbour = getArmyAtKingdom(kingdom);
+								if(neighbour != null && neighbour.getPlayer().getId() == getSelectedArmy().getPlayer().getId()){
+									//Chequeo si se excede el maximo de tropas
+									changeSubState(SUB_STATE_ACTION_EXCEED);
+								}else{
+									changeSubState(SUB_STATE_ACTION_MOVE);
 								}
 							}
-							if(friend != null){
-								troopExceedBox.start(null, RscManager.allText[RscManager.TXT_GAME_EXCEED_TROOPS]);
-								
-							}
-							
-							
-							
-							
-							
-							
-							
-							
-							
-							getSelectedArmy().changeState(Army.STATE_MOVE);
-							changeSubState(SUB_STATE_ACTION_MOVE);
 						}else{
+							//Quito todos lo indicadores de target
+							gameScene.cleanKingdomTarget();
 							changeSubState(SUB_STATE_ACTION_RESOLVE_MOVE);
 						}
 						break;
 					}
+				}
+				break;
+				
+			case SUB_STATE_ACTION_EXCEED:
+				if(troopExceedBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
+					
 				}
 				break;
 				
@@ -738,7 +713,6 @@ public class GameManager {
 				}
 			}
 		}
-		
 		
 		if(subState == SUB_STATE_ACTION_SELECT && getCurrentPlayer().getActionIA() == null)
 			gameScene.drawTarget(gameBuffer.getGraphics(), worldConver, gameCamera);
@@ -939,10 +913,7 @@ public class GameManager {
 	private void insertTargetUnMap(Army army){
 		
 		//Quito todos lo indicadores de target
-		for(Kingdom k: gameScene.getKingdomList()){
-			k.setTarget(-1);
-		}
-		
+		gameScene.cleanKingdomTarget();
 		
 		for(Kingdom border : getSelectedArmy().getKingdom() .getBorderList()){
 			for(Kingdom kingdom: gameScene.getKingdomList()){
@@ -995,7 +966,7 @@ public class GameManager {
 	private void changeState(int newState){
 		UserInput.getInstance().getMultiTouchHandler().resetTouch();
 		cleanArmyAction();
-		gameScene.clean();
+		gameScene.resetKingdoms();
 		btnNext.setDisabled(true);
 		btnCancel.setDisabled(true);
 		btnMap.setDisabled(true);
@@ -1106,15 +1077,12 @@ public class GameManager {
 		
 		subState = newSubState;
 		
-		gameScene.clean();
-		
 		switch(state){
 		case STATE_INCOME:
-			break;
 		case STATE_ECONOMY:
+			gameScene.resetKingdoms();
 			break;
 		case STATE_ACTION:
-			
 			btnNext.setDisabled(true);
 			btnCancel.setDisabled(true);
 			
@@ -1132,6 +1100,7 @@ public class GameManager {
 				}
 				break;
 			case SUB_STATE_ACTION_WAIT:
+				gameScene.resetKingdoms();
 				btnFlagHelmet.hide();
 				btnFlagCastle.hide();
 				btnNext.setDisabled(getCurrentPlayer().getActionIA()!=null);
@@ -1164,29 +1133,60 @@ public class GameManager {
 					}
 				}
 				break;
+			
 			case SUB_STATE_ACTION_SELECT:
+				gameScene.resetKingdoms();
 				btnNext.setDisabled(true);
 				btnCancel.setDisabled(getCurrentPlayer().getActionIA()!=null);
 				break;
+				
+			case SUB_STATE_ACTION_EXCEED:
+				btnFlagHelmet.hide();
+				btnFlagCastle.hide();
+				troopExceedBox.start(null, RscManager.allText[RscManager.TXT_GAME_EXCEED_TROOPS]);
+			break;
 			case SUB_STATE_ACTION_MOVE:
+				
+				SndManager.getInstance().playFX(Main.FX_MARCH, 0);
+				
+				
+				//Ojo con la mierda esta que no quite estados de conquista que no tocan
+				getSelectedArmy().getKingdom().setState(0);
+				
+				//Actualizo el reino del ejercito
+				putArmyAtKingdom(getSelectedArmy(), getSelectKingdom());
+				
+				//Quito todos los otros indicadores de target
+				//Quito todos lo indicadores de target
+				gameScene.cleanKingdomTarget();
+				
+				getSelectedArmy().changeState(Army.STATE_MOVE);
+				getSelectKingdom().getButton().reset();
+				
 				break;
 			case SUB_STATE_ACTION_RESOLVE_MOVE:
+				gameScene.resetKingdoms();
 				resolveMovement();
 				break;
 			case SUB_STATE_ACTION_COMBAT_ANIM:
+				gameScene.resetKingdoms();
 				getSelectedArmy().changeState(Army.STATE_ATACK);
 				break;
 			case SUB_STATE_ACTION_COMBAT:
-				getSelectedArmy().changeState(Army.STATE_OFF);
+				gameScene.resetKingdoms();
 				btnFlagHelmet.hide();
 				btnFlagCastle.hide();
+				getSelectedArmy().changeState(Army.STATE_OFF);
 				break;
 			case SUB_STATE_ACTION_RESULT:
+				gameScene.resetKingdoms();
 				break;
 			case SUB_STATE_ACTION_CONQUEST:
+				gameScene.resetKingdoms();
 				startConquest(getSelectedArmy().getKingdom(), getSelectedArmy().getPlayer().getFlag());
 				break;
 			case SUB_STATE_ACTION_SCAPE:
+				gameScene.resetKingdoms();
 				//Si el que huye no es el que ataca
 				if(getDefeatArmy().getId() != getSelectedArmy().getId()){
 					getSelectedArmy().changeState(Army.STATE_OFF);
@@ -1194,27 +1194,30 @@ public class GameManager {
 					getSelectedArmy().getKingdom().setState(0);//control
 				}
 				Kingdom defeatTarget = getBorderKingdom(getDefeatArmy());
-				putArmyAtKingdom(getDefeatArmy(), getDefeatArmy().getKingdom(), defeatTarget);
+				putArmyAtKingdom(getDefeatArmy(), defeatTarget);
 				getDefeatArmy().changeState(Army.STATE_MOVE);
 				break;
 			case SUB_STATE_ACTION_RESOLVE_SCAPE:
+				gameScene.resetKingdoms();
 				resolveScape();
 				break;
 			case SUB_STATE_ARMY_MANAGEMENT:
-				break;
 			case SUB_STATE_CITY_MANAGEMENT:
-				break;
 			case SUB_STATE_MAP_MANAGEMENT:
+				gameScene.resetKingdoms();
 				break;
 			case SUB_STATE_ACTION_IA_WAIT_END:
+				gameScene.resetKingdoms();
 				IAWaitCount = 0;
 				break;
 			}
 			
 			break;
 		case STATE_END:
+			gameScene.resetKingdoms();
 			break;
 		case STATE_DEBUG:
+			gameScene.resetKingdoms();
 			btnMap.setDisabled(false);
 			break;
 		}
@@ -1353,6 +1356,16 @@ public class GameManager {
 					selected = army;
 					break;
 				}
+			}
+		}
+		return selected;
+	}
+	
+	private Kingdom getSelectKingdom(){
+		Kingdom selected = null;
+		for(Kingdom kingdom: gameScene.getKingdomList()){
+			if(kingdom.isSelect()){
+				selected = kingdom;
 			}
 		}
 		return selected;
@@ -1499,14 +1512,21 @@ public class GameManager {
 		}
 	}
 	
-	private void aggregation(Army army1, Army army2){
+	private int join(Army army1, Army army2){
+		int cost = 0;
 		for(Troop troop : army2.getTroopList()){
-			troop.setSubject(false);
-			army1.getTroopList().add(troop);
+			if(army1.getTroopList().size() < GameParams.MAX_NUMBER_OF_TROOPS){
+				troop.setSubject(false);
+				army1.getTroopList().add(troop);
+			}else{
+				cost += GameParams.TROOP_COST[troop.getType()]/2;
+			}
 		}
 		army1.setSelected(true);
 		army1.setDefeat(army1.isDefeat() || army2.isDefeat());
 		removeArmy(army2);
+		
+		return cost;
 	}
 	
 	private void addNewConquest(Player player, Kingdom kingdom){
@@ -1518,8 +1538,8 @@ public class GameManager {
 		player.getKingdomList().add(kingdom);
 	}
 
-	private void putArmyAtKingdom(Army army, Kingdom lastKingdom, Kingdom newKingdom){
-		army.setLastKingdom(lastKingdom);
+	private void putArmyAtKingdom(Army army, Kingdom newKingdom){
+		army.setLastKingdom(army.getKingdom());
 		army.setKingdom(newKingdom);
 		//Actulizo su zona de touch (Se altera al moverse)
 		army.setTouchX(newKingdom.getAbsoluteX());
@@ -1858,9 +1878,12 @@ public class GameManager {
 			}
 		}
 		if(armyFiendList.size() > 1){
-			aggregation(armyFiendList.get(0), armyFiendList.get(1));
+			int cost = join(armyFiendList.get(0), armyFiendList.get(1));
 			//activeArmy = armyList.get(0);
 			NotificationBox.getInstance().addMessage("The armies have joined forces");
+			if(cost > 0){
+				NotificationBox.getInstance().addMessage("+" + cost + " coins");
+			}
 			if(getCurrentPlayer().getActionIA() != null){
 				changeSubState(SUB_STATE_ACTION_IA_WAIT_START);
 			}else{
@@ -1960,8 +1983,11 @@ public class GameManager {
 			}
 		}
 		if(armyFiendList.size() > 1){
-			aggregation(armyFiendList.get(0), armyFiendList.get(1));
+			int cost = join(armyFiendList.get(0), armyFiendList.get(1));
 			NotificationBox.getInstance().addMessage("The armies have joined forces");
+			if(cost > 0){
+				NotificationBox.getInstance().addMessage("+" + cost + " coins");
+			}
 		}
 		
 		try{

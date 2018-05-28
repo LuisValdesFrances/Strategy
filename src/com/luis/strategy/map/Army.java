@@ -66,6 +66,7 @@ public class Army extends MapObject{
 		this.player = player;
 		this.troopList = new ArrayList<Troop>();
 		this.kingdom = kingdom;
+		this.lastKingdom = kingdom;
 		this.flag = flag;
 		this.state = STATE_ON;
 		spriteList = new ArrayList<SpriteImage>();
