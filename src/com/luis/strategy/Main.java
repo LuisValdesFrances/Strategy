@@ -136,8 +136,16 @@ public class Main extends LCanvas implements Runnable {
 	 
 	public static int iLanguage;
 	
+	private Activity activity;
+	public Activity getActivity() {
+		return activity;
+	}
+	public void setActivity(Activity activity) {
+		this.activity = activity;
+	}
 	public Main(Activity activity) {
 		super(activity, Define.SIZEX, Define.SIZEY);
+		this.activity = activity;
 		instance = this;
 		// if(Integer.parseInt(VERSION.SDK) < 5)
 		// touchHandler = new SingleTouchHandler(view, scaleX, scaleY);

@@ -52,6 +52,7 @@ Sorry, there is already a user with that name. Try it with another name.
 Incorrect username or password
 Connection error
 Server error
+There is no internet connection
 Account has been created
 Game has been created
 Connected by

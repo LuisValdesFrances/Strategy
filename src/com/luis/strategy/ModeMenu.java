@@ -419,7 +419,8 @@ public class ModeMenu {
 						 //Escrutura online
 						 String msg = "";
 						 Main.getInstance().startClock(Main.TYPE_EARTH);
-						 String result = OnlineInputOutput.getInstance().sendUser("createUserServlet", getTextName(), getTextPassword());
+						 String result = OnlineInputOutput.getInstance().sendUser(
+								 Main.getInstance().getActivity(), "createUserServlet", getTextName(), getTextPassword());//check
 						 Main.getInstance().stopClock();
 						 
 						 if(result.equals("Server error")){
@@ -427,6 +428,9 @@ public class ModeMenu {
 						 }
 						 else if(result.equals("Query error")){
 							msg = RscManager.allText[RscManager.TXT_TRY_ANOTHER_NAME];
+						 }
+						 else if(result.equals(OnlineInputOutput.MSG_NO_CONNECTION)){
+							msg = RscManager.allText[RscManager.TXT_NO_CONNECTION];
 						 }
 						 else if(result.equals("Succes")){
 							msg = RscManager.allText[RscManager.TXT_ACCOUNT_CREATED];
@@ -471,7 +475,8 @@ public class ModeMenu {
 					 super.onSendForm();
 					 String msg = "";
 					 Main.getInstance().startClock(Main.TYPE_EARTH);
-					 String result = OnlineInputOutput.getInstance().sendUser("loginUserServlet", getTextName(), getTextPassword());
+					 String result = OnlineInputOutput.getInstance().sendUser(
+							 Main.getInstance().getActivity(), "loginUserServlet", getTextName(), getTextPassword());//check
 					 Main.getInstance().stopClock();
 					 
 					if(result.equals("Server error")){
@@ -479,6 +484,9 @@ public class ModeMenu {
 					 }
 					 else if(result.equals("Query error")){
 						 msg = RscManager.allText[RscManager.TXT_INCORRECT_USER_NAME];
+					 }
+					 else if(result.equals(OnlineInputOutput.MSG_NO_CONNECTION)){
+						msg = RscManager.allText[RscManager.TXT_NO_CONNECTION];
 					 }
 					 else if(result.equals("Succes")){
 						 msg = RscManager.allText[RscManager.TXT_CONNECTED_BY] + " " + getTextName();
@@ -515,7 +523,8 @@ public class ModeMenu {
 			 //Notificaciones
 			 Main.getInstance().startClock(Main.TYPE_EARTH);
 			 NotificationListData notificationListData = 
-			 	OnlineInputOutput.getInstance().reviceNotificationListData(GameState.getInstance().getName());
+			 	OnlineInputOutput.getInstance().reviceNotificationListData(
+			 			Main.getInstance().getActivity(), GameState.getInstance().getName());//check
 			 Main.getInstance().stopClock();
 			 if(notificationListData.getNotificationDataList().size() > 0){
 				 
@@ -595,7 +604,8 @@ public class ModeMenu {
 				
 				
 			Main.getInstance().startClock(Main.TYPE_EARTH);
-			SceneListData sceneListData = OnlineInputOutput.getInstance().reviceSceneListData(GameState.getInstance().getName());
+			SceneListData sceneListData = OnlineInputOutput.getInstance().reviceSceneListData(
+					Main.getInstance().getActivity(), GameState.getInstance().getName());//check
 			Main.getInstance().stopClock();
 
 			if (sceneListData != null) {
@@ -637,12 +647,14 @@ public class ModeMenu {
 							SceneData sceneData = null;
 							if(sd.getState() == 0){
 								sceneData = 
-										OnlineInputOutput.getInstance().reviceSceneData(OnlineInputOutput.URL_GET_START_SCENE, ""+ sd.getId());
+										OnlineInputOutput.getInstance().reviceSceneData(
+												Main.getInstance().getActivity(), OnlineInputOutput.URL_GET_START_SCENE, ""+ sd.getId());//check
 							}
 							//El escenario NO es nuevo
 							else{
 								sceneData = 
-										OnlineInputOutput.getInstance().reviceSceneData(OnlineInputOutput.URL_GET_SCENE, ""+ sd.getId());
+										OnlineInputOutput.getInstance().reviceSceneData(
+												Main.getInstance().getActivity(), OnlineInputOutput.URL_GET_SCENE, ""+ sd.getId());//check
 							}
 							
 							Main.getInstance().stopClock();
@@ -680,7 +692,8 @@ public class ModeMenu {
 		 case Define.ST_MENU_ON_LINE_LIST_JOIN_GAME:
 			 Main.getInstance().startClock(Main.TYPE_EARTH);
 			 PreSceneListData preSceneListData =  
-					 OnlineInputOutput.getInstance().revicePreSceneListData(OnlineInputOutput.URL_GET_PRE_SCENE_LIST, GameState.getInstance().getName());
+					 OnlineInputOutput.getInstance().revicePreSceneListData(
+							 Main.getInstance().getActivity(), OnlineInputOutput.URL_GET_PRE_SCENE_LIST, GameState.getInstance().getName());//check
 			 Main.getInstance().stopClock();
 			
 			 if (preSceneListData != null) {
@@ -722,7 +735,8 @@ public class ModeMenu {
 							String msg = "";
 							Main.getInstance().startClock(Main.TYPE_EARTH);
 							String result = 
-									OnlineInputOutput.getInstance().sendInscription(OnlineInputOutput.URL_CREATE_INSCRIPTION, scene, user, create);
+									OnlineInputOutput.getInstance().sendInscription(
+											Main.getInstance().getActivity(), OnlineInputOutput.URL_CREATE_INSCRIPTION, scene, user, create);//check
 							Main.getInstance().stopClock();
 							 
 							if(result.equals("Server error")){
@@ -731,6 +745,9 @@ public class ModeMenu {
 							else if(result.equals("Query error")){
 								msg = RscManager.allText[RscManager.TXT_INCORRECT_USER_NAME];
 							}
+							else if(result.equals(OnlineInputOutput.MSG_NO_CONNECTION)){
+								msg = RscManager.allText[RscManager.TXT_NO_CONNECTION];
+							 }
 							else if(result.equals("Succes")){
 								msg = RscManager.allText[RscManager.TXT_HAVE_JOINED];
 							}
@@ -775,7 +792,8 @@ public class ModeMenu {
 							 String msg = null;
 							 Main.getInstance().startClock(Main.TYPE_EARTH);
 							 String result =  
-									 OnlineInputOutput.getInstance().sendPreScene(OnlineInputOutput.URL_CREATE_PRE_SCENE, map, host, name);
+									 OnlineInputOutput.getInstance().sendPreScene(
+											 Main.getInstance().getActivity(), OnlineInputOutput.URL_CREATE_PRE_SCENE, map, host, name);//check
 							 Main.getInstance().stopClock();
 							 if(result.equals("Server error")){
 								msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
@@ -785,6 +803,9 @@ public class ModeMenu {
 							 }
 							 else if(result.equals("Succes")){
 								msg = RscManager.allText[RscManager.TXT_GAME_CREATED];
+							 }
+							 else if(result.equals(OnlineInputOutput.MSG_NO_CONNECTION)){
+								msg = RscManager.allText[RscManager.TXT_NO_CONNECTION];
 							 }
 							 else{
 								 msg = RscManager.allText[RscManager.TXT_CONNECTION_ERROR];
@@ -1244,7 +1265,8 @@ public class ModeMenu {
 					}
 					
 					SceneListData sceneListData = 
-							OnlineInputOutput.getInstance().reviceSceneListData(GameState.getInstance().getName());
+							OnlineInputOutput.getInstance().reviceSceneListData(
+									Main.getInstance().getActivity(), GameState.getInstance().getName());
 					if (sceneListData != null &&
 							Main.state == Define.ST_MENU_ON_LINE_LIST_ALL_GAME && selectSceneBox != null) {
 						Log.i("Debug", "Actualizando selectSceneBox " + Main.iFrame);
@@ -1293,7 +1315,8 @@ public class ModeMenu {
 					}
 					
 					preSceneListData =  
-							OnlineInputOutput.getInstance().revicePreSceneListData(OnlineInputOutput.URL_GET_PRE_SCENE_LIST, GameState.getInstance().getName());
+							OnlineInputOutput.getInstance().revicePreSceneListData(
+									Main.getInstance().getActivity(), OnlineInputOutput.URL_GET_PRE_SCENE_LIST, GameState.getInstance().getName());
 					if (preSceneListData != null &&
 							Main.state == Define.ST_MENU_ON_LINE_LIST_JOIN_GAME && selectPreSceneBox != null) {
 						Log.i("Debug", "Actualizando selectPreSceneBox " + Main.iFrame);
@@ -1320,7 +1343,9 @@ public class ModeMenu {
 		Thread t = new Thread(){
 			 @Override
 			 public void run(){
-				 OnlineInputOutput.getInstance().sendDataPackage(OnlineInputOutput.URL_UPDATE_NOTIFICATION, notificationListData);
+				 OnlineInputOutput.getInstance().sendDataPackage(
+						 Main.getInstance().getActivity(),
+						 OnlineInputOutput.URL_UPDATE_NOTIFICATION, notificationListData);
 			 }
 		 };
 		 t.start();

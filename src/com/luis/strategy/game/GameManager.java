@@ -23,6 +23,7 @@ import com.luis.strategy.Main;
 import com.luis.strategy.ModeGame;
 import com.luis.strategy.RscManager;
 import com.luis.strategy.UserInput;
+import com.luis.strategy.connection.OnlineInputOutput;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.gui.ArmyBox;
@@ -371,8 +372,15 @@ public class GameManager {
 			public void onFinish() {
 				super.onWaitFinish();
 				if(GameState.getInstance().getGameMode() == GameState.GAME_MODE_ONLINE){
-					dataSender.sendGameScene(gameScene, 2);
-					//Envio notificaciones
+					
+					if(OnlineInputOutput.getInstance().isOnline(Main.getInstance().getContext())){
+						dataSender.sendGameScene(gameScene, 2);
+						//Envio notificaciones
+						//dataSender.sendGameNotifications();
+					}else{
+						NotificationBox.getInstance().addMessage(RscManager.allText[RscManager.TXT_NO_CONNECTION]);
+					}
+					
 					Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, true);
 				}else{
 					Main.changeState(Define.ST_MENU_MAIN, true);
@@ -998,7 +1006,10 @@ public class GameManager {
 			getCurrentPlayer().setGold(getCurrentPlayer().getGold()+tax-salary);
 			
 			if(getCurrentPlayer().getActionIA() == null){
-				economyBox.start("ECONOMY", "EARNING: +" +tax + " SALARY: -" + salary);
+				economyBox.start(
+						RscManager.allText[RscManager.TXT_GAME_ECONOMY], 
+						RscManager.allText[RscManager.TXT_GAME_EARNING] + " + " + tax + " " + 
+						RscManager.allText[RscManager.TXT_GAME_SALARY] + " - " + salary);
 			}else{
 				if(getCurrentPlayer().getGold() < 0){
 					changeState(STATE_DISCARD);
@@ -1010,7 +1021,7 @@ public class GameManager {
 			break;
 		case STATE_DISCARD:
 			if(getCurrentPlayer().getActionIA() == null){
-				discardBox.start(null, "Cost of troops exceedes your trasure. Discard troops.");
+				discardBox.start(null, RscManager.allText[RscManager.TXT_GAME_COST_OF_TROOPS]);
 			}else{
 				getCurrentPlayer().getActionIA().discard();
 				changeState(STATE_ACTION);
@@ -1042,15 +1053,24 @@ public class GameManager {
 					
 					
 					if(GameState.getInstance().getGameMode() == GameState.GAME_MODE_ONLINE){
-						//Notification online
-						String message = RscManager.allText[RscManager.TXT_GAME_TURN] + (gameScene.getTurnCount()+1);
 						
-						dataSender.addNotification(getCurrentPlayer().getName(), message);
-						dataSender.sendGameScene(gameScene, 1);
-						dataSender.sendGameNotifications();
+						if(OnlineInputOutput.getInstance().isOnline(Main.getInstance().getActivity())){
+							//Notification online
+							String message = RscManager.allText[RscManager.TXT_GAME_TURN] + (gameScene.getTurnCount()+1);
+							dataSender.addNotification(getCurrentPlayer().getName(), message);
+							dataSender.sendGameScene(gameScene, 1);
+							dataSender.sendGameNotifications();
+							
+							Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, true);
+						}else{
+							NotificationBox.getInstance().addMessage(RscManager.allText[RscManager.TXT_NO_CONNECTION]);
+						}
 						
 						
-						Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, true);
+						
+						
+						
+						
 					}else{
 						changeState(STATE_INCOME);
 					}

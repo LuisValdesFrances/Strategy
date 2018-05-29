@@ -8,6 +8,10 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 import com.luis.strategy.datapackage.scene.NotificationListData;
 import com.luis.strategy.datapackage.scene.PreSceneListData;
 import com.luis.strategy.datapackage.scene.SceneData;
@@ -33,6 +37,8 @@ public class OnlineInputOutput {
 	public static final String URL_UPDATE_NOTIFICATION = "updateNotificationSceneServlet";
 	public static final String URL_UPDATE_SCENE = "updateSceneServlet";
 	
+	public static final String MSG_NO_CONNECTION = "No connection";
+	
 	public static OnlineInputOutput getInstance(){
 		if(instance == null){
 			instance = new OnlineInputOutput();
@@ -40,7 +46,20 @@ public class OnlineInputOutput {
 		return instance;
 	}
 	
-	public String sendNotifiation(String URL, String scene, String user, String message){
+	
+	public boolean isOnline(Context context) {
+	    ConnectivityManager cm =
+	        (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo netInfo = cm.getActiveNetworkInfo();
+	    return netInfo != null && netInfo.isConnectedOrConnecting();
+	}
+	
+	public String sendNotifiation(Context context, String URL, String scene, String user, String message){
+		
+		if(!isOnline(context)){
+			return MSG_NO_CONNECTION;
+		}
+		
 		HttpURLConnection connection = null;
 		String result = "";
 		
@@ -75,7 +94,12 @@ public class OnlineInputOutput {
 		return result;
 	}
 	
-	public NotificationListData reviceNotificationListData(String user){
+	public NotificationListData reviceNotificationListData(Context context, String user){
+		
+		if(isOnline(context)){
+			return null;
+		}
+		
 		NotificationListData notificationListData = null;
 		HttpURLConnection connection = null;
 		try {
@@ -101,7 +125,12 @@ public class OnlineInputOutput {
 		return notificationListData;
 	}
 	
-	public String sendUser(String URL, String name, String password){
+	public String sendUser(Context context, String URL, String name, String password){
+		
+		if(!isOnline(context)){
+			return MSG_NO_CONNECTION;
+		}
+		
 		HttpURLConnection connection = null;
 		String result = "";
 		try {
@@ -134,7 +163,10 @@ public class OnlineInputOutput {
 		return result;
 	}
 	
-	public String sendPreScene(String URL, String map, String user, String name){
+	public String sendPreScene(Context context, String URL, String map, String user, String name){
+		if(!isOnline(context)){
+			return MSG_NO_CONNECTION;
+		}
 		HttpURLConnection connection = null;
 		String result = "";
 		try {
@@ -168,7 +200,10 @@ public class OnlineInputOutput {
 		return result;
 	}
 	
-	public String sendInscription(String URL, String scene, String user, String create){
+	public String sendInscription(Context context, String URL, String scene, String user, String create){
+		if(!isOnline(context)){
+			return MSG_NO_CONNECTION;
+		}
 		HttpURLConnection connection = null;
 		String result = "";
 		try {
@@ -202,7 +237,10 @@ public class OnlineInputOutput {
 		return result;
 	}
 	
-	public String sendDataPackage(String URL, Serializable dataPackage){
+	public String sendDataPackage(Context context, String URL, Serializable dataPackage){
+		if(!isOnline(context)){
+			return MSG_NO_CONNECTION;
+		}
 		HttpURLConnection connection = null;
 		String result = "";
 		try {
@@ -240,7 +278,10 @@ public class OnlineInputOutput {
 		return result;
 	}
 	
-	public PreSceneListData revicePreSceneListData(String URL, String user){
+	public PreSceneListData revicePreSceneListData(Context context, String URL, String user){
+		if(!isOnline(context)){
+			return null;
+		}
 		PreSceneListData preSceneListData = null;
 		HttpURLConnection connection = null;
 		try {
@@ -267,7 +308,10 @@ public class OnlineInputOutput {
 		return preSceneListData;
 	}
 	
-	public SceneListData reviceSceneListData(String user){
+	public SceneListData reviceSceneListData(Context context, String user){
+		if(!isOnline(context)){
+			return null;
+		}
 		SceneListData sceneListData = null;
 		HttpURLConnection connection = null;
 		try {
@@ -295,7 +339,10 @@ public class OnlineInputOutput {
 	}
 	
 	
-	public SceneData reviceSceneData(String URL, String scene){
+	public SceneData reviceSceneData(Context context, String URL, String scene){
+		if(!isOnline(context)){
+			return null;
+		}
 		SceneData sceneData = null;
 		HttpURLConnection connection = null;
 		try {

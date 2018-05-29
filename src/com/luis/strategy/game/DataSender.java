@@ -32,20 +32,25 @@ public class DataSender{
 		
 		Main.getInstance().startClock(Main.TYPE_EARTH);
 		String result = 
-				OnlineInputOutput.getInstance().sendDataPackage(OnlineInputOutput.URL_UPDATE_SCENE, sceneData);
+				OnlineInputOutput.getInstance().sendDataPackage(
+						Main.getInstance().getActivity(),
+						OnlineInputOutput.URL_UPDATE_SCENE, sceneData);
 		Main.getInstance().stopClock();
 		
 		if(result.equals("Connection error")){
 			msg = RscManager.allText[RscManager.TXT_CONNECTION_ERROR];
-		 }
-		 else if(result.equals("Server error")){
+		}
+		else if(result.equals("Server error")){
 			msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
-		 }
-		 else if(result.equals("Query error")){
+		}
+		else if(result.equals("Query error")){
 			msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
-		 }
-		 else if(result.equals("Succes")){
+		}
+		else if(result.equals("Succes")){
 			msg = RscManager.allText[RscManager.TXT_SEND_DATA];
+		}
+		else if(result.equals(OnlineInputOutput.MSG_NO_CONNECTION)){
+			msg = RscManager.allText[RscManager.TXT_NO_CONNECTION];
 		}
 		if(msg != null){
 			NotificationBox.getInstance().addMessage(msg);
@@ -80,6 +85,7 @@ public class DataSender{
 					DataKingdom.SCENARY_NAME_LIST[GameState.getInstance().getMap()] + " " + n.message;
 			
 			OnlineInputOutput.getInstance().sendNotifiation(
+					Main.getInstance().getActivity(),
 					OnlineInputOutput.URL_CREATE_NOTIFICATION, 
 					""+GameState.getInstance().getSceneData().getId(), 
 					n.user, 
