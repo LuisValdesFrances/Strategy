@@ -92,7 +92,6 @@ public class ActionIA {
 								player.getFlag(), 
 								map.getX(), map.getY(), map.getWidth(), map.getHeight());
 						army.initTroops();
-						army.setState(Army.STATE_OFF);
 						player.getArmyList().add(army);
 					}
 				}

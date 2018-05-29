@@ -63,9 +63,7 @@ public class MainActivity extends Activity{
 		//Screen no sleep
 		powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
-		
 		//this.finish();
-		
 	}
 	
 	@Override
@@ -86,7 +84,7 @@ public class MainActivity extends Activity{
 	public void onPause(){
 		super.onPause();
 		if(wakeLock != null){
-			wakeLock.acquire();
+			wakeLock.release();
 		}
 		main.pause();
 	}

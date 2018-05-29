@@ -28,10 +28,17 @@ public class Army extends MapObject{
 	private Kingdom kingdom;
 	
 	private int state;
+	public static final int STATE_NONE = -1;
 	public static final int STATE_ON = 0;
 	public static final int STATE_MOVE = 1;
 	public static final int STATE_ATACK = 2;
-	public static final int STATE_OFF = 3;
+	public static final int STATE_DEAD = 3;
+	public static final int STATE_OFF = 4;
+	
+	private float waitCount;
+	private int subState;
+	public static final int SUB_STATE_DEAD_ANIM = 0;
+	public static final int SUB_STATE_DEAD_WAIT = 1;
 	
 	
 	private boolean flip;
@@ -39,6 +46,7 @@ public class Army extends MapObject{
 	public static final int ANIN_IDLE = 0;
 	public static final int ANIN_MOVE = 1;
 	public static final int ANIN_ATACK = 2;
+	public static final int ANIN_DEAD = 3;
 	
 	private static final float SPEED = 10f;
 	
@@ -61,18 +69,19 @@ public class Army extends MapObject{
 			kingdom.getX(), kingdom.getY(),
 			GfxManager.imgArmyIdle.getWidth()/9, GfxManager.imgArmyIdle.getHeight(), 
 			mapX, mapY, mapWidth, mapHeight,
-			-1, Main.FX_SELECT_ARMY);
+			-1, -1);
 		this.id = idCount++;
 		this.player = player;
 		this.troopList = new ArrayList<Troop>();
 		this.kingdom = kingdom;
 		this.lastKingdom = kingdom;
 		this.flag = flag;
-		this.state = STATE_ON;
+		this.state = STATE_OFF;
 		spriteList = new ArrayList<SpriteImage>();
 		spriteList.add(new SpriteImage(GfxManager.imgArmyIdle.getWidth(), GfxManager.imgArmyIdle.getHeight(), 0.10f, 7));	
 		spriteList.add(new SpriteImage(GfxManager.imgArmyRun.getWidth(), GfxManager.imgArmyRun.getHeight(), 0.12f, 8));
 		spriteList.add(new SpriteImage(GfxManager.imgArmyAtack.getWidth(), GfxManager.imgArmyRun.getHeight(), 0.09f, 7));
+		spriteList.add(new SpriteImage(GfxManager.imgArmyDead.getWidth(), GfxManager.imgArmyDead.getHeight(), 0.12f, 5));
 		
 		if(getPlayer().getActionIA() != null){
 			iaDecision = new IADecision();
@@ -91,11 +100,12 @@ public class Army extends MapObject{
 	}
 	
 	public void update(MultiTouchHandler multiTouchHandler, WorldConver worldConver, GameCamera gameCamera, float delta){
-		spriteList.get(anim).updateAnimation(delta);
+		
 		
 		switch(state){
 		case STATE_ON:
 			super.update(multiTouchHandler, worldConver, gameCamera);
+			spriteList.get(anim).updateAnimation(delta);
 			if(idleCount < idleWait){
 				idleCount+= delta;
 				spriteList.get(anim).setFrame(0);
@@ -107,11 +117,14 @@ public class Army extends MapObject{
 			}
 			break;
 		case STATE_OFF:
+		case STATE_NONE:
 			super.update(multiTouchHandler, worldConver, gameCamera);
+			spriteList.get(anim).updateAnimation(delta);
 			spriteList.get(anim).setFrame(0);
+			//setInPosition();
 			break;
 		case STATE_MOVE:
-			
+			spriteList.get(anim).updateAnimation(delta);
 			float angle = Math2D.getAngle360(
 				getAbsoluteX(), getAbsoluteY(), 
 				kingdom.getAbsoluteX(), kingdom.getAbsoluteY());
@@ -124,10 +137,44 @@ public class Army extends MapObject{
 			setY(getY()-speedY);
 			break;
 		case STATE_ATACK:
+			spriteList.get(anim).updateAnimation(delta);
 			if(spriteList.get(anim).isEndAnimation()){
-				changeState(STATE_OFF);
+				changeState(STATE_NONE);//OJO
 			}
 			break;
+		case STATE_DEAD:
+			switch(subState){
+			case SUB_STATE_DEAD_ANIM:
+				spriteList.get(anim).updateAnimation(delta);
+				if(spriteList.get(anim).isEndAnimation()){
+					spriteList.get(anim).setFrame(4);
+					subState = SUB_STATE_DEAD_WAIT;
+				}
+				break;
+			case SUB_STATE_DEAD_WAIT:
+				if(waitCount < 1.25){
+					waitCount+= delta;
+				}else{
+					changeState(STATE_NONE);
+				}
+				break;
+			
+			}
+			
+			break;
+		}
+	}
+	
+	private void setInPosition(){
+		if((int)x > (int)getKingdom().getX()){
+			x--;
+		}else if((int)x < (int)getKingdom().getX()){
+			x++;
+		}
+		if((int)y > (int)getKingdom().getY()){
+			y--;
+		}else if((int)y < (int)getKingdom().getY()){
+			y++;
 		}
 	}
 	
@@ -238,6 +285,13 @@ public class Army extends MapObject{
 					(1+modSize),(1+modSize),
 					flip, Graphics.VCENTER | Graphics.HCENTER);
 			break;
+		case ANIN_DEAD:
+			spriteList.get(anim).drawFrame(g, GfxManager.imgArmyDead,
+					pX,
+					pY,
+					(1+modSize),(1+modSize),
+					flip, Graphics.VCENTER | Graphics.HCENTER);
+			break;
 		}
 		
 		//Test
@@ -276,7 +330,15 @@ public class Army extends MapObject{
 			spriteList.get(anim).resetAnimation(0);
 			SndManager.getInstance().playFX(Main.FX_SWORD, 0);
 			break;
+		case STATE_DEAD:
+			anim = ANIN_DEAD;
+			spriteList.get(anim).resetAnimation(0);
+			SndManager.getInstance().playFX(Main.FX_DEAD, 0);
+			break;
 		case STATE_OFF:
+		case STATE_NONE:
+			subState = 0;
+			waitCount = 0;
 			anim = ANIN_IDLE;
 			spriteList.get(anim).resetAnimation(0);
 			flip = lastKingdom.getAbsoluteX() > kingdom.getAbsoluteX();
@@ -366,10 +428,6 @@ public class Army extends MapObject{
 		return state;
 	}
 	
-	public void setState(int state) {
-		this.state = state;
-	}
-
 	public Kingdom getKingdom() {
 		return kingdom;
 	}
