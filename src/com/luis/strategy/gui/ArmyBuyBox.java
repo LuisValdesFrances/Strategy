@@ -223,18 +223,19 @@ public class ArmyBuyBox {
 			
 			String cost = ""+GameParams.TROOP_COST[index];
 			
-			g.drawImage(GfxManager.imgCoin, 
-					troopX + GfxManager.imgBigTroop.get(index).getWidth()/2 - (Font.getFontWidth(Font.FONT_BIG)*cost.length())/2-
-					Font.getFontWidth(Font.FONT_BIG)/2-GfxManager.imgCoin.getWidth(), 
-					troopY - GfxManager.imgBigTroop.get(index).getHeight()/2 + GfxManager.imgCoin.getHeight()/2+
-					Font.getFontWidth(Font.FONT_BIG)/2 + modY,
-					Graphics.VCENTER | Graphics.HCENTER);
 			TextManager.drawSimpleText(g, Font.FONT_BIG, cost, 
 					troopX + GfxManager.imgBigTroop.get(index).getWidth()/2 - (Font.getFontWidth(Font.FONT_BIG)*cost.length())/2-
-					Font.getFontWidth(Font.FONT_BIG)/2, 
+					GfxManager.imgCoin.getWidth(), 
 					troopY - GfxManager.imgBigTroop.get(index).getHeight()/2 + GfxManager.imgCoin.getHeight()/2+
 					Font.getFontWidth(Font.FONT_BIG)/2 + modY,
 					Graphics.VCENTER | Graphics.HCENTER);
+			
+			g.drawImage(GfxManager.imgCoin, 
+					troopX + GfxManager.imgBigTroop.get(index).getWidth()/2 - GfxManager.imgCoin.getWidth(), 
+					troopY - GfxManager.imgBigTroop.get(index).getHeight()/2 + GfxManager.imgCoin.getHeight()/2+
+					Font.getFontWidth(Font.FONT_BIG)/2 + modY,
+					Graphics.VCENTER | Graphics.HCENTER);
+			
 			buttonLeft.draw(g, 0, modY);
 			buttonRight.draw(g, 0, modY);
 			buttonBuy.draw(g, 0, modY);
