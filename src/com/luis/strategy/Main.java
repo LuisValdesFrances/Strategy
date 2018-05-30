@@ -106,6 +106,7 @@ public class Main extends LCanvas implements Runnable {
 	public static final byte FX_START_GAME = 14;
 	public static final byte FX_VICTORY = 15;
 	public static final byte FX_DEFEAT = 16;
+	public static final byte FX_DEAD = 17;
 	 
 	private static final int MUSIC_LIST [] = {
 		R.raw.intro,
@@ -131,6 +132,7 @@ public class Main extends LCanvas implements Runnable {
 	    R.raw.fx_start_game,
 	    R.raw.fx_victory,
 	    R.raw.fx_defeat,
+	    R.raw.fx_dead,
 	    
 	};
 	 
@@ -432,23 +434,19 @@ public class Main extends LCanvas implements Runnable {
     }
 
 	public void pause() {
-		//MyCanvas.isPause = true;
-//		if (iState >= Define.ST_GAME_INIT)
-//			Main.changeState(Define.ST_GAME_PAUSE,false);
-
 		Log.i("INFO", "Llamada a pause()");
 		isPaused = true;
+		if(state == Define.ST_GAME_RUN){
+			changeState(Define.ST_GAME_PAUSE, false);
+		}
 		SndManager.getInstance().pauseMusic();
 	}
 
 	public void unPause() {
-		//if (MyCanvas.isPause) 
-		{
-			//MyCanvas.isPause = false;
-			Log.i("INFO", "Llamada a unPause()");
-			isPaused = false;
-			SndManager.getInstance().unpauseMusic();
-		}
+		//MyCanvas.isPause = false;
+		Log.i("INFO", "Llamada a unPause()");
+		isPaused = false;
+		SndManager.getInstance().unpauseMusic();
 	}
 
 	public void stop() {
