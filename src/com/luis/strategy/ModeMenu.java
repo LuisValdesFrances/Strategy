@@ -526,7 +526,8 @@ public class ModeMenu {
 			 	OnlineInputOutput.getInstance().reviceNotificationListData(
 			 			Main.getInstance().getActivity(), GameState.getInstance().getName());//check
 			 Main.getInstance().stopClock();
-			 if(notificationListData.getNotificationDataList().size() > 0){
+			 
+			 if(notificationListData != null && notificationListData.getNotificationDataList().size() > 0){
 				 
 				 //Si vengo del juego, no muestro notificaciones
 				 if(Main.lastState < Define.ST_GAME_INIT_PASS_AND_PLAY){

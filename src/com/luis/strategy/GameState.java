@@ -69,14 +69,6 @@ public class GameState {
 		this.sceneData = sceneData;
 	}
 
-	public static GameState getGameState() {
-		return instance;
-	}
-
-	public static void setGameState(GameState gameState) {
-		GameState.instance = gameState;
-	}
-
 	public int getMap() {
 		return map;
 	}

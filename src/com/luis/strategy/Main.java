@@ -385,21 +385,21 @@ public class Main extends LCanvas implements Runnable {
 	}
 	
 	//Resources:
-    private static Random vRandom;// = new Random(0);
+    private static Random random;// = new Random(0);
     //Obtiene un randon entre el primer parametro(Numero menor) y el segundo parametro(numero mayor). 
     //Ambos incluidos.
     public static int getRandom(int _i0, int _i1) {
-        if(vRandom == null) vRandom = new Random();
-        return _i0 + Math.abs(vRandom.nextInt() % (1 + _i1 - _i0));
+        if(random == null) random = new Random();
+        return _i0 + Math.abs(random.nextInt() % (1 + _i1 - _i0));
     }
     
     public static int getRandom(int _iNumber) {
-        if(vRandom == null) vRandom = new Random();
+        if(random == null) random = new Random();
         if (_iNumber < 0) {
-            return (vRandom.nextInt() % -_iNumber);
+            return (random.nextInt() % -_iNumber);
         }
         try {
-            return Math.abs(vRandom.nextInt()) % _iNumber;
+            return Math.abs(random.nextInt()) % _iNumber;
         } catch (Exception e) {
             e.printStackTrace();
            return 0;

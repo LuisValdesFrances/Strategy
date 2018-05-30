@@ -10,7 +10,7 @@ import com.luis.strategy.datapackage.scene.SceneData;
 import com.luis.strategy.datapackage.scene.KingdomData;
 import com.luis.strategy.datapackage.scene.PlayerData;
 import com.luis.strategy.datapackage.scene.TroopData;
-import com.luis.strategy.game.ActionIA;
+import com.luis.strategy.map.ActionIA;
 import com.luis.strategy.map.Army;
 import com.luis.strategy.map.GameScene;
 import com.luis.strategy.map.Kingdom;

@@ -8,7 +8,6 @@ import android.util.Log;
 import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gameutils.fonts.TextManager;
 import com.luis.lgameengine.gameutils.gameworld.GameCamera;
-import com.luis.lgameengine.gameutils.gameworld.SpriteImage;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.gui.Button;
 import com.luis.lgameengine.gui.MenuElement;
@@ -34,6 +33,7 @@ import com.luis.strategy.gui.FlagButton;
 import com.luis.strategy.gui.MapBox;
 import com.luis.strategy.gui.SimpleBox;
 import com.luis.strategy.gui.TerrainBox;
+import com.luis.strategy.map.ActionIA;
 import com.luis.strategy.map.Army;
 import com.luis.strategy.map.Kingdom;
 import com.luis.strategy.map.GameScene;
@@ -1082,12 +1082,6 @@ public class GameManager {
 						}else{
 							NotificationBox.getInstance().addMessage(RscManager.allText[RscManager.TXT_NO_CONNECTION]);
 						}
-						
-						
-						
-						
-						
-						
 					}else{
 						changeState(STATE_INCOME);
 					}

@@ -1,4 +1,4 @@
-package com.luis.strategy.game;
+package com.luis.strategy.map;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,13 +11,6 @@ import com.luis.lgameengine.gui.NotificationBox;
 import com.luis.strategy.Main;
 import com.luis.strategy.RscManager;
 import com.luis.strategy.constants.GameParams;
-import com.luis.strategy.map.Army;
-import com.luis.strategy.map.Kingdom;
-import com.luis.strategy.map.GameScene;
-import com.luis.strategy.map.MapObject;
-import com.luis.strategy.map.Player;
-import com.luis.strategy.map.Terrain;
-import com.luis.strategy.map.Troop;
 
 public class ActionIA {
 	

@@ -165,6 +165,7 @@ public class Army extends MapObject{
 		}
 	}
 	
+	/*
 	private void setInPosition(){
 		if((int)x > (int)getKingdom().getX()){
 			x--;
@@ -177,6 +178,7 @@ public class Army extends MapObject{
 			y++;
 		}
 	}
+	*/
 	
 	public void draw(
 			Graphics g, WorldConver worldConver, GameCamera gameCamera, boolean isSelected, boolean isActive, 

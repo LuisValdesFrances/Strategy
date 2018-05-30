@@ -7,7 +7,6 @@ import com.luis.lgameengine.gameutils.gameworld.GameCamera;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 import com.luis.strategy.constants.GameParams;
-import com.luis.strategy.game.ActionIA;
 
 public class Player {
 	
