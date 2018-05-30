@@ -83,8 +83,8 @@ public class ModeMenu {
 			
 			alpha = 255;
         	startTime = System.currentTimeMillis();
-        	cita = Main.getRandom(RscManager.TXT_CITA_1, RscManager.TXT_CITA_4);
-			author = RscManager.TXT_CITA_4+cita;
+        	cita = Main.getRandom(RscManager.TXT_CITA_1, RscManager.TXT_CITA_6);
+			author = RscManager.TXT_CITA_6+cita;
 			
 			btnBack = new Button(GfxManager.imgButtonArrowBackRelease, GfxManager.imgButtonArrowBackFocus,
 					Define.SIZEX32+GfxManager.imgButtonArrowBackRelease.getWidth()/2,

@@ -2,11 +2,15 @@
 La guerra es el arte de destruir a los hombres, la política es el arte de engañarlos.
 Tras la guerra, paz; de la paz, abundancia; de la abundancia, vicio; del vicio, la guerra.
 La guerra es un gran esfuerzo de todos hacia la paz.
-Matadlos a todos, que Dios, ya reconocerá a los suyos
+Matadlos a todos, que Dios, ya reconocerá a los suyos.
+Los dos guerreros más poderosos son la paciencia y el tiempo.
+He recorrido un largo camino desde el campo de batalla a la mesa de paz.
 Parmenides de Elea
 Francisco de Quevedo
 Montesquieu
 Arnaud Amairic
+Leo Tolstoy
+Moshe Dayan
 English
 Español
 Català
@@ -79,14 +83,15 @@ Victory
 Big Victory
 You lost the game
 lost the game
-Your army loses
-Your army win
+Attacker loses
+Attacker win
 The attacker has destroyed the enemy
 The attacker has been destroyed
 Attacker loses
 Defender loses
 casualties
 New army recruited
+The armies have joined forces
 ECONOMY
 Earning
 Salary

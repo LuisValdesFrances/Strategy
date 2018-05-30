@@ -225,7 +225,7 @@ public class ArmyBuyBox {
 			
 			TextManager.drawSimpleText(g, Font.FONT_BIG, cost, 
 					troopX + GfxManager.imgBigTroop.get(index).getWidth()/2 - (Font.getFontWidth(Font.FONT_BIG)*cost.length())/2-
-					GfxManager.imgCoin.getWidth(), 
+					(int)(GfxManager.imgCoin.getWidth()*1.5), 
 					troopY - GfxManager.imgBigTroop.get(index).getHeight()/2 + GfxManager.imgCoin.getHeight()/2+
 					Font.getFontWidth(Font.FONT_BIG)/2 + modY,
 					Graphics.VCENTER | Graphics.HCENTER);

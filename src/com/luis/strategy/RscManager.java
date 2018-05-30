@@ -15,14 +15,18 @@ public class RscManager {
 	public static final byte TXT_CITA_2 = TXT_CITA_1+1;
 	public static final byte TXT_CITA_3 = TXT_CITA_2+1;
 	public static final byte TXT_CITA_4 = TXT_CITA_3+1;
+	public static final byte TXT_CITA_5 = TXT_CITA_4+1;
+	public static final byte TXT_CITA_6 = TXT_CITA_5+1;
 	
-	public static final byte TXT_AUTOR_1 = TXT_CITA_4+1;
+	public static final byte TXT_AUTOR_1 = TXT_CITA_6+1;
 	public static final byte TXT_AUTOR_2 = TXT_AUTOR_1+1;
 	public static final byte TXT_AUTOR_3 = TXT_AUTOR_2+1;
 	public static final byte TXT_AUTOR_4 = TXT_AUTOR_3+1;
+	public static final byte TXT_AUTOR_5 = TXT_AUTOR_4+1;
+	public static final byte TXT_AUTOR_6 = TXT_AUTOR_5+1;
 	
 	//Language text
-	public static final int TXT_ENGLISH = TXT_AUTOR_4+1;
+	public static final int TXT_ENGLISH = TXT_AUTOR_6+1;
 	public static final int TXT_SPANISH = TXT_ENGLISH+1;
 	public static final int TXT_CATALA = TXT_SPANISH+1;
 	
@@ -110,7 +114,8 @@ public class RscManager {
 	public static final int TXT_GAME_DEFENSER_LOST= TXT_GAME_ATTACKER_LOST+1;
 	public static final int TXT_GAME_LOSSES= TXT_GAME_DEFENSER_LOST+1;
 	public static final int TXT_GAME_NEW_ARMY= TXT_GAME_LOSSES+1;
-	public static final int TXT_GAME_ECONOMY= TXT_GAME_NEW_ARMY+1;
+	public static final int TXT_GAME_ARMY_JOIN= TXT_GAME_NEW_ARMY+1;
+	public static final int TXT_GAME_ECONOMY= TXT_GAME_ARMY_JOIN+1;
 	public static final int TXT_GAME_EARNING= TXT_GAME_ECONOMY+1;
 	public static final int TXT_GAME_SALARY= TXT_GAME_EARNING+1;
 	public static final int TXT_GAME_COST_OF_TROOPS= TXT_GAME_SALARY+1;

@@ -526,7 +526,6 @@ public class GameManager {
 						(getCurrentPlayer().getActionIA() != null && getCurrentPlayer().getActionIA().isKingdomToMove(gameScene, kingdom))
 							
 					){
-						
 						boolean move = kingdom.getId() != getSelectedArmy().getKingdom().getId();
 						
 						if(move){
@@ -538,8 +537,13 @@ public class GameManager {
 								//Chequeo si en el target existe un colegui
 								Army neighbour = getArmyAtKingdom(kingdom);
 								if(neighbour != null && neighbour.getPlayer().getId() == getSelectedArmy().getPlayer().getId()){
+									
 									//Chequeo si se excede el maximo de tropas
-									changeSubState(SUB_STATE_ACTION_EXCEED);
+									if(neighbour.getTroopList().size()+getSelectedArmy().getTroopList().size() > GameParams.MAX_NUMBER_OF_TROOPS){
+										changeSubState(SUB_STATE_ACTION_EXCEED);
+									}else{
+										changeSubState(SUB_STATE_ACTION_MOVE);
+									}
 								}else{
 									changeSubState(SUB_STATE_ACTION_MOVE);
 								}
@@ -1900,8 +1904,9 @@ public class GameManager {
 		if(armyFiendList.size() > 1){
 			int cost = join(armyFiendList.get(0), armyFiendList.get(1));
 			//activeArmy = armyList.get(0);
-			NotificationBox.getInstance().addMessage("The armies have joined forces");
+			NotificationBox.getInstance().addMessage(RscManager.allText[RscManager.TXT_GAME_ARMY_JOIN]);
 			if(cost > 0){
+				getCurrentPlayer().setGold(getCurrentPlayer().getGold()+cost);
 				NotificationBox.getInstance().addMessage("+" + cost + " coins");
 			}
 			if(getCurrentPlayer().getActionIA() != null){
@@ -2004,7 +2009,9 @@ public class GameManager {
 		}
 		if(armyFiendList.size() > 1){
 			int cost = join(armyFiendList.get(0), armyFiendList.get(1));
-			NotificationBox.getInstance().addMessage("The armies have joined forces");
+			getDefeatArmy().getPlayer().setGold(getCurrentPlayer().getGold()+cost);
+
+			NotificationBox.getInstance().addMessage(RscManager.allText[RscManager.TXT_GAME_ARMY_JOIN]);
 			if(cost > 0){
 				NotificationBox.getInstance().addMessage("+" + cost + " coins");
 			}
