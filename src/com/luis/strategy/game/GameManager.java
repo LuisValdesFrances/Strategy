@@ -1789,7 +1789,7 @@ public class GameManager {
 		
 		if(changeCapital){
 			String message = 
-					RscManager.allText[RscManager.TXT_GAME_PLAYER] + defeatPlayer.getName() +
+					RscManager.allText[RscManager.TXT_GAME_PLAYER] + " " + defeatPlayer.getName() +
 					RscManager.allText[RscManager.TXT_GAME_CHANGE_HIS_CAPITAL];
 			NotificationBox.getInstance().addMessage(message);
 			
