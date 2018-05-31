@@ -1754,17 +1754,6 @@ public class GameManager {
 		}
 		
 		//Notificaciones:
-		/*
-		 * boolean atackerWin;
-		boolean atackerLost;
-		boolean defenserWin;
-		boolean defenserLost;
-		boolean atackerDestroy;
-		boolean defenderDestroy;
-		 */
-		
-		
-		
 		if(attackerWins){
 			String message = RscManager.allText[RscManager.TXT_GAME_ATTACKER_WINS];
 			if(!showResultBox){
