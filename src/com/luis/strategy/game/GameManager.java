@@ -70,6 +70,8 @@ public class GameManager {
 	
 	private GameScene gameScene;
 	
+	private int localTurnCount;
+	
 	private int state;
 	public static final int STATE_INCOME = 0;
 	public static final int STATE_ECONOMY = 1;
@@ -126,6 +128,7 @@ public class GameManager {
 		this.gameBuffer = Image.createImage(
 				(int)wc.getGameLayoutX(), 
 				(int)wc.getGameLayoutY());
+		this.localTurnCount = 0;
 		this.worldConver = wc;
 		this.gameCamera = gc;
 		this.gameScene = gs;
@@ -420,11 +423,6 @@ public class GameManager {
 		switch(state){
 		case STATE_INCOME:
 			if(!updatePresentation(delta)){
-				
-				if(gameScene.getPlayerIndex() == 0 && gameScene.getTurnCount() == 0){
-					SndManager.getInstance().playMusic(Main.MUSIC_MAP, true);
-				}
-				
 				changeState(STATE_ECONOMY);
 			}
 			break;
@@ -1010,6 +1008,10 @@ public class GameManager {
 			break;
 		case STATE_ECONOMY:
 			
+			if(localTurnCount == 0){
+				SndManager.getInstance().playMusic(Main.MUSIC_MAP, true);
+			}
+			
 			//Activo tropas
 			for(Player player : gameScene.getPlayerList())
 				for(Army army : player.getArmyList())
@@ -1065,9 +1067,10 @@ public class GameManager {
 						gameScene.setPlayerIndex((gameScene.getPlayerIndex()+1)%gameScene.getPlayerList().size());
 					}
 					while(getCurrentPlayer().getCapitalkingdom() == null);
-					if(gameScene.getPlayerIndex()==0)
-						gameScene.setTurnCount(gameScene.getTurnCount()+1);
 					
+					if(gameScene.getPlayerIndex()==0){
+						gameScene.setTurnCount(gameScene.getTurnCount()+1);
+					}
 					
 					if(GameState.getInstance().getGameMode() == GameState.GAME_MODE_ONLINE){
 						
@@ -1083,6 +1086,7 @@ public class GameManager {
 							NotificationBox.getInstance().addMessage(RscManager.allText[RscManager.TXT_NO_CONNECTION]);
 						}
 					}else{
+						localTurnCount++;
 						changeState(STATE_INCOME);
 					}
 				}
