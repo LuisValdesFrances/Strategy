@@ -84,7 +84,7 @@ public class DataSender{
 					GameState.getInstance().getSceneData().getId() + "-" +
 					DataKingdom.SCENARY_NAME_LIST[GameState.getInstance().getMap()] + " " + n.message;
 			
-			OnlineInputOutput.getInstance().sendNotifiation(
+			OnlineInputOutput.getInstance().sendNotification(
 					Main.getInstance().getActivity(),
 					OnlineInputOutput.URL_CREATE_NOTIFICATION, 
 					""+GameState.getInstance().getSceneData().getId(), 

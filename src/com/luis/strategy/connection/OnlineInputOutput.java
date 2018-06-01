@@ -54,7 +54,7 @@ public class OnlineInputOutput {
 	    return netInfo != null && netInfo.isConnectedOrConnecting();
 	}
 	
-	public String sendNotifiation(Context context, String URL, String scene, String user, String message){
+	public String sendNotification(Context context, String URL, String scene, String user, String message){
 		
 		if(!isOnline(context)){
 			return MSG_NO_CONNECTION;

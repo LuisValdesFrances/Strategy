@@ -2030,11 +2030,11 @@ public class GameManager {
 		}
 		
 		try{
-		if(getDefeatArmy().getPlayer() != null && getDefeatArmy().getPlayer().getId() == getCurrentPlayer().getId()){
-			getDefeatArmy().changeState(Army.STATE_OFF);
-		}else{
-			getDefeatArmy().changeState(Army.STATE_ON);
-		}
+			if(getDefeatArmy().getPlayer() != null && getDefeatArmy().getPlayer().getId() == getCurrentPlayer().getId()){
+				getDefeatArmy().changeState(Army.STATE_OFF);
+			}else{
+				getDefeatArmy().changeState(Army.STATE_ON);
+			}
 		}catch(Exception e){
 			Log.i("Debug", getDefeatArmy().toString());
 			Log.i("Debug", getDefeatArmy().getPlayer().toString());

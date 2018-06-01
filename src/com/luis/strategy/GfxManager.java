@@ -183,10 +183,6 @@ public class GfxManager {
 					imgMapList.add(Image.createImage("/maps/genterex_2.png"));
 					imgMapList.add(Image.createImage("/maps/genterex_3.png"));
 					imgMapList.add(Image.createImage("/maps/genterex_4.png"));
-					imgMapList.add(Image.createImage("/maps/genterex_5.png"));
-					imgMapList.add(Image.createImage("/maps/genterex_6.png"));
-					imgMapList.add(Image.createImage("/maps/genterex_7.png"));
-					imgMapList.add(Image.createImage("/maps/genterex_8.png"));
 					break;
 				case 1:
 					imgMapList.add(Image.createImage("/maps/crom_1.png"));
