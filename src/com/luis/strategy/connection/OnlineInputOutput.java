@@ -21,6 +21,7 @@ public class OnlineInputOutput {
 	
 	public static final String SERVER_URL = "http://172.104.228.65:8080/KingServer/";//Online
 	//public static final String SERVER_URL = "http://192.168.1.110:8080/KingServer/";//Local
+	//public static final String SERVER_URL = "http://192.168.26.155:8080/KingServer/";//Local2
 	
 	private static OnlineInputOutput instance;
 	
@@ -96,7 +97,7 @@ public class OnlineInputOutput {
 	
 	public NotificationListData reviceNotificationListData(Context context, String user){
 		
-		if(isOnline(context)){
+		if(!isOnline(context)){
 			return null;
 		}
 		
