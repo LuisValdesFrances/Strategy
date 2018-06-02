@@ -320,6 +320,31 @@ public class DataKingdom {
 				(680f/(float)mapWidth*100f), (680f/(float)mapHeight*120f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.FOREST, false));
 		k8.setTerrainList(terrainList);
 		
+		//Dominios de Daergonais
+		Kingdom k9 = new Kingdom(map,
+				(780f/(float)mapWidth*100f), (640f/(float)mapHeight*120f), map.getX(), map.getY(), map.getWidth(), map.getHeight());
+		k9.setId(9);
+		k9.setName("Dominios de Daergonais");
+		//La posicion del terreno se expresa en porcentajes respecto al ancho y alto del mapa
+		terrainList = new ArrayList<Terrain>();
+		terrainList.add(new Terrain(map,
+				(500f/(float)mapWidth*100f), (210f/(float)mapHeight*120f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.FOREST, false));
+		k9.setTerrainList(terrainList);
+		
+		Kingdom k10 = new Kingdom(map,
+				(730f/(float)mapWidth*100f), (170f/(float)mapHeight*120f), map.getX(), map.getY(), map.getWidth(), map.getHeight());
+		k10.setId(10);
+		k10.setName("Daergonais");
+		//La posicion del terreno se expresa en porcentajes respecto al ancho y alto del mapa
+		terrainList = new ArrayList<Terrain>();
+		terrainList.add(new Terrain(map,
+				(730f/(float)mapWidth*100f), (270f/(float)mapHeight*120f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.FOREST, false));
+		terrainList.add(new Terrain(map,
+				(790f/(float)mapWidth*100f), (270f/(float)mapHeight*120f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.MONTAIN, false));
+		terrainList.add(new Terrain(map,
+				(660f/(float)mapWidth*100f), (160f/(float)mapHeight*120f), GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.SMALL_CITY, false));
+		k10.setTerrainList(terrainList);
+		
 		k1.getBorderList().add(k2);
 		k1.getBorderList().add(k4);
 		k1.getBorderList().add(k5);
