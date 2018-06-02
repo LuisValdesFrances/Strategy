@@ -48,7 +48,7 @@ public class GameManager {
 	//
 	private Image gameBuffer;
 	public float distorsion = 1.14f;
-	private static final boolean MODE_3D = false;
+	private static final boolean MODE_3D = true;
 	
 	public DataSender dataSender;
 	
@@ -1063,6 +1063,7 @@ public class GameManager {
 				if(isFinishGame()){
 					changeState(STATE_FINISH);
 				}else{
+					String currentName = getCurrentPlayer().getName();
 					do{
 						gameScene.setPlayerIndex((gameScene.getPlayerIndex()+1)%gameScene.getPlayerList().size());
 					}
@@ -1076,10 +1077,12 @@ public class GameManager {
 						
 						if(OnlineInputOutput.getInstance().isOnline(Main.getInstance().getActivity())){
 							//Notification online
+							/*
 							String message = RscManager.allText[RscManager.TXT_GAME_TURN] + (gameScene.getTurnCount()+1);
 							dataSender.addNotification(getCurrentPlayer().getName(), message);
+							*/
 							dataSender.sendGameScene(gameScene, 1);
-							dataSender.sendGameNotifications();
+							dataSender.sendGameNotifications(currentName);
 							
 							Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, true);
 						}else{
@@ -1767,7 +1770,7 @@ public class GameManager {
 				dataSender.addNotification(enemy.getPlayer().getName(), message);
 		}
 		if(attackerLost){
-			String message = RscManager.allText[RscManager.TXT_GAME_ATTACKER_DEFEAT];
+			String message = RscManager.allText[RscManager.TXT_GAME_ATTACKER_LOSES];
 			if(!showResultBox){
 				NotificationBox.getInstance().addMessage(message);
 			}

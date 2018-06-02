@@ -25,7 +25,8 @@ public class MapBox extends MenuBox{
 	private int numberPartsH;
 
 	public MapBox(WorldConver worldConver, int numberPartsW, int numberPartsH) {
-		super(Define.SIZEX, Define.SIZEY, GfxManager.imgMediumBox, null, null,
+		super(
+				Define.SIZEX, Define.SIZEY, GfxManager.imgMediumBox, null, null,
 				Define.SIZEX2, Define.SIZEY2-GfxManager.imgGameHud.getHeight()/2,
 				null,
 				null, Font.FONT_MEDIUM, Font.FONT_SMALL, -1, Main.FX_NEXT);

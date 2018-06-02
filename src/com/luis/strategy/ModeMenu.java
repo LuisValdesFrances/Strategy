@@ -18,7 +18,6 @@ import com.luis.strategy.connection.OnlineInputOutput;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.data.DataKingdom;
-import com.luis.strategy.datapackage.scene.NotificationListData;
 import com.luis.strategy.datapackage.scene.PreSceneData;
 import com.luis.strategy.datapackage.scene.PreSceneListData;
 import com.luis.strategy.datapackage.scene.SceneData;
@@ -52,19 +51,18 @@ public class ModeMenu {
 	private static Button btnOnLine;
 	private static Button btnPassAndPlay;
 	private static Button btnContinueCampaing;
-	private static Button btnContinuePassAndPlay;
+	//private static Button btnContinuePassAndPlay;
 	private static Button btnStart;
 	
 	private static Button btnNewAccount;
 	private static Button btnLogin;
 	private static Button btnSearchGame;
 	private static Button btnCreateScene;
-	private static Button btnCancel;
 	
 	private static ListBox selectMapBox;
 	private static ListBox selectPreSceneBox;
 	private static ListBox selectSceneBox;
-	private static ListBox notificationBox;
+	
 	private static ConfigMapBox configMapBox;
 	private static CreateUserBox createUserBox;
 	private static LoginBox loginBox;
@@ -520,55 +518,6 @@ public class ModeMenu {
 			 break;
 		 case Define.ST_MENU_ON_LINE_LIST_ALL_GAME:
 			 
-			 //Notificaciones
-			 Main.getInstance().startClock(Main.TYPE_EARTH);
-			 NotificationListData notificationListData = 
-			 	OnlineInputOutput.getInstance().reviceNotificationListData(
-			 			Main.getInstance().getActivity(), GameState.getInstance().getName());//check
-			 Main.getInstance().stopClock();
-			 
-			 if(notificationListData != null && notificationListData.getNotificationDataList().size() > 0){
-				 
-				 //Si vengo del juego, no muestro notificaciones
-				 if(Main.lastState < Define.ST_GAME_INIT_PASS_AND_PLAY){
-					 String[] notificationList = new String[notificationListData.getNotificationDataList().size()];
-					 for(int i = 0; i < notificationListData.getNotificationDataList().size(); i++){
-						 notificationList[i] = notificationListData.getNotificationDataList().get(i).getMessage();
-					 }
-					 notificationBox = new ListBox(
-								Define.SIZEX, Define.SIZEY, 
-								GfxManager.imgMediumBox, 
-								GfxManager.imgButtonInvisible, GfxManager.imgButtonInvisible, 
-								Define.SIZEX2, Define.SIZEY2, 
-								RscManager.allText[RscManager.TXT_NOTIFICATIONS],
-								notificationList,
-								Font.FONT_MEDIUM, Font.FONT_SMALL,
-								-1, Main.FX_NEXT);
-					 notificationBox.setDisabledList();
-					 for(Button button : notificationBox.getBtnList()){
-						 button.setIgnoreAlpha(true);
-					 }
-					 notificationBox.start();
-					 
-					 btnCancel = new Button(
-							 GfxManager.imgButtonCancelRelease, 
-							 GfxManager.imgButtonCancelRelease, 
-							 notificationBox.getX()-notificationBox.getWidth()/2, 
-							 notificationBox.getY()-notificationBox.getHeight()/2, 
-							 null, -1){
-						 @Override
-						 public void onButtonPressUp(){
-							 setDisabled(true);
-							 if(Main.state == Define.ST_MENU_ON_LINE_LIST_ALL_GAME){
-								 notificationBox.cancel();
-							 }
-						 }
-					 };
-				 }
-				 
-				 //Enviar notificaciones leidas
-				 updateNotifications(notificationListData);
-			 }
 			 btnSearchGame = new Button(
 						GfxManager.imgButtonSearchBigRelease, 
 						GfxManager.imgButtonSearchBigFocus, 
@@ -908,17 +857,11 @@ public class ModeMenu {
 			 btnBack.update(UserInput.getInstance().getMultiTouchHandler());
 			 btnSearchGame.update(UserInput.getInstance().getMultiTouchHandler());
 			 btnCreateScene.update(UserInput.getInstance().getMultiTouchHandler());
-			 if(notificationBox != null){
-				 notificationBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
-				 btnCancel.update(UserInput.getInstance().getMultiTouchHandler());
-				 if(!notificationBox.isActive()){
-					 if(selectSceneBox != null)
-						 selectSceneBox .update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
-				 }
-			 }else{
-				 if(selectSceneBox != null)
-					 selectSceneBox .update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
+			 
+			 if(selectSceneBox != null){
+				 selectSceneBox .update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
 			 }
+			 
 			 break;
 		 case Define.ST_MENU_ON_LINE_LIST_JOIN_GAME:
 			 runMenuBG(Main.getDeltaSec());
@@ -1058,10 +1001,6 @@ public class ModeMenu {
 			 btnCreateScene.draw(_g,0, 0);
 			 if(selectSceneBox != null){
 				 selectSceneBox.draw(_g, GfxManager.imgBlackBG);
-			 }
-			 if(notificationBox != null){
-				 notificationBox.draw(_g, GfxManager.imgBlackBG);
-				 btnCancel.draw(_g, (int)notificationBox.getModPosX(),0);
 			 }
 			 break;
 		 case Define.ST_MENU_ON_LINE_LIST_JOIN_GAME:
@@ -1340,15 +1279,5 @@ public class ModeMenu {
 		preSceneUpdate.start();
 	}
 	
-	public static void updateNotifications(final NotificationListData notificationListData){
-		Thread t = new Thread(){
-			 @Override
-			 public void run(){
-				 OnlineInputOutput.getInstance().sendDataPackage(
-						 Main.getInstance().getActivity(),
-						 OnlineInputOutput.URL_UPDATE_NOTIFICATION, notificationListData);
-			 }
-		 };
-		 t.start();
-	}
+	
 }

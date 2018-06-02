@@ -83,8 +83,8 @@ Victory
 Big Victory
 You lost the game
 lost the game
-Attacker loses
 Attacker win
+Attacker loses
 The attacker has destroyed the enemy
 The attacker has been destroyed
 Attacker loses
@@ -99,7 +99,6 @@ Cost of troops exceedes your tresaure. Discard troops.
 El número total de tropas excede el máximo. Se despediran las sobrantes.
 is the winner!
 change his capital
-change your capital
 Do you want discard this troop of
 for
 coins

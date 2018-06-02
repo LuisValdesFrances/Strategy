@@ -61,9 +61,10 @@ public class Define {
 	// Game states:
 	public static final int ST_GAME_INIT_PASS_AND_PLAY = 100;
 	public static final int ST_GAME_INIT_ON_LINE = 101;
-	public static final int ST_GAME_RUN = 102;
-	public static final int ST_GAME_PAUSE = 103;
-	public static final int ST_GAME_CONFIRMATION_QUIT = 104;
+	public static final int ST_GAME_NOTIFICATION = 102;
+	public static final int ST_GAME_RUN = 103;
+	public static final int ST_GAME_PAUSE = 104;
+	public static final int ST_GAME_CONFIRMATION_QUIT = 105;
 	
 	// Nombre del fichero donde se guardaran y cargaran los datos:
 	public static final String DATA_USER = "strategyDataUser";

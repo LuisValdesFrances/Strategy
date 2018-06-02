@@ -77,12 +77,10 @@ public class DataSender{
 	*/
 	
 	
-	public void sendGameNotifications(){
+	public void sendGameNotifications(String user){
 		for(Notification n : notificationList){
 			
-			String message = 
-					GameState.getInstance().getSceneData().getId() + "-" +
-					DataKingdom.SCENARY_NAME_LIST[GameState.getInstance().getMap()] + " " + n.message;
+			String message = user + " - " + n.message;
 			
 			OnlineInputOutput.getInstance().sendNotification(
 					Main.getInstance().getActivity(),

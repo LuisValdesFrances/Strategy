@@ -212,6 +212,7 @@ public class Main extends LCanvas implements Runnable {
 
 				case Define.ST_GAME_INIT_PASS_AND_PLAY:
 				case Define.ST_GAME_INIT_ON_LINE:
+				case Define.ST_GAME_NOTIFICATION:
 				case Define.ST_GAME_RUN:
 				case Define.ST_GAME_PAUSE:
 				case Define.ST_GAME_CONFIRMATION_QUIT:
@@ -285,6 +286,7 @@ public class Main extends LCanvas implements Runnable {
 					break;
 		         case Define.ST_GAME_INIT_PASS_AND_PLAY:
 		         case Define.ST_GAME_INIT_ON_LINE:
+		         case Define.ST_GAME_NOTIFICATION:
 		         case Define.ST_GAME_RUN:
 		         case Define.ST_GAME_PAUSE:
 		         case Define.ST_GAME_CONFIRMATION_QUIT:

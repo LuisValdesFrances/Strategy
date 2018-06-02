@@ -11,6 +11,7 @@ import java.net.URL;
 import java.util.List;
 
 import com.luis.lgameengine.gui.Button;
+import com.luis.lgameengine.gui.ListBox;
 import com.luis.lgameengine.gui.MenuBox;
 import com.luis.lgameengine.gameutils.GamePerformance;
 import com.luis.lgameengine.gameutils.fonts.Font;
@@ -20,9 +21,11 @@ import com.luis.lgameengine.gameutils.gameworld.ParticleManager;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.sound.SndManager;
+import com.luis.strategy.connection.OnlineInputOutput;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.data.DataKingdom;
 import com.luis.strategy.data.GameBuilder;
+import com.luis.strategy.datapackage.scene.NotificationListData;
 import com.luis.strategy.game.GameManager;
 import com.luis.strategy.map.GameScene;
 
@@ -51,8 +54,10 @@ public class ModeGame {
 	/**
 	 * Interface
 	 */
+	private static Button btnCancel;
 	private static Button btnPause;
 	
+	private static ListBox notificationBox;
 	private static MenuBox confirmationQuitBox;
 	private static MenuBox pauseBox;
 	
@@ -119,6 +124,54 @@ public class ModeGame {
 			gameManager = new GameManager(worldConver, gameCamera, GameState.getInstance().getGameScene());
 			break;
 		
+		case Define.ST_GAME_NOTIFICATION:
+			
+			
+			//Notificaciones
+			 Main.getInstance().startClock(Main.TYPE_EARTH);
+			 NotificationListData notificationListData = 
+			 	OnlineInputOutput.getInstance().reviceNotificationListData(
+			 			Main.getInstance().getActivity(), GameState.getInstance().getName());//check
+			 Main.getInstance().stopClock();
+			 
+			 if(notificationListData != null && notificationListData.getNotificationDataList().size() > 0){
+			
+				 String[] notificationList = new String[notificationListData.getNotificationDataList().size()];
+				 for(int i = 0; i < notificationListData.getNotificationDataList().size(); i++){
+					 notificationList[i] = notificationListData.getNotificationDataList().get(i).getMessage();
+				 }
+				 notificationBox = new ListBox(
+							Define.SIZEX, Define.SIZEY, 
+							GfxManager.imgBigBox, 
+							GfxManager.imgButtonInvisible, GfxManager.imgButtonInvisible, 
+							Define.SIZEX2, Define.SIZEY2, 
+							RscManager.allText[RscManager.TXT_NOTIFICATIONS],
+							notificationList,
+							Font.FONT_MEDIUM, Font.FONT_SMALL,
+							-1, Main.FX_NEXT);
+				 notificationBox.setDisabledList();
+				 for(Button button : notificationBox.getBtnList()){
+					 button.setIgnoreAlpha(true);
+				 }
+				 notificationBox.start();
+				 
+				 btnCancel = new Button(
+						 GfxManager.imgButtonCancelRelease, 
+						 GfxManager.imgButtonCancelRelease, 
+						 notificationBox.getX()-notificationBox.getWidth()/2, 
+						 notificationBox.getY()-notificationBox.getHeight()/2, 
+						 null, -1){
+					 @Override
+					 public void onButtonPressUp(){
+						 setDisabled(true);
+						 notificationBox.cancel();
+					 }
+				 };
+			 
+				 //Enviar notificaciones leidas
+				 updateNotifications(notificationListData);
+			 }
+			break;
 		case Define.ST_GAME_RUN:
 			
 			break;
@@ -225,9 +278,18 @@ public class ModeGame {
 		switch(_iState){
 		case Define.ST_GAME_INIT_PASS_AND_PLAY:
 		case Define.ST_GAME_INIT_ON_LINE:
-			Main.changeState(Define.ST_GAME_RUN, false);
+			Main.changeState(Define.ST_GAME_NOTIFICATION, false);
 			break;
-			
+		case Define.ST_GAME_NOTIFICATION:
+			if(notificationBox != null){
+				btnCancel.update(UserInput.getInstance().getMultiTouchHandler());
+				if(!notificationBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec())){
+					Main.changeState(Define.ST_GAME_RUN, false);
+				}
+			 }else{
+				 Main.changeState(Define.ST_GAME_RUN, false);
+			 }
+			break;
 		case Define.ST_GAME_RUN:
 			
 			gameFrame++;
@@ -293,7 +355,13 @@ public class ModeGame {
 		case Define.ST_GAME_INIT_PASS_AND_PLAY:
 		case Define.ST_GAME_INIT_ON_LINE:
 			break;
-			
+		case Define.ST_GAME_NOTIFICATION:
+			gameManager.draw(_g);
+			if(notificationBox != null){
+				notificationBox.draw(_g, GfxManager.imgBlackBG);
+				btnCancel.draw(_g, (int)notificationBox.getModPosX(),0);
+			 }
+			break;
 		case Define.ST_GAME_RUN:
 			gameManager.draw(_g);
 			btnPause.draw(_g, 0, 0);
@@ -332,6 +400,19 @@ public class ModeGame {
 				DEBUG_BUTTON_X, DEBUG_BUTTON_Y, DEBUG_BUTTON_X + DEBUG_BUTTON_W, DEBUG_BUTTON_Y + DEBUG_BUTTON_H, 0)){
 			showDebugInfo = !showDebugInfo;
 		}
+	}
+	
+	
+	public static void updateNotifications(final NotificationListData notificationListData){
+		Thread t = new Thread(){
+			 @Override
+			 public void run(){
+				 OnlineInputOutput.getInstance().sendDataPackage(
+						 Main.getInstance().getActivity(),
+						 OnlineInputOutput.URL_UPDATE_NOTIFICATION, notificationListData);
+			 }
+		 };
+		 t.start();
 	}
 	
 }

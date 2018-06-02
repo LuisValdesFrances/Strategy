@@ -106,8 +106,8 @@ public class RscManager {
 	public static final int TXT_GAME_LOST_GAME= TXT_GAME_YOU_LOST_GAME+1;
 	
 	public static final int TXT_GAME_ATTACKER_WINS= TXT_GAME_LOST_GAME+1;
-	public static final int TXT_GAME_ATTACKER_DEFEAT= TXT_GAME_ATTACKER_WINS+1;
-	public static final int TXT_GAME_ATTACKER_HAS_DESTROYED= TXT_GAME_ATTACKER_DEFEAT+1;
+	public static final int TXT_GAME_ATTACKER_LOSES= TXT_GAME_ATTACKER_WINS+1;
+	public static final int TXT_GAME_ATTACKER_HAS_DESTROYED= TXT_GAME_ATTACKER_LOSES+1;
 	public static final int TXT_GAME_ATTACKER_HAS_BEEN_DESTROYED= TXT_GAME_ATTACKER_HAS_DESTROYED+1;
 	
 	public static final int TXT_GAME_ATTACKER_LOST= TXT_GAME_ATTACKER_HAS_BEEN_DESTROYED+1;
@@ -122,9 +122,8 @@ public class RscManager {
 	public static final int TXT_GAME_EXCEED_TROOPS= TXT_GAME_COST_OF_TROOPS+1;
 	public static final int TXT_GAME_IS_WINNER= TXT_GAME_EXCEED_TROOPS+1;
 	public static final int TXT_GAME_CHANGE_HIS_CAPITAL = TXT_GAME_IS_WINNER+1;
-	public static final int TXT_GAME_CHANGE_YOUR_CAPITAL = TXT_GAME_CHANGE_HIS_CAPITAL+1;
 	
-	public static final int TXT_GAME_DO_YOU_WANT_DISCARD= TXT_GAME_CHANGE_YOUR_CAPITAL+1;
+	public static final int TXT_GAME_DO_YOU_WANT_DISCARD= TXT_GAME_CHANGE_HIS_CAPITAL+1;
 	public static final int TXT_GAME_FOR= TXT_GAME_DO_YOU_WANT_DISCARD+1;
 	public static final int TXT_GAME_COINS= TXT_GAME_FOR+1;
 	public static final int TXT_GAME_INTERROGATION_ICON= TXT_GAME_COINS+1;

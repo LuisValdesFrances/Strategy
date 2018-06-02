@@ -148,7 +148,7 @@ public class ActionIA {
 					if (army.getPower(k.getTerrainList().get(0)) > enemy.getPower(k.getTerrainList().get(0))) {
 						//Si mi fuerza es mayor, hay un 70% de pos de atacar
 						int r = Main.getRandom(0, 100);
-						if(r >= 75){
+						if(r <= 75){
 							army.getIaDecision().setDecision(DECISION_MOVE_AND_ATACK);
 							army.getIaDecision().setKingdomDecision(k.getId());
 						return;

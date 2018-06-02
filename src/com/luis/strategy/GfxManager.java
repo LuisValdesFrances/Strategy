@@ -174,6 +174,8 @@ public class GfxManager {
 				imgButtonMenuBigRelease = Image.createImage("/button_menu_big_release.png");
 				imgButtonMenuBigFocus = Image.createImage("/button_menu_big_focus.png");
 				
+				imgButtonInvisible = Image.createImage("/button_invisible.png");
+				
 				
 				imgMapList = new ArrayList<Image>();
 				switch (GameState.getInstance().getMap()) {
@@ -375,14 +377,10 @@ public class GfxManager {
 		imgButtonSearchBigRelease = Image.createImage("/search_big_release.png");
 		imgButtonSearchBigFocus = Image.createImage("/search_big_focus.png");
 		
-		imgButtonInvisible = Image.createImage("/button_invisible.png");
-		
 		imgButtonKeyboardRelease = Image.createImage("/button_keyboard_release.png");
 		imgButtonKeyboardFocus = Image.createImage("/button_keyboard_focus.png");
 		imgButtonKeyboardReleaseSp = Image.createImage("/button_keyboard_release_sp.png");
 		imgButtonKeyboardFocusSp = Image.createImage("/button_keyboard_focus_sp.png");
-		imgButtonCancelRelease = Image.createImage("/cancel_release.png");
-		imgButtonCancelFocus = Image.createImage("/cancel_focus.png");
 		
 		imgMainBG = Image.createImage("/main_bg.png");
 		imgSwordBG = Image.createImage("/sword_bg.png");
@@ -437,10 +435,6 @@ public class GfxManager {
 		imgButtonMapRelease = null;
 		imgButtonMapFocus = null;
 		
-		imgButtonInvisible = null;
-		imgButtonCancelRelease = null;
-		imgButtonCancelFocus = null;
-		
 		imgInputBox = null;
 		imgTextPointer = null;
 		
@@ -460,6 +454,8 @@ public class GfxManager {
 		//Menu commons
 		imgButtonMenuBigRelease = null;
 		imgButtonMenuBigFocus = null;
+		
+		imgButtonInvisible = null;
 		
 		imgMapList = null;
 		

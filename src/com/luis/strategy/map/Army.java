@@ -224,45 +224,38 @@ public class Army extends MapObject{
 			g.setAlpha(255);
 		}
 		
-		
-		
 		if(state == STATE_OFF){
 			g.setAlpha(140);
 		}
-		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 		
-		float flagX;
-		if(state != STATE_MOVE && state != STATE_ATACK){
-			flagX = (float) (pX
-				-GfxManager.imgFlagSmallList.get(flag).getWidth()*0.75);
-		}else{
-			flagX = pX
-				+
-				(int)(flip?
-				-GfxManager.imgFlagSmallList.get(flag).getWidth()*0.25:
-				-GfxManager.imgFlagSmallList.get(flag).getWidth()*0.75);
+		
+		if(state != STATE_DEAD){
+			g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+			
+			float flagX;
+			if(state != STATE_MOVE && state != STATE_ATACK){
+				flagX = (float) (pX
+					-GfxManager.imgFlagSmallList.get(flag).getWidth()*0.75);
+			}else{
+				flagX = pX
+					+
+					(int)(flip?
+					-GfxManager.imgFlagSmallList.get(flag).getWidth()*0.25:
+					-GfxManager.imgFlagSmallList.get(flag).getWidth()*0.75);
+			}
+						  
+			float flagY = pY-GfxManager.imgFlagSmallList.get(flag).getHeight();
+			int angle = flip?15:-15;
+			
+			g.drawRegion(GfxManager.imgFlagSmallList.get(flag), 
+					(int)flagX,
+					(int)flagY,
+					0, 0, 
+					GfxManager.imgFlagSmallList.get(flag).getWidth(), GfxManager.imgFlagSmallList.get(flag).getHeight(), 
+					angle, 
+					(int)flagX+GfxManager.imgFlagSmallList.get(flag).getWidth()/2, 
+					(int)flagY+GfxManager.imgFlagSmallList.get(flag).getHeight()/2);
 		}
-					  
-		float flagY = pY-GfxManager.imgFlagSmallList.get(flag).getHeight();
-		
-		int angle = flip?15:-15;
-		
-		
-		g.drawRegion(GfxManager.imgFlagSmallList.get(flag), 
-				(int)flagX,
-				(int)flagY,
-				0, 0, 
-				GfxManager.imgFlagSmallList.get(flag).getWidth(), GfxManager.imgFlagSmallList.get(flag).getHeight(), 
-				angle, 
-				(int)flagX+GfxManager.imgFlagSmallList.get(flag).getWidth()/2, 
-				(int)flagY+GfxManager.imgFlagSmallList.get(flag).getHeight()/2);
-		/*
-		g.drawImage(GfxManager.imgFlagSmallList.get(flag), 
-				worldConver.getConversionDrawX(gameCamera.getPosX(), (int)flagX+GfxManager.imgFlagSmallList.get(flag).getWidth()/2), 
-				worldConver.getConversionDrawY(gameCamera.getPosY(), (int)flagY+GfxManager.imgFlagSmallList.get(flag).getHeight()/2), 
-				Graphics.VCENTER |Graphics.HCENTER);
-		*/
-		
 		
 		
 		switch(anim){
