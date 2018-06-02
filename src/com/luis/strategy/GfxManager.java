@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.luis.lgameengine.implementation.graphics.Image;
 import com.luis.strategy.constants.Define;
+import com.luis.strategy.data.DataKingdom;
 
 public class GfxManager {
 	
@@ -180,13 +181,17 @@ public class GfxManager {
 				imgMapList = new ArrayList<Image>();
 				switch (GameState.getInstance().getMap()) {
 				case 0:
-				case 2:
 					imgMapList.add(Image.createImage("/maps/genterex_1.png"));
 					imgMapList.add(Image.createImage("/maps/genterex_2.png"));
 					imgMapList.add(Image.createImage("/maps/genterex_3.png"));
 					imgMapList.add(Image.createImage("/maps/genterex_4.png"));
-					break;
 				case 1:
+					imgMapList.add(Image.createImage("/maps/occitane_1.png"));
+					imgMapList.add(Image.createImage("/maps/occitane_2.png"));
+					imgMapList.add(Image.createImage("/maps/occitane_3.png"));
+					imgMapList.add(Image.createImage("/maps/occitane_4.png"));
+					break;
+				case 2:
 					imgMapList.add(Image.createImage("/maps/crom_1.png"));
 					imgMapList.add(Image.createImage("/maps/crom_2.png"));
 					imgMapList.add(Image.createImage("/maps/crom_3.png"));

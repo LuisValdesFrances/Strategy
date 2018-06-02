@@ -1081,10 +1081,14 @@ public class GameManager {
 							String message = RscManager.allText[RscManager.TXT_GAME_TURN] + (gameScene.getTurnCount()+1);
 							dataSender.addNotification(getCurrentPlayer().getName(), message);
 							*/
-							dataSender.sendGameScene(gameScene, 1);
-							dataSender.sendGameNotifications(currentName);
-							
-							Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, true);
+							String result = dataSender.sendGameScene(gameScene, 1);
+							if(result.equals("Succes")){
+								dataSender.sendGameNotifications(currentName);
+								NotificationBox.getInstance().addMessage(RscManager.allText[RscManager.TXT_SEND_DATA]);
+								Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, true);
+							}else{
+								NotificationBox.getInstance().addMessage(result);
+							}
 						}else{
 							NotificationBox.getInstance().addMessage(RscManager.allText[RscManager.TXT_NO_CONNECTION]);
 						}
@@ -1184,7 +1188,8 @@ public class GameManager {
 				troopExceedBox.start(null, RscManager.allText[RscManager.TXT_GAME_EXCEED_TROOPS]);
 			break;
 			case SUB_STATE_ACTION_MOVE:
-				
+				btnFlagHelmet.hide();
+				btnFlagCastle.hide();
 				SndManager.getInstance().playFX(Main.FX_MARCH, 0);
 				
 				

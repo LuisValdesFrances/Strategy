@@ -8,7 +8,6 @@ import com.luis.strategy.GameState;
 import com.luis.strategy.Main;
 import com.luis.strategy.RscManager;
 import com.luis.strategy.connection.OnlineInputOutput;
-import com.luis.strategy.data.DataKingdom;
 import com.luis.strategy.data.GameBuilder;
 import com.luis.strategy.datapackage.scene.SceneData;
 import com.luis.strategy.map.GameScene;
@@ -25,8 +24,7 @@ public class DataSender{
 		notificationList.add(new Notification(user, message));
 	}
 	
-	public void sendGameScene(GameScene gameScene, int state) {
-		String msg = null;
+	public String sendGameScene(GameScene gameScene, int state) {
 		GameState.getInstance().setGameScene(gameScene);
 		SceneData sceneData = GameBuilder.getInstance().buildSceneData(state);
 		
@@ -36,26 +34,7 @@ public class DataSender{
 						Main.getInstance().getActivity(),
 						OnlineInputOutput.URL_UPDATE_SCENE, sceneData);
 		Main.getInstance().stopClock();
-		
-		if(result.equals("Connection error")){
-			msg = RscManager.allText[RscManager.TXT_CONNECTION_ERROR];
-		}
-		else if(result.equals("Server error")){
-			msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
-		}
-		else if(result.equals("Query error")){
-			msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
-		}
-		else if(result.equals("Succes")){
-			msg = RscManager.allText[RscManager.TXT_SEND_DATA];
-		}
-		else if(result.equals(OnlineInputOutput.MSG_NO_CONNECTION)){
-			msg = RscManager.allText[RscManager.TXT_NO_CONNECTION];
-		}
-		if(msg != null){
-			NotificationBox.getInstance().addMessage(msg);
-		}
-		
+		return result;
 	}
 	
 	/*

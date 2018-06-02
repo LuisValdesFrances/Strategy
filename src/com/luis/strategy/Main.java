@@ -549,7 +549,7 @@ public class Main extends LCanvas implements Runnable {
 	public static Image imgClock;
 	public static Image imgEarth;
 	private Thread tClockThread;
-	private int type;
+	private int clockType;
 
 	public void startClock(int type) {
 
@@ -557,7 +557,7 @@ public class Main extends LCanvas implements Runnable {
 		this.isClock = true;
 		this.iFrameClock = 0;
 		this.lClCurrentTime = 0;
-		this.type = type;
+		this.clockType = type;
 		tClockThread = new Thread() {
 
 			public void run() {
@@ -594,13 +594,13 @@ public class Main extends LCanvas implements Runnable {
 	private void drawClock(Graphics _g) {
 
 		if (isClock) {
-			if (type == TYPE_CLOCK && imgClock == null){
+			if (clockType == TYPE_CLOCK && imgClock == null){
 				try{
 					imgClock = Image.createImage("/clock.png");
 					}catch(Exception e){
 						Log.e("error", "No se encuentra la imagen de carga");
 					}
-			}else if (type == TYPE_EARTH && imgEarth == null){
+			}else if (clockType == TYPE_EARTH && imgEarth == null){
 				try{
 					imgEarth = Image.createImage("/earth.png");
 					}catch(Exception e){
@@ -608,7 +608,7 @@ public class Main extends LCanvas implements Runnable {
 					}
 			}
 			
-			Image img = type == TYPE_CLOCK? imgClock : imgEarth;
+			Image img = clockType == TYPE_CLOCK? imgClock : imgEarth;
 			
 			if(img != null){
 			_g.setColor(COLOR_BLACK);

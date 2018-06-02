@@ -126,51 +126,54 @@ public class ModeGame {
 		
 		case Define.ST_GAME_NOTIFICATION:
 			
-			
 			//Notificaciones
-			 Main.getInstance().startClock(Main.TYPE_EARTH);
-			 NotificationListData notificationListData = 
-			 	OnlineInputOutput.getInstance().reviceNotificationListData(
-			 			Main.getInstance().getActivity(), GameState.getInstance().getName());//check
-			 Main.getInstance().stopClock();
-			 
-			 if(notificationListData != null && notificationListData.getNotificationDataList().size() > 0){
-			
-				 String[] notificationList = new String[notificationListData.getNotificationDataList().size()];
-				 for(int i = 0; i < notificationListData.getNotificationDataList().size(); i++){
-					 notificationList[i] = notificationListData.getNotificationDataList().get(i).getMessage();
-				 }
-				 notificationBox = new ListBox(
-							Define.SIZEX, Define.SIZEY, 
-							GfxManager.imgBigBox, 
-							GfxManager.imgButtonInvisible, GfxManager.imgButtonInvisible, 
-							Define.SIZEX2, Define.SIZEY2, 
+			if (GameState.getInstance().getGameMode() == GameState.GAME_MODE_ONLINE) {
+				Main.getInstance().startClock(Main.TYPE_EARTH);
+				NotificationListData notificationListData = 
+						OnlineInputOutput.getInstance().reviceNotificationListData(
+								Main.getInstance().getActivity(),
+								GameState.getInstance().getName());// check
+				Main.getInstance().stopClock();
+
+				if (notificationListData != null && 
+						notificationListData.getNotificationDataList().size() > 0) {
+
+					String[] notificationList = new String[notificationListData
+							.getNotificationDataList().size()];
+					for (int i = 0; i < notificationListData
+							.getNotificationDataList().size(); i++) {
+						notificationList[i] = notificationListData.getNotificationDataList().get(i).getMessage();
+					}
+					notificationBox = new ListBox(Define.SIZEX, Define.SIZEY,
+							GfxManager.imgBigBox,
+							GfxManager.imgButtonInvisible,
+							GfxManager.imgButtonInvisible, Define.SIZEX2,
+							Define.SIZEY2,
 							RscManager.allText[RscManager.TXT_NOTIFICATIONS],
-							notificationList,
-							Font.FONT_MEDIUM, Font.FONT_SMALL,
-							-1, Main.FX_NEXT);
-				 notificationBox.setDisabledList();
-				 for(Button button : notificationBox.getBtnList()){
-					 button.setIgnoreAlpha(true);
-				 }
-				 notificationBox.start();
-				 
-				 btnCancel = new Button(
-						 GfxManager.imgButtonCancelRelease, 
-						 GfxManager.imgButtonCancelRelease, 
-						 notificationBox.getX()-notificationBox.getWidth()/2, 
-						 notificationBox.getY()-notificationBox.getHeight()/2, 
-						 null, -1){
-					 @Override
-					 public void onButtonPressUp(){
-						 setDisabled(true);
-						 notificationBox.cancel();
-					 }
-				 };
-			 
-				 //Enviar notificaciones leidas
-				 updateNotifications(notificationListData);
-			 }
+							notificationList, Font.FONT_MEDIUM,
+							Font.FONT_SMALL, -1, Main.FX_NEXT);
+					notificationBox.setDisabledList();
+					for (Button button : notificationBox.getBtnList()) {
+						button.setIgnoreAlpha(true);
+					}
+					notificationBox.start();
+
+					btnCancel = new Button(GfxManager.imgButtonCancelRelease,
+							GfxManager.imgButtonCancelRelease,
+							notificationBox.getX() - notificationBox.getWidth()/ 2, 
+							notificationBox.getY()- notificationBox.getHeight() / 2, 
+							null, -1) {
+						@Override
+						public void onButtonPressUp() {
+							setDisabled(true);
+							notificationBox.cancel();
+						}
+					};
+
+					// Enviar notificaciones leidas
+					updateNotifications(notificationListData);
+				}
+			}
 			break;
 		case Define.ST_GAME_RUN:
 			

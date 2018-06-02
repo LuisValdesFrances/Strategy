@@ -39,10 +39,11 @@ public class GameBuilder {
 
 		switch (GameState.getInstance().getMap()) {
 		case 0:
-		case 2:
 			gameScene.setKingdomList(DataKingdom.getGenterex(gameScene.getMapObject()));
-			break;
 		case 1:
+			gameScene.setKingdomList(DataKingdom.getOccitane(gameScene.getMapObject()));
+			break;
+		case 2:
 			gameScene.setKingdomList(DataKingdom.getCrom(gameScene.getMapObject()));
 			break;
 		}
@@ -88,10 +89,11 @@ public class GameBuilder {
 
 		switch (GameState.getInstance().getMap()) {
 		case 0:
-		case 2:
 			gameScene.setKingdomList(DataKingdom.getGenterex(gameScene.getMapObject()));
-			break;
 		case 1:
+			gameScene.setKingdomList(DataKingdom.getOccitane(gameScene.getMapObject()));
+			break;
+		case 2:
 			gameScene.setKingdomList(DataKingdom.getCrom(gameScene.getMapObject()));
 			break;
 		}
@@ -154,15 +156,16 @@ public class GameBuilder {
 		
 		List<Player>playerList = new ArrayList<Player>();
 		
-		switch(GameState.getInstance().getMap()){
-    	case 0:
-    	case 2:
-    		gameScene.setKingdomList(DataKingdom.getGenterex(gameScene.getMapObject()));
-            break;
-    	case 1:
-    		gameScene.setKingdomList(DataKingdom.getCrom(gameScene.getMapObject()));
-    		break;
-    	}
+		switch (GameState.getInstance().getMap()) {
+		case 0:
+			gameScene.setKingdomList(DataKingdom.getGenterex(gameScene.getMapObject()));
+		case 1:
+			gameScene.setKingdomList(DataKingdom.getOccitane(gameScene.getMapObject()));
+			break;
+		case 2:
+			gameScene.setKingdomList(DataKingdom.getCrom(gameScene.getMapObject()));
+			break;
+		}
 		
 		for(PlayerData playerData: GameState.getInstance().getSceneData().getPlayerDataList()){
 			
