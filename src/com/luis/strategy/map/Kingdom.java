@@ -94,6 +94,12 @@ public class Kingdom extends MapObject{
 	}
 
 	public void setBorderList(List<Kingdom> borderList) {
+		for(int i = 0; i < borderList.size(); i++){
+			if(borderList.get(i) == null){
+				borderList.remove(i);
+				i--;
+			}
+		}
 		this.borderList = borderList;
 	}
 

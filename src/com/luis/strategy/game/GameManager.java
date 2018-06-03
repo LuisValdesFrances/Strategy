@@ -141,26 +141,28 @@ public class GameManager {
 		this.dataSender = new DataSender();
 		MenuElement.bgAlpha = GameParams.BG_BLACK_ALPHA;
 		
-		btnDebugPause = new Button(
-				GfxManager.imgButtonDebugPauseRelease, 
-				GfxManager.imgButtonDebugPauseFocus, 
-				Define.SIZEX64 + GfxManager.imgButtonDebugPauseRelease.getWidth()/2, 
-				Define.SIZEY4,
-				null, 0){
-			@Override
-			public void onButtonPressDown(){}
-			
-			@Override
-			public void onButtonPressUp(){
+		if(Main.debug){
+			btnDebugPause = new Button(
+					GfxManager.imgButtonDebugPauseRelease, 
+					GfxManager.imgButtonDebugPauseFocus, 
+					Define.SIZEX64 + GfxManager.imgButtonDebugPauseRelease.getWidth()/2, 
+					Define.SIZEY4,
+					null, 0){
+				@Override
+				public void onButtonPressDown(){}
 				
-				isDebugPaused = !isDebugPaused;
-				if(state == STATE_DEBUG){
-					changeState(STATE_END);
-				}else{
-					btnDebugPause.setDisabled(true);
+				@Override
+				public void onButtonPressUp(){
+					
+					isDebugPaused = !isDebugPaused;
+					if(state == STATE_DEBUG){
+						changeState(STATE_END);
+					}else{
+						btnDebugPause.setDisabled(true);
+					}
 				}
-			}
-		};
+			};
+		}
 		
 		btnNext = new Button(
 				GfxManager.imgButtonNextRelease, 
@@ -837,9 +839,11 @@ public class GameManager {
 		btnCancel.update(multiTouchHandler);
 		btnNext.update(multiTouchHandler);
 		btnMap.update(multiTouchHandler);
-		btnDebugPause.update(multiTouchHandler);
 		btnFlagHelmet.update(multiTouchHandler, delta);
 		btnFlagCastle.update(multiTouchHandler, delta);
+		if(Main.debug){
+			btnDebugPause.update(multiTouchHandler);
+		}
 		
 	}
 	
@@ -870,7 +874,9 @@ public class GameManager {
 		btnFlagHelmet.draw(g);
 		btnFlagCastle.draw(g);
 		btnMap.draw(g, 0, 0);
-		btnDebugPause.draw(g, 0, 0);
+		if(Main.debug){
+			btnDebugPause.draw(g, 0, 0);
+		}
 		NotificationBox.getInstance().draw(g);
 	}
 	
@@ -999,8 +1005,9 @@ public class GameManager {
 		state = newState;
 		switch(state){
 		case STATE_INCOME:
-			btnDebugPause.setDisabled(getCurrentPlayer().getActionIA() == null);
-			
+			if(Main.debug){
+				btnDebugPause.setDisabled(getCurrentPlayer().getActionIA() == null);
+			}
 			startPresentation(Font.FONT_BIG, RscManager.allText[RscManager.TXT_GAME_TURN] + 
 					(gameScene.getTurnCount()+1) + " - " + getCurrentPlayer().getName());
 			cameraTargetX = getCurrentPlayer().getCapitalkingdom().getAbsoluteX();

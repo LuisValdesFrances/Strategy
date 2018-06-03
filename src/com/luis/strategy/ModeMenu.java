@@ -1152,8 +1152,7 @@ public class ModeMenu {
 		if(
 				Main.state == Define.ST_MENU_MAIN || 
 				Main.state == Define.ST_MENU_SELECT_GAME || 
-				Main.state == Define.ST_MENU_ON_LINE_START || 
-				Main.state == Define.ST_MENU_ON_LINE_LOGIN
+				Main.state == Define.ST_MENU_ON_LINE_START
 				
 		){
 			logoAlpha +=delta*255;

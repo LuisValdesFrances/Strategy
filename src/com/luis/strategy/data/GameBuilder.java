@@ -34,20 +34,10 @@ public class GameBuilder {
 				.getMap(),
 				0,// GfxManager.imgMap.getWidth()/2,
 				0,// GfxManager.imgMap.getHeight()/2,
-				DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][0],
-				DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][1]);
+				DataKingdom.MAP_PARTS_WIDTH,
+				DataKingdom.MAP_PARTS_HEIGHT);
 
-		switch (GameState.getInstance().getMap()) {
-		case 0:
-			gameScene.setKingdomList(DataKingdom.getGenterex(gameScene.getMapObject()));
-			break;
-		case 1:
-			gameScene.setKingdomList(DataKingdom.getOccitane(gameScene.getMapObject()));
-			break;
-		case 2:
-			gameScene.setKingdomList(DataKingdom.getCrom(gameScene.getMapObject()));
-			break;
-		}
+		gameScene.setKingdomList(DataKingdom.getMap(gameScene.getMapObject(), GameState.getInstance().getMap()));
 		
 		List<Player> playerList = new ArrayList<Player>();
 		GameState.PlayerConf[] playerConfList = GameState.getInstance().getPlayerConfList();
@@ -83,20 +73,10 @@ public class GameBuilder {
 				.getMap(),
 				0,// GfxManager.imgMap.getWidth()/2,
 				0,// GfxManager.imgMap.getHeight()/2,
-				DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][0],
-				DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][1]);
+				DataKingdom.MAP_PARTS_WIDTH,
+				DataKingdom.MAP_PARTS_HEIGHT);
 
-		switch (GameState.getInstance().getMap()) {
-		case 0:
-			gameScene.setKingdomList(DataKingdom.getGenterex(gameScene.getMapObject()));
-			break;
-		case 1:
-			gameScene.setKingdomList(DataKingdom.getOccitane(gameScene.getMapObject()));
-			break;
-		case 2:
-			gameScene.setKingdomList(DataKingdom.getCrom(gameScene.getMapObject()));
-			break;
-		}
+		gameScene.setKingdomList(DataKingdom.getMap(gameScene.getMapObject(), GameState.getInstance().getMap()));
 		
 		List<Player> playerList = new ArrayList<Player>();
 		
@@ -146,25 +126,14 @@ public class GameBuilder {
 				GameState.getInstance().getMap(),
 				0,//GfxManager.imgMap.getWidth()/2, 
 				0,//GfxManager.imgMap.getHeight()/2,
-				DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][0],
-				DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][1]
-				);
+				DataKingdom.MAP_PARTS_WIDTH,
+				DataKingdom.MAP_PARTS_HEIGHT);
 		gameScene.setTurnCount(GameState.getInstance().getSceneData().getTurnCount());
 		gameScene.setPlayerIndex(GameState.getInstance().getSceneData().getPlayerIndex());
 		
 		List<Player>playerList = new ArrayList<Player>();
 		
-		switch (GameState.getInstance().getMap()) {
-		case 0:
-			gameScene.setKingdomList(DataKingdom.getGenterex(gameScene.getMapObject()));
-			break;
-		case 1:
-			gameScene.setKingdomList(DataKingdom.getOccitane(gameScene.getMapObject()));
-			break;
-		case 2:
-			gameScene.setKingdomList(DataKingdom.getCrom(gameScene.getMapObject()));
-			break;
-		}
+		gameScene.setKingdomList(DataKingdom.getMap(gameScene.getMapObject(), GameState.getInstance().getMap()));
 		
 		for(PlayerData playerData: GameState.getInstance().getSceneData().getPlayerDataList()){
 			

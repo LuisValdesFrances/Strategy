@@ -106,10 +106,8 @@ public class ModeGame {
 
 			
 			
-			int mapWidth = GfxManager.imgMapList.get(0).getWidth()*
-					DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][0];
-			int mapHeight = GfxManager.imgMapList.get(0).getHeight()*
-					DataKingdom.MAP_PARTS[GameState.getInstance().getMap()][1];
+			int mapWidth = GfxManager.imgMapList.get(0).getWidth()* DataKingdom.MAP_PARTS_WIDTH;
+			int mapHeight = GfxManager.imgMapList.get(0).getHeight()* DataKingdom.MAP_PARTS_HEIGHT;
 			
 			worldConver = new WorldConver(
 					Define.SIZEX, Define.SIZEY,
@@ -388,20 +386,24 @@ public class ModeGame {
 	public static final int DEBUG_BUTTON_X = Define.SIZEX-DEBUG_BUTTON_W-DEBUG_BUTTON_W/2;
 	public static final int DEBUG_BUTTON_Y = Define.SIZEY4 - DEBUG_BUTTON_H/2;
 	private static void drawDebugButton(Graphics _g){
-		_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-		if(!showDebugInfo){
-			_g.setColor(Main.COLOR_RED);
-		}else{
-			_g.setColor(Main.COLOR_GREEN);
+		if(Main.debug){
+			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+			if(!showDebugInfo){
+				_g.setColor(Main.COLOR_RED);
+			}else{
+				_g.setColor(Main.COLOR_GREEN);
+			}
+			_g.fillRect(DEBUG_BUTTON_X, DEBUG_BUTTON_Y, DEBUG_BUTTON_W, DEBUG_BUTTON_H);
 		}
-		_g.fillRect(DEBUG_BUTTON_X, DEBUG_BUTTON_Y, DEBUG_BUTTON_W, DEBUG_BUTTON_H);
 	}
 	
 	private static void updateDebugButton(){
-		if((UserInput.getInstance().getMultiTouchHandler().getTouchFrames(0) == 1) && 
-			UserInput.getInstance().compareTouch(
-				DEBUG_BUTTON_X, DEBUG_BUTTON_Y, DEBUG_BUTTON_X + DEBUG_BUTTON_W, DEBUG_BUTTON_Y + DEBUG_BUTTON_H, 0)){
-			showDebugInfo = !showDebugInfo;
+		if(Main.debug){
+			if((UserInput.getInstance().getMultiTouchHandler().getTouchFrames(0) == 1) && 
+				UserInput.getInstance().compareTouch(
+					DEBUG_BUTTON_X, DEBUG_BUTTON_Y, DEBUG_BUTTON_X + DEBUG_BUTTON_W, DEBUG_BUTTON_Y + DEBUG_BUTTON_H, 0)){
+				showDebugInfo = !showDebugInfo;
+			}
 		}
 	}
 	

@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.luis.lgameengine.implementation.graphics.Image;
 import com.luis.strategy.constants.Define;
-import com.luis.strategy.data.DataKingdom;
 
 public class GfxManager {
 	
@@ -181,33 +180,26 @@ public class GfxManager {
 				imgMapList = new ArrayList<Image>();
 				switch (GameState.getInstance().getMap()) {
 				case 0:
-					imgMapList.add(Image.createImage("/maps/genterex_1.png"));
-					imgMapList.add(Image.createImage("/maps/genterex_2.png"));
-					imgMapList.add(Image.createImage("/maps/genterex_3.png"));
-					imgMapList.add(Image.createImage("/maps/genterex_4.png"));
 				case 1:
-					imgMapList.add(Image.createImage("/maps/occitane_1.png"));
-					imgMapList.add(Image.createImage("/maps/occitane_2.png"));
-					imgMapList.add(Image.createImage("/maps/occitane_3.png"));
-					imgMapList.add(Image.createImage("/maps/occitane_4.png"));
-					break;
 				case 2:
-					imgMapList.add(Image.createImage("/maps/crom_1.png"));
-					imgMapList.add(Image.createImage("/maps/crom_2.png"));
-					imgMapList.add(Image.createImage("/maps/crom_3.png"));
-					imgMapList.add(Image.createImage("/maps/crom_4.png"));
-					imgMapList.add(Image.createImage("/maps/crom_5.png"));
-					imgMapList.add(Image.createImage("/maps/crom_6.png"));
-					imgMapList.add(Image.createImage("/maps/crom_7.png"));
-					imgMapList.add(Image.createImage("/maps/crom_8.png"));
-					imgMapList.add(Image.createImage("/maps/crom_9.png"));
-					imgMapList.add(Image.createImage("/maps/crom_10.png"));
-					imgMapList.add(Image.createImage("/maps/crom_11.png"));
-					imgMapList.add(Image.createImage("/maps/crom_12.png"));
-					imgMapList.add(Image.createImage("/maps/crom_13.png"));
-					imgMapList.add(Image.createImage("/maps/crom_14.png"));
-					imgMapList.add(Image.createImage("/maps/crom_15.png"));
-					imgMapList.add(Image.createImage("/maps/crom_16.png"));
+				case 3:
+				case 4:
+					imgMapList.add(Image.createImage("/maps/map_1.png"));
+					imgMapList.add(Image.createImage("/maps/map_2.png"));
+					imgMapList.add(Image.createImage("/maps/map_3.png"));
+					imgMapList.add(Image.createImage("/maps/map_4.png"));
+					imgMapList.add(Image.createImage("/maps/map_5.png"));
+					imgMapList.add(Image.createImage("/maps/map_6.png"));
+					imgMapList.add(Image.createImage("/maps/map_7.png"));
+					imgMapList.add(Image.createImage("/maps/map_8.png"));
+					imgMapList.add(Image.createImage("/maps/map_9.png"));
+					imgMapList.add(Image.createImage("/maps/map_10.png"));
+					imgMapList.add(Image.createImage("/maps/map_11.png"));
+					imgMapList.add(Image.createImage("/maps/map_12.png"));
+					imgMapList.add(Image.createImage("/maps/map_13.png"));
+					imgMapList.add(Image.createImage("/maps/map_14.png"));
+					imgMapList.add(Image.createImage("/maps/map_15.png"));
+					imgMapList.add(Image.createImage("/maps/map_16.png"));
 					break;
 				}
 				
