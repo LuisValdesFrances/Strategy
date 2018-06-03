@@ -20,7 +20,7 @@ import com.luis.strategy.constants.Define;
  */
 public class Main extends LCanvas implements Runnable {
 	
-	public static boolean debug = false;
+	public static boolean debug = true;
 
 	public static Main instance;
 	public static Main getInstance(){

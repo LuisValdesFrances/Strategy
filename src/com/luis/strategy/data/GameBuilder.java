@@ -40,6 +40,7 @@ public class GameBuilder {
 		switch (GameState.getInstance().getMap()) {
 		case 0:
 			gameScene.setKingdomList(DataKingdom.getGenterex(gameScene.getMapObject()));
+			break;
 		case 1:
 			gameScene.setKingdomList(DataKingdom.getOccitane(gameScene.getMapObject()));
 			break;
@@ -54,7 +55,6 @@ public class GameBuilder {
 		for (int i = 0; i < playerConfList.length; i++) {
 			
 			int k1 = DataKingdom.INIT_MAP_DATA[GameState.getInstance().getMap()][i][0];
-			int k2 = DataKingdom.INIT_MAP_DATA[GameState.getInstance().getMap()][i][1];
 			
 			Player player = new Player(
 					GameState.getInstance().getPlayerConfList()[i].name, 
@@ -64,7 +64,6 @@ public class GameBuilder {
 			
 			player.setGold(GameParams.START_GOLD);
 			player.getKingdomList().add(gameScene.getKingdom(k1));
-			player.getKingdomList().add(gameScene.getKingdom(k2));
 			
 			Army army = new Army(
 					gameScene.getMapObject(), player, gameScene.getKingdom(k1), player.getFlag(), 
@@ -90,6 +89,7 @@ public class GameBuilder {
 		switch (GameState.getInstance().getMap()) {
 		case 0:
 			gameScene.setKingdomList(DataKingdom.getGenterex(gameScene.getMapObject()));
+			break;
 		case 1:
 			gameScene.setKingdomList(DataKingdom.getOccitane(gameScene.getMapObject()));
 			break;
@@ -104,7 +104,6 @@ public class GameBuilder {
 			PlayerData playerData =  GameState.getInstance().getSceneData().getPlayerDataList().get(i);
 			
 			int k1 = DataKingdom.INIT_MAP_DATA[GameState.getInstance().getMap()][i][0];
-			int k2 = DataKingdom.INIT_MAP_DATA[GameState.getInstance().getMap()][i][1];
 			
 			Player player = new Player(
 					playerData.getName(), 
@@ -114,7 +113,6 @@ public class GameBuilder {
 			
 			player.setGold(GameParams.START_GOLD);
 			player.getKingdomList().add(gameScene.getKingdom(k1));
-			player.getKingdomList().add(gameScene.getKingdom(k2));
 			
 			Army army = new Army(
 					gameScene.getMapObject(), player, gameScene.getKingdom(k1), player.getFlag(), 
@@ -159,6 +157,7 @@ public class GameBuilder {
 		switch (GameState.getInstance().getMap()) {
 		case 0:
 			gameScene.setKingdomList(DataKingdom.getGenterex(gameScene.getMapObject()));
+			break;
 		case 1:
 			gameScene.setKingdomList(DataKingdom.getOccitane(gameScene.getMapObject()));
 			break;
