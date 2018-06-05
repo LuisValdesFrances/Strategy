@@ -390,6 +390,9 @@ public class GameManager {
 					
 					Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, true);
 				}else{
+					//Guardo la victoria
+					GameState.getInstance().setGameScene(null);
+					ModeGame.saveGame();
 					Main.changeState(Define.ST_MENU_MAIN, true);
 				}
 			}
@@ -1013,6 +1016,7 @@ public class GameManager {
 			cameraTargetX = getCurrentPlayer().getCapitalkingdom().getAbsoluteX();
 			cameraTargetY = getCurrentPlayer().getCapitalkingdom().getAbsoluteY();
 			break;
+			
 		case STATE_ECONOMY:
 			
 			if(localTurnCount == 0){
@@ -1045,6 +1049,7 @@ public class GameManager {
 			}
 			
 			break;
+			
 		case STATE_DISCARD:
 			if(getCurrentPlayer().getActionIA() == null){
 				discardBox.start(null, RscManager.allText[RscManager.TXT_GAME_COST_OF_TROOPS]);
@@ -1053,6 +1058,7 @@ public class GameManager {
 				changeState(STATE_ACTION);
 			}
 			break;
+			
 		case STATE_ACTION:
 			/*
 			if(getCurrentPlayer().getActionIA() != null){
@@ -1063,6 +1069,7 @@ public class GameManager {
 			*/
 			changeSubState(SUB_STATE_ACTION_WAIT);
 			break;
+			
 		case STATE_END:
 			if(isDebugPaused){
 				changeState(STATE_DEBUG);
@@ -1099,7 +1106,8 @@ public class GameManager {
 						}else{
 							NotificationBox.getInstance().addMessage(RscManager.allText[RscManager.TXT_NO_CONNECTION]);
 						}
-					}else{
+					}else if(GameState.getInstance().getGameMode() == GameState.GAME_MODE_PLAY_AND_PASS){
+						ModeGame.saveGame();
 						localTurnCount++;
 						changeState(STATE_INCOME);
 					}
@@ -1266,7 +1274,6 @@ public class GameManager {
 				IAWaitCount = 0;
 				break;
 			}
-			
 			break;
 		case STATE_END:
 			gameScene.resetKingdoms();
@@ -1817,6 +1824,7 @@ public class GameManager {
 			dataSender.addNotification(defeatPlayer.getName(), message);
 			
 		}
+		
 		if(deletePlayer){
 			String message = 
 					RscManager.allText[RscManager.TXT_GAME_PLAYER] + " " + defeatPlayer.getName() +
@@ -1827,8 +1835,6 @@ public class GameManager {
 					RscManager.allText[RscManager.TXT_GAME_YOU_LOST_GAME];
 			dataSender.addNotification(defeatPlayer.getName(), message);
 		}
-		
-		
 		
 		if(showResultBox){
 			resultBox.start(textB.length() > 0 ?textH:null, textB.length() > 0 ?textB:textH);

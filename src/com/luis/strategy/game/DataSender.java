@@ -3,10 +3,8 @@ package com.luis.strategy.game;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.luis.lgameengine.gui.NotificationBox;
 import com.luis.strategy.GameState;
 import com.luis.strategy.Main;
-import com.luis.strategy.RscManager;
 import com.luis.strategy.connection.OnlineInputOutput;
 import com.luis.strategy.data.GameBuilder;
 import com.luis.strategy.datapackage.scene.SceneData;

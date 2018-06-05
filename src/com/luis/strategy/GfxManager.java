@@ -364,6 +364,8 @@ public class GfxManager {
 		imgButtonMenuMediumFocus = Image.createImage("/button_menu_medium_focus.png");
 		imgButtonMenuSmallRelease = Image.createImage("/button_menu_small_release.png");
 		imgButtonMenuSmallFocus = Image.createImage("/button_menu_small_focus.png");
+		imgButtonOkRelease = Image.createImage("/ok_release.png");
+		imgButtonOkFocus = Image.createImage("/ok_focus.png");
 		
 		imgButtonArrowBackRelease = Image.createImage("/arrow_back_release.png");
 		imgButtonArrowBackFocus = Image.createImage("/arrow_back_focus.png");
@@ -398,7 +400,7 @@ public class GfxManager {
 		imgFlagList.add(Image.createImage("/flag7.png"));
 		imgFlagList.add(Image.createImage("/flag8.png"));
 		
-		imgMediumBox = Image.createImage("/medium_box.png");
+		imgSmallBox = Image.createImage("/small_box.png");
 		
 		imgNotificationBox = Image
 				.createImage("/notification_box.png");
@@ -416,8 +418,10 @@ public class GfxManager {
 		imgButtonArrowBackFocus = null;
 		imgButtonArrowNextRelease = null;
 		imgButtonArrowNextFocus = null;
+		imgButtonOkRelease = null;
+		imgButtonOkFocus = null;
 		
-		imgMediumBox = null;
+		imgSmallBox = null;
 		
 		imgButtonKeyboardRelease = null;
 		imgButtonKeyboardFocus = null;

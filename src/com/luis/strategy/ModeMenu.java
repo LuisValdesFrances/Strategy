@@ -1,5 +1,8 @@
 package com.luis.strategy;
 
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+
 import android.util.Log;
 
 import com.luis.lgameengine.gameutils.Settings;
@@ -26,6 +29,7 @@ import com.luis.strategy.gui.ConfigMapBox;
 import com.luis.strategy.gui.CreateUserBox;
 import com.luis.strategy.gui.LoginBox;
 import com.luis.strategy.gui.SceneDataListBox;
+import com.luis.strategy.gui.SimpleBox;
 
 public class ModeMenu {
 	
@@ -50,9 +54,8 @@ public class ModeMenu {
 	private static Button btnMultiPlayer;
 	private static Button btnOnLine;
 	private static Button btnPassAndPlay;
-	private static Button btnContinueCampaing;
-	//private static Button btnContinuePassAndPlay;
-	private static Button btnStart;
+	//private static Button btnContinueCampaing;
+	private static Button btnContinuePassAndPlay;
 	
 	private static Button btnNewAccount;
 	private static Button btnLogin;
@@ -66,9 +69,12 @@ public class ModeMenu {
 	private static ConfigMapBox configMapBox;
 	private static CreateUserBox createUserBox;
 	private static LoginBox loginBox;
+	private static SimpleBox gameVersionBox;
 	
 	private static boolean createUsserSucces;
 	private static boolean loginUsserSucces;
+	
+	private static SceneData sceneData;
 	
 	public static void init(int _iMenuState){
 		Log.i("Info", "Init State: "+ _iMenuState);
@@ -223,61 +229,28 @@ public class ModeMenu {
 			break;
 		
 		case Define. ST_MENU_CAMPAING:
-			
-			btnContinueCampaing = new Button(
-					GfxManager.imgButtonMenuBigRelease, 
-					GfxManager.imgButtonMenuBigFocus, 
-					Define.SIZEX-(int)(GfxManager.imgButtonMenuBigRelease.getWidth()/2)-Define.SIZEY64, 
-					Define.SIZEY-(int)(GfxManager.imgButtonMenuBigRelease.getHeight()*1.5)-Define.SIZEY64,
-					RscManager.allText[RscManager.TXT_CONTINUE], Font.FONT_MEDIUM){
-				@Override
-				public void onButtonPressDown(){}
-				
-				@Override
-				public void onButtonPressUp(){
-					SndManager.getInstance().playFX(Main.FX_NEXT, 0);
-					//SceneData dataPackage = null;
-					/*
-					//Lectura local
-					try{
-						FileInputStream fis = Main.context.openFileInput("Test");
-						ObjectInputStream is = new ObjectInputStream(fis);
-						dataPackage = (DataPackage) is.readObject();
-						is.close();
-						fis.close();
-					}catch(Exception e){
-						e.printStackTrace();
-					}
-					*/
-					
-					//GameState.getInstance().init(GameState.GAME_MODE_CAMPAING, dataPackage);
-					//Main.changeState(Define.ST_GAME_CONTINUE, true);
-					reset();
-				}
-			};
-			btnStart = new Button(
-					GfxManager.imgButtonMenuBigRelease, 
-					GfxManager.imgButtonMenuBigFocus, 
-					Define.SIZEX-(int)(GfxManager.imgButtonMenuBigRelease.getWidth()/2)-Define.SIZEY64, 
-					Define.SIZEY-(int)(GfxManager.imgButtonMenuBigRelease.getHeight()/2)-Define.SIZEY64,
-					RscManager.allText[RscManager.TXT_START], Font.FONT_MEDIUM){
-				@Override
-				public void onButtonPressDown(){}
-				
-				@Override
-				public void onButtonPressUp(){
-					SndManager.getInstance().playFX(Main.FX_NEXT, 0);
-					reset();
-				}
-			};
 			break;
 			
 		case Define. ST_MENU_SELECT_GAME://porque carga
+			
+			//Miro si hay partida guardada
+			sceneData = null;
+			try{
+				FileInputStream fis = Main.getInstance().getActivity().openFileInput(Define.DATA_PASS_AND_PLAY);
+				ObjectInputStream is = new ObjectInputStream(fis);
+				sceneData = (SceneData) is.readObject();
+				is.close();
+				fis.close();
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			
 			btnOnLine = new Button(
 					GfxManager.imgButtonMenuBigRelease, 
 					GfxManager.imgButtonMenuBigFocus, 
 					Define.SIZEX-(int)(GfxManager.imgButtonMenuBigRelease.getWidth()/2)-Define.SIZEY64, 
-					Define.SIZEY-(int)(GfxManager.imgButtonMenuBigRelease.getHeight()*1.5)-Define.SIZEY64,
+					Define.SIZEY-Define.SIZEY64
+					-(int)(sceneData != null ? GfxManager.imgButtonMenuBigRelease.getHeight()*2.5 : GfxManager.imgButtonMenuBigRelease.getHeight()*1.5),
 					RscManager.allText[RscManager.TXT_ON_LINE], Font.FONT_MEDIUM){
 				@Override
 				public void onButtonPressDown(){}
@@ -286,17 +259,31 @@ public class ModeMenu {
 				public void onButtonPressUp(){
 					SndManager.getInstance().playFX(Main.FX_NEXT, 0);
 					reset();
-					String data = FileIO.getInstance().loadData(Define.DATA_USER, 
-							Settings.getInstance().getActiviy().getApplicationContext());
-
-					if (data != null && data.length() > 0) {
-						String[] d = data.split("\n");
-						GameState.getInstance().setName(d[0]);
-						GameState.getInstance().setPassword(d[1]);
-						NotificationBox.getInstance().addMessage(RscManager.allText[RscManager.TXT_CONNECTED_BY] + " " + d[0]);
-						Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, false);
-					} else{
-						Main.changeState(Define.ST_MENU_ON_LINE_START, false);
+					
+					//Chequeo si la version del juego es la ultima
+					String result = OnlineInputOutput.getInstance().checkGameVersion(Main.getInstance().getActivity());
+					
+					if(result.equals("Succes")){
+						String data = FileIO.getInstance().loadData(Define.DATA_USER, 
+								Settings.getInstance().getActiviy().getApplicationContext());
+	
+						if (data != null && data.length() > 0) {
+							String[] d = data.split("\n");
+							GameState.getInstance().setName(d[0]);
+							GameState.getInstance().setPassword(d[1]);
+							NotificationBox.getInstance().addMessage(RscManager.allText[RscManager.TXT_CONNECTED_BY] + " " + d[0]);
+							Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, false);
+						} else{
+							Main.changeState(Define.ST_MENU_ON_LINE_START, false);
+						}
+					}else if(result.equals("Server error")){
+						NotificationBox.getInstance().addMessage(RscManager.allText[RscManager.TXT_SERVER_ERROR]);
+					}else if(result.equals("Version error")){
+						gameVersionBox = new SimpleBox(GfxManager.imgSmallBox, true, false){
+							@Override
+							public void onFinish(){}
+						};
+						gameVersionBox .start(null, RscManager.allText[RscManager.TXT_UPDATE_GAME]);
 					}
 				}
 			};
@@ -305,7 +292,8 @@ public class ModeMenu {
 					GfxManager.imgButtonMenuBigRelease, 
 					GfxManager.imgButtonMenuBigFocus, 
 					Define.SIZEX-(int)(GfxManager.imgButtonMenuBigRelease.getWidth()/2)-Define.SIZEY64, 
-					Define.SIZEY-(int)(GfxManager.imgButtonMenuBigRelease.getHeight()/2)-Define.SIZEY64,
+					Define.SIZEY-Define.SIZEY64
+					-(int)(sceneData != null ? GfxManager.imgButtonMenuBigRelease.getHeight()*1.5 : GfxManager.imgButtonMenuBigRelease.getHeight()/2),
 					RscManager.allText[RscManager.TXT_PASS_AND_PLAY], Font.FONT_MEDIUM){
 				@Override
 				public void onButtonPressDown(){}
@@ -317,6 +305,32 @@ public class ModeMenu {
 					reset();
 				}
 			};
+			
+			if(sceneData != null){
+				btnContinuePassAndPlay = new Button(
+						GfxManager.imgButtonMenuBigRelease, 
+						GfxManager.imgButtonMenuBigFocus, 
+						Define.SIZEX-(int)(GfxManager.imgButtonMenuBigRelease.getWidth()/2)-Define.SIZEY64, 
+						Define.SIZEY-Define.SIZEY64
+						-(int)(GfxManager.imgButtonMenuBigRelease.getHeight()/2),
+						RscManager.allText[RscManager.TXT_CONTINUE], Font.FONT_MEDIUM){
+					@Override
+					public void onButtonPressDown(){}
+					
+					@Override
+					public void onButtonPressUp(){
+						SndManager.getInstance().playFX(Main.FX_NEXT, 0);
+						
+						
+						GameState.getInstance().init(GameState.GAME_MODE_PLAY_AND_PASS, sceneData);
+						String msg = RscManager.allText[RscManager.TXT_GAME_LOADED];
+						NotificationBox.getInstance().addMessage(msg);
+						Main.changeState(Define.ST_GAME_INIT_PASS_AND_PLAY, true);
+						//Main.changeState(Define.ST_GAME_CONTINUE, true);
+						reset();
+					}
+				};
+			}
 			break;
 		case Define.ST_MENU_SELECT_MAP:
 			selectMapBox = new ListBox(
@@ -815,15 +829,23 @@ public class ModeMenu {
 		case Define.ST_MENU_CAMPAING:
 	        	runMenuBG(Main.getDeltaSec());
 	        	btnBack.update(UserInput.getInstance().getMultiTouchHandler());
-				btnContinueCampaing.update(UserInput.getInstance().getMultiTouchHandler());
-				btnStart.update(UserInput.getInstance().getMultiTouchHandler());
 				break;
         case Define.ST_MENU_SELECT_GAME:
         	runMenuBG(Main.getDeltaSec());
         	btnBack.update(UserInput.getInstance().getMultiTouchHandler());
-			btnOnLine.update(UserInput.getInstance().getMultiTouchHandler());
-			btnPassAndPlay.update(UserInput.getInstance().getMultiTouchHandler());
-			break;
+        	
+        	if(gameVersionBox != null){
+        		gameVersionBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
+        	}
+        	
+        	if(gameVersionBox == null || (gameVersionBox != null && !gameVersionBox.isActive())){
+        		btnOnLine.update(UserInput.getInstance().getMultiTouchHandler());
+    			btnPassAndPlay.update(UserInput.getInstance().getMultiTouchHandler());
+    			if(btnContinuePassAndPlay != null){
+    				btnContinuePassAndPlay.update(UserInput.getInstance().getMultiTouchHandler());
+    			}
+        	}
+        	break;
         case Define.ST_MENU_SELECT_MAP:
         	runMenuBG(Main.getDeltaSec());
         	btnBack.update(UserInput.getInstance().getMultiTouchHandler());
@@ -857,11 +879,9 @@ public class ModeMenu {
 			 btnBack.update(UserInput.getInstance().getMultiTouchHandler());
 			 btnSearchGame.update(UserInput.getInstance().getMultiTouchHandler());
 			 btnCreateScene.update(UserInput.getInstance().getMultiTouchHandler());
-			 
 			 if(selectSceneBox != null){
 				 selectSceneBox .update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
 			 }
-			 
 			 break;
 		 case Define.ST_MENU_ON_LINE_LIST_JOIN_GAME:
 			 runMenuBG(Main.getDeltaSec());
@@ -950,8 +970,6 @@ public class ModeMenu {
 		case Define. ST_MENU_CAMPAING:
 			drawMenuBG(_g);
 			btnBack.draw(_g, 0, 0);
-			btnContinueCampaing.draw(_g, 0, 0);
-			btnStart.draw(_g, 0, 0);
 			break;
 			
 		case Define.ST_MENU_SELECT_GAME:
@@ -959,6 +977,12 @@ public class ModeMenu {
 			btnBack.draw(_g, 0, 0);
 			btnOnLine.draw(_g, 0, 0);
 			btnPassAndPlay.draw(_g, 0, 0);
+			if(btnContinuePassAndPlay != null){
+				btnContinuePassAndPlay.draw(_g, 0, 0);
+			}
+			if(gameVersionBox != null){
+				gameVersionBox.draw(_g, GfxManager.imgBlackBG);
+			}
 			break;
 		case Define.ST_MENU_SELECT_MAP:
 			drawMenuBG(_g);

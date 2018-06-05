@@ -19,6 +19,7 @@ import com.luis.strategy.datapackage.scene.SceneListData;
 
 public class OnlineInputOutput {
 	
+	public static final String GAME_VERSION = "0.1";
 	public static final String SERVER_URL = "http://172.104.228.65:8080/KingServer/";//Online
 	//public static final String SERVER_URL = "http://192.168.1.110:8080/KingServer/";//Local
 	//public static final String SERVER_URL = "http://192.168.26.155:8080/KingServer/";//Local2
@@ -29,6 +30,7 @@ public class OnlineInputOutput {
 	public static final String URL_CREATE_PRE_SCENE = "createPreSceneServlet";
 	public static final String URL_CREATE_NOTIFICATION = "createNotificationServlet";
 	
+	public static final String URL_GET_GAME_VERSION = "getGameVersionServlet";
 	public static final String URL_GET_PRE_SCENE_LIST = "getPreSceneListServlet";
 	public static final String URL_GET_SCENE_LIST = "getSceneListServlet";
 	public static final String URL_GET_START_SCENE = "getStartSceneServlet";
@@ -55,6 +57,44 @@ public class OnlineInputOutput {
 	    return netInfo != null && netInfo.isConnectedOrConnecting();
 	}
 	
+	public String checkGameVersion(Context context){
+		
+		if(!isOnline(context)){
+			return MSG_NO_CONNECTION;
+		}
+		
+		HttpURLConnection connection = null;
+		String result = "";
+		
+		try {
+			// open URL connection
+			URL url = new URL(SERVER_URL + URL_GET_GAME_VERSION);
+			connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestProperty("Content-Type", "application/octet-stream");
+			connection.setRequestMethod("GET");
+			connection.setRequestProperty("version", GAME_VERSION);
+			connection.setDoInput(true);
+			connection.setDoOutput(false);
+			connection.setUseCaches(false);
+
+			BufferedReader in = 
+					new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+			String str = "";
+			while ((str = in.readLine()) != null) {
+				result += str;// + "\n";
+			}
+			in.close();
+
+			System.out.println(result);
+			connection.disconnect();
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = e.getMessage();
+		}
+		return result;
+	}
+
 	public String sendNotification(Context context, String URL, String scene, String user, String message){
 		
 		if(!isOnline(context)){

@@ -28,7 +28,7 @@ public class GameBuilder {
 		return instance;
 	}
 	
-	public GameScene buildPassAndPlay(){
+	public GameScene buildStartPassAndPlay(){
 		
 		GameScene gameScene = new GameScene(GameState.getInstance()
 				.getMap(),
@@ -176,6 +176,11 @@ public class GameBuilder {
 	}
 	
 	public SceneData buildSceneData(int state){
+		
+		if(GameState.getInstance().getGameScene() == null){
+			return null;
+		}
+		
 		SceneData sceneData = GameState.getInstance().getSceneData();
 		
 		sceneData.setPlayerIndex(GameState.getInstance().getGameScene().getPlayerIndex());

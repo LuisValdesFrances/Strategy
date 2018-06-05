@@ -67,6 +67,7 @@ public class Define {
 	public static final int ST_GAME_CONFIRMATION_QUIT = 105;
 	
 	// Nombre del fichero donde se guardaran y cargaran los datos:
+	public static final String DATA_CONFIG = "strategyDataConfig";
 	public static final String DATA_USER = "strategyDataUser";
 	public static final String DATA_PASS_AND_PLAY = "strategyDataPassAndPlay";
 	public static final String DATA_CAMPAING = "strategyDataCampaing";

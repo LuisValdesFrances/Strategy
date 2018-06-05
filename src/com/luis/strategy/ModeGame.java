@@ -1,14 +1,9 @@
 package com.luis.strategy;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.List;
+
+import android.content.Context;
 
 import com.luis.lgameengine.gui.Button;
 import com.luis.lgameengine.gui.ListBox;
@@ -26,6 +21,7 @@ import com.luis.strategy.constants.Define;
 import com.luis.strategy.data.DataKingdom;
 import com.luis.strategy.data.GameBuilder;
 import com.luis.strategy.datapackage.scene.NotificationListData;
+import com.luis.strategy.datapackage.scene.SceneData;
 import com.luis.strategy.game.GameManager;
 import com.luis.strategy.map.GameScene;
 
@@ -37,7 +33,6 @@ public class ModeGame {
 	
 	/**/
 	public static boolean isGamePaused;
-	private static int gameFrame;
 	
 	public static float worldWidth;
 	public static float worldHeight;
@@ -89,11 +84,13 @@ public class ModeGame {
 			particleManager = ParticleManager.getInstance();
 			gfxEffects = GfxEffects.getInstance();
 			
-			gameFrame = 0;
-			
 			GameScene gameScene = null;
 			if(Main.state == Define.ST_GAME_INIT_PASS_AND_PLAY){
-				gameScene = GameBuilder.getInstance().buildPassAndPlay();
+				if(GameState.getInstance().getSceneData() == null){
+					gameScene = GameBuilder.getInstance().buildStartPassAndPlay();
+				}else{
+					gameScene = GameBuilder.getInstance().buildGameScene();
+				}
 			}
 			else if(Main.state == Define.ST_GAME_INIT_ON_LINE){
 				if(GameState.getInstance().getSceneData().getState() == 0){
@@ -179,66 +176,6 @@ public class ModeGame {
 			
 		case Define.ST_GAME_PAUSE:
 			
-			
-			/*
-			//Escrutura online
-			HttpURLConnection connection = null;
-			try {
-				// open URL connection
-				URL url = new URL(Define.SERVER_URL + "mapTestServlet2");//online
-				connection = (HttpURLConnection) url.openConnection();
-				connection.setRequestProperty("Content-Type", "application/octet-stream");
-				connection.setRequestMethod("POST");
-				connection.setDoInput(true);
-				connection.setDoOutput(true);
-				connection.setUseCaches(false);
-
-				// send object
-				ObjectOutputStream objOut = new ObjectOutputStream(
-						connection.getOutputStream());
-				objOut.writeObject(GameBuilder.getInstance().buildSceneData());
-				objOut.flush();
-				objOut.close();
-
-				BufferedReader in = new BufferedReader(new InputStreamReader(
-						connection.getInputStream()));
-
-				String str = "";
-				String result = "";
-				while ((str = in.readLine()) != null) {
-					result += str + "\n";
-				}
-				in.close();
-
-				System.out.println(result);
-				connection.disconnect();
-
-				// Envia el post
-				// ObjectInputStream objIn = new
-				// ObjectInputStream(conn.getInputStream());
-
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}	
-			*/
-			
-			
-			/*
-			 * Escritura local
-			try {
-				FileOutputStream fos = Main. context.openFileOutput(Define.DATA_GAME_SAVE, Main.context.MODE_PRIVATE);
-				ObjectOutputStream os = new ObjectOutputStream(fos);
-				os.writeObject(GameBuilder.getInstance().
-						build(GameState.getInstance().getGameScene()));
-				os.close();
-				fos.close();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}	
-			*/
-			
-			
-			
 			pauseBox = new MenuBox(
 					Define.SIZEX, Define.SIZEY, 
 					GfxManager.imgBigBox, 
@@ -274,6 +211,22 @@ public class ModeGame {
 			break;
 		}
 	}
+	
+	public static void saveGame(){
+		try {
+			GameState.getInstance().setSceneData(new SceneData());
+			Main.getInstance().getActivity();
+			FileOutputStream fos = Main.getInstance().getActivity().
+					openFileOutput(Define.DATA_PASS_AND_PLAY, 
+					Context.MODE_PRIVATE);
+			ObjectOutputStream os = new ObjectOutputStream(fos);
+			os.writeObject(GameBuilder.getInstance().buildSceneData(1));
+			os.close();
+			fos.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}	
+	}
 
 	public static void update(int _iState) {
 		switch(_iState){
@@ -293,7 +246,6 @@ public class ModeGame {
 			break;
 		case Define.ST_GAME_RUN:
 			
-			gameFrame++;
 			btnPause.update(UserInput.getInstance().getMultiTouchHandler());
 			
 			

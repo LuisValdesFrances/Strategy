@@ -27,7 +27,7 @@ public class SimpleBox extends MenuBox{
 					GfxManager.imgButtonOkRelease, 
 					GfxManager.imgButtonOkFocus, 
 					screenWidth/2, 
-					screenHeight/2 + GfxManager.imgSmallBox.getHeight()/2, 
+					screenHeight/2 + imgBox.getHeight()/2, 
 					null, 
 					-1){
 				@Override
@@ -45,8 +45,8 @@ public class SimpleBox extends MenuBox{
 			btnList.add(new Button(
 					GfxManager.imgButtonDeleteRelease, 
 					GfxManager.imgButtonDeleteFocus, 
-					screenWidth/2-GfxManager.imgSmallBox.getWidth()/2, 
-					screenHeight/2 - GfxManager.imgSmallBox.getHeight()/2, 
+					screenWidth/2 - imgBox.getWidth()/2, 
+					screenHeight/2 -imgBox.getHeight()/2, 
 					null, 
 					-1){
 				@Override
