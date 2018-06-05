@@ -2,6 +2,7 @@ package com.luis.strategy;
 
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
+import java.util.Locale;
 
 import android.util.Log;
 
@@ -82,7 +83,33 @@ public class ModeMenu {
 		
 		case Define.ST_MENU_START:
 			Font.init(GfxManager.vImgFontSmall, GfxManager.vImgFontMedium, GfxManager.vImgFontBig);
-			RscManager.loadLanguage(Main.iLanguage);
+			
+			//Miro si hay datos guardados
+			String dataConfig = FileIO.getInstance().loadData(Define.DATA_CONFIG, Main.getInstance().getActivity());
+			
+			if(dataConfig == null){
+				
+				String language = Locale.getDefault().getDisplayLanguage();
+				
+				language = language.toLowerCase();
+				
+				Log.i("Debug", language);
+				
+				dataConfig = language;//Añadir resto de configuraciones + "\n" ;
+				FileIO.getInstance().saveData(dataConfig, Define.DATA_CONFIG, Main.getInstance().getActivity());
+			}
+			
+			String language = dataConfig.split("\n")[0];
+			if(language.equals("english")){
+				RscManager.loadLanguage(0);
+			}
+			else if(language.equals("español")){
+				RscManager.loadLanguage(1);
+			}else{
+				RscManager.loadLanguage(0);
+			}
+			
+			
 			MenuElement.bgAlpha = (int)(GameParams.BG_BLACK_ALPHA*0.5);
 			
 			alpha = 255;

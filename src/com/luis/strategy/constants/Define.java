@@ -68,6 +68,9 @@ public class Define {
 	
 	// Nombre del fichero donde se guardaran y cargaran los datos:
 	public static final String DATA_CONFIG = "strategyDataConfig";
+	/*
+	 * Primera linea: English, Spanish, Catalan
+	 */
 	public static final String DATA_USER = "strategyDataUser";
 	public static final String DATA_PASS_AND_PLAY = "strategyDataPassAndPlay";
 	public static final String DATA_CAMPAING = "strategyDataCampaing";

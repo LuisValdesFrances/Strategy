@@ -113,6 +113,8 @@ private Keyboard keyboard;
 				onSendForm();
 			};
 		};
+		
+		keyboard.setModY(Define.SIZEY);
 	}
 	
 	
@@ -122,6 +124,13 @@ private Keyboard keyboard;
 	
 	
 	public boolean update(MultiTouchHandler touchHandler, float delta){
+		
+		if(state ==  STATE_TO_ACTIVE){
+			keyboard.setModY(modPosX*-1/2);
+		}
+		else if(state ==  STATE_TO_UNACTIVE){
+			keyboard.setModY(modPosX/2);
+		}
 		
 		if(state == STATE_ACTIVE){
 			keyboard.update(touchHandler);

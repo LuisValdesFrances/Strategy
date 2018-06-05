@@ -20,7 +20,7 @@ import com.luis.strategy.constants.Define;
  */
 public class Main extends LCanvas implements Runnable {
 	
-	public static boolean debug = false;
+	public static boolean debug = true;
 
 	public static Main instance;
 	public static Main getInstance(){
@@ -42,8 +42,11 @@ public class Main extends LCanvas implements Runnable {
 		return (int)deltaTime;
 	}
 	public static float getDeltaSec(){
-		//return 0.03f;//Para debug
-		return Math.min(((float)deltaTime / 1000f), 0.1f);
+		if(debug){
+			return 0.03f;
+		}else{
+			return Math.min(((float)deltaTime / 1000f), 0.1f);
+		}
 	}
 	public static long lastTime;
 
@@ -136,8 +139,6 @@ public class Main extends LCanvas implements Runnable {
 	    
 	};
 	 
-	public static int iLanguage;
-	
 	private Activity activity;
 	public Activity getActivity() {
 		return activity;
