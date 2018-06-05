@@ -134,7 +134,11 @@ public class BattleDiceBox {
 		if(state != STATE_UNACTIVE){
 			switch(state){
 			case STATE_START:
-				
+				modPosY -= (modPosY*8)*delta -1;
+				if(modPosY >= 0){
+					modPosY = 0;
+					state = STATE_COMBAT_1;
+				}
 				break;
 			case STATE_COMBAT_1:
 			case STATE_COMBAT_2:

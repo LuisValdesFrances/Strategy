@@ -418,6 +418,8 @@ public class ModeMenu {
 				@Override
 				public void onFinish(){
 					if(getIndexPressed() != -1){
+						//Borro los datos guardados en caso de haberlos
+						GameState.getInstance().setSceneData(null);
 						Main.changeState(Define.ST_GAME_INIT_PASS_AND_PLAY, true);
 					}else{
 						Main.changeState(Define.ST_MENU_SELECT_MAP, false);

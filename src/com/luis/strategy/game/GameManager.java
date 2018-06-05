@@ -1680,7 +1680,7 @@ public class GameManager {
 				break;
 		}
 		//Ñapa
-		//result = 3;
+		result = 3;
 		
 		//Hay ejercito enemigo
 		if(enemy != null){
