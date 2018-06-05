@@ -731,24 +731,24 @@ public class ModeMenu {
 						
 						if(getIndexPressed() != -1){
 							PreSceneListData preSceneListData = (PreSceneListData)getSceneListData();
-							PreSceneData sceneData = preSceneListData.getPreSceneDataList().get(getIndexPressed());
+							PreSceneData preSceneData = preSceneListData.getPreSceneDataList().get(getIndexPressed());
 							
-							String scene = "" + sceneData.getId();
+							String scene = "" + preSceneData.getId();
 							String user = GameState.getInstance().getName();
 							
 							String create = null;
 							
-							int insCount = (sceneData.getPlayerCount()+1);
-							if(insCount ==  DataKingdom.INIT_MAP_DATA[sceneData.getMap()].length){
+							int insCount = (preSceneData.getPlayerCount()+1);
+							if(insCount ==  DataKingdom.INIT_MAP_DATA[preSceneData.getMap()].length){
 								create = "create";
-								Log.i("Debug", "Scene " + sceneData.getId() + " ya contiene el total de jugadores");
+								Log.i("Debug", "Scene " + preSceneData.getId() + " ya contiene el total de jugadores");
 							}
 							
 							String msg = "";
 							Main.getInstance().startClock(Main.TYPE_EARTH);
 							String result = 
-									OnlineInputOutput.getInstance().sendInscription(
-											Main.getInstance().getActivity(), OnlineInputOutput.URL_CREATE_INSCRIPTION, scene, user, create);//check
+									OnlineInputOutput.getInstance().sendInscription(Main.getInstance().getActivity(), 
+											scene, user, create);//check
 							Main.getInstance().stopClock();
 							 
 							if(result.equals("Server error")){

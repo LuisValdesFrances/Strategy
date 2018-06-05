@@ -241,7 +241,7 @@ public class OnlineInputOutput {
 		return result;
 	}
 	
-	public String sendInscription(Context context, String URL, String scene, String user, String create){
+	public String sendInscription(Context context, String scene, String user, String create){
 		if(!isOnline(context)){
 			return MSG_NO_CONNECTION;
 		}
@@ -249,7 +249,7 @@ public class OnlineInputOutput {
 		String result = "";
 		try {
 			// open URL connection
-			URL url = new URL(SERVER_URL + URL);
+			URL url = new URL(SERVER_URL + URL_CREATE_INSCRIPTION);
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestProperty("Content-Type", "application/octet-stream");
 			connection.setRequestMethod("POST");
