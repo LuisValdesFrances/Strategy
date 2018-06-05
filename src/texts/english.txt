@@ -1,4 +1,4 @@
-﻿
+
 War is the art of destroying men, politics is the art of deceiving them.
 After the war, peace; of peace, abundance; of abundance, vice; of vice, war.
 War is a great effort of all towards peace.
@@ -36,7 +36,7 @@ Yes
 Help
 About
 Texto help.
-Desing and programer: Luis Valdes. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx Music and FX: Francisco Hoyos. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx All right reserved.
+Designed and developed: Luis Valdes. @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Music and FX: Francisco Hoyos. @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ All right reserved.
 SELECT MAP
 CONFIGURE MAP
 HUMAN

@@ -381,6 +381,9 @@ public class GfxManager {
 		imgButtonKeyboardReleaseSp = Image.createImage("/button_keyboard_release_sp.png");
 		imgButtonKeyboardFocusSp = Image.createImage("/button_keyboard_focus_sp.png");
 		
+		imgButtonInfoFocus = Image.createImage("/info_focus.png");
+		imgButtonInfoRelease = Image.createImage("/info_release.png");
+		
 		imgMainBG = Image.createImage("/main_bg.png");
 		imgSwordBG = Image.createImage("/sword_bg.png");
 		imgCloudBG = Image.createImage("/cloud_bg.png");
@@ -420,6 +423,9 @@ public class GfxManager {
 		imgButtonArrowNextFocus = null;
 		imgButtonOkRelease = null;
 		imgButtonOkFocus = null;
+		
+		imgButtonInfoRelease = null;
+		imgButtonInfoFocus = null;
 		
 		imgSmallBox = null;
 		

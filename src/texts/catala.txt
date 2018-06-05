@@ -1,25 +1,106 @@
-﻿
-ENGLISH
-ESPAÑOL
-CATALÀ
-JUGAR
-OPCIONS
-MES
-SORTIR
-SO ON
-SO OFF
-VIBRACIÓ ON
-VIBRACIÓ OFF
-¿DESITJES SORTIR DEL JOG?
-NO
-SI
-AJUDA
-ABOUT
-DESTRUEIX AMB LA BOLA TOTS ELS BLOCS QUE PUGUIS PER GUANYAR PUNTS. MOU EL DIT PER LA PANTALLA PER DESPLAÇAR LA BARRA.
-DISENY Y PROGRAMACIÓ: LUIS VALDES FRANCES. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MUSICA I EFECTES FX: FRANCISCO HOYOS. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx ALL RIGHTS RESERVED.
-PUNTS:
-RECORD:
-REINTENTAR
-ABANDONAR
-NOU RECORD:
-DESITJES TORNAR AL MENÚ?
+
+La guerra es el arte de destruir a los hombres, la política es el arte de engañarlos.
+Tras la guerra, paz; de la paz, abundancia; de la abundancia, vicio; del vicio, la guerra.
+La guerra es un gran esfuerzo de todos hacia la paz.
+Matadlos a todos, que Dios ya reconocerá a los suyos.
+Los dos guerreros más poderosos son la paciencia y el tiempo.
+He recorrido un largo camino desde el campo de batalla a la mesa de paz.
+Parmenides de Elea
+Francisco de Quevedo
+Montesquieu
+Arnaud Amairic
+Leo Tolstoy
+Moshe Dayan
+English
+Español
+Català
+CAMPAÑA
+CONTINUAR
+EMPEZAR
+MULTIJUGADOR
+ON LINE
+PASA Y JUEGA
+NUEVA CUENTA
+INICIAR SESION
+Juego
+Opciones
+Mas
+Salir
+Sonido On
+Sonido Off
+Vibracion On
+Vibracion Off
+Quieres sair?
+No
+Si
+Ayuda
+Acerca de
+Texto help.
+Diseñado y desarrollado: Luis Valdes. @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Musica y FX: Francisco Hoyos. @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ All right reserved.
+SELECIONA MAPA
+CONFIGURA MAPA
+HUMANO
+IA
+Puntos:
+Record:
+Continua
+Abandonar
+Nuevo record:
+¿Quires volver al menu?
+Notificaciones
+Nombre
+Password
+Repite pass
+Passwords no coinciden
+Lo siento, ya existe un usuario con ese nombre. Prueba otro nombre.
+Nombre de usuario o password incorrectos
+Error de conexion
+Error de servidor
+No hay conexion a interrnet
+Se ha creado la cuenta
+Se ha creado la partida
+Conectado con
+Te has unido al juego
+Juego cargado
+Enviando datos de la partida...
+Tu versión del juego esta obsoleta. Por favor, descarga la ultima version del juego.
+TURNO:
+Llano
+Bosque
+Montaña
+Ciudad pequeña
+Ciudad mediana
+Ciudad grande
+Castillo
+Infanteria
+Caballeria
+Hostigadores
+Asedio
+RESULTADO
+Jugador
+Gran derrota
+Derrota
+Victoria
+Gran voctoria
+Has perdido el juego
+piede el juego
+Atacante gana
+Atacante pierde
+El atacante ha destruido el enemido
+El atacante ha sido destriudo
+Atacante pierde
+Defensor pierde
+bajas
+Nuevo ejercito reclutado
+Los ejercitos han unido sus fuerzas
+ECONOMIA
+Ganancias
+Salarios
+El coste de las tropas excede tu tesoro. Descarta algunas.
+El número total de tropas excede el máximo. Se despediran las sobrantes.
+es el ganador!
+cambia su capital
+¿Realmente quieres descartar esta tropa
+por
+monedas
+?

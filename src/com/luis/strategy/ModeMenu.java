@@ -62,6 +62,7 @@ public class ModeMenu {
 	private static Button btnLogin;
 	private static Button btnSearchGame;
 	private static Button btnCreateScene;
+	private static Button btnAbout;
 	
 	private static ListBox selectMapBox;
 	private static ListBox selectPreSceneBox;
@@ -76,6 +77,8 @@ public class ModeMenu {
 	private static boolean loginUsserSucces;
 	
 	private static SceneData sceneData;
+	
+	private static int numLetters;
 	
 	public static void init(int _iMenuState){
 		Log.i("Info", "Init State: "+ _iMenuState);
@@ -131,6 +134,8 @@ public class ModeMenu {
 					case Define.ST_MENU_SELECT_GAME:
 					case Define.ST_MENU_CAMPAING:
 					case Define.ST_MENU_ON_LINE_START:
+					case Define.ST_MENU_ABOUT:
+					case Define.ST_MENU_OPTIONS:
 						Main.changeState(Define.ST_MENU_MAIN, false);
 						break;
 					case Define.ST_MENU_SELECT_MAP:
@@ -175,6 +180,21 @@ public class ModeMenu {
 						configMapBox.cancel();
 						break;
 					}
+				};
+			};
+			
+			btnAbout = new Button(GfxManager.imgButtonInfoRelease, GfxManager.imgButtonInfoFocus,
+					Define.SIZEX32+GfxManager.imgButtonInfoRelease.getWidth()/2,
+					Define.SIZEY32+GfxManager.imgButtonArrowBackRelease.getHeight()/2,
+					null, -1){
+				
+				@Override
+				public void onButtonPressDown(){}
+				@Override
+				public void onButtonPressUp() {
+					SndManager.getInstance().playFX(Main.FX_NEXT, 0);
+					reset();
+					Main.changeState(Define.ST_MENU_ABOUT, false);
 				};
 			};
 			
@@ -253,6 +273,7 @@ public class ModeMenu {
 		case Define. ST_MENU_EXIT:
 		case Define. ST_MENU_HELP:
 		case Define. ST_MENU_ABOUT:
+			numLetters = 0;
 			break;
 		
 		case Define. ST_MENU_CAMPAING:
@@ -840,23 +861,43 @@ public class ModeMenu {
 			runMenuBG(Main.getDeltaSec());
 			btnCampaign.update(UserInput.getInstance().getMultiTouchHandler());
 			btnMultiPlayer.update(UserInput.getInstance().getMultiTouchHandler());
+			btnAbout.update(UserInput.getInstance().getMultiTouchHandler());
 			break;
 			
 		case Define.ST_MENU_MORE:
+			runMenuBG(Main.getDeltaSec());
+			btnBack.update(UserInput.getInstance().getMultiTouchHandler());
 			break;
 			
 		case Define.ST_MENU_OPTIONS:
+			runMenuBG(Main.getDeltaSec());
+			btnBack.update(UserInput.getInstance().getMultiTouchHandler());
 			break;
+			
 		case Define.ST_MENU_HELP:
+			runMenuBG(Main.getDeltaSec());
+			btnBack.update(UserInput.getInstance().getMultiTouchHandler());
+			break;
+			
 		case Define.ST_MENU_ABOUT:
+			runMenuBG(Main.getDeltaSec());
+			btnBack.update(UserInput.getInstance().getMultiTouchHandler());
+			if(numLetters < RscManager.allText[RscManager.TXT_ABOUT_DESCRIP].length()){
+				while(RscManager.allText[RscManager.TXT_ABOUT_DESCRIP].charAt(numLetters) == '@'){
+					numLetters++;	
+				}
+				numLetters++;
+			}
 			break;
 			
 		case Define.ST_MENU_EXIT:
         	break;
+        	
 		case Define.ST_MENU_CAMPAING:
 	        	runMenuBG(Main.getDeltaSec());
 	        	btnBack.update(UserInput.getInstance().getMultiTouchHandler());
 				break;
+				
         case Define.ST_MENU_SELECT_GAME:
         	runMenuBG(Main.getDeltaSec());
         	btnBack.update(UserInput.getInstance().getMultiTouchHandler());
@@ -878,6 +919,7 @@ public class ModeMenu {
         	btnBack.update(UserInput.getInstance().getMultiTouchHandler());
         	selectMapBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
 			break;
+			
         case Define.ST_MENU_CONFIG_MAP:
 			runMenuBG(Main.getDeltaSec());
 			btnBack.update(UserInput.getInstance().getMultiTouchHandler());
@@ -891,16 +933,19 @@ public class ModeMenu {
         	 btnNewAccount.update(UserInput.getInstance().getMultiTouchHandler());
         	 btnLogin.update(UserInput.getInstance().getMultiTouchHandler());
 			 break;
+			 
 		 case Define.ST_MENU_ON_LINE_CREATE_USER:
 			 runMenuBG(Main.getDeltaSec());
 			 btnBack.update(UserInput.getInstance().getMultiTouchHandler());
 			 createUserBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
 			 break;
+			 
 		 case Define.ST_MENU_ON_LINE_LOGIN:
 			 runMenuBG(Main.getDeltaSec());
 			 btnBack.update(UserInput.getInstance().getMultiTouchHandler());
 			 loginBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
 			 break;
+			 
 		 case Define.ST_MENU_ON_LINE_LIST_ALL_GAME:
 			 runMenuBG(Main.getDeltaSec());
 			 btnBack.update(UserInput.getInstance().getMultiTouchHandler());
@@ -910,6 +955,7 @@ public class ModeMenu {
 				 selectSceneBox .update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
 			 }
 			 break;
+			 
 		 case Define.ST_MENU_ON_LINE_LIST_JOIN_GAME:
 			 runMenuBG(Main.getDeltaSec());
 			 btnBack.update(UserInput.getInstance().getMultiTouchHandler());
@@ -917,6 +963,7 @@ public class ModeMenu {
 				 selectPreSceneBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
 			 }
 			 break;
+			 
 		 case Define.ST_MENU_ON_LINE_CREATE_SCENE:
 			 runMenuBG(Main.getDeltaSec());
 			 btnBack.update(UserInput.getInstance().getMultiTouchHandler());
@@ -976,6 +1023,7 @@ public class ModeMenu {
 			drawMenuBG(_g);
 			btnCampaign.draw(_g, 0, 0);
 			btnMultiPlayer.draw(_g, 0, 0);
+			btnAbout.draw(_g, 0, 0);
 			_g.setAlpha(alpha);
 			_g.drawImage(GfxManager.imgBlackBG, 0, 0, Graphics.TOP | Graphics.LEFT);
 			_g.setAlpha(255);
@@ -990,8 +1038,15 @@ public class ModeMenu {
 			break;
 			
 		case Define.ST_MENU_HELP:
+			drawMenuBG(_g);
+			btnBack.draw(_g, 0, 0);
+			break;
 		case Define.ST_MENU_ABOUT:
-			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+			drawMenuBG(_g);
+			btnBack.draw(_g, 0, 0);
+			TextManager.draw(_g, Font.FONT_BIG, RscManager.allText[RscManager.TXT_ABOUT_DESCRIP],
+					Define.SIZEX2, Define.SIZEY2,
+					Define.SIZEX-Define.SIZEX8, TextManager.ALING_CENTER, numLetters);
 			break;
 			
 		case Define. ST_MENU_CAMPAING:
