@@ -262,7 +262,8 @@ public class ModeMenu {
 				};
 				
 				btnCampaign.setDisabled(true);
-			}else if(Main.lastState > Define.ST_GAME_INIT_PASS_AND_PLAY){
+			}
+			else if(Main.lastState > Define.ST_GAME_INIT_PASS_AND_PLAY){
 				SndManager.getInstance().playMusic(Main.MUSIC_INTRO, true);
 			}
 			
@@ -701,7 +702,11 @@ public class ModeMenu {
 				Main.changeState(Define.ST_MENU_ON_LINE_START, false);
 			}
 			
-			 break;
+			if(Main.lastState > Define.ST_GAME_INIT_PASS_AND_PLAY){
+				SndManager.getInstance().playMusic(Main.MUSIC_INTRO, true);
+			}
+			
+			break;
 		 
 		 case Define.ST_MENU_ON_LINE_LIST_JOIN_GAME:
 			 Main.getInstance().startClock(Main.TYPE_EARTH);
