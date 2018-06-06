@@ -48,7 +48,7 @@ public class GameManager {
 	//
 	private Image gameBuffer;
 	public float distorsion = 1.14f;
-	private static final boolean MODE_3D = true;
+	private static final boolean MODE_3D = false;
 	
 	public DataSender dataSender;
 	
@@ -1682,7 +1682,7 @@ public class GameManager {
 				break;
 		}
 		//Ñapa
-		result = 3;
+		//result = 3;
 		
 		//Hay ejercito enemigo
 		if(enemy != null){
