@@ -114,7 +114,7 @@ public class DataKingdom {
 		
 		if(mapId == 0 || mapId == 1 || mapId == 3   || mapId == 4){
 			k1 = new Kingdom(map,
-				(540f/mapWidth*100), (425f/mapHeight*100), map.getX(), map.getY(), map.getWidth(), map.getHeight());
+				(540f/mapWidth*100), (420f/mapHeight*100), map.getX(), map.getY(), map.getWidth(), map.getHeight());
 			k1.setId(1);
 			k1.setName("Genterex");
 			//La posicion del terreno se expresa en porcentajes respecto al ancho y alto del mapa
@@ -242,13 +242,13 @@ public class DataKingdom {
 			k9.setTerrainList(terrainList);
 			
 			k10 = new Kingdom(map,
-				(450f/(float)mapWidth*100f), (220f/(float)mapHeight*100f), map.getX(), map.getY(), map.getWidth(), map.getHeight());
+				(450f/(float)mapWidth*100f), (210f/(float)mapHeight*100f), map.getX(), map.getY(), map.getWidth(), map.getHeight());
 			k10.setId(10);
 			k10.setName("");
 			//La posicion del terreno se expresa en porcentajes respecto al ancho y alto del mapa
 			terrainList = new ArrayList<Terrain>();
 			terrainList.add(new Terrain(map,
-				(500f/(float)mapWidth*100f), (320f/(float)mapHeight*100f), GfxManager.imgTerrain.get(GameParams.FOREST).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.FOREST, false));
+				(500f/(float)mapWidth*100f), (300f/(float)mapHeight*100f), GfxManager.imgTerrain.get(GameParams.FOREST).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.FOREST, false));
 			k10.setTerrainList(terrainList);
 			
 			k11 = new Kingdom(map,
@@ -262,13 +262,13 @@ public class DataKingdom {
 			k11.setTerrainList(terrainList);
 			
 			k12 = new Kingdom(map,
-				(695f/(float)mapWidth*100f), (400f/(float)mapHeight*100f), map.getX(), map.getY(), map.getWidth(), map.getHeight());
+				(695f/(float)mapWidth*100f), (420f/(float)mapHeight*100f), map.getX(), map.getY(), map.getWidth(), map.getHeight());
 			k12.setId(12);
 			k12.setName("");
 			//La posicion del terreno se expresa en porcentajes respecto al ancho y alto del mapa
 			terrainList = new ArrayList<Terrain>();
 			terrainList.add(new Terrain(map,
-				(635f/(float)mapWidth*100f), (375f/(float)mapHeight*100f), GfxManager.imgTerrain.get(GameParams.FOREST).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.FOREST, false));
+				(635f/(float)mapWidth*100f), (360f/(float)mapHeight*100f), GfxManager.imgTerrain.get(GameParams.FOREST).getWidth(), GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight(), map.getX(), map.getY(), map.getWidth(), map.getHeight(), GameParams.FOREST, false));
 			k12.setTerrainList(terrainList);
 			
 			k13 = new Kingdom(map,
