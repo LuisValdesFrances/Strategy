@@ -741,9 +741,9 @@ public class GameManager {
 			}
 		}
 		
-		if(subState == SUB_STATE_ACTION_SELECT && getCurrentPlayer().getActionIA() == null)
+		if(subState == SUB_STATE_ACTION_SELECT && getCurrentPlayer().getActionIA() == null){
 			gameScene.drawTarget(gameBuffer.getGraphics(), worldConver, gameCamera);
-		
+		}
 		
 		 
 		 //Army
@@ -858,8 +858,10 @@ public class GameManager {
 				Graphics.VCENTER | Graphics.LEFT);
 		}
 		drawRanking(g);
-		TextManager.drawSimpleText(g, Font.FONT_MEDIUM, getCurrentPlayer().getName(), 
-				0, Define.SIZEY-GfxManager.imgGameHud.getHeight(), Graphics.BOTTOM | Graphics.LEFT);
+		if(state != STATE_END){
+			TextManager.drawSimpleText(g, Font.FONT_MEDIUM, getCurrentPlayer().getName(), 
+					0, Define.SIZEY-GfxManager.imgGameHud.getHeight(), Graphics.BOTTOM | Graphics.LEFT);
+			}
 		g.drawImage(GfxManager.imgGameHud, 0, Define.SIZEY, Graphics.BOTTOM | Graphics.LEFT);
 		drawGold(g);
 		
