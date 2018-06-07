@@ -127,6 +127,7 @@ public class ModeGame {
 				NotificationListData notificationListData = 
 						OnlineInputOutput.getInstance().reviceNotificationListData(
 								Main.getInstance().getActivity(),
+								""+GameState.getInstance().getSceneData().getId(), 
 								GameState.getInstance().getName(), "1");
 				Main.getInstance().stopClock();
 

@@ -136,7 +136,7 @@ public class OnlineInputOutput {
 		return result;
 	}
 	
-	public NotificationListData reviceNotificationListData(Context context, String user, String type){
+	public NotificationListData reviceNotificationListData(Context context, String scene, String user, String type){
 		
 		if(!isOnline(context)){
 			return null;
@@ -151,6 +151,7 @@ public class OnlineInputOutput {
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestProperty("Content-Type", "application/octet-stream");
 			connection.setRequestMethod("GET");
+			connection.setRequestProperty("scene", scene);
 			connection.setRequestProperty("user", user);
 			connection.setRequestProperty("type", type);
 			connection.setDoInput(true);

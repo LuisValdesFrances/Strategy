@@ -1323,7 +1323,7 @@ public class ModeMenu {
 			NotificationListData notificationListData = 
 					OnlineInputOutput.getInstance().reviceNotificationListData(
 							Main.getInstance().getActivity(),
-							GameState.getInstance().getName(), "0");
+							"-1", GameState.getInstance().getName(), "0");
 			
 			if (notificationListData != null && 
 					notificationListData.getNotificationDataList().size() > 0) {
