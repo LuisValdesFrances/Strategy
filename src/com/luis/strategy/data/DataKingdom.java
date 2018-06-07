@@ -114,7 +114,7 @@ public class DataKingdom {
 		
 		if(mapId == 0 || mapId == 1 || mapId == 3   || mapId == 4){
 			k1 = new Kingdom(map,
-				(540f/mapWidth*100), (420f/mapHeight*100), map.getX(), map.getY(), map.getWidth(), map.getHeight());
+				(520f/mapWidth*100), (420f/mapHeight*100), map.getX(), map.getY(), map.getWidth(), map.getHeight());
 			k1.setId(1);
 			k1.setName("Genterex");
 			//La posicion del terreno se expresa en porcentajes respecto al ancho y alto del mapa
