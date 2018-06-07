@@ -71,6 +71,8 @@ public class GfxManager {
 	public static Image imgButtonInfoFocus;
 	public static Image imgButtonMapRelease;
 	public static Image imgButtonMapFocus;
+	
+	public static Image imgNickBox;
 
 	public static Image imgTextBox;
 	public static Image imgBigBox;
@@ -204,6 +206,7 @@ public class GfxManager {
 				}
 				
 				imgTextBG = Image.createImage("/text_bg.png");
+				imgNickBox = Image.createImage("/nick_box.png");
 				
 				imgPadWest = Image.createImage("/pad_left.png");
 				imgPadEast = Image.createImage("/pad_right.png");
@@ -461,6 +464,8 @@ public class GfxManager {
 		//Menu commons
 		imgButtonMenuBigRelease = null;
 		imgButtonMenuBigFocus = null;
+		
+		imgNickBox = null;
 		
 		imgButtonInvisible = null;
 		

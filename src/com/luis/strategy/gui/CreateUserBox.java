@@ -52,7 +52,7 @@ public class CreateUserBox extends MenuBox{
 				Define.SIZEY-GfxManager.imgButtonKeyboardRelease.getHeight()*2, 
 				GfxManager.imgButtonKeyboardRelease, GfxManager.imgButtonKeyboardFocus, 
 				GfxManager.imgButtonKeyboardReleaseSp, GfxManager.imgButtonKeyboardFocusSp,
-				Font.FONT_BIG, Font.FONT_SMALL,
+				Font.FONT_BIG, Font.FONT_SMALL, Define.MAX_NAME_CHAR,
 				Main.FX_SELECT){
 			
 			@Override

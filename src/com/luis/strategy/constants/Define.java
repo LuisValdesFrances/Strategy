@@ -75,7 +75,6 @@ public class Define {
 	public static final String DATA_PASS_AND_PLAY = "strategyDataPassAndPlay";
 	public static final String DATA_CAMPAING = "strategyDataCampaing";
 	public static final int MAX_NAME_CHAR = 14;
-	public static final int MAX_PASSWORD_CHAR = 20;
 	public static final int MIN_NAME_CHAR = 4;
 	public static final int MIN_PASSWORD_CHAR = 8;
 	  

@@ -3,13 +3,17 @@ package com.luis.strategy.map;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.luis.lgameengine.gameutils.fonts.Font;
+import com.luis.lgameengine.gameutils.fonts.TextManager;
 import com.luis.lgameengine.gameutils.gameworld.GameCamera;
 import com.luis.lgameengine.gameutils.gameworld.Math2D;
 import com.luis.lgameengine.gameutils.gameworld.SpriteImage;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.implementation.graphics.Graphics;
+import com.luis.lgameengine.implementation.graphics.Image;
 import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 import com.luis.lgameengine.implementation.sound.SndManager;
+import com.luis.strategy.GameState;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.Main;
 import com.luis.strategy.constants.Define;
@@ -57,6 +61,8 @@ public class Army extends MapObject{
 	
 	private int flag;
 	
+	private Image imgNickBuffer;
+	
 	//IA
 	private IADecision iaDecision;
 	
@@ -86,6 +92,8 @@ public class Army extends MapObject{
 		if(getPlayer().getActionIA() != null){
 			iaDecision = new IADecision();
 		}
+		
+		imgNickBuffer = Image.createImage(GfxManager.imgNickBox.getWidth(), GfxManager.imgNickBox.getHeight());
 		
 		anim = ANIN_IDLE;
 	}
@@ -181,8 +189,8 @@ public class Army extends MapObject{
 	*/
 	
 	public void draw(
-			Graphics g, WorldConver worldConver, GameCamera gameCamera, boolean isSelected, boolean isActive, 
-			float distorsionX, float distorsionY, GameScene gameScene){
+			Graphics g, WorldConver worldConver, GameCamera gameCamera, GameScene gameScene, boolean isSelected, boolean isActive, 
+			float distorsionX, float distorsionY, int typeGame){
 		
 		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 		
@@ -306,6 +314,32 @@ public class Army extends MapObject{
 					Graphics.HFLIP);
 		}
 		*/
+		
+		if(typeGame == GameState.GAME_MODE_ONLINE && state != STATE_DEAD && getPlayer() != null){
+			g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+			Graphics _g = imgNickBuffer.getGraphics();
+			_g.drawImage(
+					GfxManager.imgNickBox, imgNickBuffer.getWidth()/2, 
+					imgNickBuffer.getHeight()/2,
+					Graphics.VCENTER | Graphics.HCENTER);
+			TextManager.drawSimpleText(_g, Font.FONT_SMALL, 
+					getPlayer().getName(), 
+					imgNickBuffer.getWidth()/2, 
+					imgNickBuffer.getHeight()/2, 
+					Graphics.VCENTER | Graphics.HCENTER);
+			
+			float scale=0.65f;
+			int nickX = pX + getWidth()/2 + imgNickBuffer.getWidth()/2;
+			int nickY = pY - getHeight()/4 - imgNickBuffer.getHeight()/2;
+			g.setImageSize(scale, scale);
+			g.setAlpha(180);
+			g.drawImage(imgNickBuffer, 
+					nickX - (int)((GfxManager.imgNickBox.getWidth()*(1f-scale))/2), 
+					nickY + (int)((GfxManager.imgNickBox.getHeight()*(1f-scale))/2), 
+					Graphics.VCENTER | Graphics.HCENTER);
+			g.setAlpha(255);
+			g.setImageSize(1f, 1f);
+		}
 	}
 	
 	public void changeState(int newState){

@@ -46,9 +46,9 @@ import com.luis.strategy.map.Troop;
 public class GameManager {
 	
 	//
+	private static final boolean MODE_3D = true;
 	private Image gameBuffer;
 	public float distorsion = 1.14f;
-	private static final boolean MODE_3D = false;
 	
 	public DataSender dataSender;
 	
@@ -751,9 +751,9 @@ public class GameManager {
 			 for(Army army: gameScene.getPlayerList().get(i).getArmyList()){
 				 boolean isSelected =  subState == SUB_STATE_ACTION_WAIT && 
 						 getSelectedArmy() != null && getSelectedArmy().getId() == army.getId();
-				 army.draw(gameBuffer.getGraphics(), worldConver, gameCamera,
+				 army.draw(gameBuffer.getGraphics(), worldConver, gameCamera, gameScene,
 						 getSelectedArmy()!= null && isSelected, i == gameScene.getPlayerIndex() && army.getState() == Army.STATE_ON,
-						 distorsion, distorsion, gameScene);
+						 distorsion, distorsion, GameState.getInstance().getGameMode());
 			 }
 		 }
 		 
