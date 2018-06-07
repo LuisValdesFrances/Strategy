@@ -369,6 +369,8 @@ public class GfxManager {
 		imgButtonMenuSmallFocus = Image.createImage("/button_menu_small_focus.png");
 		imgButtonOkRelease = Image.createImage("/ok_release.png");
 		imgButtonOkFocus = Image.createImage("/ok_focus.png");
+		imgButtonCancelRelease = Image.createImage("/cancel_release.png");
+		imgButtonCancelFocus = Image.createImage("/cancel_focus.png");
 		
 		imgButtonArrowBackRelease = Image.createImage("/arrow_back_release.png");
 		imgButtonArrowBackFocus = Image.createImage("/arrow_back_focus.png");
@@ -378,6 +380,7 @@ public class GfxManager {
 		imgButtonCrossBigFocus = Image.createImage("/cross_big_focus.png");
 		imgButtonSearchBigRelease = Image.createImage("/search_big_release.png");
 		imgButtonSearchBigFocus = Image.createImage("/search_big_focus.png");
+		imgButtonInvisible = Image.createImage("/button_invisible.png");
 		
 		imgButtonKeyboardRelease = Image.createImage("/button_keyboard_release.png");
 		imgButtonKeyboardFocus = Image.createImage("/button_keyboard_focus.png");
@@ -386,6 +389,8 @@ public class GfxManager {
 		
 		imgButtonInfoFocus = Image.createImage("/info_focus.png");
 		imgButtonInfoRelease = Image.createImage("/info_release.png");
+		
+		imgBigBox = Image.createImage("/big_box.png");
 		
 		imgMainBG = Image.createImage("/main_bg.png");
 		imgSwordBG = Image.createImage("/sword_bg.png");
@@ -419,6 +424,8 @@ public class GfxManager {
 		imgButtonMenuMediumFocus = null;
 		imgButtonMenuSmallRelease = null;
 		imgButtonMenuSmallFocus = null;
+		imgButtonCancelRelease = null;
+		imgButtonCancelFocus = null;
 		
 		imgButtonArrowBackRelease = null;
 		imgButtonArrowBackFocus = null;
@@ -426,6 +433,7 @@ public class GfxManager {
 		imgButtonArrowNextFocus = null;
 		imgButtonOkRelease = null;
 		imgButtonOkFocus = null;
+		imgButtonInvisible = null;
 		
 		imgButtonInfoRelease = null;
 		imgButtonInfoFocus = null;
@@ -444,6 +452,8 @@ public class GfxManager {
 		
 		imgButtonMapRelease = null;
 		imgButtonMapFocus = null;
+		
+		imgBigBox = null;
 		
 		imgInputBox = null;
 		imgTextPointer = null;

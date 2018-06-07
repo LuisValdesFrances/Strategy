@@ -1788,7 +1788,7 @@ public class GameManager {
 				NotificationBox.getInstance().addMessage(message);
 			}
 			if(enemy != null)
-				dataSender.addNotification(enemy.getPlayer().getName(), message);
+				dataSender.addNotification(enemy.getPlayer().getName(), message, 1);
 		}
 		if(attackerLost){
 			String message = RscManager.allText[RscManager.TXT_GAME_ATTACKER_LOSES];
@@ -1796,7 +1796,7 @@ public class GameManager {
 				NotificationBox.getInstance().addMessage(message);
 			}
 			if(enemy != null)
-				dataSender.addNotification(enemy.getPlayer().getName(), message);
+				dataSender.addNotification(enemy.getPlayer().getName(), message, 1);
 		}
 		if(attackerHasDestroyed){
 			String message = RscManager.allText[RscManager.TXT_GAME_ATTACKER_HAS_DESTROYED];
@@ -1804,7 +1804,7 @@ public class GameManager {
 				NotificationBox.getInstance().addMessage(message);
 			}
 			if(enemy != null)
-				dataSender.addNotification(enemy.getPlayer().getName(), message);
+				dataSender.addNotification(enemy.getPlayer().getName(), message, 1);
 		}
 		if(arrackerHasBeendestroyed){
 			String message = RscManager.allText[RscManager.TXT_GAME_ATTACKER_HAS_BEEN_DESTROYED];
@@ -1812,7 +1812,7 @@ public class GameManager {
 				NotificationBox.getInstance().addMessage(message);
 			}
 			if(enemy != null)
-				dataSender.addNotification(enemy.getPlayer().getName(), message);
+				dataSender.addNotification(enemy.getPlayer().getName(), message, 1);
 		}
 		
 		if(changeCapital){
@@ -1823,7 +1823,7 @@ public class GameManager {
 			
 			message = 
 					RscManager.allText[RscManager.TXT_GAME_CHANGE_HIS_CAPITAL];
-			dataSender.addNotification(defeatPlayer.getName(), message);
+			dataSender.addNotification(defeatPlayer.getName(), message, 1);
 			
 		}
 		
@@ -1835,7 +1835,14 @@ public class GameManager {
 			
 			message = 
 					RscManager.allText[RscManager.TXT_GAME_YOU_LOST_GAME];
-			dataSender.addNotification(defeatPlayer.getName(), message);
+			dataSender.addNotification(defeatPlayer.getName(), message, 0);
+			
+			//Notifico al resto de jugadores que uno ha perdido
+			for(Player player : gameScene.getPlayerList()){
+				if(player != null && player.getId() != getCurrentPlayer().getId()){
+					dataSender.addNotification(player.getName(), message, 1);
+				}
+			}
 		}
 		
 		if(showResultBox){

@@ -22,6 +22,7 @@ import com.luis.strategy.connection.OnlineInputOutput;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.data.DataKingdom;
+import com.luis.strategy.datapackage.scene.NotificationListData;
 import com.luis.strategy.datapackage.scene.PreSceneData;
 import com.luis.strategy.datapackage.scene.PreSceneListData;
 import com.luis.strategy.datapackage.scene.SceneData;
@@ -45,10 +46,7 @@ public class ModeMenu {
 	public static int iLanguageSelect;
 	public static int iSoundSelect;
 	
-	public static Image vImgPlanet;
-	public static Image vImgAstheroid;
-	public static Image vImgAstheroid2;
-	
+	private static Button btnCancel;
 	private static Button btnBack;
 	private static Button btnNext;
 	private static Button btnCampaign;
@@ -72,6 +70,7 @@ public class ModeMenu {
 	private static CreateUserBox createUserBox;
 	private static LoginBox loginBox;
 	private static SimpleBox gameVersionBox;
+	private static ListBox notificationBox;
 	
 	private static boolean createUsserSucces;
 	private static boolean loginUsserSucces;
@@ -955,12 +954,22 @@ public class ModeMenu {
 			 
 		 case Define.ST_MENU_ON_LINE_LIST_ALL_GAME:
 			 runMenuBG(Main.getDeltaSec());
-			 btnBack.update(UserInput.getInstance().getMultiTouchHandler());
-			 btnSearchGame.update(UserInput.getInstance().getMultiTouchHandler());
-			 btnCreateScene.update(UserInput.getInstance().getMultiTouchHandler());
-			 if(selectSceneBox != null){
-				 selectSceneBox .update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
+			 
+			 if(notificationBox != null){
+				 btnCancel.update(UserInput.getInstance().getMultiTouchHandler());
+				 notificationBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
+				 
 			 }
+			 
+			 if(notificationBox == null || (notificationBox != null && !notificationBox.isActive())){
+				 btnBack.update(UserInput.getInstance().getMultiTouchHandler());
+				 btnSearchGame.update(UserInput.getInstance().getMultiTouchHandler());
+				 btnCreateScene.update(UserInput.getInstance().getMultiTouchHandler());
+				 if(selectSceneBox != null){
+					 selectSceneBox .update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
+				 }
+			 }
+			 
 			 break;
 			 
 		 case Define.ST_MENU_ON_LINE_LIST_JOIN_GAME:
@@ -1115,6 +1124,12 @@ public class ModeMenu {
 			 if(selectSceneBox != null){
 				 selectSceneBox.draw(_g, GfxManager.imgBlackBG);
 			 }
+			 
+			 if(notificationBox != null){
+				 notificationBox.draw(_g, GfxManager.imgBlackBG);
+				 btnCancel.draw(_g, (int)notificationBox.getModPosX(), 0);
+			 }
+			 
 			 break;
 		 case Define.ST_MENU_ON_LINE_LIST_JOIN_GAME:
 			 drawMenuBG(_g);
@@ -1300,6 +1315,59 @@ public class ModeMenu {
 	
 	private static Thread sceneUpdate;
 	private static Thread preSceneUpdate;
+	
+	private static void updateNotificatons(){
+		
+		if(notificationBox == null || notificationBox != null && !notificationBox.isActive()){
+		
+			NotificationListData notificationListData = 
+					OnlineInputOutput.getInstance().reviceNotificationListData(
+							Main.getInstance().getActivity(),
+							GameState.getInstance().getName(), "0");
+			
+			if (notificationListData != null && 
+					notificationListData.getNotificationDataList().size() > 0) {
+				
+				
+				String[] notificationList = new String[notificationListData.getNotificationDataList().size()];
+				for (int i = 0; i < notificationListData.getNotificationDataList().size(); i++) {
+					notificationList[i] = notificationListData.getNotificationDataList().get(i).getMessage();
+				}
+				notificationBox = new ListBox(Define.SIZEX, Define.SIZEY,
+						GfxManager.imgBigBox,
+						GfxManager.imgButtonInvisible,
+						GfxManager.imgButtonInvisible, Define.SIZEX2,
+						Define.SIZEY2,
+						RscManager.allText[RscManager.TXT_NOTIFICATIONS],
+						notificationList, Font.FONT_MEDIUM,
+						Font.FONT_SMALL, -1, Main.FX_NEXT);
+				notificationBox.setDisabledList();
+				for (Button button : notificationBox.getBtnList()) {
+					button.setIgnoreAlpha(true);
+				}
+				notificationBox.start();
+	
+				btnCancel = new Button(
+						GfxManager.imgButtonCancelRelease,
+						GfxManager.imgButtonCancelFocus,
+						notificationBox.getX() - notificationBox.getWidth()/ 2, 
+						notificationBox.getY()- notificationBox.getHeight() / 2, 
+						null, -1) {
+					@Override
+					public void onButtonPressUp() {
+						setDisabled(true);
+						notificationBox.cancel();
+					}
+				};
+	
+				// Enviar notificaciones leidas
+				OnlineInputOutput.getInstance().sendDataPackage(
+						 Main.getInstance().getActivity(),
+						 OnlineInputOutput.URL_UPDATE_NOTIFICATION, notificationListData);
+				
+			}
+		}
+	}
 
 	private static void updateScenes() {
 		sceneUpdate = new Thread() {
@@ -1344,6 +1412,8 @@ public class ModeMenu {
 					selectSceneBox.refresh(sceneListData, RscManager.allText[RscManager.TXT_SELECT_MAP], textList);
 					selectSceneBox.setDisabledList(disableList);
 					}
+					
+					updateNotificatons();
 				}
 			}
 		};

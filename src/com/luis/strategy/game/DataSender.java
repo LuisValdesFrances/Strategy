@@ -18,8 +18,8 @@ public class DataSender{
 		notificationList = new ArrayList<Notification>();
 	}
 	
-	public void addNotification(String user, String message){
-		notificationList.add(new Notification(user, message));
+	public void addNotification(String user, String message, int type){
+		notificationList.add(new Notification(user, message, type));
 	}
 	
 	public String sendGameScene(GameScene gameScene, int state) {
@@ -58,13 +58,12 @@ public class DataSender{
 		for(Notification n : notificationList){
 			
 			String message = user + " - " + n.message;
+			String type = "" + n.type;
 			
 			OnlineInputOutput.getInstance().sendNotification(
 					Main.getInstance().getActivity(),
-					OnlineInputOutput.URL_CREATE_NOTIFICATION, 
-					""+GameState.getInstance().getSceneData().getId(), 
-					n.user, 
-					message);
+					"" + GameState.getInstance().getSceneData().getId(), 
+					n.user, message, type);
 		}
 		/*
 		Thread thread = new Thread(){
@@ -86,12 +85,14 @@ public class DataSender{
 	
 	class Notification{
 		
-		public Notification(String user, String message) {
+		public Notification(String user, String message, int type) {
 			super();
 			this.user = user;
 			this.message = message;
+			this.type = type;
 		}
 		String user;
 		String message;
+		int type;
 	}
 }

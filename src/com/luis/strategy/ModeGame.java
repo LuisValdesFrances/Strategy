@@ -127,16 +127,14 @@ public class ModeGame {
 				NotificationListData notificationListData = 
 						OnlineInputOutput.getInstance().reviceNotificationListData(
 								Main.getInstance().getActivity(),
-								GameState.getInstance().getName());// check
+								GameState.getInstance().getName(), "1");
 				Main.getInstance().stopClock();
 
 				if (notificationListData != null && 
 						notificationListData.getNotificationDataList().size() > 0) {
 
-					String[] notificationList = new String[notificationListData
-							.getNotificationDataList().size()];
-					for (int i = 0; i < notificationListData
-							.getNotificationDataList().size(); i++) {
+					String[] notificationList = new String[notificationListData.getNotificationDataList().size()];
+					for (int i = 0; i < notificationListData.getNotificationDataList().size(); i++) {
 						notificationList[i] = notificationListData.getNotificationDataList().get(i).getMessage();
 					}
 					notificationBox = new ListBox(Define.SIZEX, Define.SIZEY,
@@ -153,8 +151,9 @@ public class ModeGame {
 					}
 					notificationBox.start();
 
-					btnCancel = new Button(GfxManager.imgButtonCancelRelease,
+					btnCancel = new Button(
 							GfxManager.imgButtonCancelRelease,
+							GfxManager.imgButtonCancelFocus,
 							notificationBox.getX() - notificationBox.getWidth()/ 2, 
 							notificationBox.getY()- notificationBox.getHeight() / 2, 
 							null, -1) {
@@ -312,7 +311,7 @@ public class ModeGame {
 			gameManager.draw(_g);
 			if(notificationBox != null){
 				notificationBox.draw(_g, GfxManager.imgBlackBG);
-				btnCancel.draw(_g, (int)notificationBox.getModPosX(),0);
+				btnCancel.draw(_g, (int)notificationBox.getModPosX(), 0);
 			 }
 			break;
 		case Define.ST_GAME_RUN:

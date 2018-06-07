@@ -95,7 +95,7 @@ public class OnlineInputOutput {
 		return result;
 	}
 
-	public String sendNotification(Context context, String URL, String scene, String user, String message){
+	public String sendNotification(Context context, String scene, String user, String message, String type){
 		
 		if(!isOnline(context)){
 			return MSG_NO_CONNECTION;
@@ -106,13 +106,14 @@ public class OnlineInputOutput {
 		
 		try {
 			// open URL connection
-			URL url = new URL(SERVER_URL + URL);
+			URL url = new URL(SERVER_URL + URL_CREATE_NOTIFICATION);
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestProperty("Content-Type", "application/octet-stream");
 			connection.setRequestMethod("POST");
 			connection.setRequestProperty("scene", scene);
 			connection.setRequestProperty("user", user);
 			connection.setRequestProperty("message", message);
+			connection.setRequestProperty("type", type);
 			connection.setDoInput(true);
 			connection.setDoOutput(true);
 			connection.setUseCaches(false);
@@ -135,7 +136,7 @@ public class OnlineInputOutput {
 		return result;
 	}
 	
-	public NotificationListData reviceNotificationListData(Context context, String user){
+	public NotificationListData reviceNotificationListData(Context context, String user, String type){
 		
 		if(!isOnline(context)){
 			return null;
@@ -151,6 +152,7 @@ public class OnlineInputOutput {
 			connection.setRequestProperty("Content-Type", "application/octet-stream");
 			connection.setRequestMethod("GET");
 			connection.setRequestProperty("user", user);
+			connection.setRequestProperty("type", type);
 			connection.setDoInput(true);
 			connection.setDoOutput(false);
 			connection.setUseCaches(false);
