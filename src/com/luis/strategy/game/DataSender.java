@@ -18,8 +18,8 @@ public class DataSender{
 		notificationList = new ArrayList<Notification>();
 	}
 	
-	public void addNotification(String user, String message, int type){
-		notificationList.add(new Notification(user, message, type));
+	public void addNotification(String from, String to, int type, int message){
+		notificationList.add(new Notification(from, to, message, type));
 	}
 	
 	public String sendGameScene(GameScene gameScene, int state) {
@@ -35,46 +35,25 @@ public class DataSender{
 		return result;
 	}
 	
-	/*
-	public void sendNotification(final String user, final String message){
-		if(GameState.getInstance().getGameMode() == GameState.GAME_MODE_ONLINE){
-			Thread thread = new Thread(){
-				@Override
-				public void run(){
-					OnlineInputOutput.getInstance().sendNotifiation(
-							OnlineInputOutput.URL_CREATE_NOTIFICATION, 
-							""+GameState.getInstance().getSceneData().getId(), 
-							user, 
-							message);
-				}
-			};
-			thread.start();
-		}
-	}
-	*/
-	
-	
 	public void sendGameNotifications(String user){
 		for(Notification n : notificationList){
 			
-			String message = user + " - " + n.message;
 			String type = "" + n.type;
 			
 			OnlineInputOutput.getInstance().sendNotification(
 					Main.getInstance().getActivity(),
 					"" + GameState.getInstance().getSceneData().getId(), 
-					n.user, message, type);
+					n.from, n.to, ""+n.message, type);
 		}
 		/*
 		Thread thread = new Thread(){
 			@Override
 			public void run(){
 				for(Notification n : notificationList){
-				OnlineInputOutput.getInstance().sendNotifiation(
-						OnlineInputOutput.URL_CREATE_NOTIFICATION, 
-						""+GameState.getInstance().getSceneData().getId(), 
-						n.user, 
-						n.message);
+				OnlineInputOutput.getInstance().sendNotification(
+					Main.getInstance().getActivity(),
+					"" + GameState.getInstance().getSceneData().getId(), 
+					n.from, n.to, ""+n.message, type);
 			}
 			}
 		};
@@ -85,14 +64,16 @@ public class DataSender{
 	
 	class Notification{
 		
-		public Notification(String user, String message, int type) {
+		public Notification(String from, String to, int message, int type) {
 			super();
-			this.user = user;
+			this.from = from;
+			this.to = to;
 			this.message = message;
 			this.type = type;
 		}
-		String user;
-		String message;
+		String from;
+		String to;
+		int message;
 		int type;
 	}
 }

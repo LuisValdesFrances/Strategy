@@ -1331,7 +1331,23 @@ public class ModeMenu {
 				
 				String[] notificationList = new String[notificationListData.getNotificationDataList().size()];
 				for (int i = 0; i < notificationListData.getNotificationDataList().size(); i++) {
-					notificationList[i] = notificationListData.getNotificationDataList().get(i).getMessage();
+					
+					String msg = "";
+					switch(notificationListData.getNotificationDataList().get(i).getMessage()){
+					case OnlineInputOutput.CODE_NOTIFICATION_YOU_LOST_GAME:
+						msg = RscManager.allText[RscManager.TXT_NOTIFICATION_YOU_LOST_GAME];
+						break;
+					case OnlineInputOutput.CODE_NOTIFICATION_LOST_GAME:
+						msg = 
+								notificationListData.getNotificationDataList().get(i).getFrom() + 
+								" " +
+								RscManager.allText[RscManager.TXT_NOTIFICATION_LOST_GAME];
+						break;
+					default:
+						msg = "Notification error default";
+						break;
+					}
+					notificationList[i] = msg;
 				}
 				notificationBox = new ListBox(Define.SIZEX, Define.SIZEY,
 						GfxManager.imgBigBox,

@@ -136,7 +136,42 @@ public class ModeGame {
 
 					String[] notificationList = new String[notificationListData.getNotificationDataList().size()];
 					for (int i = 0; i < notificationListData.getNotificationDataList().size(); i++) {
-						notificationList[i] = notificationListData.getNotificationDataList().get(i).getMessage();
+						
+						
+						
+						String msg = "";
+						switch(notificationListData.getNotificationDataList().get(i).getMessage()){
+						case OnlineInputOutput.CODE_NOTIFICATION_YOUR_ARMY_DEFEATED:
+							msg = 
+									notificationListData.getNotificationDataList().get(i).getFrom() + "-" +
+									RscManager.allText[RscManager.TXT_NOTIFICATION_YOUR_ARMY_DEFEATED];
+							break;
+						case OnlineInputOutput.CODE_NOTIFICATION_YOUR_ARMY_WON:
+							msg = 
+									notificationListData.getNotificationDataList().get(i).getFrom() + "-" +
+									RscManager.allText[RscManager.TXT_NOTIFICATION_YOUR_ARMY_WON];
+							break;
+						case OnlineInputOutput.CODE_NOTIFICATION_YOUR_ARMY_DESTROYED:
+							msg = 
+									notificationListData.getNotificationDataList().get(i).getFrom() + "-" +
+									RscManager.allText[RscManager.TXT_NOTIFICATION_YOUR_ARMY_DESTROYED];
+							break;
+						case OnlineInputOutput.CODE_NOTIFICATION_YOUR_ARMY_DESTROYED_ENEMY:
+							msg = 
+									notificationListData.getNotificationDataList().get(i).getFrom() + "-" +
+									RscManager.allText[RscManager.TXT_NOTIFICATION_YOUR_ARMY_DESTROYED_ENEMY];
+							break;
+						case OnlineInputOutput.CODE_NOTIFICATION_CHANGE_CAPITAL:
+							msg = 
+									notificationListData.getNotificationDataList().get(i).getFrom() + " " +
+									RscManager.allText[RscManager.TXT_NOTIFICATION_CHANGE_CAPITAL];
+							break;
+						default:
+							msg = "Notification error default";
+							break;
+						}
+						notificationList[i] = msg;
+						
 					}
 					notificationBox = new ListBox(Define.SIZEX, Define.SIZEY,
 							GfxManager.imgBigBox,

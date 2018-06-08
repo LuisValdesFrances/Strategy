@@ -1787,32 +1787,47 @@ public class GameManager {
 			if(!showResultBox){
 				NotificationBox.getInstance().addMessage(message);
 			}
-			if(enemy != null)
-				dataSender.addNotification(enemy.getPlayer().getName(), message, 1);
+			if(enemy != null){
+				dataSender.addNotification(
+						getCurrentPlayer().getName(), enemy.getPlayer().getName(), 1, 
+						OnlineInputOutput.CODE_NOTIFICATION_YOUR_ARMY_DEFEATED);
+			}
 		}
+		
 		if(attackerLost){
 			String message = RscManager.allText[RscManager.TXT_GAME_ATTACKER_LOSES];
 			if(!showResultBox){
 				NotificationBox.getInstance().addMessage(message);
 			}
-			if(enemy != null)
-				dataSender.addNotification(enemy.getPlayer().getName(), message, 1);
+			if(enemy != null){
+				dataSender.addNotification(
+						getCurrentPlayer().getName(), enemy.getPlayer().getName(), 1, 
+						OnlineInputOutput.CODE_NOTIFICATION_YOUR_ARMY_WON);
+			}
 		}
+		
 		if(attackerHasDestroyed){
 			String message = RscManager.allText[RscManager.TXT_GAME_ATTACKER_HAS_DESTROYED];
 			if(!showResultBox){
 				NotificationBox.getInstance().addMessage(message);
 			}
-			if(enemy != null)
-				dataSender.addNotification(enemy.getPlayer().getName(), message, 1);
+			if(enemy != null){
+				dataSender.addNotification(
+						getCurrentPlayer().getName(), enemy.getPlayer().getName(), 1, 
+						OnlineInputOutput.CODE_NOTIFICATION_YOUR_ARMY_DESTROYED);
+			}
 		}
+		
 		if(arrackerHasBeendestroyed){
 			String message = RscManager.allText[RscManager.TXT_GAME_ATTACKER_HAS_BEEN_DESTROYED];
 			if(!showResultBox){
 				NotificationBox.getInstance().addMessage(message);
 			}
-			if(enemy != null)
-				dataSender.addNotification(enemy.getPlayer().getName(), message, 1);
+			if(enemy != null){
+				dataSender.addNotification(
+						getCurrentPlayer().getName(), enemy.getPlayer().getName(), 1,
+						OnlineInputOutput.CODE_NOTIFICATION_YOUR_ARMY_DESTROYED_ENEMY);
+			}
 		}
 		
 		if(changeCapital){
@@ -1821,10 +1836,16 @@ public class GameManager {
 					RscManager.allText[RscManager.TXT_GAME_CHANGE_HIS_CAPITAL];
 			NotificationBox.getInstance().addMessage(message);
 			
-			message = 
-					RscManager.allText[RscManager.TXT_GAME_CHANGE_HIS_CAPITAL];
-			dataSender.addNotification(defeatPlayer.getName(), message, 1);
-			
+			//Notifico al resto de jugadores que uno ha cambia de capital (Pongo como remitente al player afectado)
+			if(enemy != null){
+				for(Player player : gameScene.getPlayerList()){
+					if(player != null && player.getId() != getCurrentPlayer().getId()){
+						dataSender.addNotification(
+							enemy.getPlayer().getName(), player.getName(), 1, 
+							OnlineInputOutput.CODE_NOTIFICATION_CHANGE_CAPITAL);
+					}
+				}
+			}
 		}
 		
 		if(deletePlayer){
@@ -1833,14 +1854,18 @@ public class GameManager {
 					RscManager.allText[RscManager.TXT_GAME_LOST_GAME];
 			NotificationBox.getInstance().addMessage(message);
 			
-			message = 
-					RscManager.allText[RscManager.TXT_GAME_YOU_LOST_GAME];
-			dataSender.addNotification(defeatPlayer.getName(), message, 0);
+			dataSender.addNotification(
+					getCurrentPlayer().getName(), defeatPlayer.getName(), 0, 
+					OnlineInputOutput.CODE_NOTIFICATION_YOU_LOST_GAME);
 			
-			//Notifico al resto de jugadores que uno ha perdido
-			for(Player player : gameScene.getPlayerList()){
-				if(player != null && player.getId() != getCurrentPlayer().getId()){
-					dataSender.addNotification(player.getName(), message, 1);
+			//Notifico al resto de jugadores que uno ha perdido (Pongo como remitente al player afectado)
+			if(enemy != null){
+				for(Player player : gameScene.getPlayerList()){
+					if(player != null && player.getId() != getCurrentPlayer().getId()){
+						dataSender.addNotification(
+								enemy.getPlayer().getName(), player.getName(), 1, 
+								OnlineInputOutput.CODE_NOTIFICATION_LOST_GAME);
+					}
 				}
 			}
 		}

@@ -1,4 +1,4 @@
-
+﻿
 La guerra es el arte de destruir a los hombres, la política es el arte de engañarlos.
 Tras la guerra, paz; de la paz, abundancia; de la abundancia, vicio; del vicio, la guerra.
 La guerra es un gran esfuerzo de todos hacia la paz.
@@ -104,3 +104,10 @@ cambia su capital
 por
 monedas
 ?
+You lost the game.
+lost the game.
+Your army has been defeated.
+Your army has won.
+Your army has been destroyed.
+Your army has destroyed to enemy.
+change his capital.

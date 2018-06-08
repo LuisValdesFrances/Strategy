@@ -129,7 +129,24 @@ public class RscManager {
 	public static final int TXT_GAME_COINS= TXT_GAME_FOR+1;
 	public static final int TXT_GAME_INTERROGATION_ICON= TXT_GAME_COINS+1;
 	
-	public static final int TOTAL_LINES_TXT = TXT_GAME_INTERROGATION_ICON;
+	//Notificaciones online
+	public static final int TXT_NOTIFICATION_YOU_LOST_GAME= TXT_GAME_INTERROGATION_ICON+1; //Code 0
+	public static final int TXT_NOTIFICATION_LOST_GAME= TXT_NOTIFICATION_YOU_LOST_GAME+1;//Code 1
+	public static final int TXT_NOTIFICATION_YOUR_ARMY_DEFEATED= TXT_NOTIFICATION_LOST_GAME+1;//Code 2
+	public static final int TXT_NOTIFICATION_YOUR_ARMY_WON= TXT_NOTIFICATION_YOUR_ARMY_DEFEATED+1;//Code 3
+	public static final int TXT_NOTIFICATION_YOUR_ARMY_DESTROYED= TXT_NOTIFICATION_YOUR_ARMY_WON+1;//Code 4
+	public static final int TXT_NOTIFICATION_YOUR_ARMY_DESTROYED_ENEMY= TXT_NOTIFICATION_YOUR_ARMY_DESTROYED+1;//Code 5
+	public static final int TXT_NOTIFICATION_CHANGE_CAPITAL= TXT_NOTIFICATION_YOUR_ARMY_DESTROYED_ENEMY+1;//Code 5
+	
+	
+	//You lost the game
+	//PlayerX lost the game
+	//PlayerX You army has been defeated
+	//PlayerX You army has been the winner
+	//PlayerX You army has been destroyed
+	//PlayerX You army has destroyed to enemy
+	
+	public static final int TOTAL_LINES_TXT = TXT_NOTIFICATION_CHANGE_CAPITAL;
 	
 	
 	public static void loadLanguage(int language) {

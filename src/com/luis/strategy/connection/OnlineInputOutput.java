@@ -42,6 +42,15 @@ public class OnlineInputOutput {
 	
 	public static final String MSG_NO_CONNECTION = "No connection";
 	
+	//Notifications code
+	public static final int CODE_NOTIFICATION_YOU_LOST_GAME= 0;
+	public static final int CODE_NOTIFICATION_LOST_GAME= CODE_NOTIFICATION_YOU_LOST_GAME+1;
+	public static final int CODE_NOTIFICATION_YOUR_ARMY_DEFEATED= CODE_NOTIFICATION_LOST_GAME+1;
+	public static final int CODE_NOTIFICATION_YOUR_ARMY_WON= CODE_NOTIFICATION_YOUR_ARMY_DEFEATED+1;
+	public static final int CODE_NOTIFICATION_YOUR_ARMY_DESTROYED= CODE_NOTIFICATION_YOUR_ARMY_WON+1;
+	public static final int CODE_NOTIFICATION_YOUR_ARMY_DESTROYED_ENEMY= CODE_NOTIFICATION_YOUR_ARMY_DESTROYED+1;
+	public static final int CODE_NOTIFICATION_CHANGE_CAPITAL= CODE_NOTIFICATION_YOUR_ARMY_DESTROYED_ENEMY+1;
+	
 	public static OnlineInputOutput getInstance(){
 		if(instance == null){
 			instance = new OnlineInputOutput();
@@ -95,7 +104,7 @@ public class OnlineInputOutput {
 		return result;
 	}
 
-	public String sendNotification(Context context, String scene, String user, String message, String type){
+	public String sendNotification(Context context, String scene, String from, String to, String message, String type){
 		
 		if(!isOnline(context)){
 			return MSG_NO_CONNECTION;
@@ -111,7 +120,8 @@ public class OnlineInputOutput {
 			connection.setRequestProperty("Content-Type", "application/octet-stream");
 			connection.setRequestMethod("POST");
 			connection.setRequestProperty("scene", scene);
-			connection.setRequestProperty("user", user);
+			connection.setRequestProperty("from", from);
+			connection.setRequestProperty("to", to);
 			connection.setRequestProperty("message", message);
 			connection.setRequestProperty("type", type);
 			connection.setDoInput(true);
@@ -136,7 +146,7 @@ public class OnlineInputOutput {
 		return result;
 	}
 	
-	public NotificationListData reviceNotificationListData(Context context, String scene, String user, String type){
+	public NotificationListData reviceNotificationListData(Context context, String scene, String to, String type){
 		
 		if(!isOnline(context)){
 			return null;
@@ -152,7 +162,7 @@ public class OnlineInputOutput {
 			connection.setRequestProperty("Content-Type", "application/octet-stream");
 			connection.setRequestMethod("GET");
 			connection.setRequestProperty("scene", scene);
-			connection.setRequestProperty("user", user);
+			connection.setRequestProperty("to", to);
 			connection.setRequestProperty("type", type);
 			connection.setDoInput(true);
 			connection.setDoOutput(false);

@@ -1,4 +1,4 @@
-
+﻿
 War is the art of destroying men, politics is the art of deceiving them.
 After the war, peace; of peace, abundance; of abundance, vice; of vice, war.
 War is a great effort of all towards peace.
@@ -97,10 +97,17 @@ ECONOMY
 Earning
 Salary
 Cost of troops exceedes your tresaure. Discard troops.
-El número total de tropas excede el máximo. Se despediran las sobrantes.
+The total number of troops exceeds the maximum. The leftovers will be dismissed.
 is the winner!
 change his capital
 Do you want discard this troop of
 for
 coins
 ?
+You lost the game.
+lost the game.
+Your army has been defeated.
+Your army has won.
+Your army has been destroyed.
+Your army has destroyed to enemy.
+change his capital.
