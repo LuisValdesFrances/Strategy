@@ -65,7 +65,7 @@ public class ModeGame {
 			SndManager.getInstance().stopMusic();
 			
 			btnPause = new Button(
-					GfxManager.imgButtonPauseRelease, 
+					GfxManager.imgButtonPauseRelease,
 					GfxManager.imgButtonPauseFocus, 
 					Define.SIZEX - Define.SIZEX64 - GfxManager.imgButtonPauseRelease.getWidth()/2, 
 					Define.SIZEY8,
