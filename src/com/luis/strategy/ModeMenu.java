@@ -4,6 +4,8 @@ import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.util.Locale;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 
 import com.luis.lgameengine.gameutils.Settings;
@@ -60,7 +62,10 @@ public class ModeMenu {
 	private static Button btnLogin;
 	private static Button btnSearchGame;
 	private static Button btnCreateScene;
+	private static Button btnInfo;
+	
 	private static Button btnAbout;
+	private static Button btnHelp;
 	
 	private static ListBox selectMapBox;
 	private static ListBox selectPreSceneBox;
@@ -133,9 +138,12 @@ public class ModeMenu {
 					case Define.ST_MENU_SELECT_GAME:
 					case Define.ST_MENU_CAMPAING:
 					case Define.ST_MENU_ON_LINE_START:
-					case Define.ST_MENU_ABOUT:
+					case Define.ST_MENU_INFO:
 					case Define.ST_MENU_OPTIONS:
 						Main.changeState(Define.ST_MENU_MAIN, false);
+						break;
+					case Define.ST_MENU_ABOUT:
+						Main.changeState(Define.ST_MENU_INFO, false);
 						break;
 					case Define.ST_MENU_SELECT_MAP:
 						selectMapBox.cancel();
@@ -182,7 +190,7 @@ public class ModeMenu {
 				};
 			};
 			
-			btnAbout = new Button(GfxManager.imgButtonInfoRelease, GfxManager.imgButtonInfoFocus,
+			btnInfo = new Button(GfxManager.imgButtonInfoRelease, GfxManager.imgButtonInfoFocus,
 					Define.SIZEX32+GfxManager.imgButtonInfoRelease.getWidth()/2,
 					Define.SIZEY32+GfxManager.imgButtonArrowBackRelease.getHeight()/2,
 					null, -1){
@@ -193,7 +201,7 @@ public class ModeMenu {
 				public void onButtonPressUp() {
 					SndManager.getInstance().playFX(Main.FX_NEXT, 0);
 					reset();
-					Main.changeState(Define.ST_MENU_ABOUT, false);
+					Main.changeState(Define.ST_MENU_INFO, false);
 				};
 			};
 			
@@ -269,7 +277,47 @@ public class ModeMenu {
 			break;
 		case Define. ST_MENU_OPTIONS:
 			break;
-		case Define. ST_MENU_MORE:
+		case Define.ST_MENU_INFO:
+			
+			btnAbout = new Button(
+					GfxManager.imgButtonMenuBigRelease, 
+					GfxManager.imgButtonMenuBigFocus, 
+					Define.SIZEX-(int)(GfxManager.imgButtonMenuBigRelease.getWidth()/2)-Define.SIZEY64, 
+					Define.SIZEY-Define.SIZEY64 -(int)GfxManager.imgButtonMenuBigRelease.getHeight()/2,
+					RscManager.allText[RscManager.TXT_ABOUT], Font.FONT_MEDIUM){
+				@Override
+				public void onButtonPressDown(){}
+				
+				@Override
+				public void onButtonPressUp(){
+					SndManager.getInstance().playFX(Main.FX_NEXT, 0);
+					reset();
+					Main.changeState(Define.ST_MENU_ABOUT, false);
+				}
+			};
+			
+			btnHelp = new Button(
+					GfxManager.imgButtonMenuBigRelease, 
+					GfxManager.imgButtonMenuBigFocus, 
+					Define.SIZEX-(int)(GfxManager.imgButtonMenuBigRelease.getWidth()/2)-Define.SIZEY64, 
+					Define.SIZEY-Define.SIZEY64 -(int)(GfxManager.imgButtonMenuBigRelease.getHeight()*1.5),
+					RscManager.allText[RscManager.TXT_HELP], Font.FONT_MEDIUM){
+				@Override
+				public void onButtonPressDown(){}
+				
+				@Override
+				public void onButtonPressUp(){
+					SndManager.getInstance().playFX(Main.FX_NEXT, 0);
+					reset();
+					
+					String url = "https://www.youtube.com/watch?v=CpSBnGPn0r0";
+					Intent i = new Intent(Intent.ACTION_VIEW);
+					i.setData(Uri.parse(url));
+					Main.getInstance().getActivity().startActivity(i);
+				}
+			};
+			
+			break;
 		case Define. ST_MENU_EXIT:
 		case Define. ST_MENU_HELP:
 		case Define. ST_MENU_ABOUT:
@@ -368,7 +416,6 @@ public class ModeMenu {
 					@Override
 					public void onButtonPressUp(){
 						SndManager.getInstance().playFX(Main.FX_NEXT, 0);
-						
 						
 						GameState.getInstance().init(GameState.GAME_MODE_PLAY_AND_PASS, sceneData);
 						String msg = RscManager.allText[RscManager.TXT_GAME_LOADED];
@@ -867,12 +914,14 @@ public class ModeMenu {
 			runMenuBG(Main.getDeltaSec());
 			btnCampaign.update(UserInput.getInstance().getMultiTouchHandler());
 			btnMultiPlayer.update(UserInput.getInstance().getMultiTouchHandler());
-			btnAbout.update(UserInput.getInstance().getMultiTouchHandler());
+			btnInfo.update(UserInput.getInstance().getMultiTouchHandler());
 			break;
 			
-		case Define.ST_MENU_MORE:
+		case Define.ST_MENU_INFO:
 			runMenuBG(Main.getDeltaSec());
 			btnBack.update(UserInput.getInstance().getMultiTouchHandler());
+			btnHelp.update(UserInput.getInstance().getMultiTouchHandler());
+			btnAbout.update(UserInput.getInstance().getMultiTouchHandler());
 			break;
 			
 		case Define.ST_MENU_OPTIONS:
@@ -1039,7 +1088,7 @@ public class ModeMenu {
 			drawMenuBG(_g);
 			btnCampaign.draw(_g, 0, 0);
 			btnMultiPlayer.draw(_g, 0, 0);
-			btnAbout.draw(_g, 0, 0);
+			btnInfo.draw(_g, 0, 0);
 			_g.setAlpha(alpha);
 			_g.drawImage(GfxManager.imgBlackBG, 0, 0, Graphics.TOP | Graphics.LEFT);
 			_g.setAlpha(255);
@@ -1049,8 +1098,11 @@ public class ModeMenu {
 			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 			break;
 			
-		case Define.ST_MENU_MORE:
-			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+		case Define.ST_MENU_INFO:
+			drawMenuBG(_g);
+			btnBack.draw(_g, 0, 0);
+			btnHelp.draw(_g, 0, 0);
+			btnAbout.draw(_g, 0, 0);
 			break;
 			
 		case Define.ST_MENU_HELP:
@@ -1336,12 +1388,6 @@ public class ModeMenu {
 					switch(notificationListData.getNotificationDataList().get(i).getMessage()){
 					case OnlineInputOutput.CODE_NOTIFICATION_YOU_LOST_GAME:
 						msg = RscManager.allText[RscManager.TXT_NOTIFICATION_YOU_LOST_GAME];
-						break;
-					case OnlineInputOutput.CODE_NOTIFICATION_LOST_GAME:
-						msg = 
-								notificationListData.getNotificationDataList().get(i).getFrom() + 
-								" " +
-								RscManager.allText[RscManager.TXT_NOTIFICATION_LOST_GAME];
 						break;
 					default:
 						msg = "Notification error default";

@@ -33,8 +33,8 @@ Vibracion Off
 Quieres sair?
 No
 Si
-Ayuda
-Acerca de
+AYUDA
+ACERCA DE
 Texto help.
 Diseñado y desarrollado: Luis Valdes. @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Musica y FX: Francisco Hoyos. @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ All right reserved.
 SELECIONA MAPA
@@ -63,7 +63,7 @@ Conectado con
 Te has unido al juego
 Juego cargado
 Enviando datos de la partida...
-Tu versión del juego esta obsoleta. Por favor, descarga la ultima version del juego.
+Tu versión del juego esta obsoleta. Por favor, descarga la ultima version.
 TURNO:
 Llano
 Bosque

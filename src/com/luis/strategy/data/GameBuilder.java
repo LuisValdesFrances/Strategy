@@ -183,6 +183,7 @@ public class GameBuilder {
 		
 		SceneData sceneData = GameState.getInstance().getSceneData();
 		
+		sceneData.setMap(GameState.getInstance().getGameScene().getMap());
 		sceneData.setPlayerIndex(GameState.getInstance().getGameScene().getPlayerIndex());
 		sceneData.setNextPlayer(GameState.getInstance().getGameScene().getPlayerList().get(sceneData.getPlayerIndex()).getName());
 		sceneData.setTurnCount(GameState.getInstance().getGameScene().getTurnCount());

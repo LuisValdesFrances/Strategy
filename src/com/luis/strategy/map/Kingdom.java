@@ -3,6 +3,8 @@ package com.luis.strategy.map;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.luis.lgameengine.gui.Button;
+import com.luis.lgameengine.implementation.sound.SndManager;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.constants.GameParams;
 
@@ -44,6 +46,24 @@ public class Kingdom extends MapObject{
 		totalStates = terrainList.size();
 		
 		target = -1;
+		
+		this.button = new Button(width, height, -1, -1){
+			@Override
+			public void onButtonPressDown(){};
+			@Override
+			public void onButtonPressUp() {
+				reset();
+				if(target != -1){
+					select = true;
+				}
+			};
+			
+			@Override
+			public void reset(){
+				super.reset();
+				select = false;
+			}
+		};
 	}
 	
 	public boolean hasTerrain(int type){

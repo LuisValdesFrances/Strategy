@@ -166,6 +166,11 @@ public class ModeGame {
 									notificationListData.getNotificationDataList().get(i).getFrom() + " " +
 									RscManager.allText[RscManager.TXT_NOTIFICATION_CHANGE_CAPITAL];
 							break;
+						case OnlineInputOutput.CODE_NOTIFICATION_LOST_GAME:
+							msg = 
+									notificationListData.getNotificationDataList().get(i).getFrom() + " " +
+									RscManager.allText[RscManager.TXT_NOTIFICATION_LOST_GAME];
+							break;
 						default:
 							msg = "Notification error default";
 							break;
@@ -252,8 +257,7 @@ public class ModeGame {
 			GameState.getInstance().setSceneData(new SceneData());
 			Main.getInstance().getActivity();
 			FileOutputStream fos = Main.getInstance().getActivity().
-					openFileOutput(Define.DATA_PASS_AND_PLAY, 
-					Context.MODE_PRIVATE);
+					openFileOutput(Define.DATA_PASS_AND_PLAY, Context.MODE_PRIVATE);
 			ObjectOutputStream os = new ObjectOutputStream(fos);
 			os.writeObject(GameBuilder.getInstance().buildSceneData(1));
 			os.close();

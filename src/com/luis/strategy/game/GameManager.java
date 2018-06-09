@@ -781,8 +781,8 @@ public class GameManager {
 		
 		if(ModeGame.showDebugInfo){
 			for(Kingdom k : gameScene.getKingdomList())
-				TextManager.drawSimpleText(g, Font.FONT_MEDIUM, 
-						"ST:" + k.getState(),
+				TextManager.drawSimpleText(g, Font.FONT_SMALL, 
+						"ST/TA:" + k.getState() + "/" + k.getTarget(),
 					worldConver.getConversionDrawX(gameCamera.getPosX(), k.getAbsoluteX()),
 					worldConver.getConversionDrawY(gameCamera.getPosY(), k.getAbsoluteY()),
 					Graphics.BOTTOM | Graphics.RIGHT);
@@ -944,6 +944,12 @@ public class GameManager {
 		}
 	}
 	
+	private void cleanTargetKingdom(){
+		for(Kingdom kingdom : gameScene.getKingdomList()){
+			kingdom.setTarget(-1);
+		}
+	}
+	
 	private void insertTargetUnMap(Army army){
 		
 		//Quito todos lo indicadores de target
@@ -1000,6 +1006,7 @@ public class GameManager {
 	private void changeState(int newState){
 		UserInput.getInstance().getMultiTouchHandler().resetTouch();
 		cleanArmyAction();
+		
 		gameScene.resetKingdoms();
 		btnNext.setDisabled(true);
 		btnCancel.setDisabled(true);
@@ -1129,11 +1136,11 @@ public class GameManager {
 	}
 	
 	private void changeSubState(int newSubState){
+		
 		lastSubState = subState;
 		btnNext.setDisabled(true);
 		btnCancel.setDisabled(true);
 		btnMap.setDisabled(true);
-		
 		subState = newSubState;
 		
 		switch(state){
@@ -1147,6 +1154,7 @@ public class GameManager {
 			
 			switch(subState){
 			case SUB_STATE_ACTION_IA_WAIT_START:
+				cleanTargetKingdom();
 				IAWaitCount = 0;
 				//Solo espero si IA va a dar una torta
 				if(!(getSelectedArmy() != null && 
@@ -1159,6 +1167,7 @@ public class GameManager {
 				}
 				break;
 			case SUB_STATE_ACTION_WAIT:
+				cleanTargetKingdom();
 				gameScene.resetKingdoms();
 				btnFlagHelmet.hide();
 				btnFlagCastle.hide();
@@ -1200,11 +1209,13 @@ public class GameManager {
 				break;
 				
 			case SUB_STATE_ACTION_EXCEED:
+				cleanTargetKingdom();
 				btnFlagHelmet.hide();
 				btnFlagCastle.hide();
 				troopExceedBox.start(null, RscManager.allText[RscManager.TXT_GAME_EXCEED_TROOPS]);
 			break;
 			case SUB_STATE_ACTION_MOVE:
+				cleanTargetKingdom();
 				btnFlagHelmet.hide();
 				btnFlagCastle.hide();
 				SndManager.getInstance().playFX(Main.FX_MARCH, 0);
@@ -1225,32 +1236,39 @@ public class GameManager {
 				
 				break;
 			case SUB_STATE_ACTION_RESOLVE_MOVE:
+				cleanTargetKingdom();
 				gameScene.resetKingdoms();
 				resolveMovement();
 				break;
 			case SUB_STATE_ACTION_ANIM_ATACK:
+				cleanTargetKingdom();
 				gameScene.resetKingdoms();
 				getSelectedArmy().changeState(Army.STATE_ATACK);
 				break;
 			case SUB_STATE_ACTION_COMBAT:
+				cleanTargetKingdom();
 				gameScene.resetKingdoms();
 				btnFlagHelmet.hide();
 				btnFlagCastle.hide();
 				//getSelectedArmy().changeState(Army.STATE_OFF);//OJO
 				break;
 			case SUB_STATE_ACTION_RESULT:
+				cleanTargetKingdom();
 				gameScene.resetKingdoms();
 				break;
 			case SUB_STATE_ACTION_ANIM_DEAD:
+				cleanTargetKingdom();
 				gameScene.resetKingdoms();
 				getDefeatArmy().changeState(Army.STATE_DEAD);
 				break;
 			case SUB_STATE_ACTION_CONQUEST:
+				cleanTargetKingdom();
 				gameScene.resetKingdoms();
 				getSelectedArmy().changeState(Army.STATE_OFF);
 				startConquest(getSelectedArmy().getKingdom(), getSelectedArmy().getPlayer().getFlag());
 				break;
 			case SUB_STATE_ACTION_SCAPE:
+				cleanTargetKingdom();
 				gameScene.resetKingdoms();
 				//Si el que huye no es el que ataca
 				if(getDefeatArmy().getId() != getSelectedArmy().getId()){
@@ -1263,15 +1281,18 @@ public class GameManager {
 				getDefeatArmy().changeState(Army.STATE_MOVE);
 				break;
 			case SUB_STATE_ACTION_RESOLVE_SCAPE:
+				cleanTargetKingdom();
 				gameScene.resetKingdoms();
 				resolveScape();
 				break;
 			case SUB_STATE_ARMY_MANAGEMENT:
 			case SUB_STATE_CITY_MANAGEMENT:
 			case SUB_STATE_MAP_MANAGEMENT:
+				cleanTargetKingdom();
 				gameScene.resetKingdoms();
 				break;
 			case SUB_STATE_ACTION_IA_WAIT_END:
+				cleanTargetKingdom();
 				gameScene.resetKingdoms();
 				IAWaitCount = 0;
 				break;
@@ -1746,7 +1767,7 @@ public class GameManager {
 			//Si el atacante gana, le quita el territorio al defensor
 			if(getSelectedArmy() != null && result > 1){
 				getSelectedArmy().getKingdom().setState(0);//control
-				getSelectedArmy().getKingdom().setTarget(-1);
+				//getSelectedArmy().getKingdom().setTarget(-1);
 			}
 		}
 		
@@ -1758,13 +1779,13 @@ public class GameManager {
 				int totalStates = getSelectedArmy().getKingdom().getTotalStates();
 				if(newState < totalStates){
 					getSelectedArmy().getKingdom().setState(newState);
-					getSelectedArmy().getKingdom().setTarget(-1);
+					//getSelectedArmy().getKingdom().setTarget(-1);
 				}else{//Conquista
 					startConquest = true;
 					defeatPlayer = getPlayerByKingdom(getSelectedArmy().getKingdom());
 					
 					getSelectedArmy().getKingdom().setState(0);
-					getSelectedArmy().getKingdom().setTarget(-1);
+					//getSelectedArmy().getKingdom().setTarget(-1);
 					addNewConquest(getCurrentPlayer(), getSelectedArmy().getKingdom());
 					
 					//Cambio de capital
@@ -1939,7 +1960,7 @@ public class GameManager {
 		//getSelectedArmy().setX(getSelectedArmy().getKingdom().getX());
 		//getSelectedArmy().setY(getSelectedArmy().getKingdom().getY());
 		
-		getSelectedArmy().getKingdom().setTarget(-1);
+		//getSelectedArmy().getKingdom().setTarget(-1);
 		getSelectedArmy().changeState(Army.STATE_OFF);
 		
 		
@@ -2026,7 +2047,7 @@ public class GameManager {
 			}else{
 				//Si el territorio es mio
 				if(getCurrentPlayer().hasKingom(getSelectedArmy().getKingdom())){
-					getSelectedArmy().getKingdom().setTarget(-1);
+					//getSelectedArmy().getKingdom().setTarget(-1);
 					getSelectedArmy().changeState(Army.STATE_OFF);
 					if(getCurrentPlayer().getActionIA() != null){
 						changeSubState(SUB_STATE_ACTION_IA_WAIT_START);
@@ -2045,7 +2066,7 @@ public class GameManager {
 									getSelectedArmy(),
 									null);
 						}else{
-							getSelectedArmy().getKingdom().setTarget(-1);
+							//getSelectedArmy().getKingdom().setTarget(-1);
 							getSelectedArmy().changeState(Army.STATE_OFF);
 							changeSubState(SUB_STATE_ACTION_IA_WAIT_START);
 						}
@@ -2066,9 +2087,7 @@ public class GameManager {
 	}
 	
 	private void resolveScape(){
-		//defeat.setX(defeat.getKingdom().getX());
-		//defeat.setY(defeat.getKingdom().getY());
-		getDefeatArmy().getKingdom().setTarget(-1);
+		//getDefeatArmy().getKingdom().setTarget(-1);
 		
 		//Si hay un ejercito amigo, se unen
 		//Si tengo un ejercito en la zona y no soy yo ese ejercito me uno

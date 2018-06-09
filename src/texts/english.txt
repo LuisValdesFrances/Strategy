@@ -33,8 +33,8 @@ Vibration Off
 Do you want exit?
 No
 Yes
-Help
-About
+HELP
+ABOUT
 Texto help.
 Designed and developed: Luis Valdes. @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Music and FX: Francisco Hoyos. @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ All right reserved.
 SELECT MAP
@@ -63,7 +63,7 @@ Connected by
 You have joined the game
 Game loaded
 Send game data...
-Your version of the game is obsolete, please download the latest version of the game.
+Your version of the game is obsolete, please download the latest version.
 TURN:
 Plain
 Forest

@@ -40,7 +40,7 @@ public class Define {
 
 	public static final int ST_MENU_MAIN = 4;
 	public static final int ST_MENU_OPTIONS = 5;
-	public static final int ST_MENU_MORE = 6;
+	public static final int ST_MENU_INFO = 6;
 	public static final int ST_MENU_EXIT = 7;
 	public static final int ST_MENU_HELP = 8;
 	public static final int ST_MENU_ABOUT = 9;

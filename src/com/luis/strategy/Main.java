@@ -189,7 +189,7 @@ public class Main extends LCanvas implements Runnable {
 					case Define.ST_MENU_ASK_SOUND:
 					case Define.ST_MENU_MAIN:
 					case Define.ST_MENU_OPTIONS:
-					case Define.ST_MENU_MORE:
+					case Define.ST_MENU_INFO:
 					case Define.ST_MENU_EXIT:
 					case Define.ST_MENU_HELP:
 					case Define.ST_MENU_ABOUT:
@@ -266,7 +266,7 @@ public class Main extends LCanvas implements Runnable {
 		         case Define.ST_MENU_ASK_SOUND:
 		         case Define.ST_MENU_MAIN:
 		         case Define.ST_MENU_OPTIONS:
-		         case Define.ST_MENU_MORE:
+		         case Define.ST_MENU_INFO:
 		         case Define.ST_MENU_EXIT:
 		         case Define.ST_MENU_HELP:
 		         case Define.ST_MENU_ABOUT:
