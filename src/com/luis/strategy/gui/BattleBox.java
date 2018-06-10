@@ -9,6 +9,7 @@ import com.luis.lgameengine.gui.Button;
 import com.luis.lgameengine.gui.MenuBox;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.Main;
+import com.luis.strategy.RscManager;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.map.Army;
@@ -40,9 +41,8 @@ public class BattleBox extends MenuBox{
 		
 		super(Define.SIZEX, Define.SIZEY, GfxManager.imgBigBox, null, null,
 				Define.SIZEX2, Define.SIZEY2-GfxManager.imgGameHud.getHeight()/2,
-				"Balance of power",
+				RscManager.allText[RscManager.TXT_GAME_BALANCE_POWER],
 				null, Font.FONT_MEDIUM, Font.FONT_SMALL, -1, Main.FX_NEXT);
-		
 		
 		btnList.add(new Button(
 				GfxManager.imgButtonCombatRelease,
@@ -209,7 +209,8 @@ public class BattleBox extends MenuBox{
 			if(armyDefense == null){
 				g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 				int initY = getY() -
-						((GfxManager.imgVillagers.getHeight() + Font.getFontHeight(Font.FONT_MEDIUM)+ separation)/2);
+						((GfxManager.imgVillagers.getHeight() + 
+								Font.getFontHeight(Font.FONT_MEDIUM)+ separation)/2);
 				String text = "X1";
 				
 				TextManager.drawSimpleText(g, 
@@ -326,7 +327,8 @@ public class BattleBox extends MenuBox{
 			int barHeight = GfxManager.imgFlagBigList.get(armyAtack.getPlayer().getFlag()).getHeight()/10;
 			
 			int atackForces = armyAtack.getPower(terrain);
-			int defenseForces = armyDefense != null? armyDefense.getPower(terrain):GameParams.TERRAIN_DEFENSE[terrain.getType()];
+			int defenseForces = armyDefense != null? 
+					armyDefense.getPower(terrain):GameParams.TERRAIN_DEFENSE[terrain.getType()];
 			int totalForces = atackForces+defenseForces;
 			int atackWidth = (atackForces*barWidth)/totalForces;
 			int defenseWidth = (defenseForces*barWidth)/totalForces;

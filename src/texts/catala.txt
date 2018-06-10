@@ -104,6 +104,11 @@ cambia su capital
 por
 monedas
 ?
+Nueva tropa adquirida
+Equilibrio de poder
+¡Critico!
+¡Pifia!
+Dificultad
 You lost the game.
 lost the game.
 Your army has been defeated.

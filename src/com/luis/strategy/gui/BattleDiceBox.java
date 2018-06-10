@@ -10,6 +10,7 @@ import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 import com.luis.lgameengine.implementation.sound.SndManager;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.Main;
+import com.luis.strategy.RscManager;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.game.GameUtils;
@@ -111,19 +112,19 @@ public class BattleDiceBox {
 		for(int i = 0; i < resultIcon.length;i++){
 			resultIcon[i] = new ResultIconPropierties();
 		}
-		
 		combat();
-		
 	}
 	
 	private void combat() {
 		callToFX = true;
 		this.diceValue = Main.getRandom(1, GameParams.ROLL_SYSTEM);
 		if(diceValue == GameParams.ROLL_SYSTEM){
-			NotificationBox.getInstance().addMessage("Critical!");
+			NotificationBox.getInstance().
+			addMessage(RscManager.allText[RscManager.TXT_GAME_CRITICAL]);
 			result[stateCombat] = true;
 		}else if(diceValue == 1){
-			NotificationBox.getInstance().addMessage("Blunder!");
+			NotificationBox.getInstance().
+			addMessage(RscManager.allText[RscManager.TXT_GAME_BLUNDER]);
 			result[stateCombat] = false;
 		}else{
 			result[stateCombat] = diceValue >= diceDifficult;
@@ -156,7 +157,6 @@ public class BattleDiceBox {
 							if(resultIcon[i].modSize <= 0.01f){
 								resultIcon[i].modAlpha = 0;
 								resultIcon[i].modSize = 0f;
-								
 							}
 						}
 					}
@@ -209,7 +209,8 @@ public class BattleDiceBox {
 					parchmentY + modY, 
 					Graphics.VCENTER | Graphics.HCENTER);
 			
-			TextManager.drawSimpleText(g, Font.FONT_BIG, "DIFFICULT: "+ diceDifficult, 
+			TextManager.drawSimpleText(g, Font.FONT_BIG, 
+					RscManager.allText[RscManager.TXT_GAME_DIFFICULTY] + " "+ diceDifficult, 
 					parchmentX, parchmentY + modY, Graphics.VCENTER | Graphics.HCENTER);
 			g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 			
@@ -254,9 +255,6 @@ public class BattleDiceBox {
 	public void onCombat(){}
 	
 	public void onResult(){}
-	
-	
-	
 	
 	class ResultIconPropierties{
 		

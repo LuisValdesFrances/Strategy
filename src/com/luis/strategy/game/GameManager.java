@@ -46,7 +46,7 @@ import com.luis.strategy.map.Troop;
 public class GameManager {
 	
 	//
-	private static final boolean MODE_3D = true;
+	private static final boolean MODE_3D = false;
 	private Image gameBuffer;
 	public float distorsion = 1.14f;
 	

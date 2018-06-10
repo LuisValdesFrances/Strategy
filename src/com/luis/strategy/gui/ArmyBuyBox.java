@@ -101,7 +101,7 @@ public class ArmyBuyBox {
 			public void onButtonPressUp() {
 				SndManager.getInstance().playFX(Main.FX_COINS, 0);
 				buttonBuy.reset();
-				String text = "New troop has been acquired";
+				String text = RscManager.allText[RscManager.TXT_GAME_NEW_ARMY];
 				NotificationBox.getInstance().addMessage(text);
 				onBuy();
 				buttonBuy.setDisabled(army.getPlayer().getGold() < GameParams.TROOP_COST[index]);

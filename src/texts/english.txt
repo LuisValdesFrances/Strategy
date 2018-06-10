@@ -104,6 +104,11 @@ Do you want discard this troop of
 for
 coins
 ?
+New troop acquired
+Balance of power
+Critical!
+Blunder!
+Difficulty
 You lost the game.
 lost the game.
 Your army has been defeated.
