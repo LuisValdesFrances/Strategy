@@ -145,8 +145,14 @@ public class RscManager {
 	public static final int TXT_GAME_BLUNDER= TXT_GAME_CRITICAL+1;
 	public static final int TXT_GAME_DIFFICULTY= TXT_GAME_BLUNDER+1;
 	
+	public static final int TXT_GAME_DESC_INFATRY= TXT_GAME_DIFFICULTY+1;
+	public static final int TXT_GAME_DESC_KNIGHTS= TXT_GAME_DESC_INFATRY+1;
+	public static final int TXT_GAME_DESC_HARASERS= TXT_GAME_DESC_KNIGHTS+1;
+	public static final int TXT_GAME_DESC_SIEGE= TXT_GAME_DESC_HARASERS+1;
+	
+	
 	//Notificaciones online
-	public static final int TXT_NOTIFICATION_YOU_LOST_GAME= TXT_GAME_DIFFICULTY+1; //Code 0
+	public static final int TXT_NOTIFICATION_YOU_LOST_GAME= TXT_GAME_DESC_SIEGE+1; //Code 0
 	public static final int TXT_NOTIFICATION_LOST_GAME= TXT_NOTIFICATION_YOU_LOST_GAME+1;//Code 1
 	public static final int TXT_NOTIFICATION_YOUR_ARMY_DEFEATED= TXT_NOTIFICATION_LOST_GAME+1;//Code 2
 	public static final int TXT_NOTIFICATION_YOUR_ARMY_WON= TXT_NOTIFICATION_YOUR_ARMY_DEFEATED+1;//Code 3

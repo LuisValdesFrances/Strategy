@@ -116,10 +116,14 @@ Equilibrio de poder
 ¡Critico!
 ¡Pifia!
 Dificultad
-You lost the game.
-lost the game.
-Your army has been defeated.
-Your army has won.
-Your army has been destroyed.
-Your army has destroyed to enemy.
-change his capital.
+Tropa basica de eficiencia media en todo tipo de terrenos.
+Tropa poderosa cuando en llano, poco eficiente en bosque y torpe en montaña.
+Expertos luchando en bosque y sobretodo en montaña. En llano son fáciles de vencer.
+Devastadoras para en ciudades. En el resto de terrenos no aportan ninguna ventaja.
+Has perdido la partida.
+pierde la partida.
+Tu ejercito ha sido derrotado.
+Tu ejercito ha vencido.
+Tu ejercito ha sido destruido.
+Tu ejercito ha destruido al enemigo.
+cambia su capital.

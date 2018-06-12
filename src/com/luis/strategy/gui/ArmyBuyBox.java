@@ -64,7 +64,7 @@ public class ArmyBuyBox {
 		descTroopList = new ArrayList<String>();
 		
 		for(int i = 0; i < GfxManager.imgBigTroop.size(); i++){
-			descTroopList.add("Description text large explain combat habilities and skills for troop with index " + i);
+			descTroopList.add(RscManager.allText[(RscManager.TXT_GAME_DESC_INFATRY+i)]);
 		}
 		
 		nameTroopList = new ArrayList<String>();

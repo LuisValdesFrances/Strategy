@@ -70,8 +70,8 @@ Enviando datos de la partida...
 Tu versión del juego esta obsoleta. Por favor, descarga la ultima version.
 ¡Tu reino te necesita!
 Tienes partidas para responder
-TURNO:
 ¿Quieres crear esta partida? La partida empezará cuando se hayan unido el resto de jugadores.
+TURNO:
 Llano
 Bosque
 Montaña
@@ -88,9 +88,9 @@ Jugador
 Gran derrota
 Derrota
 Victoria
-Gran voctoria
+Gran victoria
 Has perdido el juego
-piede el juego
+pierde el juego
 Atacante gana
 Atacante pierde
 El atacante ha destruido el enemido
@@ -111,15 +111,19 @@ cambia su capital
 por
 monedas
 ?
-Nueva tropa adquirida
+Nueva tropa adquirda
 Equilibrio de poder
 ¡Critico!
 ¡Pifia!
 Dificultad
-You lost the game.
-lost the game.
-Your army has been defeated.
-Your army has won.
-Your army has been destroyed.
-Your army has destroyed to enemy.
-change his capital.
+Tropa basica de eficiencia media en todo tipo de terrenos.
+Tropa poderosa cuando en llano, poco eficiente en bosque y torpe en montaña.
+Expertos luchando en bosque y sobretodo en montaña. En llano son fáciles de vencer.
+Devastadoras para en ciudades. En el resto de terrenos no aportan ninguna ventaja.
+Has perdido la partida.
+pierde la partida.
+Tu ejercito ha sido derrotado.
+Tu ejercito ha vencido.
+Tu ejercito ha sido destruido.
+Tu ejercito ha destruido al enemigo.
+cambia su capital.

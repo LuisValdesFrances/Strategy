@@ -233,6 +233,7 @@ public class ModeMenu {
 			if(Main.lastState < Define.ST_MENU_MAIN){
 				
 				//Solo debe de llamarse una vez!
+				/*
 				String name = null;
 				String data = FileIO.getInstance().loadData(Define.DATA_USER, 
 						Settings.getInstance().getActiviy().getApplicationContext());
@@ -243,6 +244,7 @@ public class ModeMenu {
 					Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, false);
 				} 
 				updateNotifications(name);
+				*/
 				
 				alpha = 255;
 				startTime = System.currentTimeMillis();
@@ -1447,7 +1449,7 @@ public class ModeMenu {
 	
 	private static Thread sceneUpdate;
 	private static Thread preSceneUpdate;
-	private static Thread notificationsUpdate;
+	//private static Thread notificationsUpdate;
 	
 	private static void updateNotificatons(){
 		
@@ -1512,6 +1514,7 @@ public class ModeMenu {
 		}
 	}
 	
+	/*
 	private static void updateNotifications(final String name){
 		if (name != null) {
 
@@ -1560,6 +1563,7 @@ public class ModeMenu {
 			notificationsUpdate.start();
 		}
 	}
+	*/
 
 	private static void updateScenes() {
 		sceneUpdate = new Thread() {
