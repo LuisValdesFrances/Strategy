@@ -4,9 +4,15 @@ package com.luis.strategy;
 import com.luis.lgameengine.gameutils.Settings;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.media.RingtoneManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
@@ -101,11 +107,31 @@ public class MainActivity extends Activity{
 	}
 	
 	
+	//Notificaciones
+	public void sendNotification(int notificationId, String title, String content) {
+		
+		//Intent intent = new Intent(this, MainActivity.class);
+		Intent intent = getIntent();
+		//intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+		
+		
+		
+		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+        .setSmallIcon(R.drawable.ic_launcher)
+        .setContentTitle(title)
+        .setContentText(content)
+        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        .setContentIntent(pendingIntent)
+        .setAutoCancel(true);
+		
+		NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+		// notificationId is a unique int for each notification that you must define
+		notificationManager.notify(notificationId, mBuilder.build());
+	}
 	
-	//Dialogo de confirmación que captura el boton "atrás":
-//		public boolean onKeyDown(int keyCode, KeyEvent event) {
-//			return true;
-//		}
 	}
 
 

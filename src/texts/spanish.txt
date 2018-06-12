@@ -65,6 +65,8 @@ Te has unido al juego
 Juego cargado
 Enviando datos de la partida...
 Tu versión del juego esta obsoleta. Por favor, descarga la ultima version.
+¡Tu reino te necesita!
+Tienes partidas para responder
 TURNO:
 Llano
 Bosque

@@ -85,7 +85,10 @@ public class RscManager {
 	public static final int TXT_SEND_DATA= TXT_GAME_LOADED+1;
 	public static final int TXT_UPDATE_GAME= TXT_SEND_DATA+1;
 	
-	public static final int TXT_GAME_TURN= TXT_UPDATE_GAME+1;
+	public static final int TXT_KINGDOM_NEEDS_YOU= TXT_UPDATE_GAME+1;
+	public static final int TXT_GAME_ANSWER= TXT_KINGDOM_NEEDS_YOU+1;
+	
+	public static final int TXT_GAME_TURN= TXT_GAME_ANSWER+1;
 	public static final int TXT_GAME_PLAIN= TXT_GAME_TURN+1;
 	public static final int TXT_GAME_FOREST= TXT_GAME_PLAIN+1;
 	public static final int TXT_GAME_MONTAIN= TXT_GAME_FOREST+1;

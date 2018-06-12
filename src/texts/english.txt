@@ -65,6 +65,8 @@ You have joined the game
 Game loaded
 Send game data...
 Your version of the game is obsolete, please download the latest version.
+Your kingdom needs you!
+You have games to answer
 TURN:
 Plain
 Forest

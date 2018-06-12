@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.util.Locale;
 
 import android.content.Intent;
+import android.content.res.Resources.Theme;
 import android.net.Uri;
 import android.util.Log;
 
@@ -225,8 +226,19 @@ public class ModeMenu {
 			
 			break;
 		case Define.ST_MENU_MAIN:
-			
 			if(Main.lastState < Define.ST_MENU_MAIN){
+				
+				//Solo debe de llamarse una vez!
+				String name = null;
+				String data = FileIO.getInstance().loadData(Define.DATA_USER, 
+						Settings.getInstance().getActiviy().getApplicationContext());
+
+				if (data != null && data.length() > 0) {
+					String[] d = data.split("\n");
+					name = d[0];
+					Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, false);
+				} 
+				updateNotifications(name);
 				
 				alpha = 255;
 				startTime = System.currentTimeMillis();
@@ -1395,6 +1407,7 @@ public class ModeMenu {
 	
 	private static Thread sceneUpdate;
 	private static Thread preSceneUpdate;
+	private static Thread notificationsUpdate;
 	
 	private static void updateNotificatons(){
 		
@@ -1458,6 +1471,55 @@ public class ModeMenu {
 			}
 		}
 	}
+	
+	private static void updateNotifications(final String name){
+		if (name != null) {
+
+			notificationsUpdate = new Thread() {
+				@Override
+				public void run() {
+					super.run();
+
+					int notificationId = 0;
+
+					while (true) {
+						try {
+
+							while (!Main.getInstance().isPaused()) {
+								Thread.sleep(5000);
+							}
+
+							SceneListData sceneListData = OnlineInputOutput
+									.getInstance().reviceSceneListData(Main.getInstance().getActivity(), name);
+
+							boolean play = false;
+							if (sceneListData != null) {
+								for (SceneData sceneData : sceneListData
+										.getSceneDataList()) {
+									if (sceneData.getNextPlayer().equals(name)) {
+										play = true;
+									}
+								}
+							}
+
+							if (play) {
+								Main.getInstance().getActivity().
+								sendNotification(notificationId++,
+										RscManager.allText[RscManager.TXT_KINGDOM_NEEDS_YOU], 
+										RscManager.allText[RscManager.TXT_GAME_ANSWER]);
+							}
+							Thread.sleep(1000 * 60 * 60 * 12);
+
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				}
+
+			};
+			notificationsUpdate.start();
+		}
+	}
 
 	private static void updateScenes() {
 		sceneUpdate = new Thread() {
@@ -1466,7 +1528,6 @@ public class ModeMenu {
 				super.run();
 				
 				while(Main.state == Define.ST_MENU_ON_LINE_LIST_ALL_GAME){
-					
 					try {
 						Thread.sleep(5000);
 						//Log.i("Debug", "Actualizando lista de scenes...");
@@ -1477,6 +1538,7 @@ public class ModeMenu {
 					SceneListData sceneListData = 
 							OnlineInputOutput.getInstance().reviceSceneListData(
 									Main.getInstance().getActivity(), GameState.getInstance().getName());
+					
 					if (sceneListData != null &&
 							Main.state == Define.ST_MENU_ON_LINE_LIST_ALL_GAME && selectSceneBox != null) {
 						Log.i("Debug", "Actualizando selectSceneBox " + Main.iFrame);

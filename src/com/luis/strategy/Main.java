@@ -139,14 +139,16 @@ public class Main extends LCanvas implements Runnable {
 	    
 	};
 	 
-	private Activity activity;
-	public Activity getActivity() {
+	private MainActivity activity;
+	public MainActivity getActivity() {
 		return activity;
 	}
-	public void setActivity(Activity activity) {
+	
+	public void setActivity(MainActivity activity) {
 		this.activity = activity;
 	}
-	public Main(Activity activity) {
+	
+	public Main(MainActivity activity) {
 		super(activity, Define.SIZEX, Define.SIZEY);
 		this.activity = activity;
 		instance = this;
