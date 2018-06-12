@@ -37,8 +37,10 @@ HELP
 ABOUT
 Texto help.
 Designed and developed: Luis Valdes. @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Music and FX: Francisco Hoyos. @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ All right reserved.
-SELECT MAP
-CONFIGURE MAP
+SELECT GAME
+CREATE GAME
+JOIN TO GAME
+CONFIGURE GAME
 HUMAN
 IA
 Points:
@@ -61,12 +63,14 @@ Account has been created
 Game has been created
 Connected by
 Do you want to join the game created by
+Players:
 You have joined the game
 Game loaded
 Send game data...
 Your version of the game is obsolete, please download the latest version.
 Your kingdom needs you!
 You have games to answer
+Do you want to create this game? The game will start when the other players have joined.
 TURN:
 Plain
 Forest

@@ -5,7 +5,6 @@ import java.io.ObjectInputStream;
 import java.util.Locale;
 
 import android.content.Intent;
-import android.content.res.Resources.Theme;
 import android.net.Uri;
 import android.util.Log;
 
@@ -69,9 +68,10 @@ public class ModeMenu {
 	private static Button btnAbout;
 	private static Button btnHelp;
 	
-	private static ListBox selectMapBox;
-	private static ListBox selectPreSceneBox;
+	private static ListBox createSceneBox;
+	
 	private static ListBox selectSceneBox;
+	private static ListBox joinPreSceneBox;
 	
 	private static ConfigMapBox configMapBox;
 	private static CreateUserBox createUserBox;
@@ -86,6 +86,10 @@ public class ModeMenu {
 	private static SceneData sceneData;
 	
 	private static PreSceneData preSceneDataToJoin;
+	
+	private static String onlineCreateMap;
+	private static String onlineCreateHost;
+	private static String onLineGameName;
 	
 	private static int numLetters;
 	
@@ -151,16 +155,16 @@ public class ModeMenu {
 						Main.changeState(Define.ST_MENU_INFO, false);
 						break;
 					case Define.ST_MENU_SELECT_MAP:
-						selectMapBox.cancel();
+						createSceneBox.cancel();
 						break;
 					case Define.ST_MENU_ON_LINE_CREATE_SCENE:
-						selectMapBox.cancel();
+						createSceneBox.cancel();
 						break;
 					case Define.ST_MENU_ON_LINE_LIST_ALL_GAME:
 						selectSceneBox.cancel();
 						break;
 					case Define.ST_MENU_ON_LINE_LIST_JOIN_GAME:
-						selectPreSceneBox.cancel();
+						joinPreSceneBox.cancel();
 						break;
 					case Define.ST_MENU_CONFIG_MAP:
 						configMapBox.cancel();
@@ -449,11 +453,11 @@ public class ModeMenu {
 			}
 			break;
 		case Define.ST_MENU_SELECT_MAP:
-			selectMapBox = new ListBox(
+			createSceneBox = new ListBox(
 					Define.SIZEX, Define.SIZEY, 
 					null, GfxManager.imgNotificationBox, GfxManager.imgNotificationBox, 
 					Define.SIZEX2, Define.SIZEY2, 
-					RscManager.allText[RscManager.TXT_SELECT_MAP],
+					RscManager.allText[RscManager.TXT_SELECT_GAME],
 					DataKingdom.SCENARY_LIST,
 					Font.FONT_BIG, Font.FONT_SMALL,
 					-1, Main.FX_NEXT){
@@ -479,7 +483,7 @@ public class ModeMenu {
 					}
 				}
 			};
-			selectMapBox.start();
+			createSceneBox.start();
 			break;
 		case Define.ST_MENU_CONFIG_MAP:
 			configMapBox = new ConfigMapBox(GameState.getInstance().getPlayerConfList()){
@@ -712,7 +716,8 @@ public class ModeMenu {
 					}
 				}
                 
-				selectSceneBox = new SceneDataListBox(sceneListData, textList) {
+				selectSceneBox = new SceneDataListBox(
+						sceneListData, RscManager.allText[RscManager.TXT_SELECT_GAME], textList) {
 					@Override
 					public void onFinish() {
 						if (getIndexPressed() != -1) {
@@ -780,7 +785,7 @@ public class ModeMenu {
 							 Main.getInstance().getActivity(), OnlineInputOutput.URL_GET_PRE_SCENE_LIST, GameState.getInstance().getName());//check
 			 Main.getInstance().stopClock();
 			 
-			 dialogBox = new DialogBox(GfxManager.imgSmallBox){
+			 dialogBox = new DialogBox(GfxManager.imgMediumBox){
 					@Override
 					public void onFinish() {
 						btnBack.setDisabled(false);
@@ -791,7 +796,7 @@ public class ModeMenu {
 							
 							String create = null;
 							
-							int insCount = (preSceneDataToJoin.getPlayerCount()+1);
+							int insCount = (preSceneDataToJoin.getPlayerList().size()+1);
 							if(insCount ==  DataKingdom.INIT_MAP_DATA[preSceneDataToJoin.getMap()].length){
 								create = "create";
 								Log.i("Debug", "Scene " + preSceneDataToJoin.getId() + " ya contiene el total de jugadores");
@@ -822,7 +827,7 @@ public class ModeMenu {
 							NotificationBox.getInstance().addMessage(msg);
 							Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, false);
 						}else{
-							selectPreSceneBox.start();
+							joinPreSceneBox.start();
 						}
 					}
 				};
@@ -839,11 +844,12 @@ public class ModeMenu {
 							preSceneListData.getPreSceneDataList().get(i).getHost() + " " +
 							DataKingdom.SCENARY_NAME_LIST[preSceneListData.getPreSceneDataList().get(i).getMap()] +
 							" - " +
-							preSceneListData.getPreSceneDataList().get(i).getPlayerCount() + 
+							preSceneListData.getPreSceneDataList().get(i).getPlayerList().size() + 
 							"/" + numPlayer;
 				}
 				
-				selectPreSceneBox = new SceneDataListBox(preSceneListData, textList){
+				joinPreSceneBox = new SceneDataListBox(
+						preSceneListData, RscManager.allText[RscManager.TXT_JOIN_GAME], textList){
 					@Override
 					public void onFinish(){
 						if(getIndexPressed() != -1){
@@ -852,18 +858,30 @@ public class ModeMenu {
 							preSceneDataToJoin = preSceneListData.getPreSceneDataList().get(getIndexPressed());
 							btnBack.setDisabled(true);
 							int numPlayer = DataKingdom.INIT_MAP_DATA[preSceneDataToJoin.getMap()].length;
+							
+							String playerList = "";
+							for(int i = 0; i < preSceneDataToJoin.getPlayerList().size(); i++){
+								playerList += preSceneDataToJoin.getPlayerList().get(i).getName();
+								if(i < preSceneDataToJoin.getPlayerList().size()-1){
+									playerList += " - ";
+								}
+							}
+							
 							dialogBox.start(
+									preSceneDataToJoin.getId() + "-" +
 									DataKingdom.SCENARY_NAME_LIST[preSceneDataToJoin.getMap()] + " " +
-									preSceneDataToJoin.getPlayerCount() + "/" + numPlayer,
-									(
+									preSceneDataToJoin.getPlayerList().size() + "/" + numPlayer,
+									
 									RscManager.allText[RscManager.TXT_DO_YOU_WANT_JOIN] + " " + preSceneDataToJoin.getHost() + 
-									RscManager.allText[RscManager.TXT_GAME_INTERROGATION_ICON]));
+									RscManager.allText[RscManager.TXT_GAME_INTERROGATION_ICON] + " " +
+									RscManager.allText[RscManager.TXT_PLAYERS] + " " +
+									playerList);
 						}else{
 							Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, false);
 						}
 					}
 				};
-				selectPreSceneBox.start();
+				joinPreSceneBox.start();
 				updatePreScenes();
 				
 				
@@ -874,11 +892,48 @@ public class ModeMenu {
 			
 			break;
 		 case Define.ST_MENU_ON_LINE_CREATE_SCENE:
-			 selectMapBox = new ListBox(
+			 dialogBox = new DialogBox(GfxManager.imgMediumBox){
+					@Override
+					public void onFinish() {
+						btnBack.setDisabled(false);
+						if(this.getIndexPressed() != 0){
+							
+							String msg = null;
+							Main.getInstance().startClock(Main.TYPE_EARTH);
+							String result =  
+								 OnlineInputOutput.getInstance().sendPreScene(
+											 Main.getInstance().getActivity(), 
+											 OnlineInputOutput.URL_CREATE_PRE_SCENE, onlineCreateMap, onlineCreateHost, onLineGameName);//check
+							Main.getInstance().stopClock();
+							if(result.equals("Server error")){
+								msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
+							}
+							else if(result.equals("Query error")){
+								msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
+							}
+							else if(result.equals("Succes")){
+								msg = RscManager.allText[RscManager.TXT_GAME_CREATED];
+							}
+							else if(result.equals(OnlineInputOutput.MSG_NO_CONNECTION)){
+								msg = RscManager.allText[RscManager.TXT_NO_CONNECTION];
+							}else{
+								msg = RscManager.allText[RscManager.TXT_CONNECTION_ERROR];
+							}
+							if(msg != null){
+								NotificationBox.getInstance().addMessage(msg);
+							}
+							
+						}else{
+							createSceneBox.start();
+						}
+					}
+				};
+			 
+			 createSceneBox = new ListBox(
 						Define.SIZEX, Define.SIZEY, 
 						null, GfxManager.imgNotificationBox, GfxManager.imgNotificationBox, 
 						Define.SIZEX2, Define.SIZEY2, 
-						RscManager.allText[RscManager.TXT_SELECT_MAP],
+						RscManager.allText[RscManager.TXT_CREATE_GAME],
 						DataKingdom.SCENARY_LIST,
 						Font.FONT_BIG, Font.FONT_SMALL,
 						-1, Main.FX_NEXT){
@@ -888,40 +943,23 @@ public class ModeMenu {
 						
 						if(getIndexPressed() != -1){
 							
-							String map = "" + getIndexPressed();
-							String host = GameState.getInstance().getName();
-							String name = "TEST";
+							onlineCreateMap = "" + getIndexPressed();
+							onlineCreateHost = GameState.getInstance().getName();
+							onLineGameName = "TEST";
 							
+							btnBack.setDisabled(true);
 							
-							 String msg = null;
-							 Main.getInstance().startClock(Main.TYPE_EARTH);
-							 String result =  
-									 OnlineInputOutput.getInstance().sendPreScene(
-											 Main.getInstance().getActivity(), OnlineInputOutput.URL_CREATE_PRE_SCENE, map, host, name);//check
-							 Main.getInstance().stopClock();
-							 if(result.equals("Server error")){
-								msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
-							 }
-							 else if(result.equals("Query error")){
-								msg = RscManager.allText[RscManager.TXT_SERVER_ERROR];
-							 }
-							 else if(result.equals("Succes")){
-								msg = RscManager.allText[RscManager.TXT_GAME_CREATED];
-							 }
-							 else if(result.equals(OnlineInputOutput.MSG_NO_CONNECTION)){
-								msg = RscManager.allText[RscManager.TXT_NO_CONNECTION];
-							 }
-							 else{
-								 msg = RscManager.allText[RscManager.TXT_CONNECTION_ERROR];
-							 }
-							 if(msg != null){
-								NotificationBox.getInstance().addMessage(msg);
-							 }
+							dialogBox.start(
+									DataKingdom.SCENARY_NAME_LIST[getIndexPressed()] + " - " +
+									RscManager.allText[RscManager.TXT_PLAYERS] + " " +
+									DataKingdom.INIT_MAP_DATA[getIndexPressed()].length,
+									RscManager.allText[RscManager.TXT_GAME_CREATE_CONF]);
+						}else{
+							Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, false);
 						}
-						Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, false);
 					};
 				};
-				selectMapBox.start();
+				createSceneBox.start();
 			 break;
 			 
 		 case Define.ST_TEST:
@@ -1010,7 +1048,7 @@ public class ModeMenu {
         case Define.ST_MENU_SELECT_MAP:
         	runMenuBG(Main.getDeltaSec());
         	btnBack.update(UserInput.getInstance().getMultiTouchHandler());
-        	selectMapBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
+        	createSceneBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
 			break;
 			
         case Define.ST_MENU_CONFIG_MAP:
@@ -1063,16 +1101,17 @@ public class ModeMenu {
 			 btnBack.update(UserInput.getInstance().getMultiTouchHandler());
 			 dialogBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
 			 
-			 if(selectPreSceneBox != null){
-				 selectPreSceneBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
+			 if(joinPreSceneBox != null){
+				 joinPreSceneBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
 			 }
 			 break;
 			 
 		 case Define.ST_MENU_ON_LINE_CREATE_SCENE:
 			 runMenuBG(Main.getDeltaSec());
 			 btnBack.update(UserInput.getInstance().getMultiTouchHandler());
-			 if(selectMapBox != null)
-				 selectMapBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
+			 dialogBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
+			 if(createSceneBox != null)
+				 createSceneBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
 			 break;
 		
 		 
@@ -1176,7 +1215,7 @@ public class ModeMenu {
 		case Define.ST_MENU_SELECT_MAP:
 			drawMenuBG(_g);
 			btnBack.draw(_g, 0, 0);
-			selectMapBox.draw(_g, GfxManager.imgBlackBG);
+			createSceneBox.draw(_g, GfxManager.imgBlackBG);
 			break;
 		
 		case Define.ST_MENU_CONFIG_MAP:
@@ -1231,15 +1270,16 @@ public class ModeMenu {
 					 RscManager.allText[RscManager.TXT_GAME_PLAYER] + " " + GameState.getInstance().getName(), 
 					 Define.SIZEX64, 
 					 Define.SIZEY-Define.SIZEY64, Graphics.BOTTOM | Graphics.LEFT);
-			 if(selectPreSceneBox != null){
-				 selectPreSceneBox.draw(_g, GfxManager.imgBlackBG);
+			 if(joinPreSceneBox != null){
+				 joinPreSceneBox.draw(_g, GfxManager.imgBlackBG);
 			 }
 			 break;
 		 case Define.ST_MENU_ON_LINE_CREATE_SCENE:
 			 drawMenuBG(_g);
 			 btnBack.draw(_g, 0, 0);
-			 if(selectMapBox != null){
-				 selectMapBox.draw(_g, GfxManager.imgBlackBG);
+			 dialogBox.draw(_g, GfxManager.imgBlackBG);
+			 if(createSceneBox != null){
+				 createSceneBox.draw(_g, GfxManager.imgBlackBG);
 			 }
 			 break;
 		
@@ -1561,7 +1601,7 @@ public class ModeMenu {
 								textList[i] += "YOUR TURN";
 							}
 						}
-					selectSceneBox.refresh(sceneListData, RscManager.allText[RscManager.TXT_SELECT_MAP], textList);
+					selectSceneBox.refresh(sceneListData, RscManager.allText[RscManager.TXT_SELECT_GAME], textList);
 					selectSceneBox.setDisabledList(disableList);
 					}
 					
@@ -1592,7 +1632,7 @@ public class ModeMenu {
 							OnlineInputOutput.getInstance().revicePreSceneListData(
 									Main.getInstance().getActivity(), OnlineInputOutput.URL_GET_PRE_SCENE_LIST, GameState.getInstance().getName());
 					if (preSceneListData != null &&
-							Main.state == Define.ST_MENU_ON_LINE_LIST_JOIN_GAME && selectPreSceneBox != null) {
+							Main.state == Define.ST_MENU_ON_LINE_LIST_JOIN_GAME && joinPreSceneBox != null) {
 						Log.i("Debug", "Actualizando selectPreSceneBox " + Main.iFrame);
 						String[] textList = new String[preSceneListData.getPreSceneDataList().size()];
 						for(int i = 0; i < preSceneListData.getPreSceneDataList().size(); i++){
@@ -1602,10 +1642,10 @@ public class ModeMenu {
 									preSceneListData.getPreSceneDataList().get(i).getHost() + " " +
 									DataKingdom.SCENARY_NAME_LIST[preSceneListData.getPreSceneDataList().get(i).getMap()] +
 									" - " +
-									preSceneListData.getPreSceneDataList().get(i).getPlayerCount() + 
+									preSceneListData.getPreSceneDataList().get(i).getPlayerList().size() + 
 									"/" + numPlayer;
 							}
-						selectPreSceneBox.refresh(preSceneListData, RscManager.allText[RscManager.TXT_SELECT_MAP], textList);
+						joinPreSceneBox.refresh(preSceneListData, RscManager.allText[RscManager.TXT_SELECT_GAME], textList);
 						}
 				}
 			}

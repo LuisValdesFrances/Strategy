@@ -391,6 +391,7 @@ public class GfxManager {
 		imgButtonInfoRelease = Image.createImage("/info_release.png");
 		
 		imgSmallBox = Image.createImage("/small_box.png");
+		imgMediumBox = Image.createImage("/medium_box.png");
 		imgBigBox = Image.createImage("/big_box.png");
 		
 		imgMainBG = Image.createImage("/main_bg.png");
@@ -440,6 +441,7 @@ public class GfxManager {
 		imgButtonInfoFocus = null;
 		
 		imgSmallBox = null;
+		imgMediumBox = null;
 		imgBigBox = null;
 		
 		imgButtonKeyboardRelease = null;

@@ -17,18 +17,18 @@ public class SceneDataListBox extends ListBox{
 		super(Define.SIZEX, Define.SIZEY, null, 
 				GfxManager.imgNotificationBox, GfxManager.imgNotificationBox, 
 				Define.SIZEX2, Define.SIZEY2, 
-				RscManager.allText[RscManager.TXT_SELECT_MAP], 
+				RscManager.allText[RscManager.TXT_SELECT_GAME], 
 				null,
 				Font.FONT_BIG, Font.FONT_SMALL, -1, Main.FX_NEXT);
 		
 	}
 	
-	public SceneDataListBox(Serializable sceneListData, String[] textOptions) {
+	public SceneDataListBox(Serializable sceneListData, String header, String[] textOptions) {
 		
 		super(Define.SIZEX, Define.SIZEY, null, 
 				GfxManager.imgNotificationBox, GfxManager.imgNotificationBox, 
 				Define.SIZEX2, Define.SIZEY2, 
-				RscManager.allText[RscManager.TXT_SELECT_MAP], 
+				header, 
 				textOptions,
 				Font.FONT_BIG, Font.FONT_SMALL, -1, Main.FX_NEXT);
 		

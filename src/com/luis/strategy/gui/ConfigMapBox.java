@@ -33,7 +33,7 @@ public class ConfigMapBox extends ListBox{
 		super(Define.SIZEX, Define.SIZEY, null,
 			GfxManager.imgButtonMenuMediumRelease, GfxManager.imgButtonMenuMediumFocus,
 			Define.SIZEX2, Define.SIZEY2, 
-			RscManager.allText[RscManager.TXT_CONFIG_MAP],
+			RscManager.allText[RscManager.TXT_CONFIG_GAME],
 			new String[pcList.length], 
 			Font.FONT_BIG, Font.FONT_MEDIUM, -1, Main.FX_NEXT);
 		

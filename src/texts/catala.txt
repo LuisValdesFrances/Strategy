@@ -37,8 +37,10 @@ AYUDA
 ACERCA DE
 Texto help.
 Diseñado y desarrollado: Luis Valdes. @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Musica y FX: Francisco Hoyos. @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ All right reserved.
-SELECIONA MAPA
-CONFIGURA MAPA
+SELECIONA UNA PARTIDA
+CREA UNA PARTIDA
+UNETE A UNA PARTIDA
+CONFIGURA UNA PARTIDA
 HUMANO
 IA
 Puntos:
@@ -61,6 +63,7 @@ Se ha creado la cuenta
 Se ha creado la partida
 Conectado con
 ¿Quieres unirte a la partida creada por
+Jugadores:
 Te has unido al juego
 Juego cargado
 Enviando datos de la partida...
@@ -68,6 +71,7 @@ Tu versión del juego esta obsoleta. Por favor, descarga la ultima version.
 ¡Tu reino te necesita!
 Tienes partidas para responder
 TURNO:
+¿Quieres crear esta partida? La partida empezará cuando se hayan unido el resto de jugadores.
 Llano
 Bosque
 Montaña
