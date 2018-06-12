@@ -377,7 +377,7 @@ public class GameManager {
 		endGameBox = new SimpleBox(GfxManager.imgSmallBox, true, false){
 			@Override
 			public void onFinish() {
-				super.onWaitFinish();
+				super.onFinish();
 				if(GameState.getInstance().getGameMode() == GameState.GAME_MODE_ONLINE){
 					
 					if(OnlineInputOutput.getInstance().isOnline(Main.getInstance().getContext())){

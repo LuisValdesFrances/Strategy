@@ -60,6 +60,7 @@ No hay conexion a interrnet
 Se ha creado la cuenta
 Se ha creado la partida
 Conectado con
+¿Quieres unirte a la partida creada por
 Te has unido al juego
 Juego cargado
 Enviando datos de la partida...

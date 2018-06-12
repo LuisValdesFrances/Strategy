@@ -79,7 +79,8 @@ public class RscManager {
 	public static final int TXT_ACCOUNT_CREATED= TXT_NO_CONNECTION+1;
 	public static final int TXT_GAME_CREATED= TXT_ACCOUNT_CREATED+1;
 	public static final int TXT_CONNECTED_BY= TXT_GAME_CREATED+1;
-	public static final int TXT_HAVE_JOINED= TXT_CONNECTED_BY+1;
+	public static final int TXT_DO_YOU_WANT_JOIN= TXT_CONNECTED_BY+1;
+	public static final int TXT_HAVE_JOINED= TXT_DO_YOU_WANT_JOIN+1;
 	public static final int TXT_GAME_LOADED= TXT_HAVE_JOINED+1;
 	public static final int TXT_SEND_DATA= TXT_GAME_LOADED+1;
 	public static final int TXT_UPDATE_GAME= TXT_SEND_DATA+1;

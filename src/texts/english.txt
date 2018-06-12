@@ -60,6 +60,7 @@ There is no internet connection
 Account has been created
 Game has been created
 Connected by
+Do you want to join the game created by
 You have joined the game
 Game loaded
 Send game data...
