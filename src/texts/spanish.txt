@@ -37,7 +37,7 @@ AYUDA
 ACERCA DE
 Texto help.
 Diseñado y desarrollado: Luis Valdes. @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Musica y FX: Francisco Hoyos. @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ All right reserved.
-SELECIONA UNA PARTIDA
+SELECCIONA UNA PARTIDA
 CREA UNA PARTIDA
 UNETE A UNA PARTIDA
 CONFIGURA UNA PARTIDA
@@ -117,9 +117,12 @@ Equilibrio de poder
 ¡Pifia!
 Dificultad
 Tropa basica de eficiencia media en todo tipo de terrenos.
-Tropa poderosa cuando en llano, poco eficiente en bosque y torpe en montaña.
+Tropa poderosa en llano, poco eficiente en bosque y torpe en montaña.
 Expertos luchando en bosque y sobretodo en montaña. En llano son fáciles de vencer.
-Devastadoras para en ciudades. En el resto de terrenos no aportan ninguna ventaja.
+Devastadoras en ciudades. En el resto de terrenos no aportan ninguna ventaja.
+ATACAR
+ESPERAR
+CANCELAR
 Has perdido la partida.
 pierde la partida.
 Tu ejercito ha sido derrotado.

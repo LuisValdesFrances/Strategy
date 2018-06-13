@@ -345,6 +345,13 @@ public class GameManager {
 						changeSubState(SUB_STATE_ACTION_WAIT);
 					}
 					break;
+				case 2:
+					putArmyAtKingdom(getSelectedArmy(), getSelectedArmy().getLastKingdom());
+					getSelectedArmy().setX(getSelectedArmy().getKingdom().getX());
+					getSelectedArmy().setY(getSelectedArmy().getKingdom().getY());
+					getSelectedArmy().changeState(Army.STATE_ON);
+					changeSubState(SUB_STATE_ACTION_WAIT);
+					break;
 				}
 			}
 		};
@@ -1982,7 +1989,8 @@ public class GameManager {
 				&&
 				getEnemyAtKingdom(getCurrentPlayer()).getPlayer().getActionIA() == null; //El defensor NO es IA
 		
-		boolean cancelOption = getCurrentPlayer().getActionIA() == null && getEnemyAtKingdom(getCurrentPlayer()) == null;
+		boolean waitOption = getCurrentPlayer().getActionIA() == null && getEnemyAtKingdom(getCurrentPlayer()) == null;
+		boolean cancelOption = getSelectedArmy().getPlayer().getId() == getCurrentPlayer().getId();
 		
 		
 		
@@ -2039,7 +2047,8 @@ public class GameManager {
 								getSelectedArmy(),
 								getEnemyAtKingdom(getCurrentPlayer()),
 								-1,
-								cancelOption, scapeOption, getCurrentPlayer().getActionIA() != null);
+								waitOption, scapeOption, cancelOption,
+								getCurrentPlayer().getActionIA() != null);
 						changeSubState(SUB_STATE_ACTION_ANIM_ATACK);
 						SndManager.getInstance().playMusic(Main.MUSIC_START_BATTLE, true);
 					}
@@ -2078,7 +2087,8 @@ public class GameManager {
 								null,
 								getPlayerByKingdom(getSelectedArmy().getKingdom()) != null?
 								getPlayerByKingdom(getSelectedArmy().getKingdom()).getFlag():GfxManager.imgFlagBigList.size()-1,
-								cancelOption, scapeOption, getCurrentPlayer().getActionIA() != null);
+								waitOption, scapeOption, cancelOption, 
+								getCurrentPlayer().getActionIA() != null);
 						changeSubState(SUB_STATE_ACTION_ANIM_ATACK);
 					}
 				}

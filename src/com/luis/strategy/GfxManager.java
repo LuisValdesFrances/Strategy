@@ -72,13 +72,6 @@ public class GfxManager {
 	public static Image imgButtonMapRelease;
 	public static Image imgButtonMapFocus;
 	
-	public static Image imgNickBox;
-
-	public static Image imgTextBox;
-	public static Image imgBigBox;
-	public static Image imgMediumBox;
-	public static Image imgSmallBox;
-	public static Image imgNotificationBox;
 	public static Image imgButtonCombatRelease;
 	public static Image imgButtonCombatFocus;
 	public static Image imgButtonCardRelease;
@@ -95,6 +88,21 @@ public class GfxManager {
 	public static Image imgButtonFlagHelmetFocus;
 	public static Image imgButtonFlagCastleRelease;
 	public static Image imgButtonFlagCastleFocus;
+	
+	public static Image imgButtonYellowRelease;
+	public static Image imgButtonYellowFocus;
+	public static Image imgButtonGreenRelease;
+	public static Image imgButtonGreenFocus;
+	public static Image imgButtonRedRelease;
+	public static Image imgButtonRedFocus;
+	
+	public static Image imgNickBox;
+
+	public static Image imgTextBox;
+	public static Image imgBigBox;
+	public static Image imgMediumBox;
+	public static Image imgSmallBox;
+	public static Image imgNotificationBox;
 	
 	
 
@@ -269,6 +277,13 @@ public class GfxManager {
 				
 				imgButtonMapRelease = Image.createImage("/icon_map_release.png");
 				imgButtonMapFocus = Image.createImage("/icon_map_release.png");
+				
+				imgButtonYellowRelease = Image.createImage("/button_menu_big_release.png");
+				imgButtonYellowFocus = Image.createImage("/button_menu_big_focus.png");
+				imgButtonGreenRelease = Image.createImage("/button_menu_big_release.png");
+				imgButtonGreenFocus = Image.createImage("/button_menu_big_focus.png");
+				imgButtonRedRelease = Image.createImage("/button_menu_big_release.png");
+				imgButtonRedFocus = Image.createImage("/button_menu_big_focus.png");
 
 				imgFlagList = new ArrayList<Image>();
 				imgFlagSmallList = new ArrayList<Image>();
@@ -521,6 +536,12 @@ public class GfxManager {
 		imgButtonCrossFocus = null;
 		imgButtonCrossBigRelease = null;
 		imgButtonCrossBigFocus = null;
+		imgButtonYellowRelease = null;
+		imgButtonYellowFocus = null;
+		imgButtonGreenRelease = null;
+		imgButtonGreenFocus = null;
+		imgButtonRedRelease = null;
+		imgButtonRedFocus  = null;
 
 		imgButtonDeleteFocus = null;
 		imgButtonDeleteRelease = null;

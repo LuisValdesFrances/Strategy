@@ -120,6 +120,9 @@ Basic troop, being equally efficient in all types of terrain.
 Is the powerful in the plains, inefficient in the woods and really clumsy in the mountains.
 Specialists in forests and especially in mountains. On the plain they are easy to beat.
 Devastating troop when attack cities. In the rest of the lands, they do not provide any advantage.
+ATACK
+WAIT
+CANCEL
 You lost the game.
 lost the game.
 Your army has been defeated.

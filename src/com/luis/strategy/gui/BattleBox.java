@@ -29,6 +29,7 @@ public class BattleBox extends MenuBox{
 	private int separation;
 	
 	private Button cancelButton;
+	private Button waitButton;
 	
 	private int kingdomFlag;
 	
@@ -45,12 +46,12 @@ public class BattleBox extends MenuBox{
 				null, Font.FONT_MEDIUM, Font.FONT_SMALL, -1, Main.FX_NEXT);
 		
 		btnList.add(new Button(
-				GfxManager.imgButtonCombatRelease,
-				GfxManager.imgButtonCombatFocus,
+				GfxManager.imgButtonYellowRelease,
+				GfxManager.imgButtonYellowFocus,
 				getX() + GfxManager.imgBigBox.getWidth()/2, 
 				getY() + GfxManager.imgBigBox.getHeight()/2, 
-				null, 
-				-1){
+				RscManager.allText[RscManager.TXT_GAME_ATACK],
+				Font.FONT_SMALL){
 			@Override
 			public void onButtonPressDown() {
 				super.onButtonPressDown();
@@ -89,7 +90,7 @@ public class BattleBox extends MenuBox{
 	
 	private boolean autoPlay;
 	public void start(Terrain terrain, Army armyAtack, Army armyDefense, int kingdomFlag,
-			boolean cancelOption, boolean scapeOption, boolean autoPlay){
+			boolean waitOption, boolean scapeOption, boolean cancelOption, boolean autoPlay){
 		super.start();
 		this.terrain = terrain;
 		this.armyAtack = armyAtack;
@@ -98,14 +99,17 @@ public class BattleBox extends MenuBox{
 		this.scapeOptions = scapeOption;
 		this.autoPlay = autoPlay;
 		
-		if(cancelOption || scapeOption){
-			cancelButton =  new Button(
-					GfxManager.imgButtonCancelRelease,
-					GfxManager.imgButtonCancelFocus,
-					getX() - GfxManager.imgBigBox.getWidth()/2, 
+		if(waitOption || scapeOption){
+			
+			//Cambiar icono dependiendo de si noAtackOpt o scapeOpt
+			
+			waitButton =  new Button(
+					GfxManager.imgButtonGreenRelease,
+					GfxManager.imgButtonGreenFocus,
+					getX(), 
 					getY() + GfxManager.imgBigBox.getHeight()/2, 
-					null, 
-					-1){
+					RscManager.allText[RscManager.TXT_GAME_WAIT],
+					Font.FONT_SMALL){
 				@Override
 				public void onButtonPressDown() {}
 				
@@ -113,6 +117,29 @@ public class BattleBox extends MenuBox{
 				public void onButtonPressUp(){
 					SndManager.getInstance().playFX(Main.FX_BACK, 0);
 					indexPressed = 1;//Al controlador de juego le interesa saber que he cancelado el combate
+					reset();
+					cancel();
+				}
+			};
+		}else{
+			waitButton = null;
+		}
+		
+		if(cancelOption){
+			cancelButton =  new Button(
+					GfxManager.imgButtonRedRelease,
+					GfxManager.imgButtonRedFocus,
+					getX() - GfxManager.imgBigBox.getWidth()/2, 
+					getY() + GfxManager.imgBigBox.getHeight()/2, 
+					RscManager.allText[RscManager.TXT_GAME_CANCEL], 
+					Font.FONT_SMALL){
+				@Override
+				public void onButtonPressDown() {}
+				
+				@Override
+				public void onButtonPressUp(){
+					SndManager.getInstance().playFX(Main.FX_BACK, 0);
+					indexPressed = 2;//Al controlador de juego le interesa saber que he cancelado el combate
 					reset();
 					cancel();
 				}
@@ -135,6 +162,9 @@ public class BattleBox extends MenuBox{
 	public boolean update(MultiTouchHandler touchHandler, float delta){
 		if(!battleDiceBox.update(touchHandler, delta)){
 			
+			if(waitButton != null){
+				waitButton.update(touchHandler);
+			}
 			if(cancelButton != null){
 				cancelButton.update(touchHandler);
 			}
@@ -150,9 +180,12 @@ public class BattleBox extends MenuBox{
 			for(int i = 0; i < GfxManager.imgIconTroop.size(); i++){
 				g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 				
-				if(cancelButton != null)
+				if(waitButton != null){
+					waitButton.draw(g, (int)modPosX, 0);
+				}
+				if(cancelButton != null){
 					cancelButton.draw(g, (int)modPosX, 0);
-				
+				}
 				//Left
 				g.drawImage(
 						GfxManager.imgIconTroop.get(i),
@@ -296,25 +329,27 @@ public class BattleBox extends MenuBox{
 			
 			String terrainText="";
 			switch(terrain.getType()){
-				case GameParams.PLAIN: terrainText = "Battle plain"; break;
-				case GameParams.FOREST: terrainText = "Battle forest"; break;
-				case GameParams.MONTAIN: terrainText = "Battle montain"; break;
-				case GameParams.SMALL_CITY: terrainText = "battle small city"; break;
-				case GameParams.MEDIUM_CITY: terrainText = "battle medium city"; break;
-				case GameParams.BIG_CITY: terrainText = "battle big city"; break;
+				case GameParams.PLAIN: terrainText = RscManager.allText[RscManager.TXT_GAME_PLAIN]; break;
+				case GameParams.FOREST: terrainText = RscManager.allText[RscManager.TXT_GAME_FOREST]; break;
+				case GameParams.MONTAIN: terrainText = RscManager.allText[RscManager.TXT_GAME_MONTAIN]; break;
+				case GameParams.SMALL_CITY: terrainText = RscManager.allText[RscManager.TXT_GAME_SMALL_CITY]; break;
+				case GameParams.MEDIUM_CITY: terrainText = RscManager.allText[RscManager.TXT_GAME_MEDIUM_CITY]; break;
+				case GameParams.BIG_CITY: terrainText = RscManager.allText[RscManager.TXT_GAME_BIG_CITY]; break;
 			}
 			
 			TextManager.drawSimpleText(g, 
 					Font.FONT_SMALL,
 					terrainText,
-					getX()+(int)modPosX, 
+					getX()+(int)modPosX,
 					centerY +
 					Font.getFontHeight(Font.FONT_BIG) + 
 					separation*2 +
 					(armyDefense != null ?
 							GfxManager.imgFlagBigList.get(armyDefense.getPlayer().getFlag()).getHeight():
 							GfxManager.imgFlagBigList.get(GfxManager.imgFlagBigList.size()-1).getHeight()) +
-							GfxManager.imgTerrainBox.get(terrain.getType()).getHeight(),
+							GfxManager.imgTerrainBox.get(terrain.getType()).getHeight()
+							
+							-Font.getFontHeight(Font.FONT_SMALL)*2,
 					Graphics.VCENTER|Graphics.HCENTER);
 			
 			//Equilibrio de poder
