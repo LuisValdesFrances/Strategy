@@ -278,12 +278,12 @@ public class GfxManager {
 				imgButtonMapRelease = Image.createImage("/icon_map_release.png");
 				imgButtonMapFocus = Image.createImage("/icon_map_release.png");
 				
-				imgButtonYellowRelease = Image.createImage("/button_menu_big_release.png");
-				imgButtonYellowFocus = Image.createImage("/button_menu_big_focus.png");
-				imgButtonGreenRelease = Image.createImage("/button_menu_big_release.png");
-				imgButtonGreenFocus = Image.createImage("/button_menu_big_focus.png");
-				imgButtonRedRelease = Image.createImage("/button_menu_big_release.png");
-				imgButtonRedFocus = Image.createImage("/button_menu_big_focus.png");
+				imgButtonYellowRelease = Image.createImage("/button_yellow_release.png");
+				imgButtonYellowFocus = Image.createImage("/button_yellow_focus.png");
+				imgButtonGreenRelease = Image.createImage("/button_green_release.png");
+				imgButtonGreenFocus = Image.createImage("/button_green_focus.png");
+				imgButtonRedRelease = Image.createImage("/button_red_release.png");
+				imgButtonRedFocus = Image.createImage("/button_red_focus.png");
 
 				imgFlagList = new ArrayList<Image>();
 				imgFlagSmallList = new ArrayList<Image>();

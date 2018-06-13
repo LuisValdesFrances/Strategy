@@ -951,6 +951,14 @@ public class GameManager {
 		}
 	}
 	
+	private void prepareArmy(){
+		for(Player player : gameScene.getPlayerList()){
+			for(Army army : player.getArmyList()){
+				army.setLastKingdom(army.getKingdom());
+			}
+		}
+	}
+	
 	private void cleanTargetKingdom(){
 		for(Kingdom kingdom : gameScene.getKingdomList()){
 			kingdom.setTarget(-1);
@@ -1013,7 +1021,7 @@ public class GameManager {
 	private void changeState(int newState){
 		UserInput.getInstance().getMultiTouchHandler().resetTouch();
 		cleanArmyAction();
-		
+		prepareArmy();
 		gameScene.resetKingdoms();
 		btnNext.setDisabled(true);
 		btnCancel.setDisabled(true);
@@ -1368,7 +1376,7 @@ public class GameManager {
 	private void drawPresentation(Graphics g){
 		if(presentationState != 0){
 			g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-			g.setAlpha(GameParams.BG_BLACK_ALPHA);
+			g.setAlpha(140);
 			g.setImageSize(1f, 1f-(Math.abs(presentationModX)/Define.SIZEX));
 			g.drawImage(GfxManager.imgTextBG, Define.SIZEX2, Define.SIZEY2, Graphics.VCENTER | Graphics.HCENTER);
 			g.setImageSize(1f, 1f);
@@ -1989,7 +1997,11 @@ public class GameManager {
 				&&
 				getEnemyAtKingdom(getCurrentPlayer()).getPlayer().getActionIA() == null; //El defensor NO es IA
 		
-		boolean waitOption = getCurrentPlayer().getActionIA() == null && getEnemyAtKingdom(getCurrentPlayer()) == null;
+		boolean waitOption = 
+				getCurrentPlayer().getActionIA() == null && 
+				getEnemyAtKingdom(getCurrentPlayer()) == null &&
+				getSelectedArmy().getKingdom() != getSelectedArmy().getLastKingdom();//Si hay movimiento
+				
 		boolean cancelOption = getSelectedArmy().getPlayer().getId() == getCurrentPlayer().getId();
 		
 		

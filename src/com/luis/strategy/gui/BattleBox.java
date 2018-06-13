@@ -48,7 +48,7 @@ public class BattleBox extends MenuBox{
 		btnList.add(new Button(
 				GfxManager.imgButtonYellowRelease,
 				GfxManager.imgButtonYellowFocus,
-				getX() + GfxManager.imgBigBox.getWidth()/2, 
+				getX() + GfxManager.imgBigBox.getWidth()/2  - GfxManager.imgButtonYellowRelease.getWidth()/2, 
 				getY() + GfxManager.imgBigBox.getHeight()/2, 
 				RscManager.allText[RscManager.TXT_GAME_ATACK],
 				Font.FONT_SMALL){
@@ -129,7 +129,7 @@ public class BattleBox extends MenuBox{
 			cancelButton =  new Button(
 					GfxManager.imgButtonRedRelease,
 					GfxManager.imgButtonRedFocus,
-					getX() - GfxManager.imgBigBox.getWidth()/2, 
+					getX() - GfxManager.imgBigBox.getWidth()/2 + GfxManager.imgButtonRedRelease.getWidth()/2, 
 					getY() + GfxManager.imgBigBox.getHeight()/2, 
 					RscManager.allText[RscManager.TXT_GAME_CANCEL], 
 					Font.FONT_SMALL){
@@ -343,13 +343,11 @@ public class BattleBox extends MenuBox{
 					getX()+(int)modPosX,
 					centerY +
 					Font.getFontHeight(Font.FONT_BIG) + 
-					separation*2 +
+					separation +
 					(armyDefense != null ?
 							GfxManager.imgFlagBigList.get(armyDefense.getPlayer().getFlag()).getHeight():
 							GfxManager.imgFlagBigList.get(GfxManager.imgFlagBigList.size()-1).getHeight()) +
-							GfxManager.imgTerrainBox.get(terrain.getType()).getHeight()
-							
-							-Font.getFontHeight(Font.FONT_SMALL)*2,
+							GfxManager.imgTerrainBox.get(terrain.getType()).getHeight(),
 					Graphics.VCENTER|Graphics.HCENTER);
 			
 			//Equilibrio de poder

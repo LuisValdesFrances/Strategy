@@ -3,6 +3,8 @@ package com.luis.strategy.gui;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.graphics.Paint.FontMetricsInt;
+
 import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gameutils.fonts.TextManager;
 import com.luis.lgameengine.gui.Button;
@@ -213,11 +215,12 @@ public class ArmyBuyBox {
 			
 			TextManager.drawSimpleText(g, Font.FONT_MEDIUM, nameTroopList.get(index), 
 					textX, 
-					textY + modY - GfxManager.imgTextBox.getHeight()/8,
+					textY + modY - GfxManager.imgTextBox.getHeight()/4,
 					Graphics.VCENTER | Graphics.HCENTER);
+			
 			TextManager.draw(g, Font.FONT_SMALL, descTroopList.get(index),
 					textX, 
-					textY + modY + GfxManager.imgTextBox.getHeight()/8, 
+					textY + modY + Font.getFontHeight(Font.FONT_MEDIUM),
 					GfxManager.imgTextBox.getWidth()-GfxManager.imgTextBox.getWidth()/4, 
 					TextManager.ALING_CENTER, -1);
 			
