@@ -106,7 +106,8 @@ public class BattleBox extends MenuBox{
 			waitButton =  new Button(
 					GfxManager.imgButtonGreenRelease,
 					GfxManager.imgButtonGreenFocus,
-					getX(), 
+					//getX(),
+					getX() - GfxManager.imgBigBox.getWidth()/2 + GfxManager.imgButtonRedRelease.getWidth()/2, 
 					getY() + GfxManager.imgBigBox.getHeight()/2, 
 					RscManager.allText[RscManager.TXT_GAME_WAIT],
 					Font.FONT_SMALL){

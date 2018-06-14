@@ -120,6 +120,7 @@ public class GameManager {
 	private SimpleBox discardBox;
 	private SimpleBox endGameBox;
 	private DialogBox troopExceedBox;
+	private DialogBox confirmActionBox;
 	
 	//private Army activeArmy;
 	//private Kingdom selectKingdom;
@@ -418,6 +419,17 @@ public class GameManager {
 			}
 		};
 		
+		confirmActionBox = new DialogBox(GfxManager.imgSmallBox){
+			@Override
+			public void onFinish() {
+				if(this.getIndexPressed() == 0){
+					btnCancel.trigger();
+				}else{
+					startAction();
+				}
+			}
+		};
+		
 		discardBox = new SimpleBox(GfxManager.imgNotificationBox, false, false){
 			@Override
 			public void onFinish() {
@@ -530,43 +542,24 @@ public class GameManager {
 			break;
 				
 			case SUB_STATE_ACTION_SELECT:
-				for(Kingdom kingdom: gameScene.getKingdomList()){
-					
-					//Chequea si el reino que se ha tocado (isSelect) es valido(target != -1)
-					if(
-						(getCurrentPlayer().getActionIA() == null && kingdom.getTarget()!= -1 && kingdom.isSelect())
-						||
-						(getCurrentPlayer().getActionIA() != null && getCurrentPlayer().getActionIA().isKingdomToMove(gameScene, kingdom))
-							
-					){
-						boolean move = kingdom.getId() != getSelectedArmy().getKingdom().getId();
+				
+				if(!confirmActionBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
+					for(Kingdom kingdom: gameScene.getKingdomList()){
 						
-						if(move){
+						//Chequea si el reino que se ha tocado (isSelect) es valido(target != -1)
+						if(
+							(getCurrentPlayer().getActionIA() == null && kingdom.getTarget()!= -1 && kingdom.isSelect())
+							||
+							(getCurrentPlayer().getActionIA() != null && getCurrentPlayer().getActionIA().getKingdomToDecision().getId() == kingdom.getId())
+						){
 							
-							if(getCurrentPlayer().getActionIA() != null){
-								kingdom.setSelect(true);
-								changeSubState(SUB_STATE_ACTION_MOVE);
+							if(getCurrentPlayer().getActionIA() == null){
+								confirmActionBox.start(null, RscManager.allText[RscManager.TXT_GAME_CONFIRM_ACTION]);
 							}else{
-								//Chequeo si en el target existe un colegui
-								Army neighbour = getArmyAtKingdom(kingdom);
-								if(neighbour != null && neighbour.getPlayer().getId() == getSelectedArmy().getPlayer().getId()){
-									
-									//Chequeo si se excede el maximo de tropas
-									if(neighbour.getTroopList().size()+getSelectedArmy().getTroopList().size() > GameParams.MAX_NUMBER_OF_TROOPS){
-										changeSubState(SUB_STATE_ACTION_EXCEED);
-									}else{
-										changeSubState(SUB_STATE_ACTION_MOVE);
-									}
-								}else{
-									changeSubState(SUB_STATE_ACTION_MOVE);
-								}
+								startAction();
 							}
-						}else{
-							//Quito todos lo indicadores de target
-							gameScene.cleanKingdomTarget();
-							changeSubState(SUB_STATE_ACTION_RESOLVE_MOVE);
+							break;
 						}
-						break;
 					}
 				}
 				break;
@@ -702,6 +695,7 @@ public class GameManager {
 			!resultBox.isActive() &&
 			!endGameBox.isActive() &&
 			!troopExceedBox.isActive() &&
+			!confirmActionBox.isActive() &&
 			!terrainBox.isActive()){
 			updateCamera();
 			if(getCurrentPlayer().getActionIA() == null && state == STATE_ACTION){
@@ -876,6 +870,7 @@ public class GameManager {
 		armyBox.draw(g);
 		discardBox.draw(g, null);
 		troopExceedBox.draw(g, GfxManager.imgBlackBG);
+		confirmActionBox.draw(g, GfxManager.imgBlackBG);
 		battleBox.draw(g);
 		terrainBox.draw(g);
 		mapBox.draw(g);
@@ -1678,6 +1673,44 @@ public class GameManager {
 		}
 	}
 	
+	private void startAction(){
+		
+		Kingdom kingdom = getSelectKingdom(); 
+		if(getCurrentPlayer().getActionIA() != null){
+			kingdom = getSelectedArmy().getPlayer().getActionIA().getKingdomToDecision();
+		}else{
+			kingdom = getSelectKingdom(); 
+		}
+		
+		boolean move = kingdom.getId() != getSelectedArmy().getKingdom().getId();
+		
+		if(move){
+			
+			if(getCurrentPlayer().getActionIA() != null){
+				kingdom.setSelect(true);
+				changeSubState(SUB_STATE_ACTION_MOVE);
+			}else{
+				//Chequeo si en el target existe un colegui
+				Army neighbour = getArmyAtKingdom(kingdom);
+				if(neighbour != null && neighbour.getPlayer().getId() == getSelectedArmy().getPlayer().getId()){
+					
+					//Chequeo si se excede el maximo de tropas
+					if(neighbour.getTroopList().size()+getSelectedArmy().getTroopList().size() > GameParams.MAX_NUMBER_OF_TROOPS){
+						changeSubState(SUB_STATE_ACTION_EXCEED);
+					}else{
+						changeSubState(SUB_STATE_ACTION_MOVE);
+					}
+				}else{
+					changeSubState(SUB_STATE_ACTION_MOVE);
+				}
+			}
+		}else{
+			//Quito todos lo indicadores de target
+			gameScene.cleanKingdomTarget();
+			changeSubState(SUB_STATE_ACTION_RESOLVE_MOVE);
+		}
+	}
+	
 	private void resolveCombat(int result){
 		startAnimDead = false;
 		Player defeatPlayer = null;
@@ -2002,7 +2035,7 @@ public class GameManager {
 				getEnemyAtKingdom(getCurrentPlayer()) == null &&
 				getSelectedArmy().getKingdom() != getSelectedArmy().getLastKingdom();//Si hay movimiento
 				
-		boolean cancelOption = getSelectedArmy().getPlayer().getId() == getCurrentPlayer().getId();
+		boolean cancelOption = false;//getSelectedArmy().getPlayer().getId() == getCurrentPlayer().getId();
 		
 		
 		

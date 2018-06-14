@@ -69,6 +69,7 @@ Juego cargado
 Enviando datos de la partida...
 Tu versión del juego esta obsoleta. Por favor, descarga la ultima version.
 ¡Tu reino te necesita!
+¿Comfirmas la orden?
 Tienes partidas para responder
 ¿Quieres crear esta partida? La partida empezará cuando se hayan unido el resto de jugadores.
 TURNO:

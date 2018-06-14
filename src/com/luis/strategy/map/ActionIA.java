@@ -153,13 +153,13 @@ public class ActionIA {
 						int r = Main.getRandom(0, 100);
 						if(r <= 75){
 							army.getIaDecision().setDecision(DECISION_MOVE_AND_ATACK);
-							army.getIaDecision().setKingdomDecision(k.getId());
+							army.getIaDecision().setKingdomDecision(k);
 						return;
 						}
 					} else if (army.getPower(k.getTerrainList().get(0)) == enemy.getPower(k.getTerrainList().get(0))) {
 						if (Main.getRandom(0, 100) >= 50) {
 							army.getIaDecision().setDecision(DECISION_MOVE_AND_ATACK);
-							army.getIaDecision().setKingdomDecision(k.getId());
+							army.getIaDecision().setKingdomDecision(k);
 							return;
 						}
 					}
@@ -177,7 +177,7 @@ public class ActionIA {
 			Kingdom target = getKingdomForeigner(playerList, army, false);
 			if(target != null){
 				army.getIaDecision().setDecision(DECISION_MOVE_AND_ATACK);
-				army.getIaDecision().setKingdomDecision(target.getId());
+				army.getIaDecision().setKingdomDecision(target);
 				return;
 			}
 				
@@ -187,7 +187,7 @@ public class ActionIA {
 			target = getKingdomDomainCity(playerList, army, false);
 			if(!army.getKingdom().isACity() && target != null){
 				army.getIaDecision().setDecision(DECISION_MOVE);
-				army.getIaDecision().setKingdomDecision(target.getId());
+				army.getIaDecision().setKingdomDecision(target);
 				return;
 			}
 			
@@ -196,7 +196,7 @@ public class ActionIA {
 			target = getKingdomDomain(playerList, army, false);
 			if(target != null){
 				army.getIaDecision().setDecision(DECISION_MOVE);
-				army.getIaDecision().setKingdomDecision(target.getId());
+				army.getIaDecision().setKingdomDecision(target);
 				return;
 			}
 			
@@ -204,10 +204,10 @@ public class ActionIA {
 			army.getIaDecision().setDecision(-1);
 			int r = Main.getRandom(0, 100);
 			if(r >= 25){//Me quedo donde estoy
-				army.getIaDecision().setKingdomDecision(army.getKingdom().getId());
+				army.getIaDecision().setKingdomDecision(army.getKingdom());
 			}else{
 				r = Main.getRandom(0, army.getKingdom().getBorderList().size()-1);
-				army.getIaDecision().setKingdomDecision(army.getKingdom().getBorderList().get(r).getId());
+				army.getIaDecision().setKingdomDecision(army.getKingdom().getBorderList().get(r));
 				return;
 			}
 		}
@@ -230,18 +230,18 @@ public class ActionIA {
 		}
 	}
 	
-	public boolean isKingdomToMove(GameScene map, Kingdom kingdom){
+	public Kingdom getKingdomToDecision(){
 		
 		switch(getSelectedArmy().getIaDecision().getDecision()){
 			case DECISION_ATACK:
-				return getSelectedArmy().getKingdom().getId() == kingdom.getId();
+				return getSelectedArmy().getKingdom();
 			
 			case DECISION_MOVE:
 			case DECISION_MOVE_AND_ATACK:
-				return getSelectedArmy().getIaDecision().getKingdomDecision() == kingdom.getId();
+				return getSelectedArmy().getIaDecision().getKingdomDecision();
 			default:
 				int r = Main.getRandom(0, getSelectedArmy().getKingdom().getBorderList().size()-1);
-				return getSelectedArmy().getKingdom().getBorderList().get(r).getId() == kingdom.getId();
+				return getSelectedArmy().getKingdom().getBorderList().get(r);
 		}
 	}
 

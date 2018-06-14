@@ -536,7 +536,7 @@ public class Army extends MapObject{
 
 	public class IADecision{
 		private int decision;
-		private int kingdomDecision;
+		private Kingdom kingdomDecision;
 		
 		public int getDecision() {
 			return decision;
@@ -545,13 +545,15 @@ public class Army extends MapObject{
 		public void setDecision(int decision) {
 			this.decision = decision;
 		}
-		
-		public int getKingdomDecision() {
+
+		public Kingdom getKingdomDecision() {
 			return kingdomDecision;
 		}
 
-		public void setKingdomDecision(int kingdomDecision) {
+		public void setKingdomDecision(Kingdom kingdomDecision) {
 			this.kingdomDecision = kingdomDecision;
 		}
+		
+		
 	}
 }
