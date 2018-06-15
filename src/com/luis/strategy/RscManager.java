@@ -62,7 +62,9 @@ public class RscManager {
 	
 	public static final int TXT_MAP_CONFIG_HUMAN = TXT_CONFIG_GAME+1;
 	public static final int TXT_MAP_CONFIG_IA = TXT_MAP_CONFIG_HUMAN+1;
-	public static final int TXT_POINTS= TXT_MAP_CONFIG_IA+1;
+	public static final int TXT_YOUR_TURN = TXT_MAP_CONFIG_HUMAN+1;
+	public static final int TXT_NEXT = TXT_YOUR_TURN+1;
+	public static final int TXT_POINTS= TXT_NEXT+1;
 	public static final int TXT_RECORD= TXT_POINTS+1;
 	public static final int TXT_CONTINUE_GAME= TXT_RECORD+1;
 	public static final int TXT_QUIT= TXT_CONTINUE_GAME+1;
