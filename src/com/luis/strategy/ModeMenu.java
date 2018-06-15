@@ -921,9 +921,8 @@ public class ModeMenu {
 							}else{
 								msg = RscManager.allText[RscManager.TXT_CONNECTION_ERROR];
 							}
-							if(msg != null){
-								NotificationBox.getInstance().addMessage(msg);
-							}
+							Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, false);
+							NotificationBox.getInstance().addMessage(msg);
 							
 						}else{
 							createSceneBox.start();
@@ -1515,7 +1514,7 @@ public class ModeMenu {
 	}
 	
 	/*
-	private static void updateNotifications(final String name){
+	private static void updatePushNotifications(final String name){
 		if (name != null) {
 
 			notificationsUpdate = new Thread() {
@@ -1579,37 +1578,41 @@ public class ModeMenu {
 						e.printStackTrace();
 					}
 					
-					SceneListData sceneListData = 
-							OnlineInputOutput.getInstance().reviceSceneListData(
-									Main.getInstance().getActivity(), GameState.getInstance().getName());
-					
-					if (sceneListData != null &&
-							Main.state == Define.ST_MENU_ON_LINE_LIST_ALL_GAME && selectSceneBox != null) {
-						Log.i("Debug", "Actualizando selectSceneBox " + Main.iFrame);
-						String[] textList = new String[sceneListData.getSceneDataList().size()];
+					if(
+							!Main.getInstance().isPaused() &&
+							Main.state == Define.ST_MENU_ON_LINE_LIST_ALL_GAME && 
+							selectSceneBox != null){
+						SceneListData sceneListData = 
+								OnlineInputOutput.getInstance().reviceSceneListData(
+										Main.getInstance().getActivity(), GameState.getInstance().getName());
 						
-						boolean[] disableList = new boolean[sceneListData.getSceneDataList().size()];
-						for (int i = 0; i < sceneListData.getSceneDataList().size(); i++) {
-							disableList[i] = 
-									!sceneListData.getSceneDataList().get(i).getNextPlayer().equals(GameState.getInstance().getName());
-						}
-						
-						for (int i = 0; i < sceneListData.getSceneDataList().size(); i++) {
-							textList[i] = ""+
-									sceneListData.getSceneDataList().get(i).getId() + " - " +
-									DataKingdom.SCENARY_NAME_LIST[sceneListData.getSceneDataList().get(i).getMap()] +
-									" - ";
-							if(disableList[i]){
-								textList[i] += "NEXT " + sceneListData.getSceneDataList().get(i).getNextPlayer();
-							}else{
-								textList[i] += "YOUR TURN";
+						if (sceneListData != null) {
+							Log.i("Debug", "Actualizando selectSceneBox " + Main.iFrame);
+							String[] textList = new String[sceneListData.getSceneDataList().size()];
+							
+							boolean[] disableList = new boolean[sceneListData.getSceneDataList().size()];
+							for (int i = 0; i < sceneListData.getSceneDataList().size(); i++) {
+								disableList[i] = 
+										!sceneListData.getSceneDataList().get(i).getNextPlayer().equals(GameState.getInstance().getName());
 							}
+							
+							for (int i = 0; i < sceneListData.getSceneDataList().size(); i++) {
+								textList[i] = ""+
+										sceneListData.getSceneDataList().get(i).getId() + " - " +
+										DataKingdom.SCENARY_NAME_LIST[sceneListData.getSceneDataList().get(i).getMap()] +
+										" - ";
+								if(disableList[i]){
+									textList[i] += "NEXT " + sceneListData.getSceneDataList().get(i).getNextPlayer();
+								}else{
+									textList[i] += "YOUR TURN";
+								}
+							}
+						selectSceneBox.refresh(sceneListData, RscManager.allText[RscManager.TXT_SELECT_GAME], textList);
+						selectSceneBox.setDisabledList(disableList);
 						}
-					selectSceneBox.refresh(sceneListData, RscManager.allText[RscManager.TXT_SELECT_GAME], textList);
-					selectSceneBox.setDisabledList(disableList);
+						
+						updateNotificatons();
 					}
-					
-					updateNotificatons();
 				}
 			}
 		};
@@ -1632,25 +1635,30 @@ public class ModeMenu {
 						e.printStackTrace();
 					}
 					
-					preSceneListData =  
-							OnlineInputOutput.getInstance().revicePreSceneListData(
-									Main.getInstance().getActivity(), OnlineInputOutput.URL_GET_PRE_SCENE_LIST, GameState.getInstance().getName());
-					if (preSceneListData != null &&
-							Main.state == Define.ST_MENU_ON_LINE_LIST_JOIN_GAME && joinPreSceneBox != null) {
-						Log.i("Debug", "Actualizando selectPreSceneBox " + Main.iFrame);
-						String[] textList = new String[preSceneListData.getPreSceneDataList().size()];
-						for(int i = 0; i < preSceneListData.getPreSceneDataList().size(); i++){
-							int numPlayer = DataKingdom.INIT_MAP_DATA[preSceneListData.getPreSceneDataList().get(i).getMap()].length;
-							textList[i] = ""+
-									preSceneListData.getPreSceneDataList().get(i).getId() + "-" +
-									preSceneListData.getPreSceneDataList().get(i).getHost() + " " +
-									DataKingdom.SCENARY_NAME_LIST[preSceneListData.getPreSceneDataList().get(i).getMap()] +
-									" - " +
-									preSceneListData.getPreSceneDataList().get(i).getPlayerList().size() + 
-									"/" + numPlayer;
-							}
-						joinPreSceneBox.refresh(preSceneListData, RscManager.allText[RscManager.TXT_SELECT_GAME], textList);
+					if(
+							!Main.getInstance().isPaused()  &&
+							Main.state == Define.ST_MENU_ON_LINE_LIST_JOIN_GAME && 
+							joinPreSceneBox != null){
+						
+						preSceneListData =  
+								OnlineInputOutput.getInstance().revicePreSceneListData(
+										Main.getInstance().getActivity(), OnlineInputOutput.URL_GET_PRE_SCENE_LIST, GameState.getInstance().getName());
+						if (preSceneListData != null) {
+							Log.i("Debug", "Actualizando selectPreSceneBox " + Main.iFrame);
+							String[] textList = new String[preSceneListData.getPreSceneDataList().size()];
+							for(int i = 0; i < preSceneListData.getPreSceneDataList().size(); i++){
+								int numPlayer = DataKingdom.INIT_MAP_DATA[preSceneListData.getPreSceneDataList().get(i).getMap()].length;
+								textList[i] = ""+
+										preSceneListData.getPreSceneDataList().get(i).getId() + "-" +
+										preSceneListData.getPreSceneDataList().get(i).getHost() + " " +
+										DataKingdom.SCENARY_NAME_LIST[preSceneListData.getPreSceneDataList().get(i).getMap()] +
+										" - " +
+										preSceneListData.getPreSceneDataList().get(i).getPlayerList().size() + 
+										"/" + numPlayer;
+								}
+							joinPreSceneBox.refresh(preSceneListData, RscManager.allText[RscManager.TXT_SELECT_GAME], textList);
 						}
+					}
 				}
 			}
 		};
