@@ -507,10 +507,26 @@ public class ModeMenu {
 			
 		case Define.ST_MENU_ON_LINE_START:
 			
-			btnNewAccount = new Button(GfxManager.imgButtonMenuBigRelease,
+			btnLogin = new Button(GfxManager.imgButtonMenuBigRelease,
 					GfxManager.imgButtonMenuBigFocus,
 					Define.SIZEX - (int) (GfxManager.imgButtonMenuBigRelease.getWidth() / 2) - Define.SIZEY64,
 					Define.SIZEY - (int) (GfxManager.imgButtonMenuBigRelease.getHeight() * 1.5) - Define.SIZEY64,
+					RscManager.allText[RscManager.TXT_LOGIN], Font.FONT_MEDIUM) {
+				@Override
+				public void onButtonPressDown(){}
+				
+				@Override
+				public void onButtonPressUp() {
+					SndManager.getInstance().playFX(Main.FX_NEXT, 0);
+					Main.changeState(Define.ST_MENU_ON_LINE_LOGIN, false);
+					reset();
+				}
+			};
+			
+			btnNewAccount = new Button(GfxManager.imgButtonMenuBigRelease,
+					GfxManager.imgButtonMenuBigFocus,
+					Define.SIZEX - (int) (GfxManager.imgButtonMenuBigRelease.getWidth() / 2) - Define.SIZEY64,
+					Define.SIZEY - (int) (GfxManager.imgButtonMenuBigRelease.getHeight() / 2) - Define.SIZEY64,
 					RscManager.allText[RscManager.TXT_NEW_ACOUNT], Font.FONT_MEDIUM) {
 				@Override
 				public void onButtonPressDown(){}
@@ -519,21 +535,6 @@ public class ModeMenu {
 				public void onButtonPressUp() {
 					SndManager.getInstance().playFX(Main.FX_NEXT, 0);
 					Main.changeState(Define.ST_MENU_ON_LINE_CREATE_USER, false);
-					reset();
-				}
-			};
-			btnLogin = new Button(GfxManager.imgButtonMenuBigRelease,
-					GfxManager.imgButtonMenuBigFocus,
-					Define.SIZEX - (int) (GfxManager.imgButtonMenuBigRelease.getWidth() / 2) - Define.SIZEY64,
-					Define.SIZEY - (int) (GfxManager.imgButtonMenuBigRelease.getHeight() / 2) - Define.SIZEY64,
-					RscManager.allText[RscManager.TXT_LOGIN], Font.FONT_MEDIUM) {
-				@Override
-				public void onButtonPressDown(){}
-
-				@Override
-				public void onButtonPressUp() {
-					SndManager.getInstance().playFX(Main.FX_NEXT, 0);
-					Main.changeState(Define.ST_MENU_ON_LINE_LOGIN, false);
 					reset();
 				}
 			};
