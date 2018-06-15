@@ -713,9 +713,9 @@ public class ModeMenu {
 							DataKingdom.SCENARY_NAME_LIST[sceneListData.getSceneDataList().get(i).getMap()] +
 							" - ";
 					if(disableList[i]){
-						textList[i] += "NEXT " + sceneListData.getSceneDataList().get(i).getNextPlayer();
+						textList[i] += RscManager.allText[RscManager.TXT_NEXT] + " " + sceneListData.getSceneDataList().get(i).getNextPlayer();
 					}else{
-						textList[i] += "YOUR TURN";
+						textList[i] += RscManager.allText[RscManager.TXT_YOUR_TURN];
 					}
 				}
                 
