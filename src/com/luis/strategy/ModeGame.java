@@ -245,11 +245,31 @@ public class ModeGame {
 					Font.FONT_MEDIUM, Font.FONT_MEDIUM, 
 					-1, Main.FX_NEXT){
 				@Override
-				public void onFinish(){}
+				public void onFinish(){
+					
+					if(confirmationQuitBox.getIndexPressed()==1){
+						if(GameState.getInstance().getGameMode() == GameState.GAME_MODE_ONLINE){
+							gameManager.setNextPlayer();
+							gameManager.sendSceneToServer(true);
+						}
+					}
+					
+				}
 			};
 			confirmationQuitBox.start();
 			break;
 		}
+	}
+	
+	public static void sendSceneToServerAsin(){
+		Thread t = new Thread(){
+			@Override
+			public void run(){
+				gameManager.setNextPlayer();
+				gameManager.sendSceneToServer(false);
+			}
+		};
+		t.start();
 	}
 	
 	public static void saveGame(){
@@ -287,32 +307,6 @@ public class ModeGame {
 			
 			btnPause.update(UserInput.getInstance().getMultiTouchHandler());
 			
-			
-			/*
-			float cameraSpeed = GameParams.CAMERA_SPEED * Main.getDeltaSec();
-			gamePad.update(UserInput.getInstance().getMultiTouchHandler());
-			if(UserInput.getInstance().getKeyboardHandler().getPressedKeys(UserInput.KEYCODE_LEFT).getAction() == KeyData.KEY_DOWN
-				||
-				UserInput.getInstance().getKeyboardHandler().getPressedKeys(UserInput.KEYCODE_LEFT).getAction() == KeyData.KEY_PRESS){
-					cameraTargetX -=cameraSpeed;
-				}
-			else if(UserInput.getInstance().getKeyboardHandler().getPressedKeys(UserInput.KEYCODE_RIGHT).getAction() == KeyData.KEY_DOWN
-				||
-				UserInput.getInstance().getKeyboardHandler().getPressedKeys(UserInput.KEYCODE_RIGHT).getAction() == KeyData.KEY_PRESS){
-					cameraTargetX +=cameraSpeed;
-				}
-			if(UserInput.getInstance().getKeyboardHandler().getPressedKeys(UserInput.KEYCODE_UP).getAction() == KeyData.KEY_DOWN
-				||
-				UserInput.getInstance().getKeyboardHandler().getPressedKeys(UserInput.KEYCODE_UP).getAction() == KeyData.KEY_PRESS){
-					cameraTargetY -=cameraSpeed;
-			}
-			else if(UserInput.getInstance().getKeyboardHandler().getPressedKeys(UserInput.KEYCODE_DOWN).getAction() == KeyData.KEY_DOWN
-				||
-				UserInput.getInstance().getKeyboardHandler().getPressedKeys(UserInput.KEYCODE_DOWN).getAction() == KeyData.KEY_PRESS){
-					cameraTargetY +=cameraSpeed;
-			}
-			*/
-			
 			particleManager.update(Main.getDeltaSec());
 			gfxEffects.update(Main.getDeltaSec());
 			gameManager.update(Main.getDeltaSec());
@@ -328,7 +322,7 @@ public class ModeGame {
 			break;
 		case Define.ST_GAME_CONFIRMATION_QUIT:
 			if(!confirmationQuitBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec())){
-				//Limio el juego
+				//Limpio el juego
 				if(confirmationQuitBox.getIndexPressed()==1){
 					GameState.getInstance().setGameScene(null);
 					System.gc();

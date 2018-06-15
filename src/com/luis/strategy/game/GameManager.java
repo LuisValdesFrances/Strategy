@@ -1096,35 +1096,11 @@ public class GameManager {
 				if(isFinishGame()){
 					changeState(STATE_FINISH);
 				}else{
-					String currentName = getCurrentPlayer().getName();
-					do{
-						gameScene.setPlayerIndex((gameScene.getPlayerIndex()+1)%gameScene.getPlayerList().size());
-					}
-					while(getCurrentPlayer().getCapitalkingdom() == null);
 					
-					if(gameScene.getPlayerIndex()==0){
-						gameScene.setTurnCount(gameScene.getTurnCount()+1);
-					}
+					setNextPlayer();
 					
 					if(GameState.getInstance().getGameMode() == GameState.GAME_MODE_ONLINE){
-						
-						if(OnlineInputOutput.getInstance().isOnline(Main.getInstance().getActivity())){
-							//Notification online
-							/*
-							String message = RscManager.allText[RscManager.TXT_GAME_TURN] + (gameScene.getTurnCount()+1);
-							dataSender.addNotification(getCurrentPlayer().getName(), message);
-							*/
-							String result = dataSender.sendGameScene(gameScene, 1);
-							if(result.equals("Succes")){
-								dataSender.sendGameNotifications(currentName);
-								NotificationBox.getInstance().addMessage(RscManager.allText[RscManager.TXT_SEND_DATA]);
-								Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, true);
-							}else{
-								NotificationBox.getInstance().addMessage(result);
-							}
-						}else{
-							NotificationBox.getInstance().addMessage(RscManager.allText[RscManager.TXT_NO_CONNECTION]);
-						}
+						sendSceneToServer(true);
 					}else if(GameState.getInstance().getGameMode() == GameState.GAME_MODE_PLAY_AND_PASS){
 						ModeGame.saveGame();
 						localTurnCount++;
@@ -1315,6 +1291,39 @@ public class GameManager {
 			gameScene.resetKingdoms();
 			btnMap.setDisabled(false);
 			break;
+		}
+	}
+	
+	public void setNextPlayer(){
+		do{
+			gameScene.setPlayerIndex((gameScene.getPlayerIndex()+1)%gameScene.getPlayerList().size());
+		}
+		while(getCurrentPlayer().getCapitalkingdom() == null);
+		
+		if(gameScene.getPlayerIndex()==0){
+			gameScene.setTurnCount(gameScene.getTurnCount()+1);
+		}
+	}
+	
+	public void sendSceneToServer(boolean notificationResult){
+		if(OnlineInputOutput.getInstance().isOnline(Main.getInstance().getActivity())){
+			//Notification online
+			/*
+			String message = RscManager.allText[RscManager.TXT_GAME_TURN] + (gameScene.getTurnCount()+1);
+			dataSender.addNotification(getCurrentPlayer().getName(), message);
+			*/
+			String result = dataSender.sendGameScene(gameScene, 1);
+			if(result.equals("Succes")){
+				dataSender.sendGameNotifications();
+				NotificationBox.getInstance().addMessage(RscManager.allText[RscManager.TXT_SEND_DATA]);
+				Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, true);
+			}else{
+				if(notificationResult)
+					NotificationBox.getInstance().addMessage(result);
+			}
+		}else{
+			if(notificationResult)
+				NotificationBox.getInstance().addMessage(RscManager.allText[RscManager.TXT_NO_CONNECTION]);
 		}
 	}
 	

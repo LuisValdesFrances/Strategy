@@ -35,7 +35,7 @@ public class DataSender{
 		return result;
 	}
 	
-	public void sendGameNotifications(String user){
+	public void sendGameNotifications(){
 		for(Notification n : notificationList){
 			
 			String type = "" + n.type;
