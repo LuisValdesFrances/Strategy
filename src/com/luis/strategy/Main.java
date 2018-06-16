@@ -2,7 +2,6 @@ package com.luis.strategy;
 
 import java.util.Random;
 
-import android.app.Activity;
 import android.util.Log;
 
 import com.luis.strategy.R;
@@ -441,10 +440,18 @@ public class Main extends LCanvas implements Runnable {
 	public void pause() {
 		Log.i("INFO", "Llamada a pause()");
 		isPaused = true;
-		if(state == Define.ST_GAME_RUN){
-			changeState(Define.ST_GAME_PAUSE, false);
+		
+		//Guardo
+		if(state >= Define.ST_GAME_RUN && GameState.getInstance().getGameMode() == GameState.GAME_MODE_ONLINE){
+			ModeGame.sendSceneToServerAsin(Define.ST_MENU_MAIN);
+		}else{
+			if(state == Define.ST_GAME_RUN){
+				changeState(Define.ST_GAME_PAUSE, false);
+			}
 		}
+		
 		SndManager.getInstance().pauseMusic();
+		SndManager.getInstance().pauseFX();
 	}
 
 	public void unPause() {

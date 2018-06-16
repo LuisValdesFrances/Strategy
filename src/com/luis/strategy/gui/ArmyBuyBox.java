@@ -3,8 +3,6 @@ package com.luis.strategy.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.graphics.Paint.FontMetricsInt;
-
 import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.gameutils.fonts.TextManager;
 import com.luis.lgameengine.gui.Button;

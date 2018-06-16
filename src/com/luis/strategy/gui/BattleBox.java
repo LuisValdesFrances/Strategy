@@ -109,7 +109,7 @@ public class BattleBox extends MenuBox{
 					//getX(),
 					getX() - GfxManager.imgBigBox.getWidth()/2 + GfxManager.imgButtonRedRelease.getWidth()/2, 
 					getY() + GfxManager.imgBigBox.getHeight()/2, 
-					RscManager.allText[RscManager.TXT_GAME_WAIT],
+					waitOption?RscManager.allText[RscManager.TXT_GAME_WAIT]:RscManager.allText[RscManager.TXT_GAME_ESCAPE],
 					Font.FONT_SMALL){
 				@Override
 				public void onButtonPressDown() {}

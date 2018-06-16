@@ -62,7 +62,7 @@ public class RscManager {
 	
 	public static final int TXT_MAP_CONFIG_HUMAN = TXT_CONFIG_GAME+1;
 	public static final int TXT_MAP_CONFIG_IA = TXT_MAP_CONFIG_HUMAN+1;
-	public static final int TXT_YOUR_TURN = TXT_MAP_CONFIG_HUMAN+1;
+	public static final int TXT_YOUR_TURN = TXT_MAP_CONFIG_IA+1;
 	public static final int TXT_NEXT = TXT_YOUR_TURN+1;
 	public static final int TXT_POINTS= TXT_NEXT+1;
 	public static final int TXT_RECORD= TXT_POINTS+1;
@@ -155,7 +155,8 @@ public class RscManager {
 	public static final int TXT_GAME_DESC_SIEGE= TXT_GAME_DESC_HARASERS+1;
 	
 	public static final int TXT_GAME_ATACK= TXT_GAME_DESC_SIEGE+1;
-	public static final int TXT_GAME_WAIT= TXT_GAME_ATACK+1;
+	public static final int TXT_GAME_ESCAPE= TXT_GAME_ATACK+1;
+	public static final int TXT_GAME_WAIT= TXT_GAME_ESCAPE+1;
 	public static final int TXT_GAME_CANCEL= TXT_GAME_WAIT+1;
 	
 	//Notificaciones online

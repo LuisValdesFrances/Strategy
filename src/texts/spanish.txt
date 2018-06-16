@@ -44,7 +44,7 @@ CONFIGURA UNA PARTIDA
 HUMANO
 IA
 TU TURNO
-SIGUIENTE
+TURNO
 Puntos:
 Record:
 Continua
@@ -124,6 +124,7 @@ Tropa poderosa en llano, poco eficiente en bosque y torpe en montaña.
 Expertos luchando en bosque y sobretodo en montaña. En llano son fáciles de vencer.
 Devastadoras en ciudades. En el resto de terrenos no aportan ninguna ventaja.
 ATACAR
+HUIR
 ESPERAR
 CANCELAR
 Has perdido la partida.
