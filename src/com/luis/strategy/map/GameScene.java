@@ -2,6 +2,8 @@ package com.luis.strategy.map;
 
 import java.util.List;
 
+import com.luis.lgameengine.gameutils.fonts.Font;
+import com.luis.lgameengine.gameutils.fonts.TextManager;
 import com.luis.lgameengine.gameutils.gameworld.GameCamera;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.implementation.graphics.Graphics;

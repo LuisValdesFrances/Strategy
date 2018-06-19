@@ -757,6 +757,43 @@ public class GameManager {
 						 distorsion, distorsion, GameState.getInstance().getGameMode());
 			 }
 		 }
+		 //Gold
+		
+		 gameBuffer.getGraphics().setClip(0, 0, Define.SIZEX, Define.SIZEY);
+		 if(Main.isIntervalTwo()){
+			 for(Kingdom k : gameScene.getKingdomList()){
+				 
+				 if(k.getTarget() != -1){
+				 int index = 0;
+				 if(k.getTerrainList().get(k.getTerrainList().size()-1).getType()>=GameParams.SMALL_CITY){
+					 index = k.getTerrainList().size()-1;
+				 }
+				 
+				 int goldX = worldConver.getConversionDrawX(gameCamera.getPosX(), 
+						 k.getTerrainList().get(index).getAbsoluteX()
+							+ GfxManager.imgCoinSmall.getWidth()*0.2f);
+				 int goldY = worldConver.getConversionDrawY(gameCamera.getPosY(), 
+						 k.getTerrainList().get(index).getAbsoluteY()+ 
+							GfxManager.imgTerrain.get(0).getHeight()/2f + GfxManager.imgCoinSmall.getHeight()*0.7f);
+					gameBuffer.getGraphics().drawImage(GfxManager.imgCoinSmall, 
+							goldX, 
+							goldY, 
+							Graphics.VCENTER | Graphics.HCENTER);
+					String taxes = ""+k.getTaxes();
+					gameBuffer.getGraphics().setAlpha(80);
+					gameBuffer.getGraphics().fillRect(
+							goldX-GfxManager.imgCoinSmall.getWidth()/2, goldY-Font.getFontHeight(Font.FONT_SMALL)/2, 
+							Font.getFontWidth(Font.FONT_SMALL)*taxes.length()+GfxManager.imgCoinSmall.getWidth(), 
+							Font.getFontHeight(Font.FONT_SMALL));
+					gameBuffer.getGraphics().setAlpha(255);
+					
+					TextManager.drawSimpleText(gameBuffer.getGraphics(), Font.FONT_SMALL, taxes, 
+						goldX + GfxManager.imgCoinSmall.getWidth()/2, 
+						goldY, Graphics.VCENTER | Graphics.LEFT);
+				 }
+			 }
+		 }
+		
 		 
 		 if(MODE_3D){
 			 float totalW = (float)gameBuffer.getWidth()*distorsion;

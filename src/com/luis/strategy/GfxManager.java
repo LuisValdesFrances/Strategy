@@ -54,6 +54,7 @@ public class GfxManager {
 	public static Image imgGameHud;
 	public static Image imgChest;
 	public static Image imgCoin;
+	public static Image imgCoinSmall;
 	public static Image imgCrown;
 	public static Image imgButtonPauseRelease;
 	public static Image imgButtonPauseFocus;
@@ -237,6 +238,7 @@ public class GfxManager {
 				imgGameHud = Image.createImage("/game_hud.png");
 				imgChest = Image.createImage("/chest.png");
 				imgCoin = Image.createImage("/coin.png");
+				imgCoinSmall = Image.createImage("/coin_small.png");
 				imgCrown = Image.createImage("/crown.png");
 				imgButtonPauseRelease = Image.createImage("/pause_release.png");
 				imgButtonPauseFocus = Image.createImage("/pause_focus.png");
@@ -521,6 +523,7 @@ public class GfxManager {
 		imgGameHud = null;
 		imgChest = null;
 		imgCoin = null;
+		imgCoinSmall = null;
 		imgCrown = null;
 		imgButtonPauseRelease = null;
 		imgButtonPauseFocus = null;

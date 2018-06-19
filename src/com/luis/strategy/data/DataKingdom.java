@@ -1099,6 +1099,8 @@ public class DataKingdom {
 			k32.getBorderList().add(k29);
 			k32.getBorderList().add(k30);
 			k32.getBorderList().add(k33);
+			k32.getBorderList().add(k37);
+			k32.getBorderList().add(k36);
 		}
 		
 		if(k33 != null){

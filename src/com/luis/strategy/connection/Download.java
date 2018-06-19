@@ -1,22 +1,22 @@
 package com.luis.strategy.connection;
 
+/*
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-
 import android.util.Log;
+ */
 
 public class Download {
 
 	public boolean download(String externalURL) {
-
+		/*
 		HttpClient httpclient = new DefaultHttpClient();
 		String result = null;
 		HttpGet httpget = new HttpGet(externalURL);
@@ -67,6 +67,8 @@ public class Download {
 		}
 
 		return sb.toString();
+		*/
+		return false;
 	}
 
 }
