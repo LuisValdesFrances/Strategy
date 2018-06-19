@@ -122,6 +122,14 @@ public class Kingdom extends MapObject{
 		}
 		this.borderList = borderList;
 	}
+	
+	public int getTaxes(){
+		int tax = 0;
+		for(Terrain terrain : getTerrainList()){
+			tax += GameParams.TERRAIN_TAX[terrain.getType()];
+		}
+		return tax;
+	}
 
 	public int getTarget() {
 		return target;

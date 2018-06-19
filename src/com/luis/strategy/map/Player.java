@@ -85,9 +85,7 @@ public class Player {
 	public int getTaxes() {
 		int tax = 0;
 		for(Kingdom kingdom : getKingdomList()){
-			for(Terrain terrain : kingdom.getTerrainList()){
-				tax += GameParams.TERRAIN_TAX[terrain.getType()];
-			}
+			tax += kingdom.getTaxes();
 		}
 		return tax;
 	}
