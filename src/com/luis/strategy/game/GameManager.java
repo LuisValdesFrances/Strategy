@@ -389,7 +389,7 @@ public class GameManager {
 				if(GameState.getInstance().getGameMode() == GameState.GAME_MODE_ONLINE){
 					
 					if(OnlineInputOutput.getInstance().isOnline(Main.getInstance().getContext())){
-						dataSender.sendGameScene(gameScene, 2);
+						dataSender.sendGameScene(gameScene, 2, true);
 						//Envio notificaciones
 						//dataSender.sendGameNotifications();
 					}else{
@@ -1100,7 +1100,7 @@ public class GameManager {
 					setNextPlayer();
 					
 					if(GameState.getInstance().getGameMode() == GameState.GAME_MODE_ONLINE){
-						sendSceneToServer(true);
+						sendSceneToServer(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, true, true);
 					}else if(GameState.getInstance().getGameMode() == GameState.GAME_MODE_PLAY_AND_PASS){
 						ModeGame.saveGame();
 						localTurnCount++;
@@ -1305,25 +1305,27 @@ public class GameManager {
 		}
 	}
 	
-	public void sendSceneToServer(boolean notificationResult){
+	public void sendSceneToServer(int newState, boolean notificationResult, boolean showWait){
 		if(OnlineInputOutput.getInstance().isOnline(Main.getInstance().getActivity())){
 			//Notification online
 			/*
 			String message = RscManager.allText[RscManager.TXT_GAME_TURN] + (gameScene.getTurnCount()+1);
 			dataSender.addNotification(getCurrentPlayer().getName(), message);
 			*/
-			String result = dataSender.sendGameScene(gameScene, 1);
+			String result = dataSender.sendGameScene(gameScene, 1, showWait);
 			if(result.equals("Succes")){
 				dataSender.sendGameNotifications();
 				NotificationBox.getInstance().addMessage(RscManager.allText[RscManager.TXT_SEND_DATA]);
-				Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, true);
+				Main.changeState(newState, true);
 			}else{
-				if(notificationResult)
+				if(notificationResult){
 					NotificationBox.getInstance().addMessage(result);
+				}
 			}
 		}else{
-			if(notificationResult)
+			if(notificationResult){
 				NotificationBox.getInstance().addMessage(RscManager.allText[RscManager.TXT_NO_CONNECTION]);
+			}
 		}
 	}
 	

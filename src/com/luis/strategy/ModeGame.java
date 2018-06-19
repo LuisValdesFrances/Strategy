@@ -250,7 +250,7 @@ public class ModeGame {
 					if(confirmationQuitBox.getIndexPressed()==1){
 						if(GameState.getInstance().getGameMode() == GameState.GAME_MODE_ONLINE){
 							gameManager.setNextPlayer();
-							gameManager.sendSceneToServer(true);
+							gameManager.sendSceneToServer(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, true, true);
 						}
 					}
 					
@@ -261,12 +261,12 @@ public class ModeGame {
 		}
 	}
 	
-	public static void sendSceneToServerAsin(){
+	public static void sendSceneToServerAsin(final int newState){
 		Thread t = new Thread(){
 			@Override
 			public void run(){
 				gameManager.setNextPlayer();
-				gameManager.sendSceneToServer(false);
+				gameManager.sendSceneToServer(newState, false, false);
 			}
 		};
 		t.start();

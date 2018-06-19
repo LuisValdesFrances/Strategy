@@ -22,16 +22,20 @@ public class DataSender{
 		notificationList.add(new Notification(from, to, message, type));
 	}
 	
-	public String sendGameScene(GameScene gameScene, int state) {
+	public String sendGameScene(GameScene gameScene, int state, boolean showWait) {
 		GameState.getInstance().setGameScene(gameScene);
 		SceneData sceneData = GameBuilder.getInstance().buildSceneData(state);
 		
-		Main.getInstance().startClock(Main.TYPE_EARTH);
+		if(showWait){
+			Main.getInstance().startClock(Main.TYPE_EARTH);
+		}
 		String result = 
 				OnlineInputOutput.getInstance().sendDataPackage(
 						Main.getInstance().getActivity(),
 						OnlineInputOutput.URL_UPDATE_SCENE, sceneData);
-		Main.getInstance().stopClock();
+		if(showWait){
+			Main.getInstance().stopClock();
+		}
 		return result;
 	}
 	
