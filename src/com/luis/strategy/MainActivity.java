@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -114,13 +115,15 @@ public class MainActivity extends Activity{
 		//intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
 		
-		
+		long[] vibrate = {500};
 		
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
         .setSmallIcon(R.drawable.ic_launcher)
         .setContentTitle(title)
         .setContentText(content)
         .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+        .setVibrate(vibrate)
+        .setLights(Color.GREEN, 1000, 500)
         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
         .setContentIntent(pendingIntent)
         .setAutoCancel(true);
