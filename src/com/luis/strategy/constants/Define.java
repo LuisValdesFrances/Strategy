@@ -67,6 +67,8 @@ public class Define {
 	public static final int ST_GAME_CONFIRMATION_QUIT = 105;
 	
 	// Nombre del fichero donde se guardaran y cargaran los datos:
+	//language\nsound\enableAlerts\game3D
+	//0\ntrue\ntrue\ntrue
 	public static final String DATA_CONFIG = "strategyDataConfig";
 	/*
 	 * Primera linea: English, Spanish, Catalan

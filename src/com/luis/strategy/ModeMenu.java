@@ -111,18 +111,25 @@ public class ModeMenu {
 				String language = Locale.getDefault().getDisplayLanguage();
 				
 				language = language.toLowerCase();
+				//Log.i("Debug", language);
+				int lang=0;
+				if(language.equals("english")){
+					lang=0;
+				}else if(language.equals("español")){
+					lang=1;
+				}else if(language.equals("catala")){
+					lang=2;
+				}
 				
-				Log.i("Debug", language);
-				
-				dataConfig = language;//Añadir resto de configuraciones + "\n" ;
+				dataConfig = ""+lang+"\ntrue\ntrue\nfalse";//Añadir resto de configuraciones;
 				FileIO.getInstance().saveData(dataConfig, Define.DATA_CONFIG, Main.getInstance().getActivity());
 			}
 			
-			String language = dataConfig.split("\n")[0];
-			if(language.equals("english")){
+			int language = Integer.parseInt(dataConfig.split("\n")[0]);
+			if(language == 0){
 				RscManager.loadLanguage(0);
 			}
-			else if(language.equals("español")){
+			else if(language == 2){
 				RscManager.loadLanguage(1);
 			}else{
 				RscManager.loadLanguage(0);
