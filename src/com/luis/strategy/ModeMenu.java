@@ -129,7 +129,7 @@ public class ModeMenu {
 			if(language == 0){
 				RscManager.loadLanguage(0);
 			}
-			else if(language == 2){
+			else if(language == 1){
 				RscManager.loadLanguage(1);
 			}else{
 				RscManager.loadLanguage(0);

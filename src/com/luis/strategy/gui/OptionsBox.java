@@ -79,6 +79,7 @@ public class OptionsBox extends MenuBox{
 	}
 	
 	private void updateLanguageButton(int language){
+		/*
 		if(language == 0){
 			languageButton.setImgRelese(GfxManager.imgEnglishRelease);
 			languageButton.setImgFocus(GfxManager.imgEnglishFocus);
@@ -89,6 +90,7 @@ public class OptionsBox extends MenuBox{
 			languageButton.setImgRelese(GfxManager.imgCatalaRelease);
 			languageButton.setImgFocus(GfxManager.imgCatalaFocus);
 		}
+		*/
 	}
 
 }
