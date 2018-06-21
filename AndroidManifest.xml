@@ -11,17 +11,18 @@
 
     <application
         android:icon="@drawable/ic_launcher"
-        android:label="Stratey">
+        android:label="The king is dead">
         <activity
             android:name=".MainActivity"
             android:label="The king is dead" 
-            android:screenOrientation="landscape">
+            android:screenOrientation="sensorLandscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
+    
     
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.INTERNET" />

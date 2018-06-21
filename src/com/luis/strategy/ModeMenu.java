@@ -21,6 +21,7 @@ import com.luis.lgameengine.implementation.graphics.Image;
 import com.luis.lgameengine.implementation.sound.SndManager;
 import com.luis.strategy.GameState.PlayerConf;
 import com.luis.strategy.connection.OnlineInputOutput;
+import com.luis.strategy.connection.PushNotifications;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.data.DataKingdom;
@@ -93,6 +94,8 @@ public class ModeMenu {
 	
 	private static int numLetters;
 	
+	private static PushNotifications pushNotifications;
+	
 	public static void init(int _iMenuState){
 		Log.i("Info", "Init State: "+ _iMenuState);
 		switch (_iMenuState) {
@@ -108,22 +111,42 @@ public class ModeMenu {
 				String language = Locale.getDefault().getDisplayLanguage();
 				
 				language = language.toLowerCase();
+				//Log.i("Debug", language);
+				int lang=0;
+				if(language.equals("english")){
+					lang=0;
+				}else if(language.equals("español")){
+					lang=1;
+				}else if(language.equals("catala")){
+					lang=2;
+				}
 				
-				Log.i("Debug", language);
-				
-				dataConfig = language;//Añadir resto de configuraciones + "\n" ;
+				dataConfig = ""+lang+"\ntrue\ntrue\nfalse";//Añadir resto de configuraciones;
 				FileIO.getInstance().saveData(dataConfig, Define.DATA_CONFIG, Main.getInstance().getActivity());
 			}
 			
-			String language = dataConfig.split("\n")[0];
-			if(language.equals("english")){
+			int language = Integer.parseInt(dataConfig.split("\n")[0]);
+			if(language == 0){
 				RscManager.loadLanguage(0);
 			}
-			else if(language.equals("español")){
+			else if(language == 2){
 				RscManager.loadLanguage(1);
 			}else{
 				RscManager.loadLanguage(0);
 			}
+			
+			//Notificaciones
+			String name = null;
+			String data = FileIO.getInstance().loadData(Define.DATA_USER, 
+					Settings.getInstance().getActiviy().getApplicationContext());
+
+			if (data != null && data.length() > 0) {
+				String[] d = data.split("\n");
+				name = d[0];
+				
+				pushNotifications = new PushNotifications(Main.getInstance().getActivity(), name);
+				pushNotifications.start();
+			} 
 			
 			
 			MenuElement.bgAlpha = (int)(GameParams.BG_BLACK_ALPHA*0.5);
@@ -231,21 +254,6 @@ public class ModeMenu {
 			break;
 		case Define.ST_MENU_MAIN:
 			if(Main.lastState < Define.ST_MENU_MAIN){
-				
-				//Solo debe de llamarse una vez!
-				/*
-				String name = null;
-				String data = FileIO.getInstance().loadData(Define.DATA_USER, 
-						Settings.getInstance().getActiviy().getApplicationContext());
-
-				if (data != null && data.length() > 0) {
-					String[] d = data.split("\n");
-					name = d[0];
-					Main.changeState(Define.ST_MENU_ON_LINE_LIST_ALL_GAME, false);
-				} 
-				updateNotifications(name);
-				*/
-				
 				alpha = 255;
 				startTime = System.currentTimeMillis();
 				
@@ -656,6 +664,11 @@ public class ModeMenu {
 			 loginBox.start();
 			 break;
 		 case Define.ST_MENU_ON_LINE_LIST_ALL_GAME:
+			 
+			 if(pushNotifications == null){
+				 pushNotifications = new PushNotifications(Main.getInstance().getActivity(), GameState.getInstance().getName());
+				 pushNotifications.start();
+			 }
 			 
 			 btnSearchGame = new Button(
 						GfxManager.imgButtonSearchBigRelease, 
@@ -1514,57 +1527,6 @@ public class ModeMenu {
 		}
 	}
 	
-	/*
-	private static void updatePushNotifications(final String name){
-		if (name != null) {
-
-			notificationsUpdate = new Thread() {
-				@Override
-				public void run() {
-					super.run();
-
-					int notificationId = 0;
-
-					while (true) {
-						try {
-
-							while (!Main.getInstance().isPaused()) {
-								Thread.sleep(5000);
-							}
-
-							SceneListData sceneListData = OnlineInputOutput
-									.getInstance().reviceSceneListData(Main.getInstance().getActivity(), name);
-
-							boolean play = false;
-							if (sceneListData != null) {
-								for (SceneData sceneData : sceneListData
-										.getSceneDataList()) {
-									if (sceneData.getNextPlayer().equals(name)) {
-										play = true;
-									}
-								}
-							}
-
-							if (play) {
-								Main.getInstance().getActivity().
-								sendNotification(notificationId++,
-										RscManager.allText[RscManager.TXT_KINGDOM_NEEDS_YOU], 
-										RscManager.allText[RscManager.TXT_GAME_ANSWER]);
-							}
-							Thread.sleep(1000 * 60 * 60 * 12);
-
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-				}
-
-			};
-			notificationsUpdate.start();
-		}
-	}
-	*/
-
 	private static void updateScenes() {
 		sceneUpdate = new Thread() {
 			@Override

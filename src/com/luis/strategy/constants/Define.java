@@ -67,6 +67,8 @@ public class Define {
 	public static final int ST_GAME_CONFIRMATION_QUIT = 105;
 	
 	// Nombre del fichero donde se guardaran y cargaran los datos:
+	//language\nsound\enableAlerts\game3D
+	//0\ntrue\ntrue\ntrue
 	public static final String DATA_CONFIG = "strategyDataConfig";
 	/*
 	 * Primera linea: English, Spanish, Catalan
@@ -74,6 +76,7 @@ public class Define {
 	public static final String DATA_USER = "strategyDataUser";
 	public static final String DATA_PASS_AND_PLAY = "strategyDataPassAndPlay";
 	public static final String DATA_CAMPAING = "strategyDataCampaing";
+	public static final String DATA_NOTIFICATION = "strategyDataNotification";
 	public static final int MAX_NAME_CHAR = 14;
 	public static final int MIN_NAME_CHAR = 4;
 	public static final int MIN_PASSWORD_CHAR = 8;

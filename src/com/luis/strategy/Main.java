@@ -10,14 +10,14 @@ import com.luis.lgameengine.gameutils.Settings;
 import com.luis.lgameengine.gameutils.fonts.Font;
 import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.graphics.Image;
-import com.luis.lgameengine.implementation.graphics.LCanvas;
+import com.luis.lgameengine.implementation.graphics.Screen;
 import com.luis.lgameengine.implementation.sound.SndManager;
 import com.luis.strategy.constants.Define;
 
 /**
  * @author Luis Valdes Frances
  */
-public class Main extends LCanvas implements Runnable {
+public class Main extends Screen implements Runnable {
 	
 	public static boolean debug = false;
 
@@ -50,7 +50,7 @@ public class Main extends LCanvas implements Runnable {
 	public static long lastTime;
 
 	private static long minDurationFrame;
-	public static boolean isGameRun;
+	private static boolean isGameRun;
 
 	public static int state;
 	public static int lastState;
@@ -175,8 +175,9 @@ public class Main extends LCanvas implements Runnable {
 
 		Log.i("Debug", "Game thread start");
 		initGame();
-
+		
 		while (isGameRun) {
+			
 			deltaTime = System.currentTimeMillis() - lastTime;
 			lastTime = System.currentTimeMillis();
 			
