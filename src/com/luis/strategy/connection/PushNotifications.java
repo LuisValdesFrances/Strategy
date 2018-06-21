@@ -40,8 +40,6 @@ public class PushNotifications extends Thread{
 				}catch(Exception e){}
 			}
 		}
-
-		
 	}
 	
 	private void saveNotifications(){
@@ -67,9 +65,6 @@ public class PushNotifications extends Thread{
 				SceneListData sceneListData = OnlineInputOutput
 						.getInstance().reviceSceneListData(Main.getInstance().getActivity(), user);
 				
-				
-
-				
 				if (sceneListData != null) {
 					//Añado nuevas escenas si no existen
 					for (SceneData sceneData : sceneListData.getSceneDataList()) {
@@ -86,8 +81,6 @@ public class PushNotifications extends Thread{
 							notificationList.add(n);
 						}
 					}
-					
-					
 					
 					for (SceneData sceneData : sceneListData.getSceneDataList()) {
 						//Si la siguiente partida es del jugador, chequeo si ya se ha notificado
@@ -122,13 +115,12 @@ public class PushNotifications extends Thread{
 				}
 
 				//Thread.sleep(1000 * 60 * 60 * 12);
-				Thread.sleep(5000);
+				Thread.sleep(10000);
 
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		
 	}
 	
 	class Notification{
