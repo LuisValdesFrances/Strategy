@@ -11,6 +11,9 @@ Montesquieu
 Arnaud Amairic
 Leo Tolstoy
 Moshe Dayan
+Idioma
+Sonido
+Alertas
 English
 Español
 Català

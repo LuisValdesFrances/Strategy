@@ -41,12 +41,25 @@ public class GfxManager {
 	
 	public static Image imgInputBox;
 	public static Image imgTextPointer;
+	
+	public static Image imgCheckFocus;
+	public static Image imgCheckRelease;
+	public static Image imgUncheckFocus;
+	public static Image imgUncheckRelease;
+	
+	public static Image imgEnglishRelease;
+	public static Image imgEnglishFocus;
+	public static Image imgSpanishRelease;
+	public static Image imgSpanishFocus;
+	public static Image imgCatalaRelease;
+	public static Image imgCatalaFocus;
 
 	// Game images:
 	public static Image imgTextBG;
 
 	public static Image imgPadWest;
 	public static Image imgPadEast;
+	
 	/*
 	 * public static Image imgPadNorth; public static Image imgPadSouth; public
 	 * static Image imgPadAux;
@@ -430,7 +443,16 @@ public class GfxManager {
 		imgFlagList.add(Image.createImage("/flag7.png"));
 		imgFlagList.add(Image.createImage("/flag8.png"));
 		
-		
+		imgCheckRelease = Image.createImage("check_release.png");
+		imgCheckFocus = Image.createImage("check_focus.png");
+		imgUncheckRelease = Image.createImage("uncheck_release.png");
+		imgUncheckFocus = Image.createImage("uncheck_focus.png");
+		imgEnglishRelease = Image.createImage("english_release.png");
+		imgEnglishFocus = Image.createImage("english_focus.png");
+		imgSpanishRelease = Image.createImage("spanish_release.png");
+		imgSpanishFocus = Image.createImage("spanish_focus.png");
+		imgCatalaRelease = Image.createImage("catala_release.png");
+		imgCatalaFocus = Image.createImage("catala_focus.png");
 		
 		imgNotificationBox = Image
 				.createImage("/notification_box.png");
@@ -486,6 +508,17 @@ public class GfxManager {
 		imgFlagList = null;
 		
 		imgNotificationBox = null;
+		
+		imgCheckRelease = null;
+		imgCheckFocus = null;
+		imgUncheckRelease = null;
+		imgUncheckFocus = null;
+		imgEnglishFocus = null;
+		imgSpanishRelease = null;
+		imgSpanishFocus = null;
+		imgCatalaRelease = null;
+		imgCatalaFocus = null;
+		
 		System.gc();
 	}
 

@@ -25,8 +25,11 @@ public class RscManager {
 	public static final byte TXT_AUTOR_5 = TXT_AUTOR_4+1;
 	public static final byte TXT_AUTOR_6 = TXT_AUTOR_5+1;
 	
+	public static final int TXT_LANGUAGE = TXT_AUTOR_6+1;
+	public static final int TXT_SOUND = TXT_LANGUAGE+1;
+	public static final int TXT_ALERTS = TXT_SOUND+1;
 	//Language text
-	public static final int TXT_ENGLISH = TXT_AUTOR_6+1;
+	public static final int TXT_ENGLISH = TXT_ALERTS+1;
 	public static final int TXT_SPANISH = TXT_ENGLISH+1;
 	public static final int TXT_CATALA = TXT_SPANISH+1;
 	

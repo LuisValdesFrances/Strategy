@@ -5,10 +5,12 @@ import com.luis.lgameengine.gameutils.Settings;
 
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
@@ -26,10 +28,9 @@ public class MainActivity extends Activity{
 	private Main main;
 	
 	
-	/*
+	
 	private PowerManager powerManager;
 	private PowerManager.WakeLock wakeLock;
-	*/
 	
 	
 	@Override
@@ -69,31 +70,31 @@ public class MainActivity extends Activity{
 		
 		
 		//Screen no sleep
-		/*
+		
 		powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
-		*/
+		
 	}
 	
 	@Override
 	public void onResume(){
 		super.onResume();
-		/*
+		
 		if(wakeLock != null){
 			wakeLock.acquire();
 		}
-		*/
+		
 		main.unPause();
 	}
 	
 	@Override
 	public void onPause(){
 		super.onPause();
-		/*
+		
 		if(wakeLock != null){
 			wakeLock.release();
 		}
-		*/
+		
 		main.pause();
 	}
 	
