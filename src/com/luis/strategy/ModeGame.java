@@ -23,6 +23,7 @@ import com.luis.strategy.data.GameBuilder;
 import com.luis.strategy.datapackage.scene.NotificationListData;
 import com.luis.strategy.datapackage.scene.SceneData;
 import com.luis.strategy.game.GameManager;
+import com.luis.strategy.gui.ConfigurationBox;
 import com.luis.strategy.map.GameScene;
 
 /**
@@ -234,6 +235,9 @@ public class ModeGame {
 			};
 			pauseBox.start();
 			break;
+		case Define.ST_GAME_OPTIONS:
+			ModeMenu.configurationBox.start();
+			break;
 		case Define.ST_GAME_CONFIRMATION_QUIT:
 			confirmationQuitBox = new MenuBox(
 					Define.SIZEX, Define.SIZEY, 
@@ -315,9 +319,23 @@ public class ModeGame {
 			
 		case Define.ST_GAME_PAUSE:
 			if(!pauseBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec())){
-				Main.changeState(
-						pauseBox.getIndexPressed()==0?Define.ST_GAME_RUN:Define.ST_GAME_CONFIRMATION_QUIT, 
-						false);
+				
+				switch(pauseBox.getIndexPressed()){
+				case 0:
+					Main.changeState(Define.ST_GAME_RUN, false);
+					break;
+				case 1:
+					Main.changeState(Define.ST_GAME_OPTIONS, false);
+					break;
+				case 2:
+					Main.changeState(Define.ST_GAME_CONFIRMATION_QUIT, false);
+					break;
+				}
+			}
+			break;
+		case Define.ST_GAME_OPTIONS:
+			if(!ModeMenu.configurationBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec())){
+				Main.changeState(Define.ST_GAME_PAUSE, false);
 			}
 			break;
 		case Define.ST_GAME_CONFIRMATION_QUIT:
@@ -357,6 +375,10 @@ public class ModeGame {
 		case Define.ST_GAME_PAUSE:
 			gameManager.draw(_g);
 			pauseBox.draw(_g, GfxManager.imgBlackBG);
+			break;
+		case Define.ST_GAME_OPTIONS:
+			gameManager.draw(_g);
+			ModeMenu.configurationBox.draw(_g, GfxManager.imgBlackBG);
 			break;
 		case Define.ST_GAME_CONFIRMATION_QUIT:
 			gameManager.draw(_g);

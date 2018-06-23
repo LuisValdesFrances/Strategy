@@ -64,7 +64,8 @@ public class Define {
 	public static final int ST_GAME_NOTIFICATION = 102;
 	public static final int ST_GAME_RUN = 103;
 	public static final int ST_GAME_PAUSE = 104;
-	public static final int ST_GAME_CONFIRMATION_QUIT = 105;
+	public static final int ST_GAME_OPTIONS = 105;
+	public static final int ST_GAME_CONFIRMATION_QUIT = 106;
 	
 	// Nombre del fichero donde se guardaran y cargaran los datos:
 	//language\nsound\enableAlerts\game3D

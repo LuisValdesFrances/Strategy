@@ -47,6 +47,9 @@ public class GfxManager {
 	public static Image imgUncheckFocus;
 	public static Image imgUncheckRelease;
 	
+	public static Image imgButtonOptionsRelease;
+	public static Image imgButtonOptionsFocus;
+	
 	public static Image imgEnglishRelease;
 	public static Image imgEnglishFocus;
 	public static Image imgSpanishRelease;
@@ -381,6 +384,17 @@ public class GfxManager {
 				imgRollList.add(Image.createImage("/roll8.png"));
 				imgRollList.add(Image.createImage("/roll9.png"));
 				imgRollList.add(Image.createImage("/roll10.png"));
+				
+				imgCheckRelease = Image.createImage("/check_release.png");
+				imgCheckFocus = Image.createImage("/check_focus.png");
+				imgUncheckRelease = Image.createImage("/uncheck_release.png");
+				imgUncheckFocus = Image.createImage("/uncheck_focus.png");
+				imgEnglishRelease = Image.createImage("/english_release.png");
+				imgEnglishFocus = Image.createImage("/english_focus.png");
+				imgSpanishRelease = Image.createImage("/spanish_release.png");
+				imgSpanishFocus = Image.createImage("/spanish_focus.png");
+				imgCatalaRelease = Image.createImage("/catala_release.png");
+				imgCatalaFocus = Image.createImage("/catala_focus.png");
 
 			} catch (IOException ex) {
 				ex.printStackTrace();
@@ -411,6 +425,8 @@ public class GfxManager {
 		imgButtonSearchBigRelease = Image.createImage("/search_big_release.png");
 		imgButtonSearchBigFocus = Image.createImage("/search_big_focus.png");
 		imgButtonInvisible = Image.createImage("/button_invisible.png");
+		imgButtonOptionsRelease = Image.createImage("/options_big_release.png");
+		imgButtonOptionsFocus = Image.createImage("/options_big_focus.png");
 		
 		imgButtonKeyboardRelease = Image.createImage("/button_keyboard_release.png");
 		imgButtonKeyboardFocus = Image.createImage("/button_keyboard_focus.png");
@@ -443,16 +459,16 @@ public class GfxManager {
 		imgFlagList.add(Image.createImage("/flag7.png"));
 		imgFlagList.add(Image.createImage("/flag8.png"));
 		
-		imgCheckRelease = Image.createImage("check_release.png");
-		imgCheckFocus = Image.createImage("check_focus.png");
-		imgUncheckRelease = Image.createImage("uncheck_release.png");
-		imgUncheckFocus = Image.createImage("uncheck_focus.png");
-		imgEnglishRelease = Image.createImage("english_release.png");
-		imgEnglishFocus = Image.createImage("english_focus.png");
-		imgSpanishRelease = Image.createImage("spanish_release.png");
-		imgSpanishFocus = Image.createImage("spanish_focus.png");
-		imgCatalaRelease = Image.createImage("catala_release.png");
-		imgCatalaFocus = Image.createImage("catala_focus.png");
+		imgCheckRelease = Image.createImage("/check_release.png");
+		imgCheckFocus = Image.createImage("/check_focus.png");
+		imgUncheckRelease = Image.createImage("/uncheck_release.png");
+		imgUncheckFocus = Image.createImage("/uncheck_focus.png");
+		imgEnglishRelease = Image.createImage("/english_release.png");
+		imgEnglishFocus = Image.createImage("/english_focus.png");
+		imgSpanishRelease = Image.createImage("/spanish_release.png");
+		imgSpanishFocus = Image.createImage("/spanish_focus.png");
+		imgCatalaRelease = Image.createImage("/catala_release.png");
+		imgCatalaFocus = Image.createImage("/catala_focus.png");
 		
 		imgNotificationBox = Image
 				.createImage("/notification_box.png");
@@ -619,6 +635,16 @@ public class GfxManager {
 		imgOkIcon = null;
 		imgShield = null;
 		imgRollList = null;
+		
+		imgCheckRelease = null;
+		imgCheckFocus = null;
+		imgUncheckRelease = null;
+		imgUncheckFocus = null;
+		imgEnglishFocus = null;
+		imgSpanishRelease = null;
+		imgSpanishFocus = null;
+		imgCatalaRelease = null;
+		imgCatalaFocus = null;
 		System.gc();
 	}
 

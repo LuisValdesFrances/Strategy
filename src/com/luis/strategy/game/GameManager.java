@@ -46,9 +46,9 @@ import com.luis.strategy.map.Troop;
 public class GameManager {
 	
 	//
-	private static final boolean MODE_3D = false;
+	public static boolean game3D = false;
 	private Image gameBuffer;
-	public float distorsion = 1.14f;
+	public float distorsion = 1.16f;
 	
 	public DataSender dataSender;
 	
@@ -555,6 +555,9 @@ public class GameManager {
 							
 							if(getCurrentPlayer().getActionIA() == null){
 								confirmActionBox.start(null, RscManager.allText[RscManager.TXT_GAME_CONFIRM_ACTION]);
+								btnFlagHelmet.hide();
+								btnFlagCastle.hide();
+								btnCancel.setDisabled(true);
 							}else{
 								startAction();
 							}
@@ -800,7 +803,7 @@ public class GameManager {
 		 }
 		
 		 
-		 if(MODE_3D){
+		 if(game3D){
 			 float totalW = (float)gameBuffer.getWidth()*distorsion;
 			 float totalH = (float)gameBuffer.getHeight()*distorsion;
 			 g.drawDistorisionImage(

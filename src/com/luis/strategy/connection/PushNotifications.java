@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.luis.lgameengine.implementation.fileio.FileIO;
 import com.luis.strategy.Main;
@@ -17,6 +18,7 @@ public class PushNotifications extends Thread{
 	private Context context;
 	private String user;
 	private int notificationId;
+	private boolean active;
 	
 	private List<Notification> notificationList;
 	
@@ -55,7 +57,9 @@ public class PushNotifications extends Thread{
 
 	@Override
 	public void run() {
-		while (true) {
+		Log.i("Debug", "Inicio de las notificaciones");
+		active = true;
+		while (active) {
 			try {
 
 				while (!Main.getInstance().isPaused()) {
@@ -115,17 +119,30 @@ public class PushNotifications extends Thread{
 				}
 
 				//Thread.sleep(1000 * 60 * 60 * 12);
-				Thread.sleep(10000);
+				Thread.sleep(3000);
+				
+				Log.i("Debug", "Actualizadas las notificaciones...");
 
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
+		Log.i("Debug", "Fin de las notificaciones");
 	}
 	
 	class Notification{
 		public int scene;
 		public boolean notified;
 	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+	
+	
 
 }

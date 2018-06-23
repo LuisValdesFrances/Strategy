@@ -218,6 +218,7 @@ public class Main extends Screen implements Runnable {
 				case Define.ST_GAME_NOTIFICATION:
 				case Define.ST_GAME_RUN:
 				case Define.ST_GAME_PAUSE:
+				case Define.ST_GAME_OPTIONS:
 				case Define.ST_GAME_CONFIRMATION_QUIT:
 					if (!isLoading) {
 						ModeGame.update(state);
@@ -292,6 +293,7 @@ public class Main extends Screen implements Runnable {
 		         case Define.ST_GAME_NOTIFICATION:
 		         case Define.ST_GAME_RUN:
 		         case Define.ST_GAME_PAUSE:
+		         case Define.ST_GAME_OPTIONS:
 		         case Define.ST_GAME_CONFIRMATION_QUIT:
 		        	 ModeGame.draw(_g, state);
 					break;

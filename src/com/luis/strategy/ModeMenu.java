@@ -30,10 +30,12 @@ import com.luis.strategy.datapackage.scene.PreSceneData;
 import com.luis.strategy.datapackage.scene.PreSceneListData;
 import com.luis.strategy.datapackage.scene.SceneData;
 import com.luis.strategy.datapackage.scene.SceneListData;
+import com.luis.strategy.game.GameManager;
 import com.luis.strategy.gui.ConfigMapBox;
 import com.luis.strategy.gui.CreateUserBox;
 import com.luis.strategy.gui.DialogBox;
 import com.luis.strategy.gui.LoginBox;
+import com.luis.strategy.gui.ConfigurationBox;
 import com.luis.strategy.gui.SceneDataListBox;
 import com.luis.strategy.gui.SimpleBox;
 
@@ -46,9 +48,6 @@ public class ModeMenu {
 	
 	public static int cita;
 	public static int author;
-	
-	public static int iLanguageSelect;
-	public static int iSoundSelect;
 	
 	private static Button btnCancel;
 	private static Button btnBack;
@@ -65,9 +64,11 @@ public class ModeMenu {
 	private static Button btnSearchGame;
 	private static Button btnCreateScene;
 	private static Button btnInfo;
+	private static Button btnConfiguration;
 	
 	private static Button btnAbout;
 	private static Button btnHelp;
+	
 	
 	private static ListBox createSceneBox;
 	
@@ -80,6 +81,7 @@ public class ModeMenu {
 	private static SimpleBox gameVersionBox;
 	private static ListBox notificationBox;
 	private static DialogBox dialogBox;
+	public static ConfigurationBox configurationBox;
 	
 	private static boolean createUsserSucces;
 	private static boolean loginUsserSucces;
@@ -94,6 +96,8 @@ public class ModeMenu {
 	
 	private static int numLetters;
 	
+	private static String dataConfig;
+	
 	private static PushNotifications pushNotifications;
 	
 	public static void init(int _iMenuState){
@@ -104,7 +108,7 @@ public class ModeMenu {
 			Font.init(GfxManager.vImgFontSmall, GfxManager.vImgFontMedium, GfxManager.vImgFontBig);
 			
 			//Miro si hay datos guardados
-			String dataConfig = FileIO.getInstance().loadData(Define.DATA_CONFIG, Main.getInstance().getActivity());
+			dataConfig = FileIO.getInstance().loadData(Define.DATA_CONFIG, Main.getInstance().getActivity());
 			
 			if(dataConfig == null){
 				
@@ -135,19 +139,21 @@ public class ModeMenu {
 				RscManager.loadLanguage(0);
 			}
 			
+			//Sonido
+			SndManager.getInstance().setSound(dataConfig.split("\n")[1].equals("true"));
 			//Notificaciones
-			String name = null;
-			String data = FileIO.getInstance().loadData(Define.DATA_USER, 
+			String dataUser = FileIO.getInstance().loadData(Define.DATA_USER, 
 					Settings.getInstance().getActiviy().getApplicationContext());
-
-			if (data != null && data.length() > 0) {
-				String[] d = data.split("\n");
-				name = d[0];
+			if(dataUser != null){
+				String n =  dataUser.split("\n")[0];
+				pushNotifications = new PushNotifications(Main.getInstance().getActivity(), n);
 				
-				pushNotifications = new PushNotifications(Main.getInstance().getActivity(), name);
-				pushNotifications.start();
-			} 
-			
+				if(dataConfig.split("\n")[2].equals("true")){
+					pushNotifications.start();
+				}
+			}
+			//Modo 3D
+			GameManager.game3D = dataConfig.split("\n")[3].equals("true");
 			
 			MenuElement.bgAlpha = (int)(GameParams.BG_BLACK_ALPHA*0.5);
 			
@@ -155,6 +161,15 @@ public class ModeMenu {
         	startTime = System.currentTimeMillis();
         	cita = Main.getRandom(RscManager.TXT_CITA_1, RscManager.TXT_CITA_6);
 			author = RscManager.TXT_CITA_6+cita;
+			
+			configurationBox = new ConfigurationBox(){
+				@Override
+				public void onFinish(){
+					if(pushNotifications != null){
+						pushNotifications.setActive(configurationBox.isNotifications());
+					}
+				}
+			};
 			
 			btnBack = new Button(GfxManager.imgButtonArrowBackRelease, GfxManager.imgButtonArrowBackFocus,
 					Define.SIZEX32+GfxManager.imgButtonArrowBackRelease.getWidth()/2,
@@ -223,8 +238,8 @@ public class ModeMenu {
 			};
 			
 			btnInfo = new Button(GfxManager.imgButtonInfoRelease, GfxManager.imgButtonInfoFocus,
-					Define.SIZEX32+GfxManager.imgButtonInfoRelease.getWidth()/2,
-					Define.SIZEY32+GfxManager.imgButtonArrowBackRelease.getHeight()/2,
+					Define.SIZEY64 + GfxManager.imgButtonInfoRelease.getWidth()/2,
+					Define.SIZEY64 + GfxManager.imgButtonInfoRelease.getHeight()/2,
 					null, -1){
 				
 				@Override
@@ -234,6 +249,22 @@ public class ModeMenu {
 					SndManager.getInstance().playFX(Main.FX_NEXT, 0);
 					reset();
 					Main.changeState(Define.ST_MENU_INFO, false);
+				};
+			};
+			
+			btnConfiguration = new Button(
+					GfxManager.imgButtonOptionsRelease, GfxManager.imgButtonOptionsFocus,
+					Define.SIZEY64 + GfxManager.imgButtonInfoRelease.getWidth()/2,
+					Define.SIZEY32 + (int)(GfxManager.imgButtonInfoRelease.getHeight()*1.5f),
+					null, -1){
+				
+				@Override
+				public void onButtonPressDown(){}
+				@Override
+				public void onButtonPressUp() {
+					SndManager.getInstance().playFX(Main.FX_NEXT, 0);
+					reset();
+					configurationBox.start();
 				};
 			};
 			
@@ -667,7 +698,12 @@ public class ModeMenu {
 			 
 			 if(pushNotifications == null){
 				 pushNotifications = new PushNotifications(Main.getInstance().getActivity(), GameState.getInstance().getName());
-				 pushNotifications.start();
+				 
+				 if(dataConfig.split("\n")[1].equals("true")){
+					 if(!pushNotifications.isAlive()){
+						pushNotifications.start();
+					 }
+				 }
 			 }
 			 
 			 btnSearchGame = new Button(
@@ -1003,9 +1039,17 @@ public class ModeMenu {
 		
 		case Define.ST_MENU_MAIN:
 			runMenuBG(Main.getDeltaSec());
+			configurationBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
+				
+			btnConfiguration.setDisabled(configurationBox.isActive());
+			btnConfiguration.update(UserInput.getInstance().getMultiTouchHandler());
+			btnCampaign.setDisabled(configurationBox.isActive());
 			btnCampaign.update(UserInput.getInstance().getMultiTouchHandler());
+			btnMultiPlayer.setDisabled(configurationBox.isActive());
 			btnMultiPlayer.update(UserInput.getInstance().getMultiTouchHandler());
+			btnInfo.setDisabled(configurationBox.isActive());
 			btnInfo.update(UserInput.getInstance().getMultiTouchHandler());
+			
 			break;
 			
 		case Define.ST_MENU_INFO:
@@ -1157,6 +1201,7 @@ public class ModeMenu {
 			_g.drawImage(GfxManager.imgBlackBG, 0, 0, Graphics.TOP | Graphics.LEFT);
 			_g.setAlpha(255);
 			break;
+			
 		case Define.ST_MENU_LOGO:
 			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 			_g.setColor(Main.COLOR_BLACK);
@@ -1182,6 +1227,8 @@ public class ModeMenu {
 			btnCampaign.draw(_g, 0, 0);
 			btnMultiPlayer.draw(_g, 0, 0);
 			btnInfo.draw(_g, 0, 0);
+			btnConfiguration.draw(_g, 0, 0);
+			configurationBox.draw(_g, GfxManager.imgBlackBG);
 			_g.setAlpha(alpha);
 			_g.drawImage(GfxManager.imgBlackBG, 0, 0, Graphics.TOP | Graphics.LEFT);
 			_g.setAlpha(255);
@@ -1202,6 +1249,7 @@ public class ModeMenu {
 			drawMenuBG(_g);
 			btnBack.draw(_g, 0, 0);
 			break;
+			
 		case Define.ST_MENU_ABOUT:
 			drawMenuBG(_g);
 			btnBack.draw(_g, 0, 0);
@@ -1227,6 +1275,7 @@ public class ModeMenu {
 				gameVersionBox.draw(_g, GfxManager.imgBlackBG);
 			}
 			break;
+			
 		case Define.ST_MENU_SELECT_MAP:
 			drawMenuBG(_g);
 			btnBack.draw(_g, 0, 0);
@@ -1246,6 +1295,7 @@ public class ModeMenu {
 			 btnNewAccount.draw(_g, 0, 0);
 			 btnLogin.draw(_g, 0, 0);
 			 break;
+			 
 		 case Define.ST_MENU_ON_LINE_CREATE_USER:
 			 drawMenuBG(_g);
 			 btnBack.draw(_g, 0, 0);
@@ -1256,6 +1306,7 @@ public class ModeMenu {
 			 btnBack.draw(_g, 0, 0);
 			 loginBox.draw(_g);
 			 break;
+			 
 		 case Define.ST_MENU_ON_LINE_LIST_ALL_GAME:
 			 drawMenuBG(_g);
 			 btnBack.draw(_g, 0, 0);
@@ -1274,8 +1325,8 @@ public class ModeMenu {
 				 notificationBox.draw(_g, GfxManager.imgBlackBG);
 				 btnCancel.draw(_g, (int)notificationBox.getModPosX(), 0);
 			 }
-			 
 			 break;
+			 
 		 case Define.ST_MENU_ON_LINE_LIST_JOIN_GAME:
 			 drawMenuBG(_g);
 			 btnBack.draw(_g, 0, 0);
@@ -1289,6 +1340,7 @@ public class ModeMenu {
 				 joinPreSceneBox.draw(_g, GfxManager.imgBlackBG);
 			 }
 			 break;
+			 
 		 case Define.ST_MENU_ON_LINE_CREATE_SCENE:
 			 drawMenuBG(_g);
 			 btnBack.draw(_g, 0, 0);
@@ -1298,7 +1350,6 @@ public class ModeMenu {
 			 }
 			 break;
 		
-		 
 		 case Define.ST_MENU_EXIT:
 			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 			break;
@@ -1425,9 +1476,11 @@ public class ModeMenu {
 		cloudNear2BGX-=40f*delta;
 		
 		if(
+				!configurationBox.isActive() &&
+				(
 				Main.state == Define.ST_MENU_MAIN || 
 				Main.state == Define.ST_MENU_SELECT_GAME || 
-				Main.state == Define.ST_MENU_ON_LINE_START
+				Main.state == Define.ST_MENU_ON_LINE_START)
 				
 		){
 			logoAlpha +=delta*255;
