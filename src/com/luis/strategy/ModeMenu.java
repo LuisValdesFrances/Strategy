@@ -52,10 +52,10 @@ public class ModeMenu {
 	private static Button btnCancel;
 	private static Button btnBack;
 	private static Button btnNext;
-	private static Button btnCampaign;
 	private static Button btnMultiPlayer;
 	private static Button btnOnLine;
 	private static Button btnPassAndPlay;
+	private static Button btnCampaign;
 	//private static Button btnContinueCampaing;
 	private static Button btnContinuePassAndPlay;
 	
@@ -141,6 +141,7 @@ public class ModeMenu {
 			
 			//Sonido
 			SndManager.getInstance().setSound(dataConfig.split("\n")[1].equals("true"));
+			
 			//Notificaciones
 			String dataUser = FileIO.getInstance().loadData(Define.DATA_USER, 
 					Settings.getInstance().getActiviy().getApplicationContext());
@@ -152,6 +153,7 @@ public class ModeMenu {
 					pushNotifications.start();
 				}
 			}
+			
 			//Modo 3D
 			GameManager.game3D = dataConfig.split("\n")[3].equals("true");
 			
@@ -1043,7 +1045,6 @@ public class ModeMenu {
 				
 			btnConfiguration.setDisabled(configurationBox.isActive());
 			btnConfiguration.update(UserInput.getInstance().getMultiTouchHandler());
-			btnCampaign.setDisabled(configurationBox.isActive());
 			btnCampaign.update(UserInput.getInstance().getMultiTouchHandler());
 			btnMultiPlayer.setDisabled(configurationBox.isActive());
 			btnMultiPlayer.update(UserInput.getInstance().getMultiTouchHandler());
