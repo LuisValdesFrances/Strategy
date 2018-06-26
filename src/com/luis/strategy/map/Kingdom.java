@@ -24,6 +24,7 @@ public class Kingdom extends MapObject{
 	public static final int TARGET_DOMAIN = 1;
 	public static final int TARGET_AGGREGATION = 2;
 	
+	private CityManagement cityManagement;
 	
 	public Kingdom(
 		MapObject map,
@@ -63,6 +64,10 @@ public class Kingdom extends MapObject{
 				select = false;
 			}
 		};
+		
+		if(isACity()){
+			cityManagement = new CityManagement();
+		}
 	}
 	
 	public boolean hasTerrain(int type){
