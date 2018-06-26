@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.luis.lgameengine.gui.Button;
-import com.luis.lgameengine.implementation.sound.SndManager;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.constants.GameParams;
 
