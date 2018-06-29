@@ -4,11 +4,15 @@ public class CityManagement {
 	
 	/*
 	 * Mititar:
-	 * Torre -> Muralla -> Fortaleza
+	 * Torre -> Muralla -> Fortaleza (Aumentan defensa)
 	 * 
-	 * Economico -> Taller -> Gremios -> Mercado
+	 * Economico -> Taller -> Gremios -> Mercado (Aumentan recaudación)
 	 * 
-	 * Religioso -> Capilla -> Iglesia -> Catedral
+	 * Religioso -> Capilla -> Iglesia -> Catedral (Cabeza de la Iglesia-> ¿Bindadarse?)
+	 */
+	
+	/*
+	 * Cabeza de la Iglesia: este seria un jugador que podría blindarse y no recibir ataques ¿?
 	 */
 	
 	//Ofrecer la posibilidad de arrasar ciudades??
