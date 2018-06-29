@@ -19,6 +19,18 @@ public class CityManagement {
 	//1-La elimino del mapa -> Guardar en Scene lista de territorios arrasados
 	//2-Le quito todas las mejoras 
 	
+	public static final int[][] BUILDING_COST = {
+												{200, 400, 800},
+												{300, 600, 1200},
+												{400, 800, 1600}
+	};
+	
+	public static final int[][] BUILDING_STATE = {
+												{3, 5, 7},
+												{4, 7, 10},
+												{5, 9, 13}
+	};
+	
 	class Building{
 		int type;
 		int state;
