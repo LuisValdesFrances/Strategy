@@ -5,12 +5,14 @@ La guerra es un gran esfuerzo de todos hacia la paz.
 Matadlos a todos, que Dios ya reconocerá a los suyos.
 Los dos guerreros más poderosos son la paciencia y el tiempo.
 He recorrido un largo camino desde el campo de batalla a la mesa de paz.
+Maldito hombre de letras, lo destrozare con mis puños.
 Parmenides de Elea
 Francisco de Quevedo
 Montesquieu
 Arnaud Amairic
 Leo Tolstoy
 Moshe Dayan
+Burufulot
 Idioma
 Sonido
 Alertas
@@ -99,8 +101,8 @@ Has perdido el juego
 pierde el juego
 Atacante gana
 Atacante pierde
-El atacante ha destruido el enemido
-El atacante ha sido destriudo
+El atacante ha destruido el enemigo
+El atacante ha sido destruido
 Atacante pierde
 Defensor pierde
 bajas

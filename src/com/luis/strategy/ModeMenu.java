@@ -136,7 +136,7 @@ public class ModeMenu {
 			else if(language == 1){
 				RscManager.loadLanguage(1);
 			}else{
-				RscManager.loadLanguage(0);
+				RscManager.loadLanguage(2);
 			}
 			
 			//Sonido
@@ -161,8 +161,8 @@ public class ModeMenu {
 			
 			alpha = 255;
         	startTime = System.currentTimeMillis();
-        	cita = Main.getRandom(RscManager.TXT_CITA_1, RscManager.TXT_CITA_6);
-			author = RscManager.TXT_CITA_6+cita;
+        	cita = Main.getRandom(RscManager.TXT_CITA_1, RscManager.TXT_CITA_7);
+			author = RscManager.TXT_CITA_7+cita;
 			
 			configurationBox = new ConfigurationBox(){
 				@Override
