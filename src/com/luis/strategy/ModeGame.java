@@ -265,6 +265,9 @@ public class ModeGame {
 		}
 	}
 	
+	/*
+	 * No se cambia de jugador en este punto
+	 */
 	public static void sendSceneToServerAsin(final int newState){
 		Thread t = new Thread(){
 			@Override
