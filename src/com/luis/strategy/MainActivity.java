@@ -94,8 +94,13 @@ public class MainActivity extends Activity{
 		if(wakeLock != null){
 			wakeLock.release();
 		}
-		
 		main.pause();
+	}
+	
+	@Override
+	public void onStop(){
+		super.onStop();
+		main.saveAndSend();
 	}
 	
 	@Override

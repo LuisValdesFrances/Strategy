@@ -1,139 +1,141 @@
 ﻿
-La guerra es el arte de destruir a los hombres, la política es el arte de engañarlos.
-Tras la guerra, paz; de la paz, abundancia; de la abundancia, vicio; del vicio, la guerra.
-La guerra es un gran esfuerzo de todos hacia la paz.
-Matadlos a todos, que Dios ya reconocerá a los suyos.
-Los dos guerreros más poderosos son la paciencia y el tiempo.
-He recorrido un largo camino desde el campo de batalla a la mesa de paz.
-Parmenides de Elea
+La guerra és l'art de destruir els homes, la política és l'art de enganyar-los.
+Després de la guerra, pau; de la pau, abundància; de l'abundància, vici; del vici, la guerra.
+La guerra és un gran esforç de tots cap a la pau.
+Mateu-los a tots, que Déu ja reconeixerà els seus.
+Els dos guerrers més poderosos són la paciència i el temps.
+He recorregut un llarg camí des del camp de batalla a la taula de pau.
+Maleit escriptor desgraciat! Pense destrossarlo amb els meus punys.
+Parmenides d'Elea
 Francisco de Quevedo
 Montesquieu
 Arnaud Amairic
-Leo Tolstoy
+Leo Tolstoi
 Moshe Dayan
+Burufulot
 Idioma
-Sonido
-Alertas
+So
+Alertes
 English
-Español
+Espanyol
 Català
-CAMPAÑA
+CAMPANYA
 CONTINUAR
-EMPEZAR
+COMENÇAR
 MULTIJUGADOR
 ON LINE
-PASA Y JUEGA
-NUEVA CUENTA
-INICIAR SESION
-Juego
-Opciones
-Mas
-Salir
-Sonido On
-Sonido Off
-Vibracion On
-Vibracion Off
-Quieres sair?
+PASSA I JUGA
+NOU COMPTE
+INICIAR SESSIÓ
+Joc
+Opcions
+Mes
+Eixir
+So On
+So Off
+Vibració On
+Vibració Off
+Vols eixir?
 No
 Si
-AYUDA
-ACERCA DE
-Texto help.
-Diseñado y desarrollado: Luis Valdes. @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Musica y FX: Francisco Hoyos. @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ All right reserved.
+AJUDA
+SOBRE
+Text help.
+Dissenyat i desenvolupat: Luis Valdes. @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Musica y FX: Francisco Hoyos. @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ All right reserved.
 SELECCIONA UNA PARTIDA
 CREA UNA PARTIDA
-UNETE A UNA PARTIDA
+UNEIX-TE A UNA PARTIDA
 CONFIGURA UNA PARTIDA
-HUMANO
+HUMÀ
 IA
-TU TURNO
-TURNO
-Puntos:
+EL TEU TORN
+TORN
+Punts:
 Record:
 Continua
 Abandonar
-Nuevo record:
-¿Quires volver al menu?
-Notificaciones
-Nombre
+Nou rècord:
+¿Vols tornar al menu?
+Notificacions
+Nom
 Password
-Repite pass
-Passwords no coinciden
-Lo siento, ya existe un usuario con ese nombre. Prueba otro nombre.
-Nombre de usuario o password incorrectos
-Error de conexion
+Repeteix pass
+Passwords no coincideixen
+Ho sent, ja existeix un usuari amb aquest nom. Prova un altre nom.
+Nom d'usuari o password incorrectes
+Error de connexió
 Error de servidor
-No hay conexion a interrnet
-Se ha creado la cuenta
-Se ha creado la partida
-Conectado con
-¿Quieres unirte a la partida creada por
-Jugadores:
-Te has unido al juego
-Juego cargado
-Enviando datos de la partida...
-Tu versión del juego esta obsoleta. Por favor, descarga la ultima version.
-¡Tu reino te necesita!
-¿Comfirmas la orden?
-Tienes una partida para responder
-¿Quieres crear esta partida? La partida empezará cuando se hayan unido el resto de jugadores.
-TURNO:
-Llano
-Bosque
-Montaña
-Ciudad pequeña
-Ciudad mediana
-Ciudad grande
-Castillo
+No hi ha connexió a interrnet
+S'ha creat el compte
+S'ha creat la partida
+Connectat amb
+Vols unir-te a la partida creada per
+Jugadors:
+T'has unit al joc
+Joc carregat
+Enviant dades de la partida ...
+La teua versió del joc esta obsoleta. Per favor, descarrega la darrera versio.
+El teu regne et necessita!
+¿Comfirmas l'ordre?
+Tens una partida per respondre
+Vols crear aquesta partida? La partida començarà quan s'hagin unit la resta de jugadors.
+TORN:
+Pla
+Bosc
+Muntanya
+Ciutat xicoteta
+Ciutat mitjana
+Ciutat gran
+Castell
 Infanteria
 Caballeria
-Hostigadores
-Asedio
-RESULTADO
+Fustigadors
+Setge
+RESULTAT
 Jugador
 Gran derrota
 Derrota
-Victoria
-Gran victoria
-Has perdido el juego
-pierde el juego
-Atacante gana
-Atacante pierde
-El atacante ha destruido el enemido
-El atacante ha sido destriudo
-Atacante pierde
-Defensor pierde
-bajas
-Nuevo ejercito reclutado
-Los ejercitos han unido sus fuerzas
+Victòria
+Gran victòria
+Has perdut el joc
+perd el joc
+Atacant guanya
+Atacant perd
+L'atacant ha destruït l enemig
+L'atacant ha segut destruit
+Atacant perd
+Defensor perd
+baixes
+Nou exèrcit reclutat
+Els exèrcits han unit les seves forces
 ECONOMIA
-Ganancias
-Salarios
-El coste de las tropas excede tu tesoro. Descarta algunas.
-El número total de tropas excede el máximo. Se despediran las sobrantes.
-es el ganador!
-cambia su capital
-¿Realmente quieres descartar esta tropa
-por
-monedas
+Ganacies
+Salaris
+El cost de les tropes excedeix el teu tresor. Descarta algunes.
+El nombre total de tropes excedeix el màxim. S'acomiadaran les sobrants.
+és el guanyador!
+canvia la seua capital
+Realment vols descartar aquesta tropa
+per
+monedes
 ?
-Nueva tropa adquirda
-Equilibrio de poder
+Nova tropa adquirda
+Equilibri de poder
 ¡Critico!
-¡Pifia!
-Dificultad
-Tropa basica de eficiencia media en todo tipo de terrenos.
-Tropa poderosa en llano, poco eficiente en bosque y torpe en montaña.
-Expertos luchando en bosque y sobretodo en montaña. En llano son fáciles de vencer.
-Devastadoras en ciudades. En el resto de terrenos no aportan ninguna ventaja.
+¡Pífia!
+Dificultat
+Tropa bàsica d'eficiència mitjana en tot tipus de terrenys.
+Tropa poderosa en pla, poc eficient en bosc i dolenta en muntanya.
+Experts lluitant en bosc i sobretot en muntanya. En pla són fàcils de vèncer.
+Devastadores en ciutats. A la resta de terrenys no aporten cap avantatge.
 ATACAR
-HUIR
+FUGIR
 ESPERAR
-CANCELAR
-Has perdido la partida.
-pierde la partida.
-Tu ejercito ha sido derrotado.
-Tu ejercito ha vencido.
-Tu ejercito ha sido destruido.
-Tu ejercito ha destruido al enemigo.
-cambia su capital.
+CANCEL·LAR
+Has perdut la partida.
+perd la partida.
+El teu exèrcit ha estat derrotat.
+El teu exèrcit ha vençut.
+El teu exèrcit ha estat destruït.
+El teu exèrcit ha destruït l'enemic.
+canvia la seva capital.

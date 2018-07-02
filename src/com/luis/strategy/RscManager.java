@@ -17,15 +17,17 @@ public class RscManager {
 	public static final byte TXT_CITA_4 = TXT_CITA_3+1;
 	public static final byte TXT_CITA_5 = TXT_CITA_4+1;
 	public static final byte TXT_CITA_6 = TXT_CITA_5+1;
+	public static final byte TXT_CITA_7 = TXT_CITA_6+1;
 	
-	public static final byte TXT_AUTOR_1 = TXT_CITA_6+1;
+	public static final byte TXT_AUTOR_1 = TXT_CITA_7+1;
 	public static final byte TXT_AUTOR_2 = TXT_AUTOR_1+1;
 	public static final byte TXT_AUTOR_3 = TXT_AUTOR_2+1;
 	public static final byte TXT_AUTOR_4 = TXT_AUTOR_3+1;
 	public static final byte TXT_AUTOR_5 = TXT_AUTOR_4+1;
 	public static final byte TXT_AUTOR_6 = TXT_AUTOR_5+1;
+	public static final byte TXT_AUTOR_7 = TXT_AUTOR_6+1;
 	
-	public static final int TXT_LANGUAGE = TXT_AUTOR_6+1;
+	public static final int TXT_LANGUAGE = TXT_AUTOR_7+1;
 	public static final int TXT_SOUND = TXT_LANGUAGE+1;
 	public static final int TXT_PUSH_NOTIFICATIONS = TXT_SOUND+1;
 	//Language text

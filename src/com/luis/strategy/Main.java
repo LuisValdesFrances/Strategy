@@ -444,17 +444,18 @@ public class Main extends Screen implements Runnable {
 		Log.i("INFO", "Llamada a pause()");
 		isPaused = true;
 		
-		//Guardo
-		if(state >= Define.ST_GAME_RUN && GameState.getInstance().getGameMode() == GameState.GAME_MODE_ONLINE){
-			ModeGame.sendSceneToServerAsin(Define.ST_MENU_MAIN);
-		}else{
-			if(state == Define.ST_GAME_RUN){
-				changeState(Define.ST_GAME_PAUSE, false);
-			}
+		if(state == Define.ST_GAME_RUN){
+			changeState(Define.ST_GAME_PAUSE, false);
 		}
 		
 		SndManager.getInstance().pauseMusic();
 		SndManager.getInstance().pauseFX();
+	}
+	
+	public void saveAndSend(){
+		if(state >= Define.ST_GAME_RUN && GameState.getInstance().getGameMode() == GameState.GAME_MODE_ONLINE){
+			ModeGame.sendSceneToServerAsin(Define.ST_MENU_MAIN);
+		}
 	}
 
 	public void unPause() {
