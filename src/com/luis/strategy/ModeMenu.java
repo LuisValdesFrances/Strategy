@@ -598,7 +598,8 @@ public class ModeMenu {
 						 String msg = "";
 						 Main.getInstance().startClock(Main.TYPE_EARTH);
 						 String result = OnlineInputOutput.getInstance().sendUser(
-								 Main.getInstance().getActivity(), "createUserServlet", getTextName(), getTextPassword());//check
+								 Main.getInstance().getActivity(), OnlineInputOutput.URL_CREATE_USER, 
+								 getTextName(), getTextPassword());//check
 						 Main.getInstance().stopClock();
 						 
 						 if(result.equals("Server error")){
@@ -654,7 +655,7 @@ public class ModeMenu {
 					 String msg = "";
 					 Main.getInstance().startClock(Main.TYPE_EARTH);
 					 String result = OnlineInputOutput.getInstance().sendUser(
-							 Main.getInstance().getActivity(), "loginUserServlet", getTextName(), getTextPassword());//check
+							 Main.getInstance().getActivity(), OnlineInputOutput.URL_LOGIN_USER, getTextName(), getTextPassword());//check
 					 Main.getInstance().stopClock();
 					 
 					if(result.equals("Server error")){
