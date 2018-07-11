@@ -132,7 +132,20 @@ public class Kingdom extends MapObject{
 		for(Terrain terrain : getTerrainList()){
 			tax += GameParams.TERRAIN_TAX[terrain.getType()];
 		}
+		
+		//Sumo propiedades ciudades:
+		if(cityManagement != null){
+			
+		}
 		return tax;
+	}
+	
+	public int getDefense(int progressIndex){
+		int defense = 0;
+		
+		defense = GameParams.TERRAIN_DEFENSE[terrainList.get(progressIndex).getType()];
+		
+		return defense;
 	}
 
 	public int getTarget() {

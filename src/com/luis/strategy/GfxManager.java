@@ -134,6 +134,17 @@ public class GfxManager {
 
 	public static List<Image> imgTerrain;
 	public static List<Image> imgTerrainBox;
+	
+	public static Image imgLevelUpRelease;
+	public static Image imgLevelUpFocus;
+	public static Image imgLevelUpDisabled;
+	
+	public static List<Image> imgTowerList;
+	public static List<Image> imgTowerBNList;
+	public static List<Image> imgMarketList;
+	public static List<Image> imgMarketBNList;
+	public static List<Image> imgChurchList;
+	public static List<Image> imgChurchBNList;
 
 	public static List<Image> imgBigTroop;
 	public static List<Image> imgSmallTroop;
@@ -229,6 +240,36 @@ public class GfxManager {
 					imgMapList.add(Image.createImage("/maps/map_16.png"));
 					break;
 				}
+				
+				imgTowerList = new ArrayList<Image>();
+				imgTowerBNList = new ArrayList<Image>();
+				imgMarketList = new ArrayList<Image>();
+				imgMarketBNList = new ArrayList<Image>();
+				imgChurchList = new ArrayList<Image>();
+				imgChurchBNList = new ArrayList<Image>();
+				
+				imgTowerList.add(Image.createImage("/tower1.png"));
+				imgTowerList.add(Image.createImage("/tower2.png"));
+				imgTowerList.add(Image.createImage("/tower3.png"));
+				imgTowerBNList.add(Image.createImage("/tower1_bn.png"));
+				imgTowerBNList.add(Image.createImage("/tower2_bn.png"));
+				imgTowerBNList.add(Image.createImage("/tower3_bn.png"));
+				imgMarketList.add(Image.createImage("/market1.png"));
+				imgMarketList.add(Image.createImage("/market2.png"));
+				imgMarketList.add(Image.createImage("/market3.png"));
+				imgMarketBNList.add(Image.createImage("/market1_bn.png"));
+				imgMarketBNList.add(Image.createImage("/market2_bn.png"));
+				imgMarketBNList.add(Image.createImage("/market3_bn.png"));
+				imgChurchList.add(Image.createImage("/church1.png"));
+				imgChurchList.add(Image.createImage("/church2.png"));
+				imgChurchList.add(Image.createImage("/church3.png"));
+				imgChurchBNList.add(Image.createImage("/church1_bn.png"));
+				imgChurchBNList.add(Image.createImage("/church2_bn.png"));
+				imgChurchBNList.add(Image.createImage("/church3_bn.png"));
+				
+				imgLevelUpRelease = Image.createImage("level_up_release.png");
+				imgLevelUpFocus = Image.createImage("level_up_focus.png");
+				imgLevelUpDisabled = Image.createImage("level_up_disabled.png");
 				
 				imgTextBG = Image.createImage("/text_bg.png");
 				imgNickBox = Image.createImage("/nick_box.png");
@@ -543,6 +584,13 @@ public class GfxManager {
 		//Menu commons
 		imgButtonMenuBigRelease = null;
 		imgButtonMenuBigFocus = null;
+		
+		imgTowerList = null;
+		imgTowerBNList = null;
+		imgMarketList = null;
+		imgMarketBNList = null;
+		imgChurchList = null;
+		imgChurchBNList = null;
 		
 		imgNickBox = null;
 		

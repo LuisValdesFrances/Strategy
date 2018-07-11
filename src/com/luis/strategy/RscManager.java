@@ -117,7 +117,11 @@ public class RscManager {
 	public static final int TXT_GAME_HARASSERS= TXT_GAME_KNIGHTS+1;
 	public static final int TXT_GAME_SIEGE= TXT_GAME_HARASSERS+1;
 	
-	public static final int TXT_GAME_RESULT= TXT_GAME_SIEGE+1;
+	public static final int TXT_GAME_DEFENSE= TXT_GAME_SIEGE+1;
+	public static final int TXT_GAME_GOLD= TXT_GAME_DEFENSE+1;
+	public static final int TXT_GAME_FAITH= TXT_GAME_GOLD+1;
+	
+	public static final int TXT_GAME_RESULT= TXT_GAME_FAITH+1;
 	public static final int TXT_GAME_PLAYER= TXT_GAME_RESULT+1;
 	public static final int TXT_GAME_BIG_DEFEAT= TXT_GAME_PLAYER+1;
 	public static final int TXT_GAME_DEFEAT= TXT_GAME_BIG_DEFEAT+1;

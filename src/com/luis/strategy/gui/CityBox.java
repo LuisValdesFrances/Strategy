@@ -15,14 +15,15 @@ import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.map.Kingdom;
 import com.luis.strategy.map.Player;
 
-public class TerrainBox extends MenuBox{
+public class CityBox extends MenuBox{
 
 	private Button buttonInfo;
 	private Button buttonNewArmy;
 	private boolean recruited;
 	
-	public TerrainBox() {
-		super(Define.SIZEX, Define.SIZEY, GfxManager.imgMediumBox, null, null,
+	public CityBox() {
+		super(
+				Define.SIZEX, Define.SIZEY, GfxManager.imgMediumBox, null, null,
 				Define.SIZEX2, Define.SIZEY2-GfxManager.imgGameHud.getHeight()/2,
 				null,
 				null, Font.FONT_MEDIUM, Font.FONT_SMALL, -1, Main.FX_BACK);
@@ -43,54 +44,35 @@ public class TerrainBox extends MenuBox{
 				SndManager.getInstance().playFX(Main.FX_BACK, 0);
 			}
 		});
-		}
+	}
 	
 	private int headY;
-	private int bodyY;
-	private int imageY;
 	private Kingdom kingdom;
-	private int terrainIndex;
 	
 	private String textHeader;
-	private String textBody;
 	
 	public void start(Player player, Kingdom kingdom, boolean clear, int terrainIndex){
 		super.start();
 		
 		this.kingdom = kingdom;
-		this.terrainIndex = terrainIndex;
 		this.recruited = false;
 		
-		String text[] ={
-				RscManager.allText[RscManager.TXT_GAME_PLAIN], 
-				RscManager.allText[RscManager.TXT_GAME_FOREST], 
-				RscManager.allText[RscManager.TXT_GAME_MONTAIN],
-				RscManager.allText[RscManager.TXT_GAME_SMALL_CITY],
-				RscManager.allText[RscManager.TXT_GAME_MEDIUM_CITY],
-				RscManager.allText[RscManager.TXT_GAME_BIG_CITY]};
-		textHeader = text[terrainIndex];
-		textBody = "Defense: " + GameParams.TERRAIN_DEFENSE[terrainIndex];
+		textHeader = RscManager.allText[RscManager.TXT_GAME_DEFENSE] + " " + GameParams.TERRAIN_DEFENSE[terrainIndex];
+		textHeader += " - " + RscManager.allText[RscManager.TXT_GAME_GOLD]  + " " + + GameParams.TERRAIN_DEFENSE[terrainIndex];
+		textHeader += " - " + RscManager.allText[RscManager.TXT_GAME_FAITH]  + " " + + GameParams.TERRAIN_DEFENSE[terrainIndex];
 		
-		int sep = GfxManager.imgButtonInfoRelease.getHeight()/8 ;
+		int sep = GfxManager.imgButtonInfoRelease.getHeight()/6 ;
 		int totalHeight = 
-				Font.getFontHeight(Font.FONT_BIG) + 
-				Font.getFontHeight(Font.FONT_MEDIUM) + 
-				GfxManager.imgTerrainBox.get(0).getHeight() + 
-				GfxManager.imgButtonInfoRelease.getHeight()
-				+ sep*5;
+				Font.getFontHeight(Font.FONT_SMALL) + 
+				GfxManager.imgTowerList.get(2).getHeight()*3 + sep*5;
 		int initY = getY() - totalHeight/2;
 		
-		headY = initY + Font.getFontHeight(Font.FONT_BIG)/2 + sep;
-		bodyY = initY + Font.getFontHeight(Font.FONT_BIG) + Font.getFontHeight(Font.FONT_MEDIUM)/2 + sep*2;
-		imageY = initY + Font.getFontHeight(Font.FONT_BIG) + Font.getFontHeight(Font.FONT_MEDIUM) + 
-				GfxManager.imgTerrainBox.get(0).getHeight()/2 + sep*3;
+		headY = initY + Font.getFontHeight(Font.FONT_SMALL)/2 + sep;
 		
 		buttonInfo = new Button(
 				GfxManager.imgButtonInfoRelease, GfxManager.imgButtonInfoFocus, 
-				getX()-GfxManager.imgTerrainBox.get(0).getWidth()/2 + GfxManager.imgButtonInfoRelease.getWidth()/2, 
-				initY + 
-				Font.getFontHeight(Font.FONT_BIG) + Font.getFontHeight(Font.FONT_MEDIUM) + GfxManager.imgTerrainBox.get(0).getHeight() +
-				GfxManager.imgButtonInfoRelease.getHeight()/2 + sep*4, 
+				getX() - GfxManager.imgMediumBox.getWidth()/2, 
+				getY() + GfxManager.imgMediumBox.getHeight()/2, 
 				null, -1){
 			public void onButtonPressUp() {
 			};
@@ -98,8 +80,8 @@ public class TerrainBox extends MenuBox{
 		if(clear){
 			buttonNewArmy = new Button(
 					GfxManager.imgButtonNewArmyRelease, GfxManager.imgButtonNewArmyFocus, 
-					getX()+GfxManager.imgTerrainBox.get(0).getWidth()/2 - GfxManager.imgButtonNewArmyRelease.getWidth()/2, 
-					buttonInfo.getY(), 
+					getX() + GfxManager.imgMediumBox.getWidth()/2, 
+					getY() + GfxManager.imgMediumBox.getHeight()/2, 
 					null, -1){
 				public void onButtonPressUp() {
 					onBuy();
@@ -109,7 +91,6 @@ public class TerrainBox extends MenuBox{
 		}else{
 			buttonNewArmy = null;
 		}
-		
 	}
 	
 	@Override
@@ -127,15 +108,14 @@ public class TerrainBox extends MenuBox{
 		super.draw(g, GfxManager.imgBlackBG);
 		if(state != STATE_UNACTIVE){
 			
-			TextManager.drawSimpleText(g, Font.FONT_BIG, textHeader, 
+			g.setAlpha(110);
+			g.drawImage(GfxManager.imgTerrainBox.get(3), 
+					getX()+(int)modPosX, getY(), Graphics.VCENTER | Graphics.HCENTER);
+			g.setAlpha(255);
+			
+			TextManager.drawSimpleText(g, Font.FONT_SMALL, textHeader, 
 					getX()+(int)modPosX, headY, Graphics.VCENTER | Graphics.HCENTER);
 			
-			TextManager.drawSimpleText(g, Font.FONT_MEDIUM, textBody, 
-					getX()+(int)modPosX, bodyY, Graphics.VCENTER | Graphics.HCENTER);
-			
-			g.drawImage(GfxManager.imgTerrainBox.get(terrainIndex), 
-					getX()+(int)modPosX, imageY, Graphics.VCENTER | Graphics.HCENTER);
-		
 			buttonInfo.draw(g, (int)modPosX, 0);
 			if(buttonNewArmy != null){
 				buttonNewArmy.draw(g, (int)modPosX, 0);

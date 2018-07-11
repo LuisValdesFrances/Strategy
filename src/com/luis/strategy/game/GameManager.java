@@ -32,7 +32,7 @@ import com.luis.strategy.gui.DialogBox;
 import com.luis.strategy.gui.FlagButton;
 import com.luis.strategy.gui.MapBox;
 import com.luis.strategy.gui.SimpleBox;
-import com.luis.strategy.gui.TerrainBox;
+import com.luis.strategy.gui.CityBox;
 import com.luis.strategy.map.ActionIA;
 import com.luis.strategy.map.Army;
 import com.luis.strategy.map.Kingdom;
@@ -113,7 +113,7 @@ public class GameManager {
 	
 	private ArmyBox armyBox;
 	private BattleBox battleBox;
-	private TerrainBox terrainBox;
+	private CityBox cityBox;
 	private MapBox mapBox;
 	private SimpleBox economyBox;
 	private SimpleBox resultBox;
@@ -298,7 +298,7 @@ public class GameManager {
 			}
 		};
 		
-		terrainBox = new TerrainBox(){
+		cityBox = new CityBox(){
 			@Override
 			public void onBuy(){
 				super.onBuy();
@@ -507,7 +507,7 @@ public class GameManager {
 							//Porculeria de los terrenos
 							if(terrain.getType() >= GameParams.SMALL_CITY){
 							
-								terrainBox.start(getCurrentPlayer(), kingdom,
+								cityBox.start(getCurrentPlayer(), kingdom,
 									terrain.getType() >= GameParams.SMALL_CITY &&
 									getArmyAtKingdom(kingdom)== null && 
 									getCurrentPlayer().hasKingom(kingdom), 
@@ -634,7 +634,7 @@ public class GameManager {
 				}
 				break;
 			case SUB_STATE_CITY_MANAGEMENT:
-				if(!terrainBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
+				if(!cityBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
 					changeSubState(SUB_STATE_ACTION_WAIT);
 				}
 				break;
@@ -699,7 +699,7 @@ public class GameManager {
 			!endGameBox.isActive() &&
 			!troopExceedBox.isActive() &&
 			!confirmActionBox.isActive() &&
-			!terrainBox.isActive()){
+			!cityBox.isActive()){
 			updateCamera();
 			if(getCurrentPlayer().getActionIA() == null && state == STATE_ACTION){
 				gameScene.update(UserInput.getInstance().getMultiTouchHandler(), worldConver, gameCamera, delta);
@@ -918,7 +918,7 @@ public class GameManager {
 		troopExceedBox.draw(g, GfxManager.imgBlackBG);
 		confirmActionBox.draw(g, GfxManager.imgBlackBG);
 		battleBox.draw(g);
-		terrainBox.draw(g);
+		cityBox.draw(g);
 		mapBox.draw(g);
 		endGameBox.draw(g, GfxManager.imgBlackBG);
 		resultBox.draw(g, GfxManager.imgBlackBG);
@@ -1706,9 +1706,11 @@ public class GameManager {
 		army.setTouchY(newKingdom.getAbsoluteY());
 	}
 	
-	private void combat(Terrain terrain, Army armyAtack, Army armyDefense){
+	private void combat(Kingdom kingdom, Army armyAtack, Army armyDefense){
 		
-		int diceDifficult = GameUtils.getInstance().calculateDifficult(terrain, armyAtack, armyDefense);
+		int diceDifficult = 
+				GameUtils.getInstance().calculateDifficult(
+				kingdom, armyAtack, armyDefense);
 		
 		int result = 0;
 		int[] diceValue = new int[]{
@@ -2139,13 +2141,14 @@ public class GameManager {
 							getSelectedArmy().getPlayer().getActionIA() != null && 
 							getEnemyAtKingdom(getCurrentPlayer()).getPlayer().getActionIA() != null){
 						
-						combat(getSelectedArmy().getKingdom().getTerrainList().get(0), 
+						combat(
+								getSelectedArmy().getKingdom(), 
 								getSelectedArmy(),
 								getEnemyAtKingdom(getCurrentPlayer()));
 						
 					}else{
 						battleBox.start(
-								getSelectedArmy().getKingdom().getTerrainList().get(0), 
+								getSelectedArmy().getKingdom(),
 								getSelectedArmy(),
 								getEnemyAtKingdom(getCurrentPlayer()),
 								-1,
@@ -2173,7 +2176,8 @@ public class GameManager {
 							||
 							getSelectedArmy().getIaDecision().getDecision() == ActionIA.DECISION_MOVE_AND_ATACK
 						){
-							combat(getSelectedArmy().getKingdom().getTerrainList().get(0), 
+							combat(
+									getSelectedArmy().getKingdom(),
 									getSelectedArmy(),
 									null);
 						}else{
@@ -2182,9 +2186,8 @@ public class GameManager {
 							changeSubState(SUB_STATE_ACTION_IA_WAIT_START);
 						}
 					}else{
-						int kingdomState = getSelectedArmy().getKingdom().getState();
 						battleBox.start(
-								getSelectedArmy().getKingdom().getTerrainList().get(kingdomState), 
+								getSelectedArmy().getKingdom(), 
 								getSelectedArmy(),
 								null,
 								getPlayerByKingdom(getSelectedArmy().getKingdom()) != null?

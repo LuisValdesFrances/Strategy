@@ -91,6 +91,9 @@ Infantry
 Knights
 Harassers
 Siege
+Defense
+Gold
+Faith
 RESULT
 Player
 Big Defeat

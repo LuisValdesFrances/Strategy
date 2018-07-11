@@ -91,6 +91,9 @@ Infanteria
 Caballeria
 Fustigadors
 Setge
+Defensa
+Or
+Fe
 RESULTAT
 Jugador
 Gran derrota

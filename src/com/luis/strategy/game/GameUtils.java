@@ -3,6 +3,7 @@ package com.luis.strategy.game;
 import com.luis.strategy.GfxManager;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.map.Army;
+import com.luis.strategy.map.Kingdom;
 import com.luis.strategy.map.Terrain;
 
 public class GameUtils {
@@ -16,11 +17,23 @@ public class GameUtils {
 		return instance;
 	}
 	
-	public int calculateDifficult(Terrain terrain, Army armyAtack, Army armyDefense){
+	public int calculateDifficult(Kingdom kingdom, Army armyAtack, Army armyDefense){
 		int value=0;
 		
-		int pAtack = armyAtack.getPower(terrain);
-		int pDefense = armyDefense != null ? armyDefense.getPower(terrain):GameParams.TERRAIN_DEFENSE[terrain.getType()];
+		int pAtack = 0;
+		int pDefense = 0;
+		
+		Terrain terrain;
+		
+		if(armyDefense == null){
+			terrain = kingdom.getTerrainList().get(kingdom.getState());
+			pAtack = armyAtack.getPower(terrain);
+			pDefense = kingdom.getDefense(kingdom.getState());
+		}else{
+			terrain = kingdom.getTerrainList().get(0);
+			pAtack = armyAtack.getPower(terrain);
+			pDefense = armyDefense.getPower(terrain);
+		}
 		
 		value = GameParams.ROLL_SYSTEM-((armyAtack.getPower(terrain) * GameParams.ROLL_SYSTEM)/(pAtack+pDefense));
 		

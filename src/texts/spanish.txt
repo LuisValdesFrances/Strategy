@@ -91,6 +91,9 @@ Infanteria
 Caballeria
 Hostigadores
 Asedio
+Defensa
+Oro
+Fé
 RESULTADO
 Jugador
 Gran derrota

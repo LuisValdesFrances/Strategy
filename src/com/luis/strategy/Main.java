@@ -19,7 +19,7 @@ import com.luis.strategy.constants.Define;
  */
 public class Main extends Screen implements Runnable {
 	
-	public static boolean debug = false;
+	public static boolean debug = true;
 
 	public static Main instance;
 	public static Main getInstance(){
@@ -41,11 +41,13 @@ public class Main extends Screen implements Runnable {
 		return (int)deltaTime;
 	}
 	public static float getDeltaSec(){
+		float d = Math.min(((float)deltaTime / 1000f), 0.1f);
 		if(debug){
-			return 0.03f;
-		}else{
-			return Math.min(((float)deltaTime / 1000f), 0.1f);
+			if(d > 0.1f){
+				d = 0.1f;
+			}
 		}
+		return d;
 	}
 	public static long lastTime;
 
