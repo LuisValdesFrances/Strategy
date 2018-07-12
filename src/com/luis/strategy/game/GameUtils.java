@@ -17,7 +17,9 @@ public class GameUtils {
 		return instance;
 	}
 	
-	public int calculateDifficult(Kingdom kingdom, Army armyAtack, Army armyDefense){
+	public int calculateDifficult(
+			Kingdom kingdom, 
+			Army armyAtack, Army armyDefense){
 		int value=0;
 		
 		int pAtack = 0;

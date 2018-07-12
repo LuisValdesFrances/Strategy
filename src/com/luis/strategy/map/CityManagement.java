@@ -1,5 +1,6 @@
 package com.luis.strategy.map;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CityManagement {
@@ -25,19 +26,20 @@ public class CityManagement {
 	public static final int[][] BUILDING_COST = { 
 			{ 200, 400, 800 },
 			{ 300, 600, 1200 }, 
-			{ 400, 800, 1600 } };
+			{ 400, 800, 1600 }};
 
 	public static final int[][] BUILDING_STATE = { 
 			{ 3, 5, 7 }, 
 			{ 4, 7, 10 },
-			{ 5, 9, 13 } };
+			{ 5, 9, 13 }};
 
 	private List<Building> buildingList;
 
 	public CityManagement() {
-		buildingList.add(null);
-		buildingList.add(null);
-		buildingList.add(null);
+		buildingList = new ArrayList<Building>();
+		buildingList.add(new Building(0, 0, -1));
+		buildingList.add(new Building(1, 0, -1));
+		buildingList.add(new Building(2, 0, -1));
 	}
 
 	public void update() {
@@ -48,7 +50,13 @@ public class CityManagement {
 		}
 	}
 	
-	
+	public List<Building> getBuildingList() {
+		return buildingList;
+	}
+
+	public void setBuildingList(List<Building> buildingList) {
+		this.buildingList = buildingList;
+	}
 
 	public void build(int type) {
 		if(buildingList.get(type).state < BUILDING_STATE[type][2]){
@@ -56,13 +64,36 @@ public class CityManagement {
 		}
 	}
 
-	class Building {
+	public class Building {
 		int type;
 		int state;
 		int level;// 0, 1, 2 //Ejemplo: torre -> muralla -> fortaleza
+		
+		
+		
+		public Building(int type, int state, int level) {
+			super();
+			this.type = type;
+			this.state = state;
+			this.level = level;
+		}
 		public boolean isBuilding(){
 			return state < BUILDING_STATE[type][state];
 		}
+		public int getType() {
+			return type;
+		}
+		
+		public int getState() {
+			return state;
+		}
+		
+		public int getLevel() {
+			return level;
+		}
+		
+		
+		
 	}
 
 }

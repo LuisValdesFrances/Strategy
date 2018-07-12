@@ -1363,6 +1363,10 @@ public class DataKingdom {
 		if(k56 != null) kingdomList.add(k56);
 		if(k57 != null) kingdomList.add(k57);
 		
+		for(Kingdom k :kingdomList){
+			k.setCityManagement(null);
+		}
+		
 		//Rastreo null
 		for(int i = 0; i < kingdomList.size(); i++){
 			for(int j = 0; j < kingdomList.get(i).getBorderList().size(); j++){

@@ -64,10 +64,6 @@ public class Kingdom extends MapObject{
 				select = false;
 			}
 		};
-		
-		if(isACity()){
-			cityManagement = new CityManagement();
-		}
 	}
 	
 	public boolean hasTerrain(int type){
@@ -146,6 +142,20 @@ public class Kingdom extends MapObject{
 		defense = GameParams.TERRAIN_DEFENSE[terrainList.get(progressIndex).getType()];
 		
 		return defense;
+	}
+
+	
+	public CityManagement getCityManagement() {
+		return cityManagement;
+	}
+
+	public void setCityManagement(CityManagement cityManagement) {
+		if(isACity()){
+			if(cityManagement != null)
+				this.cityManagement = cityManagement;
+			else
+				this.cityManagement = new CityManagement();
+		}
 	}
 
 	public int getTarget() {

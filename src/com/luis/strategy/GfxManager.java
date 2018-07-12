@@ -8,7 +8,7 @@ import com.luis.lgameengine.implementation.graphics.Image;
 import com.luis.strategy.constants.Define;
 
 public class GfxManager {
-	
+
 	public static Image vImgFontSmall;
 	public static Image vImgFontMedium;
 	public static Image vImgFontBig;
@@ -26,30 +26,30 @@ public class GfxManager {
 	public static Image imgButtonMenuMediumFocus;
 	public static Image imgButtonMenuSmallRelease;
 	public static Image imgButtonMenuSmallFocus;
-	
+
 	public static Image imgButtonArrowBackRelease;
 	public static Image imgButtonArrowBackFocus;
 	public static Image imgButtonArrowNextRelease;
 	public static Image imgButtonArrowNextFocus;
-	
+
 	public static Image imgButtonInvisible;
-	
+
 	public static Image imgButtonKeyboardRelease;
 	public static Image imgButtonKeyboardFocus;
 	public static Image imgButtonKeyboardReleaseSp;
 	public static Image imgButtonKeyboardFocusSp;
-	
+
 	public static Image imgInputBox;
 	public static Image imgTextPointer;
-	
+
 	public static Image imgCheckFocus;
 	public static Image imgCheckRelease;
 	public static Image imgUncheckFocus;
 	public static Image imgUncheckRelease;
-	
+
 	public static Image imgButtonOptionsRelease;
 	public static Image imgButtonOptionsFocus;
-	
+
 	public static Image imgEnglishRelease;
 	public static Image imgEnglishFocus;
 	public static Image imgSpanishRelease;
@@ -62,7 +62,7 @@ public class GfxManager {
 
 	public static Image imgPadWest;
 	public static Image imgPadEast;
-	
+
 	/*
 	 * public static Image imgPadNorth; public static Image imgPadSouth; public
 	 * static Image imgPadAux;
@@ -88,7 +88,7 @@ public class GfxManager {
 	public static Image imgButtonInfoFocus;
 	public static Image imgButtonMapRelease;
 	public static Image imgButtonMapFocus;
-	
+
 	public static Image imgButtonCombatRelease;
 	public static Image imgButtonCombatFocus;
 	public static Image imgButtonCardRelease;
@@ -105,14 +105,14 @@ public class GfxManager {
 	public static Image imgButtonFlagHelmetFocus;
 	public static Image imgButtonFlagCastleRelease;
 	public static Image imgButtonFlagCastleFocus;
-	
+
 	public static Image imgButtonYellowRelease;
 	public static Image imgButtonYellowFocus;
 	public static Image imgButtonGreenRelease;
 	public static Image imgButtonGreenFocus;
 	public static Image imgButtonRedRelease;
 	public static Image imgButtonRedFocus;
-	
+
 	public static Image imgNickBox;
 
 	public static Image imgTextBox;
@@ -120,8 +120,6 @@ public class GfxManager {
 	public static Image imgMediumBox;
 	public static Image imgSmallBox;
 	public static Image imgNotificationBox;
-	
-	
 
 	public static List<Image> imgMapList;
 	public static Image imgTerrainOk;
@@ -134,11 +132,11 @@ public class GfxManager {
 
 	public static List<Image> imgTerrain;
 	public static List<Image> imgTerrainBox;
-	
+
 	public static Image imgLevelUpRelease;
 	public static Image imgLevelUpFocus;
 	public static Image imgLevelUpDisabled;
-	
+
 	public static List<Image> imgTowerList;
 	public static List<Image> imgTowerBNList;
 	public static List<Image> imgMarketList;
@@ -192,7 +190,7 @@ public class GfxManager {
 
 		case Define.ST_MENU_MAIN:
 		case Define.ST_MENU_ON_LINE_LIST_ALL_GAME:
-			if(Main.lastState >= Define.ST_GAME_INIT_PASS_AND_PLAY){
+			if (Main.lastState >= Define.ST_GAME_INIT_PASS_AND_PLAY) {
 				try {
 					loadMenuGfx();
 				} catch (IOException ex) {
@@ -208,13 +206,14 @@ public class GfxManager {
 		case Define.ST_GAME_INIT_PASS_AND_PLAY:
 		case Define.ST_GAME_INIT_ON_LINE:
 			try {
-				//Menu commons
-				imgButtonMenuBigRelease = Image.createImage("/button_menu_big_release.png");
-				imgButtonMenuBigFocus = Image.createImage("/button_menu_big_focus.png");
-				
+				// Menu commons
+				imgButtonMenuBigRelease = Image
+						.createImage("/button_menu_big_release.png");
+				imgButtonMenuBigFocus = Image
+						.createImage("/button_menu_big_focus.png");
+
 				imgButtonInvisible = Image.createImage("/button_invisible.png");
-				
-				
+
 				imgMapList = new ArrayList<Image>();
 				switch (GameState.getInstance().getMap()) {
 				case 0:
@@ -240,14 +239,14 @@ public class GfxManager {
 					imgMapList.add(Image.createImage("/maps/map_16.png"));
 					break;
 				}
-				
+
 				imgTowerList = new ArrayList<Image>();
 				imgTowerBNList = new ArrayList<Image>();
 				imgMarketList = new ArrayList<Image>();
 				imgMarketBNList = new ArrayList<Image>();
 				imgChurchList = new ArrayList<Image>();
 				imgChurchBNList = new ArrayList<Image>();
-				
+
 				imgTowerList.add(Image.createImage("/tower1.png"));
 				imgTowerList.add(Image.createImage("/tower2.png"));
 				imgTowerList.add(Image.createImage("/tower3.png"));
@@ -266,17 +265,17 @@ public class GfxManager {
 				imgChurchBNList.add(Image.createImage("/church1_bn.png"));
 				imgChurchBNList.add(Image.createImage("/church2_bn.png"));
 				imgChurchBNList.add(Image.createImage("/church3_bn.png"));
-				
-				imgLevelUpRelease = Image.createImage("level_up_release.png");
-				imgLevelUpFocus = Image.createImage("level_up_focus.png");
-				imgLevelUpDisabled = Image.createImage("level_up_disabled.png");
-				
+
+				imgLevelUpRelease = Image.createImage("/level_up_release.png");
+				imgLevelUpFocus = Image.createImage("/level_up_focus.png");
+				imgLevelUpDisabled = Image.createImage("/level_up_disabled.png");
+
 				imgTextBG = Image.createImage("/text_bg.png");
 				imgNickBox = Image.createImage("/nick_box.png");
-				
+
 				imgPadWest = Image.createImage("/pad_left.png");
 				imgPadEast = Image.createImage("/pad_right.png");
-				
+
 				imgTerrainOk = Image.createImage("/terrain_ok.png");
 
 				imgTargetDomain = Image.createImage("/target_domain.png");
@@ -299,9 +298,12 @@ public class GfxManager {
 				imgCrown = Image.createImage("/crown.png");
 				imgButtonPauseRelease = Image.createImage("/pause_release.png");
 				imgButtonPauseFocus = Image.createImage("/pause_focus.png");
-				imgButtonDebugPauseRelease = Image.createImage("/debug_pause_release.png");
-				imgButtonDebugPauseFocus = Image.createImage("/debug_pause_focus.png");
-				imgButtonCancelRelease = Image.createImage("/cancel_release.png");
+				imgButtonDebugPauseRelease = Image
+						.createImage("/debug_pause_release.png");
+				imgButtonDebugPauseFocus = Image
+						.createImage("/debug_pause_focus.png");
+				imgButtonCancelRelease = Image
+						.createImage("/cancel_release.png");
 				imgButtonCancelFocus = Image.createImage("/cancel_focus.png");
 				imgButtonNextRelease = Image.createImage("/next_release.png");
 				imgButtonNextFocus = Image.createImage("/next_focus.png");
@@ -309,14 +311,19 @@ public class GfxManager {
 				imgButtonOkFocus = Image.createImage("/ok_focus.png");
 				imgButtonCrossRelease = Image.createImage("/cross_release.png");
 				imgButtonCrossFocus = Image.createImage("/cross_focus.png");
-				imgButtonCrossBigRelease = Image.createImage("/cross_big_release.png");
-				imgButtonCrossBigFocus = Image.createImage("/cross_big_focus.png");
+				imgButtonCrossBigRelease = Image
+						.createImage("/cross_big_release.png");
+				imgButtonCrossBigFocus = Image
+						.createImage("/cross_big_focus.png");
 
 				imgButtonDeleteFocus = Image.createImage("/delete_focus.png");
-				imgButtonDeleteRelease = Image.createImage("/delete_release.png");
+				imgButtonDeleteRelease = Image
+						.createImage("/delete_release.png");
 
-				imgButtonNewArmyFocus = Image.createImage("/new_army_focus.png");
-				imgButtonNewArmyRelease = Image.createImage("/new_army_release.png");
+				imgButtonNewArmyFocus = Image
+						.createImage("/new_army_focus.png");
+				imgButtonNewArmyRelease = Image
+						.createImage("/new_army_release.png");
 				imgButtonInfoFocus = Image.createImage("/info_focus.png");
 				imgButtonInfoRelease = Image.createImage("/info_release.png");
 
@@ -325,23 +332,34 @@ public class GfxManager {
 				imgMediumBox = Image.createImage("/medium_box.png");
 				imgSmallBox = Image.createImage("/small_box.png");
 				imgNotificationBox = Image.createImage("/notification_box.png");
-				imgButtonCombatRelease = Image.createImage("/combat_release.png");
+				imgButtonCombatRelease = Image
+						.createImage("/combat_release.png");
 				imgButtonCombatFocus = Image.createImage("/combat_focus.png");
 				imgButtonCardRelease = Image.createImage("/card_release.png");
 				imgButtonCardFocus = Image.createImage("/card_focus.png");
-				imgButtonFlagHelmetRelease = Image.createImage("/flag_helmet_release.png");
-				imgButtonFlagHelmetFocus = Image.createImage("/flag_helmet_focus.png");
-				imgButtonFlagCastleRelease = Image.createImage("/flag_castle_release.png");
-				imgButtonFlagCastleFocus = Image.createImage("/flag_castle_focus.png");
-				
-				imgButtonMapRelease = Image.createImage("/icon_map_release.png");
+				imgButtonFlagHelmetRelease = Image
+						.createImage("/flag_helmet_release.png");
+				imgButtonFlagHelmetFocus = Image
+						.createImage("/flag_helmet_focus.png");
+				imgButtonFlagCastleRelease = Image
+						.createImage("/flag_castle_release.png");
+				imgButtonFlagCastleFocus = Image
+						.createImage("/flag_castle_focus.png");
+
+				imgButtonMapRelease = Image
+						.createImage("/icon_map_release.png");
 				imgButtonMapFocus = Image.createImage("/icon_map_release.png");
-				
-				imgButtonYellowRelease = Image.createImage("/button_yellow_release.png");
-				imgButtonYellowFocus = Image.createImage("/button_yellow_focus.png");
-				imgButtonGreenRelease = Image.createImage("/button_green_release.png");
-				imgButtonGreenFocus = Image.createImage("/button_green_focus.png");
-				imgButtonRedRelease = Image.createImage("/button_red_release.png");
+
+				imgButtonYellowRelease = Image
+						.createImage("/button_yellow_release.png");
+				imgButtonYellowFocus = Image
+						.createImage("/button_yellow_focus.png");
+				imgButtonGreenRelease = Image
+						.createImage("/button_green_release.png");
+				imgButtonGreenFocus = Image
+						.createImage("/button_green_focus.png");
+				imgButtonRedRelease = Image
+						.createImage("/button_red_release.png");
 				imgButtonRedFocus = Image.createImage("/button_red_focus.png");
 
 				imgFlagList = new ArrayList<Image>();
@@ -425,7 +443,7 @@ public class GfxManager {
 				imgRollList.add(Image.createImage("/roll8.png"));
 				imgRollList.add(Image.createImage("/roll9.png"));
 				imgRollList.add(Image.createImage("/roll10.png"));
-				
+
 				imgCheckRelease = Image.createImage("/check_release.png");
 				imgCheckFocus = Image.createImage("/check_focus.png");
 				imgUncheckRelease = Image.createImage("/uncheck_release.png");
@@ -443,53 +461,65 @@ public class GfxManager {
 			break;
 		}
 	}
-	
-	public static void loadMenuGfx() throws IOException{
-		
-		imgButtonMenuBigRelease = Image.createImage("/button_menu_big_release.png");
+
+	public static void loadMenuGfx() throws IOException {
+
+		imgButtonMenuBigRelease = Image
+				.createImage("/button_menu_big_release.png");
 		imgButtonMenuBigFocus = Image.createImage("/button_menu_big_focus.png");
-		imgButtonMenuMediumRelease = Image.createImage("/button_menu_medium_release.png");
-		imgButtonMenuMediumFocus = Image.createImage("/button_menu_medium_focus.png");
-		imgButtonMenuSmallRelease = Image.createImage("/button_menu_small_release.png");
-		imgButtonMenuSmallFocus = Image.createImage("/button_menu_small_focus.png");
+		imgButtonMenuMediumRelease = Image
+				.createImage("/button_menu_medium_release.png");
+		imgButtonMenuMediumFocus = Image
+				.createImage("/button_menu_medium_focus.png");
+		imgButtonMenuSmallRelease = Image
+				.createImage("/button_menu_small_release.png");
+		imgButtonMenuSmallFocus = Image
+				.createImage("/button_menu_small_focus.png");
 		imgButtonOkRelease = Image.createImage("/ok_release.png");
 		imgButtonOkFocus = Image.createImage("/ok_focus.png");
 		imgButtonCancelRelease = Image.createImage("/cancel_release.png");
 		imgButtonCancelFocus = Image.createImage("/cancel_focus.png");
-		
-		imgButtonArrowBackRelease = Image.createImage("/arrow_back_release.png");
+
+		imgButtonArrowBackRelease = Image
+				.createImage("/arrow_back_release.png");
 		imgButtonArrowBackFocus = Image.createImage("/arrow_back_focus.png");
-		imgButtonArrowNextRelease = Image.createImage("/arrow_next_release.png");
+		imgButtonArrowNextRelease = Image
+				.createImage("/arrow_next_release.png");
 		imgButtonArrowNextFocus = Image.createImage("/arrow_next_focus.png");
 		imgButtonCrossBigRelease = Image.createImage("/cross_big_release.png");
 		imgButtonCrossBigFocus = Image.createImage("/cross_big_focus.png");
-		imgButtonSearchBigRelease = Image.createImage("/search_big_release.png");
+		imgButtonSearchBigRelease = Image
+				.createImage("/search_big_release.png");
 		imgButtonSearchBigFocus = Image.createImage("/search_big_focus.png");
 		imgButtonInvisible = Image.createImage("/button_invisible.png");
 		imgButtonOptionsRelease = Image.createImage("/options_big_release.png");
 		imgButtonOptionsFocus = Image.createImage("/options_big_focus.png");
-		
-		imgButtonKeyboardRelease = Image.createImage("/button_keyboard_release.png");
-		imgButtonKeyboardFocus = Image.createImage("/button_keyboard_focus.png");
-		imgButtonKeyboardReleaseSp = Image.createImage("/button_keyboard_release_sp.png");
-		imgButtonKeyboardFocusSp = Image.createImage("/button_keyboard_focus_sp.png");
-		
+
+		imgButtonKeyboardRelease = Image
+				.createImage("/button_keyboard_release.png");
+		imgButtonKeyboardFocus = Image
+				.createImage("/button_keyboard_focus.png");
+		imgButtonKeyboardReleaseSp = Image
+				.createImage("/button_keyboard_release_sp.png");
+		imgButtonKeyboardFocusSp = Image
+				.createImage("/button_keyboard_focus_sp.png");
+
 		imgButtonInfoFocus = Image.createImage("/info_focus.png");
 		imgButtonInfoRelease = Image.createImage("/info_release.png");
-		
+
 		imgSmallBox = Image.createImage("/small_box.png");
 		imgMediumBox = Image.createImage("/medium_box.png");
 		imgBigBox = Image.createImage("/big_box.png");
-		
+
 		imgMainBG = Image.createImage("/main_bg.png");
 		imgSwordBG = Image.createImage("/sword_bg.png");
 		imgCloudBG = Image.createImage("/cloud_bg.png");
 		imgBlackBG = Image.createImage("/black_bg.png");
 		imgTitle = Image.createImage("/title.png");
-		
+
 		imgInputBox = Image.createImage("/input_box.png");
 		imgTextPointer = Image.createImage("/text_pointer.png");
-		
+
 		imgFlagList = new ArrayList<Image>();
 		imgFlagList.add(Image.createImage("/flag1.png"));
 		imgFlagList.add(Image.createImage("/flag2.png"));
@@ -499,7 +529,7 @@ public class GfxManager {
 		imgFlagList.add(Image.createImage("/flag6.png"));
 		imgFlagList.add(Image.createImage("/flag7.png"));
 		imgFlagList.add(Image.createImage("/flag8.png"));
-		
+
 		imgCheckRelease = Image.createImage("/check_release.png");
 		imgCheckFocus = Image.createImage("/check_focus.png");
 		imgUncheckRelease = Image.createImage("/uncheck_release.png");
@@ -510,9 +540,8 @@ public class GfxManager {
 		imgSpanishFocus = Image.createImage("/spanish_focus.png");
 		imgCatalaRelease = Image.createImage("/catala_release.png");
 		imgCatalaFocus = Image.createImage("/catala_focus.png");
-		
-		imgNotificationBox = Image
-				.createImage("/notification_box.png");
+
+		imgNotificationBox = Image.createImage("/notification_box.png");
 	}
 
 	public static void deleteMenuGFX() {
@@ -524,7 +553,7 @@ public class GfxManager {
 		imgButtonMenuSmallFocus = null;
 		imgButtonCancelRelease = null;
 		imgButtonCancelFocus = null;
-		
+
 		imgButtonArrowBackRelease = null;
 		imgButtonArrowBackFocus = null;
 		imgButtonArrowNextRelease = null;
@@ -532,40 +561,39 @@ public class GfxManager {
 		imgButtonOkRelease = null;
 		imgButtonOkFocus = null;
 		imgButtonInvisible = null;
-		
+
 		imgButtonInfoRelease = null;
 		imgButtonInfoFocus = null;
-		
+
 		imgSmallBox = null;
 		imgMediumBox = null;
 		imgBigBox = null;
-		
+
 		imgButtonKeyboardRelease = null;
 		imgButtonKeyboardFocus = null;
 		imgButtonKeyboardReleaseSp = null;
 		imgButtonKeyboardFocusSp = null;
-		
+
 		imgButtonCrossBigRelease = null;
 		imgButtonCrossBigFocus = null;
 		imgButtonSearchBigRelease = null;
 		imgButtonCrossBigRelease = null;
-		
+
 		imgButtonMapRelease = null;
 		imgButtonMapFocus = null;
-		
-		
+
 		imgInputBox = null;
 		imgTextPointer = null;
-		
+
 		imgMainBG = null;
 		imgSwordBG = null;
 		imgCloudBG = null;
 		imgTitle = null;
-		
+
 		imgFlagList = null;
-		
+
 		imgNotificationBox = null;
-		
+
 		imgCheckRelease = null;
 		imgCheckFocus = null;
 		imgUncheckRelease = null;
@@ -575,34 +603,34 @@ public class GfxManager {
 		imgSpanishFocus = null;
 		imgCatalaRelease = null;
 		imgCatalaFocus = null;
-		
+
 		System.gc();
 	}
 
 	public static void deleteGameGFX() {
 
-		//Menu commons
+		// Menu commons
 		imgButtonMenuBigRelease = null;
 		imgButtonMenuBigFocus = null;
-		
+
 		imgTowerList = null;
 		imgTowerBNList = null;
 		imgMarketList = null;
 		imgMarketBNList = null;
 		imgChurchList = null;
 		imgChurchBNList = null;
-		
+
 		imgNickBox = null;
-		
+
 		imgButtonInvisible = null;
-		
+
 		imgMapList = null;
-		
+
 		imgTextBG = null;
 
 		imgPadWest = null;
 		imgPadEast = null;
-		
+
 		imgTerrainOk = null;
 
 		imgTargetDomain = null;
@@ -641,7 +669,7 @@ public class GfxManager {
 		imgButtonGreenRelease = null;
 		imgButtonGreenFocus = null;
 		imgButtonRedRelease = null;
-		imgButtonRedFocus  = null;
+		imgButtonRedFocus = null;
 
 		imgButtonDeleteFocus = null;
 		imgButtonDeleteRelease = null;
@@ -683,7 +711,7 @@ public class GfxManager {
 		imgOkIcon = null;
 		imgShield = null;
 		imgRollList = null;
-		
+
 		imgCheckRelease = null;
 		imgCheckFocus = null;
 		imgUncheckRelease = null;
