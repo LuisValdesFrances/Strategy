@@ -1113,6 +1113,13 @@ public class GameManager {
 				}
 			}
 			
+			//City management
+			for(Kingdom k : getCurrentPlayer().getKingdomList()){
+				if(k.getCityManagement() != null){
+					k.getCityManagement().update();
+				}
+			}
+			
 			break;
 			
 		case STATE_DISCARD:

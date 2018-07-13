@@ -44,7 +44,7 @@ public class CityManagement {
 
 	public void update() {
 		for (Building b : buildingList) {
-			if(b.state > BUILDING_STATE[b.type][b.state]){
+			if(b.level > -1 && b.state < BUILDING_STATE[b.type][b.level]){
 				b.state++;
 			}
 		}
@@ -59,8 +59,8 @@ public class CityManagement {
 	}
 
 	public void build(int type) {
-		if(buildingList.get(type).state < BUILDING_STATE[type][2]){
-			buildingList.get(type).state++;
+		if(buildingList.get(type).level < 2){
+			buildingList.get(type).level++;
 		}
 	}
 
@@ -78,7 +78,10 @@ public class CityManagement {
 			this.level = level;
 		}
 		public boolean isBuilding(){
-			return state < BUILDING_STATE[type][state];
+			if(level < 0)
+				return false;
+			else
+				return state < BUILDING_STATE[type][level];
 		}
 		public int getType() {
 			return type;

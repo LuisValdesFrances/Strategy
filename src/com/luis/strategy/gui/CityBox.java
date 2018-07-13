@@ -38,7 +38,7 @@ public class CityBox extends MenuBox{
 		}
 	}
 	
-	private List<Button> levelUpList;
+	private List<Button> levelUpButtonList;
 	
 	public CityBox() {
 		super(
@@ -72,11 +72,11 @@ public class CityBox extends MenuBox{
 	
 	public void start(
 			Player player, 
-			Kingdom kingdom, 
+			Kingdom k, 
 			boolean clear, int terrainIndex){
 		super.start();
 		
-		this.kingdom = kingdom;
+		this.kingdom = k;
 		this.recruited = false;
 		
 		textHeader = RscManager.allText[RscManager.TXT_GAME_DEFENSE] + " " + GameParams.TERRAIN_DEFENSE[terrainIndex];
@@ -134,30 +134,12 @@ public class CityBox extends MenuBox{
 		
 		//Recorro los tres edificios
 		if(player.hasKingom(kingdom)){
-			levelUpList = new ArrayList<Button>();
-			for(int i = 0; i < 3; i++){
-				
-				Button b = new Button(0, 0, 
-						GfxManager.imgLevelUpRelease.getWidth(), 
-						GfxManager.imgLevelUpRelease.getHeight());
-				
-				if(kingdom.getCityManagement().getBuildingList().get(i).isBuilding()){
-					b.setImgRelese(GfxManager.imgLevelUpFocus);
-					b.setImgFocus(GfxManager.imgLevelUpFocus);
-					b.setDisabled(true);
-				}else{
-					if(player.getGold() >= CityManagement.BUILDING_COST
-							[i][kingdom.getCityManagement().getBuildingList().get(i).getLevel()]){
-						b.setImgRelese(GfxManager.imgLevelUpRelease);
-						b.setImgFocus(GfxManager.imgLevelUpFocus);
-						//Add callback
-					}else{
-						b.setImgRelese(GfxManager.imgLevelUpDisabled);
-						b.setImgFocus(GfxManager.imgLevelUpDisabled);
-					}
-				}
-				levelUpList.add(b);
-			}
+			levelUpButtonList = new ArrayList<Button>();
+			
+			
+			addButton(player, 0);
+			addButton(player, 1);
+			addButton(player, 2);
 		}
 		
 		//Posiciones
@@ -173,13 +155,13 @@ public class CityBox extends MenuBox{
 			
 			//Botones
 			if(player.hasKingom(kingdom)){
-				levelUpList.get(i).setX(
+				levelUpButtonList.get(i).setX(
 						getX() + totalWidth/2 - sepW - GfxManager.imgLevelUpRelease.getWidth()/2);
-				levelUpList.get(i).setY(
+				levelUpButtonList.get(i).setY(
 						initY + Font.getFontHeight(Font.FONT_SMALL) + sepH*(i+2) + h*(i+1) - 
 						GfxManager.imgLevelUpRelease.getHeight()/2);
 			}else{
-				levelUpList = null;
+				levelUpButtonList = null;
 			}
 		}
 		
@@ -200,10 +182,63 @@ public class CityBox extends MenuBox{
 		}
 	}
 	
+	private void initLevelUpButtons(Player player, int type) {
+		if(kingdom.getCityManagement().getBuildingList().get(type).isBuilding()){
+			levelUpButtonList.get(type).setImgRelese(GfxManager.imgLevelUpFocus);
+			levelUpButtonList.get(type).setImgFocus(GfxManager.imgLevelUpFocus);
+			levelUpButtonList.get(type).setDisabled(true);
+		}else{
+			int level = kingdom.getCityManagement().getBuildingList().get(type).getLevel()+1;
+			if(
+					level < 2 &&
+					player.getGold() >= CityManagement.BUILDING_COST[type][level]){
+				levelUpButtonList.get(type).setImgRelese(GfxManager.imgLevelUpRelease);
+				levelUpButtonList.get(type).setImgFocus(GfxManager.imgLevelUpFocus);
+				levelUpButtonList.get(type).setDisabled(false);
+				//Add callback
+			}else{
+				levelUpButtonList.get(type).setImgRelese(GfxManager.imgLevelUpDisabled);
+				levelUpButtonList.get(type).setImgFocus(GfxManager.imgLevelUpDisabled);
+				levelUpButtonList.get(type).setDisabled(true);
+			}
+		}
+		
+	}
+
+	private void addButton(final Player player, final int type) {
+		
+		levelUpButtonList.add(new Button(
+				GfxManager.imgLevelUpRelease.getWidth(), 
+				GfxManager.imgLevelUpRelease.getHeight(),
+				0, 0){
+			@Override
+			public void onButtonPressUp() {
+				reset();
+				int level = kingdom.getCityManagement().getBuildingList().get(type).getLevel()+1;
+				
+				int cost = CityManagement.BUILDING_COST[type][level];
+				player.setGold(player.getGold() - cost);
+				kingdom.getCityManagement().build(type);
+				
+				//Habilitar botones
+				for(int i = 0; i < levelUpButtonList.size();i++){
+					initLevelUpButtons(player, i);
+				}
+			}});
+		
+		initLevelUpButtons(player, type);
+		
+	}
+
 	@Override
 	public boolean update(MultiTouchHandler touchHandler, float delta) {
 		if(state == STATE_ACTIVE){
 			buttonInfo.update(touchHandler);
+			if(levelUpButtonList != null){
+				for(Button b : levelUpButtonList){
+					b.update(touchHandler);
+				}
+			}
 			if(buttonNewArmy != null && !buttonNewArmy.isDisabled()){
 				buttonNewArmy.update(touchHandler);
 			}
@@ -224,9 +259,31 @@ public class CityBox extends MenuBox{
 							buildingImageList[i][j].x+(int)modPosX, 
 							buildingImageList[i][j].y, 
 							Graphics.VCENTER | Graphics.HCENTER);
+					
+					if(
+							kingdom.getCityManagement().getBuildingList().get(i).isBuilding() &&
+							kingdom.getCityManagement().getBuildingList().get(i).getLevel() == j){
+						TextManager.drawSimpleText(g, Font.FONT_MEDIUM, 
+								"" +
+								kingdom.getCityManagement().getBuildingList().get(i).getState() + "/" +
+								CityManagement.BUILDING_STATE[i][kingdom.getCityManagement().getBuildingList().get(i).getType()], 
+								buildingImageList[i][j].x+(int)modPosX, 
+								buildingImageList[i][j].y, 
+								Graphics.VCENTER | Graphics.HCENTER);
+						g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+					}
+					else if(kingdom.getCityManagement().getBuildingList().get(i).getLevel() < j){
+						TextManager.drawSimpleText(g, Font.FONT_MEDIUM, 
+								"" +
+								CityManagement.BUILDING_COST[i][j], 
+								buildingImageList[i][j].x+(int)modPosX, 
+								buildingImageList[i][j].y, 
+								Graphics.VCENTER | Graphics.HCENTER);
+						g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+					}
 				}
-				if(levelUpList != null){
-					levelUpList.get(i).draw(g, (int)modPosX, 0);
+				if(levelUpButtonList != null){
+					levelUpButtonList.get(i).draw(g, (int)modPosX, 0);
 				}
 			}
 			
