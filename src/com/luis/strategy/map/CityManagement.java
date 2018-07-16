@@ -19,6 +19,13 @@ public class CityManagement {
 	/*
 	 * Cabeza de la Iglesia: este seria un jugador que podría blindarse y no
 	 * recibir ataques ¿?
+	 * 
+	 * Se blinda el reino con la catedral ->
+	 * nivel 1 = 12% de blindaje
+	 * nivel 2 = 25% de blindaje
+	 * nivel 3 = 50% de blindaje
+	 * 
+	 * Puntos de Fe -> Repetir tiradas fallidas de forma global
 	 */
 
 	// Ofrecer la posibilidad de arrasar ciudades??
@@ -36,12 +43,13 @@ public class CityManagement {
 
 	public void update() {
 		for (Building b : buildingList) {
-			if(b.level > -1 && b.state < GameParams.BUILDING_STATE[b.type][b.level]){
+			if (b.level > -1
+					&& b.state < GameParams.BUILDING_STATE[b.type][b.level]) {
 				b.state++;
 			}
 		}
 	}
-	
+
 	public List<Building> getBuildingList() {
 		return buildingList;
 	}
@@ -51,44 +59,11 @@ public class CityManagement {
 	}
 
 	public void build(int type) {
-		if(buildingList.get(type).level < 2){
+		if (buildingList.get(type).level < 2) {
 			buildingList.get(type).level++;
 		}
 	}
 
-	public class Building {
-		int type;
-		int state;
-		int level;// 0, 1, 2 //Ejemplo: torre -> muralla -> fortaleza
-		
-		
-		
-		public Building(int type, int state, int level) {
-			super();
-			this.type = type;
-			this.state = state;
-			this.level = level;
-		}
-		public boolean isBuilding(){
-			if(level < 0)
-				return false;
-			else
-				return state < GameParams.BUILDING_STATE[type][level];
-		}
-		public int getType() {
-			return type;
-		}
-		
-		public int getState() {
-			return state;
-		}
-		
-		public int getLevel() {
-			return level;
-		}
-		
-		
-		
-	}
+	
 
 }
