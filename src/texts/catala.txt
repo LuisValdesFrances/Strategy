@@ -135,6 +135,7 @@ ATACAR
 FUGIR
 ESPERAR
 CANCEL·LAR
+¿Desitjes millorar aquesta construcció
 Has perdut la partida.
 perd la partida.
 El teu exèrcit ha estat derrotat.

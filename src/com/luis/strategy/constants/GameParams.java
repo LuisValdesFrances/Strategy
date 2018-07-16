@@ -20,6 +20,17 @@ public class GameParams {
 	//Ganancias reportadas por el territorio
 	public static final int[] TERRAIN_TAX =			new int[]{50, 30, 10, 20, 40, 80, 10};
 	
+	//Building
+	public static final int[][] BUILDING_COST = { 
+		{ 200, 400, 800 },
+		{ 300, 600, 1200 }, 
+		{ 400, 800, 1600 }};
+
+	public static final int[][] BUILDING_STATE = { 
+			{ 3, 5, 7 }, 
+			{ 4, 7, 10 },
+			{ 5, 9, 13 }};
+
 	//Id tropa
 	public static final int INFANTRY = 0;
 	public static final int KNIGHT = 1;

@@ -135,6 +135,7 @@ ATACK
 ESCAPE
 WAIT
 CANCEL
+Do you want to improve this construction
 You lost the game.
 lost the game.
 Your army has been defeated.

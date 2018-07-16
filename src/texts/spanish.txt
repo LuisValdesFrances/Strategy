@@ -135,6 +135,7 @@ ATACAR
 HUIR
 ESPERAR
 CANCELAR
+¿Deseas mejorar esta constucción
 Has perdido la partida.
 pierde la partida.
 Tu ejercito ha sido derrotado.

@@ -16,7 +16,6 @@ import com.luis.strategy.Main;
 import com.luis.strategy.RscManager;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
-import com.luis.strategy.map.CityManagement;
 import com.luis.strategy.map.Kingdom;
 import com.luis.strategy.map.Player;
 
@@ -25,6 +24,8 @@ public class CityBox extends MenuBox{
 	private Button buttonInfo;
 	private Button buttonNewArmy;
 	private boolean recruited;
+	
+	private DialogBox confirmBox;
 	
 	private BuildingImage[][] buildingImageList;
 	
@@ -135,8 +136,6 @@ public class CityBox extends MenuBox{
 		//Recorro los tres edificios
 		if(player.hasKingom(kingdom)){
 			levelUpButtonList = new ArrayList<Button>();
-			
-			
 			addButton(player, 0);
 			addButton(player, 1);
 			addButton(player, 2);
@@ -191,7 +190,7 @@ public class CityBox extends MenuBox{
 			int level = kingdom.getCityManagement().getBuildingList().get(type).getLevel()+1;
 			if(
 					level < 2 &&
-					player.getGold() >= CityManagement.BUILDING_COST[type][level]){
+					player.getGold() >= GameParams.BUILDING_COST[type][level]){
 				levelUpButtonList.get(type).setImgRelese(GfxManager.imgLevelUpRelease);
 				levelUpButtonList.get(type).setImgFocus(GfxManager.imgLevelUpFocus);
 				levelUpButtonList.get(type).setDisabled(false);
@@ -202,10 +201,11 @@ public class CityBox extends MenuBox{
 				levelUpButtonList.get(type).setDisabled(true);
 			}
 		}
-		
 	}
 
 	private void addButton(final Player player, final int type) {
+		
+		final int level = kingdom.getCityManagement().getBuildingList().get(type).getLevel()+1;
 		
 		levelUpButtonList.add(new Button(
 				GfxManager.imgLevelUpRelease.getWidth(), 
@@ -214,33 +214,61 @@ public class CityBox extends MenuBox{
 			@Override
 			public void onButtonPressUp() {
 				reset();
-				int level = kingdom.getCityManagement().getBuildingList().get(type).getLevel()+1;
 				
-				int cost = CityManagement.BUILDING_COST[type][level];
-				player.setGold(player.getGold() - cost);
-				kingdom.getCityManagement().build(type);
+				confirmBox = new DialogBox(GfxManager.imgSmallBox){
+					@Override
+					public void onFinish() {
+						if(this.getIndexPressed() == 1){
+							buy(player, type, level);
+						}
+					}
+				};
 				
-				//Habilitar botones
-				for(int i = 0; i < levelUpButtonList.size();i++){
-					initLevelUpButtons(player, i);
-				}
-			}});
+				confirmBox.start(
+						null, 
+						RscManager.allText[RscManager.TXT_GAME_CONFIRM_UPDATE_BUILDING] + " " +
+						RscManager.allText[RscManager.TXT_GAME_FOR] + " " + 
+						GameParams.BUILDING_COST[type][level] + " " +
+						RscManager.allText[RscManager.TXT_GAME_GOLD] +
+						RscManager.allText[RscManager.TXT_GAME_INTERROGATION_ICON]
+				);
+			}}
+		);
 		
 		initLevelUpButtons(player, type);
 		
+	}
+	
+	private void buy(Player player, int type, int level){
+		
+		
+		int cost = GameParams.BUILDING_COST[type][level];
+		player.setGold(player.getGold() - cost);
+		kingdom.getCityManagement().build(type);
+		
+		//Habilitar botones
+		for(int i = 0; i < levelUpButtonList.size();i++){
+			initLevelUpButtons(player, i);
+		}
 	}
 
 	@Override
 	public boolean update(MultiTouchHandler touchHandler, float delta) {
 		if(state == STATE_ACTIVE){
-			buttonInfo.update(touchHandler);
-			if(levelUpButtonList != null){
-				for(Button b : levelUpButtonList){
-					b.update(touchHandler);
-				}
+			if(confirmBox != null){
+				confirmBox.update(touchHandler, delta);
 			}
-			if(buttonNewArmy != null && !buttonNewArmy.isDisabled()){
-				buttonNewArmy.update(touchHandler);
+			
+			if(confirmBox == null || (confirmBox != null && !confirmBox.isActive())){
+				buttonInfo.update(touchHandler);
+				if(levelUpButtonList != null){
+					for(Button b : levelUpButtonList){
+						b.update(touchHandler);
+					}
+				}
+				if(buttonNewArmy != null && !buttonNewArmy.isDisabled()){
+					buttonNewArmy.update(touchHandler);
+				}
 			}
 		}
 		return super.update(touchHandler, delta);
@@ -263,19 +291,47 @@ public class CityBox extends MenuBox{
 					if(
 							kingdom.getCityManagement().getBuildingList().get(i).isBuilding() &&
 							kingdom.getCityManagement().getBuildingList().get(i).getLevel() == j){
-						TextManager.drawSimpleText(g, Font.FONT_MEDIUM, 
+						
+						/*
+						TextManager.drawSimpleText(g, Font.FONT_SMALL, 
 								"" +
 								kingdom.getCityManagement().getBuildingList().get(i).getState() + "/" +
 								CityManagement.BUILDING_STATE[i][kingdom.getCityManagement().getBuildingList().get(i).getType()], 
 								buildingImageList[i][j].x+(int)modPosX, 
-								buildingImageList[i][j].y, 
+								buildingImageList[i][j].y +
+								GfxManager.imgTowerList.get(2).getHeight()/2,
 								Graphics.VCENTER | Graphics.HCENTER);
 						g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+						*/
+						int level = kingdom.getCityManagement().getBuildingList().get(i).getLevel();
+						int max = GameParams.BUILDING_STATE[i][level];
+						int min = level == 0 ? 0 : GameParams.BUILDING_STATE[i][level-1];
+						int relMax = max - min;
+						int relCurrent = kingdom.getCityManagement().getBuildingList().get(i).getState() - min;
+						
+						int totalW = GfxManager.imgTowerList.get(2).getWidth();
+						int totalH = GfxManager.imgTowerList.get(2).getHeight()/12;
+						
+						int currentW = (relCurrent * totalW) / relMax;
+						
+						g.setColor(Main.COLOR_GREEN);
+						g.fillRect(
+								buildingImageList[i][j].x+(int)modPosX - totalW/2, 
+								buildingImageList[i][j].y +
+								GfxManager.imgTowerList.get(2).getHeight()/2, 
+								currentW, totalH);
+						g.setColor(Main.COLOR_RED);
+						g.fillRect(
+								buildingImageList[i][j].x+(int)modPosX - totalW/2 + currentW, 
+								buildingImageList[i][j].y +
+								GfxManager.imgTowerList.get(2).getHeight()/2, 
+								totalW-currentW, totalH);
+						
 					}
 					else if(kingdom.getCityManagement().getBuildingList().get(i).getLevel() < j){
 						TextManager.drawSimpleText(g, Font.FONT_MEDIUM, 
 								"" +
-								CityManagement.BUILDING_COST[i][j], 
+								GameParams.BUILDING_COST[i][j], 
 								buildingImageList[i][j].x+(int)modPosX, 
 								buildingImageList[i][j].y, 
 								Graphics.VCENTER | Graphics.HCENTER);
@@ -285,6 +341,10 @@ public class CityBox extends MenuBox{
 				if(levelUpButtonList != null){
 					levelUpButtonList.get(i).draw(g, (int)modPosX, 0);
 				}
+			}
+			
+			if(confirmBox != null){
+				confirmBox.draw(g, GfxManager.imgBlackBG);
 			}
 			
 			buttonInfo.draw(g, (int)modPosX, 0);

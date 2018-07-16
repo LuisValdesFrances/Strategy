@@ -3,6 +3,8 @@ package com.luis.strategy.map;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.luis.strategy.constants.GameParams;
+
 public class CityManagement {
 
 	/*
@@ -23,16 +25,6 @@ public class CityManagement {
 	// 1-La elimino del mapa -> Guardar en Scene lista de territorios arrasados
 	// 2-Le quito todas las mejoras
 
-	public static final int[][] BUILDING_COST = { 
-			{ 200, 400, 800 },
-			{ 300, 600, 1200 }, 
-			{ 400, 800, 1600 }};
-
-	public static final int[][] BUILDING_STATE = { 
-			{ 3, 5, 7 }, 
-			{ 4, 7, 10 },
-			{ 5, 9, 13 }};
-
 	private List<Building> buildingList;
 
 	public CityManagement() {
@@ -44,7 +36,7 @@ public class CityManagement {
 
 	public void update() {
 		for (Building b : buildingList) {
-			if(b.level > -1 && b.state < BUILDING_STATE[b.type][b.level]){
+			if(b.level > -1 && b.state < GameParams.BUILDING_STATE[b.type][b.level]){
 				b.state++;
 			}
 		}
@@ -81,7 +73,7 @@ public class CityManagement {
 			if(level < 0)
 				return false;
 			else
-				return state < BUILDING_STATE[type][level];
+				return state < GameParams.BUILDING_STATE[type][level];
 		}
 		public int getType() {
 			return type;
