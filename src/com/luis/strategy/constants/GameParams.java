@@ -18,6 +18,8 @@ public class GameParams {
 	//Ganancias reportadas por el territorio
 	public static final int[] TERRAIN_TAX =			new int[]{50, 30, 10, 20, 40, 80, 10};
 	
+	public static final int[] FAITH_CHECK =			new int[]{100, 100, 100};
+	
 	//Building
 	public static final int[][] BUILDING_COST = { 
 												{ 200, 400, 800 },

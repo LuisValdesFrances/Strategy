@@ -180,9 +180,7 @@ public class ActionIA {
 	
 			// Muevo y ataco al ejercito enemigo mas debil(Si procede)
 			for (Kingdom k : army.getKingdom().getBorderList()) {
-				if(k == null){
-					Log.i("Debug", "para");
-				}
+				
 				Army enemy = getArmyAtKingdom(playerList, k);
 				if(enemy != null && enemy.getPlayer().getId() != player.getId()){
 					// Comparo fuerzas

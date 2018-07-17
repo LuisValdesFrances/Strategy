@@ -8,6 +8,7 @@ import com.luis.lgameengine.implementation.graphics.Graphics;
 import com.luis.lgameengine.implementation.graphics.Image;
 import com.luis.lgameengine.implementation.input.MultiTouchHandler;
 import com.luis.strategy.GfxManager;
+import com.luis.strategy.Main;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 
@@ -124,7 +125,6 @@ public class GameScene{
 				}else{
 					switch(k.getTerrainList().get(i).getType()){
 					
-					case GameParams.CITY : img = GfxManager.imgTerrain.get(GameParams.CITY); break;
 					case GameParams.CASTLE : img = null; break;
 					case GameParams.PLAIN : img = GfxManager.imgTerrain.get(GameParams.PLAIN); break;
 					case GameParams.FOREST : img = GfxManager.imgTerrain.get(GameParams.FOREST); break;
@@ -145,6 +145,28 @@ public class GameScene{
 				
 				g.setAlpha(255);
 				g.setImageSize(1f, 1f);
+				
+				
+				
+				//Fe
+				if(Main.isIntervalTwo() && k.getTerrainList().get(i).getType() == GameParams.CITY){
+					if(k.isProtectedByFaith()){
+						g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+						int size = k.getCityManagement().getSizeByActiveLevel();
+						int modW = GfxManager.imgTerrain.get(GameParams.CITY+size).getWidth()/2;
+						int modH = GfxManager.imgTerrain.get(GameParams.CITY+size).getHeight()/2;
+						
+						g.drawImage(GfxManager.imgProtection, 
+							worldConver.getConversionDrawX(gameCamera.getPosX(),
+									k.getTerrainList().get(k.getTerrainList().size()-1).getAbsoluteX()+
+									modW),
+							worldConver.getConversionDrawY(gameCamera.getPosY(),
+									k.getTerrainList().get(k.getTerrainList().size()-1).getAbsoluteY()+
+									modH),
+							Graphics.HCENTER | Graphics.VCENTER);
+					}
+				}
+				
 			}
 			
 			//Capitales
@@ -188,7 +210,9 @@ public class GameScene{
 				
 				switch(k.getTarget()){
 				case Kingdom.TARGET_BATTLE:
-					imgTarget = GfxManager.imgTargetBattle;
+					if(!k.isProtectedByFaith()){
+						imgTarget = GfxManager.imgTargetBattle;
+					}
 					break;
 				case Kingdom.TARGET_DOMAIN:
 					imgTarget = GfxManager.imgTargetDomain;
@@ -198,9 +222,11 @@ public class GameScene{
 					break;
 				}
 				
-				g.setAlpha((int)alpha);
-				g.drawImage(imgTarget, k.getTouchX(worldConver, gameCamera), k.getTouchY(worldConver, gameCamera), Graphics.VCENTER | Graphics.HCENTER);
-				g.setAlpha(255);
+				if(imgTarget != null){
+					g.setAlpha((int)alpha);
+					g.drawImage(imgTarget, k.getTouchX(worldConver, gameCamera), k.getTouchY(worldConver, gameCamera), Graphics.VCENTER | Graphics.HCENTER);
+					g.setAlpha(255);
+				}
 			}
 		}
 	}

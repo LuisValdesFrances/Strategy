@@ -67,6 +67,7 @@ public class GfxManager {
 	 * public static Image imgPadNorth; public static Image imgPadSouth; public
 	 * static Image imgPadAux;
 	 */
+	public static Image imgProtection;
 	public static Image imgGameHud;
 	public static Image imgChest;
 	public static Image imgCoin;
@@ -266,6 +267,8 @@ public class GfxManager {
 				imgChurchBNList.add(Image.createImage("/church2_bn.png"));
 				imgChurchBNList.add(Image.createImage("/church3_bn.png"));
 
+				imgProtection = Image.createImage("/protection.png");
+				
 				imgLevelUpRelease = Image.createImage("/level_up_release.png");
 				imgLevelUpFocus = Image.createImage("/level_up_focus.png");
 				imgLevelUpDisabled = Image.createImage("/level_up_disabled.png");
@@ -610,6 +613,7 @@ public class GfxManager {
 	public static void deleteGameGFX() {
 
 		// Menu commons
+		imgProtection = null;
 		imgButtonMenuBigRelease = null;
 		imgButtonMenuBigFocus = null;
 

@@ -510,8 +510,7 @@ public class GameManager {
 								cityBox.start(getCurrentPlayer(), kingdom,
 									terrain.getType() >= GameParams.CITY &&
 									getArmyAtKingdom(kingdom)== null && 
-									getCurrentPlayer().hasKingom(kingdom), 
-									terrain.getType());
+									getCurrentPlayer().hasKingom(kingdom));
 									
 								changeSubState(SUB_STATE_CITY_MANAGEMENT);
 							}
@@ -559,7 +558,14 @@ public class GameManager {
 								btnFlagCastle.hide();
 								btnCancel.setDisabled(true);
 							}else{
-								startAction();
+								//Si esta protegido por Fe, paso
+								kingdom = getSelectedArmy().getPlayer().getActionIA().getKingdomToDecision();
+								if(!getCurrentPlayer().hasKingom(kingdom) && kingdom.isProtectedByFaith()){
+									getSelectedArmy().changeState(Army.STATE_OFF);
+									changeSubState(SUB_STATE_ACTION_IA_WAIT_START);
+								}else{
+									startAction();
+								}
 							}
 							break;
 						}
@@ -679,8 +685,7 @@ public class GameManager {
 								cityBox.start(getCurrentPlayer(), kingdom,
 									terrain.getType() >= GameParams.CITY &&
 									getArmyAtKingdom(kingdom)== null && 
-									getCurrentPlayer().hasKingom(kingdom), 
-									terrain.getType());
+									getCurrentPlayer().hasKingom(kingdom));
 							}
 						}
 					}
@@ -1059,6 +1064,9 @@ public class GameManager {
 								kingdom.setTouchY(kingdom.getAbsoluteY());
 							}
 						}else{
+							if(kingdom.isProtectedByFaith()){
+								kingdom.setTarget(-1);
+							}else{
 							kingdom.setTarget(Kingdom.TARGET_BATTLE);
 							//Busco ejercitos enemigos
 							if(getEnemyAtKingdom(getCurrentPlayer(), kingdom) != null){
@@ -1067,6 +1075,7 @@ public class GameManager {
 							}else{
 								kingdom.setTouchX(kingdom.getTerrainList().get(0).getAbsoluteX());
 								kingdom.setTouchY(kingdom.getTerrainList().get(0).getAbsoluteY());
+							}
 							}
 						}
 					}
@@ -1141,6 +1150,19 @@ public class GameManager {
 			for(Kingdom k : getCurrentPlayer().getKingdomList()){
 				if(k.getCityManagement() != null){
 					k.getCityManagement().update();
+				}
+			}
+			
+			for(Kingdom k : gameScene.getKingdomList()){
+				k.setProtectedByFaith(false);
+				//Chequeo de Fe
+				if(k.getCityManagement() != null){
+					if(		!getCurrentPlayer().hasKingom(k) &&
+							k.getCityManagement().getBuildingList().get(2).getActiveLevel() > -1){
+						int pro = GameParams.FAITH_CHECK[k.getCityManagement().getBuildingList().get(2).getActiveLevel()];
+						int ran = Main.getRandom(0, 100);
+						k.setProtectedByFaith(ran <= pro);
+					}
 				}
 			}
 			

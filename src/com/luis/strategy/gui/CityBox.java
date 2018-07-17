@@ -74,13 +74,13 @@ public class CityBox extends MenuBox{
 	public void start(
 			Player player, 
 			Kingdom k, 
-			boolean clear, int terrainIndex){
+			boolean clear){
 		super.start();
 		
 		this.kingdom = k;
 		this.recruited = false;
 		
-		textHeader = RscManager.allText[RscManager.TXT_GAME_DEFENSE] + " " + kingdom.getDefense(terrainIndex);
+		textHeader = RscManager.allText[RscManager.TXT_GAME_DEFENSE] + " " + kingdom.getDefense(kingdom.getTotalStates()-1);
 		textHeader += " - " + RscManager.allText[RscManager.TXT_GAME_GOLD]  + " " + kingdom.getTaxes();
 		textHeader += " - " + RscManager.allText[RscManager.TXT_GAME_FAITH]  + " " + "-";
 		

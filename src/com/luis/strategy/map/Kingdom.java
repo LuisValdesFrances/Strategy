@@ -12,6 +12,8 @@ public class Kingdom extends MapObject{
 	private String name;
 	private int id;
 	
+	private boolean protectedByFaith;
+	
 	private List<Terrain> terrainList;
 	private List<Kingdom> borderList;
 	
@@ -39,6 +41,7 @@ public class Kingdom extends MapObject{
 		this.mapWidth = mapWidth;
 		this.mapHeight = mapHeight;
 		this.state = 0;
+		this.protectedByFaith = false;
 		
 		terrainList = new ArrayList<Terrain>();
 		borderList = new ArrayList<Kingdom>();
@@ -147,7 +150,7 @@ public class Kingdom extends MapObject{
 		
 		//Sumo propiedades ciudades:
 		int towerMod = 0;
-		if(cityManagement != null){
+		if(terrainList.get(progressIndex).getType() == GameParams.CITY){
 			towerMod = cityManagement.getBuildingList().get(0).getActiveLevel() > -1 ? 
 					cityManagement.getBuildingList().get(0).getActiveLevel(): 0;
 		}
@@ -195,5 +198,14 @@ public class Kingdom extends MapObject{
 		this.totalStates = totalStates;
 	}
 
+	public boolean isProtectedByFaith() {
+		return protectedByFaith;
+	}
+
+	public void setProtectedByFaith(boolean protectedByFaith) {
+		this.protectedByFaith = protectedByFaith;
+	}
+
+	
 	
 }
