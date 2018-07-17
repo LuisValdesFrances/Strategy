@@ -80,9 +80,9 @@ public class CityBox extends MenuBox{
 		this.kingdom = k;
 		this.recruited = false;
 		
-		textHeader = RscManager.allText[RscManager.TXT_GAME_DEFENSE] + " " + GameParams.TERRAIN_DEFENSE[terrainIndex];
-		textHeader += " - " + RscManager.allText[RscManager.TXT_GAME_GOLD]  + " " + + GameParams.TERRAIN_DEFENSE[terrainIndex];
-		textHeader += " - " + RscManager.allText[RscManager.TXT_GAME_FAITH]  + " " + + GameParams.TERRAIN_DEFENSE[terrainIndex];
+		textHeader = RscManager.allText[RscManager.TXT_GAME_DEFENSE] + " " + kingdom.getDefense(terrainIndex);
+		textHeader += " - " + RscManager.allText[RscManager.TXT_GAME_GOLD]  + " " + kingdom.getTaxes();
+		textHeader += " - " + RscManager.allText[RscManager.TXT_GAME_FAITH]  + " " + "-";
 		
 		int sepH = GfxManager.imgTowerList.get(2).getHeight()/4;
 		int sepW = GfxManager.imgTowerList.get(2).getWidth();
@@ -109,7 +109,9 @@ public class CityBox extends MenuBox{
 		};
 		
 		//Building
-		buildingImageList = new BuildingImage[3][3];
+		int numberBuilding = GameParams.BUILDING_STATE.length;
+		int numberStates = GameParams.BUILDING_STATE[0].length;
+		buildingImageList = new BuildingImage[numberBuilding][numberStates];
 		
 		//Recorro los tres niveles
 		for(int i = 0; i < kingdom.getCityManagement().getBuildingList().size(); i++){
@@ -144,8 +146,8 @@ public class CityBox extends MenuBox{
 		//Posiciones
 		int w = buildingImageList[0][2].image.getWidth();
 		int h = buildingImageList[0][2].image.getHeight();
-		for(int i = 0; i < 3; i++){
-			for(int j = 0; j < 3; j++){
+		for(int i = 0; i < numberBuilding; i++){
+			for(int j = 0; j < numberStates; j++){
 				buildingImageList[i][j].x = 
 						initW + sepW*(j+1) + w*(j+1) - w/2;
 				buildingImageList[i][j].y = 
@@ -182,14 +184,16 @@ public class CityBox extends MenuBox{
 	}
 	
 	private void initLevelUpButtons(Player player, int type) {
-		if(kingdom.getCityManagement().getBuildingList().get(type).isBuilding()){
+		int level = kingdom.getCityManagement().getBuildingList().get(type).getLevel()+1;
+		if(
+				kingdom.getCityManagement().getBuildingList().get(type).isBuilding() && 
+				level < GameParams.BUILDING_COST[type].length){
 			levelUpButtonList.get(type).setImgRelese(GfxManager.imgLevelUpFocus);
 			levelUpButtonList.get(type).setImgFocus(GfxManager.imgLevelUpFocus);
 			levelUpButtonList.get(type).setDisabled(true);
 		}else{
-			int level = kingdom.getCityManagement().getBuildingList().get(type).getLevel()+1;
 			if(
-					level < 2 &&
+					level < GameParams.BUILDING_COST[type].length &&
 					player.getGold() >= GameParams.BUILDING_COST[type][level]){
 				levelUpButtonList.get(type).setImgRelese(GfxManager.imgLevelUpRelease);
 				levelUpButtonList.get(type).setImgFocus(GfxManager.imgLevelUpFocus);
@@ -276,13 +280,17 @@ public class CityBox extends MenuBox{
 	
 	public void draw(Graphics g){
 		super.draw(g, GfxManager.imgBlackBG);
+		
+		int numberBuilding = GameParams.BUILDING_STATE.length;
+		int numberStates = GameParams.BUILDING_STATE[0].length;
+		
 		if(state != STATE_UNACTIVE){
 			
 			TextManager.drawSimpleText(g, Font.FONT_SMALL, textHeader, 
 					getX()+(int)modPosX, headY, Graphics.VCENTER | Graphics.HCENTER);
 			
-			for(int i = 0; i < 3; i++){
-				for(int j = 0; j < 3; j++){
+			for(int i = 0; i < numberBuilding; i++){
+				for(int j = 0; j < numberStates; j++){
 					g.drawImage(buildingImageList[i][j].image, 
 							buildingImageList[i][j].x+(int)modPosX, 
 							buildingImageList[i][j].y, 

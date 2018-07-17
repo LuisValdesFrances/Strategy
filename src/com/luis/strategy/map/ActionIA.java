@@ -47,14 +47,38 @@ public class ActionIA {
 	public void management(WorldConver worldConver, GameCamera gameCamera, MapObject map, List<Player> playerList){
 		/*
 		int cost = player.getCost(false);
-		int salary = player.getTaxes();
+		int salary = player.getTaxes()
 		int gold = player.getGold();
 		*/
 		boolean canBuy;//Controla que haya alguna ciudad libre (Generar ejercito )o haya algún ejercito en una ciudad (Aquirir tropas)
 		
 		//Presupuestos
-		int armyBudget = (int)(player.getGold()*0.30f);
-		int troopBudget = (int)(player.getGold()*0.30f);
+		int armyBudget;
+		int troopBudget;
+		int cityBudget;
+		
+		switch(player.getFlag()){
+		//Genterex, crom
+		case 0:
+		case 3:
+			armyBudget = (int)(player.getGold()*0.10f);
+			troopBudget = (int)(player.getGold()*0.10f);
+			cityBudget = (int)(player.getGold()*0.50f);
+			break;
+		//Quaca, Lee
+		case 1:
+		case 2:
+			armyBudget = (int)(player.getGold()*0.20f);
+			troopBudget = (int)(player.getGold()*0.20f);
+			cityBudget = (int)(player.getGold()*0.30f);
+			break;
+		//Jap, Lev
+		default:
+			armyBudget = (int)(player.getGold()*0.15f);
+			troopBudget = (int)(player.getGold()*0.15f);
+			cityBudget = (int)(player.getGold()*0.40f);
+			break;
+		}
 		
 		do{
 			canBuy = false;
@@ -68,24 +92,38 @@ public class ActionIA {
 						}
 					}
 				}
-				if(isFree && k.isACity()){
-					canBuy = true;
+				if(k.isACity()){
 					
-					if(armyBudget >= GameParams.ARMY_COST){
-						String text = player.getName() +  " has recruited a new army";
-						NotificationBox.getInstance().addMessage(text);
+					//CityManagememnt
+					int type = Main.getRandom(0, GameParams.BUILDING_STATE.length-1);
+					Building b = k.getCityManagement().getBuildingList().get(type);
+					int nextLevel = b.getLevel() == -1? 0 : b.getLevel()+1; 
+					if(
+							!b.isBuilding() && 
+							nextLevel < GameParams.BUILDING_STATE.length &&
+							cityBudget >= GameParams.BUILDING_COST[type][nextLevel]){
+						k.getCityManagement().build(type);
+					}
+					
+					if(isFree){
+						canBuy = true;
 						
-						armyBudget -= GameParams.ARMY_COST;
-						player.setGold(player.getGold()-GameParams.ARMY_COST);
-						
-						Army army = new Army(
-								map, 
-								player,
-								k,
-								player.getFlag(), 
-								map.getX(), map.getY(), map.getWidth(), map.getHeight());
-						army.initTroops();
-						player.getArmyList().add(army);
+						if(armyBudget >= GameParams.ARMY_COST){
+							String text = player.getName() +  " has recruited a new army";
+							NotificationBox.getInstance().addMessage(text);
+							
+							armyBudget -= GameParams.ARMY_COST;
+							player.setGold(player.getGold()-GameParams.ARMY_COST);
+							
+							Army army = new Army(
+									map, 
+									player,
+									k,
+									player.getFlag(), 
+									map.getX(), map.getY(), map.getWidth(), map.getHeight());
+							army.initTroops();
+							player.getArmyList().add(army);
+						}
 					}
 				}
 			}

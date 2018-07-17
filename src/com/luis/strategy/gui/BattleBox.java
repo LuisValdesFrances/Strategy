@@ -340,9 +340,7 @@ public class BattleBox extends MenuBox{
 				case GameParams.PLAIN: terrainText = RscManager.allText[RscManager.TXT_GAME_PLAIN]; break;
 				case GameParams.FOREST: terrainText = RscManager.allText[RscManager.TXT_GAME_FOREST]; break;
 				case GameParams.MONTAIN: terrainText = RscManager.allText[RscManager.TXT_GAME_MONTAIN]; break;
-				case GameParams.SMALL_CITY: terrainText = RscManager.allText[RscManager.TXT_GAME_SMALL_CITY]; break;
-				case GameParams.MEDIUM_CITY: terrainText = RscManager.allText[RscManager.TXT_GAME_MEDIUM_CITY]; break;
-				case GameParams.BIG_CITY: terrainText = RscManager.allText[RscManager.TXT_GAME_BIG_CITY]; break;
+				case GameParams.CITY: terrainText = RscManager.allText[RscManager.TXT_GAME_SMALL_CITY+kingdom.getCityManagement().getSizeByActiveLevel()]; break;
 			}
 			
 			TextManager.drawSimpleText(g, 

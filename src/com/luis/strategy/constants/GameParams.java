@@ -6,10 +6,8 @@ public class GameParams {
 	public static final int PLAIN = 0;
 	public static final int FOREST = 1;
 	public static final int MONTAIN = 2;
-	public static final int SMALL_CITY = 3;
-	public static final int MEDIUM_CITY = 4;
-	public static final int BIG_CITY = 5;
-	public static final int CASTLE = 6;
+	public static final int CITY = 3;
+	public static final int CASTLE = 4;
 	
 	public static final int[] INFANTRY_COMBAT = 	new int[]{3, 2, 1, 1, 1, 1, 1};
 	public static final int[] KNIGHTS_COMBAT = 		new int[]{5, 2, 1, 1, 1, 1, 2};
@@ -22,14 +20,14 @@ public class GameParams {
 	
 	//Building
 	public static final int[][] BUILDING_COST = { 
-		{ 200, 400, 800 },
-		{ 300, 600, 1200 }, 
-		{ 400, 800, 1600 }};
+												{ 200, 400, 800 },
+												{ 300, 600, 1200 }, 
+												{ 400, 800, 1600 }};
 
 	public static final int[][] BUILDING_STATE = { 
-			{ 3, 5, 7 }, 
-			{ 4, 7, 10 },
-			{ 5, 9, 13 }};
+												 { 3, 5, 7 }, 
+												 { 4, 7, 10 },
+												 { 5, 9, 13 }};
 
 	//Id tropa
 	public static final int INFANTRY = 0;

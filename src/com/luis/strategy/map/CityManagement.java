@@ -40,6 +40,12 @@ public class CityManagement {
 		buildingList.add(new Building(1, 0, -1));
 		buildingList.add(new Building(2, 0, -1));
 	}
+	
+	public void build(int type) {
+		if (buildingList.get(type).level < 2) {
+			buildingList.get(type).level++;
+		}
+	}
 
 	public void update() {
 		for (Building b : buildingList) {
@@ -47,6 +53,25 @@ public class CityManagement {
 					&& b.state < GameParams.BUILDING_STATE[b.type][b.level]) {
 				b.state++;
 			}
+		}
+	}
+	
+	public int getSizeByActiveLevel(){
+		int total = GameParams.BUILDING_STATE.length * GameParams.BUILDING_STATE[0].length;
+		
+		int count = 0;
+		for (Building b : buildingList) {
+			count += (b.getActiveLevel()+1);
+		}
+		
+		if(count == total){
+			return 2;
+		}
+		else if (count >= total/2){
+			return 1;
+		}
+		else{
+			return 0;
 		}
 	}
 
@@ -58,11 +83,6 @@ public class CityManagement {
 		this.buildingList = buildingList;
 	}
 
-	public void build(int type) {
-		if (buildingList.get(type).level < 2) {
-			buildingList.get(type).level++;
-		}
-	}
 
 	
 

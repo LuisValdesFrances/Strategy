@@ -505,10 +505,10 @@ public class GameManager {
 							terrain.getButton().reset();
 							
 							//Porculeria de los terrenos
-							if(terrain.getType() >= GameParams.SMALL_CITY){
+							if(terrain.getType() >= GameParams.CITY){
 							
 								cityBox.start(getCurrentPlayer(), kingdom,
-									terrain.getType() >= GameParams.SMALL_CITY &&
+									terrain.getType() >= GameParams.CITY &&
 									getArmyAtKingdom(kingdom)== null && 
 									getCurrentPlayer().hasKingom(kingdom), 
 									terrain.getType());
@@ -665,6 +665,27 @@ public class GameManager {
 				btnMap.setDisabled(false);
 			}
 			
+			if(!cityBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
+			
+				//Actualizar iteracion terreno:
+				for(Kingdom kingdom : gameScene.getKingdomList()){
+					for(Terrain terrain : kingdom.getTerrainList()){
+						if(terrain.isSelect()){
+							terrain.getButton().reset();
+							
+							//Porculeria de los terrenos
+							if(terrain.getType() >= GameParams.CITY){
+							
+								cityBox.start(getCurrentPlayer(), kingdom,
+									terrain.getType() >= GameParams.CITY &&
+									getArmyAtKingdom(kingdom)== null && 
+									getCurrentPlayer().hasKingom(kingdom), 
+									terrain.getType());
+							}
+						}
+					}
+				}
+			}
 			
 			for(int i = 0; i < gameScene.getPlayerList().size(); i++){
 				for(Army army: gameScene.getPlayerList().get(i).getArmyList()){
@@ -701,7 +722,10 @@ public class GameManager {
 			!confirmActionBox.isActive() &&
 			!cityBox.isActive()){
 			updateCamera();
-			if(getCurrentPlayer().getActionIA() == null && state == STATE_ACTION){
+			if(
+					(getCurrentPlayer().getActionIA() == null && state == STATE_ACTION)
+					||
+					state == STATE_DEBUG){
 				gameScene.update(UserInput.getInstance().getMultiTouchHandler(), worldConver, gameCamera, delta);
 			}
 		}
@@ -773,7 +797,7 @@ public class GameManager {
 					 
 					if(!getSelectedArmy().getPlayer().hasKingom(k) && k.getTarget() != -1){
 						int index = 0;
-						if(k.getTerrainList().get(k.getTerrainList().size()-1).getType()>=GameParams.SMALL_CITY){
+						if(k.getTerrainList().get(k.getTerrainList().size()-1).getType()>=GameParams.CITY){
 							index = k.getTerrainList().size()-1;
 						}
 						 

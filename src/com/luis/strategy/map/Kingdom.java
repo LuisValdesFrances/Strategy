@@ -78,9 +78,7 @@ public class Kingdom extends MapObject{
 	
 	public boolean isACity(){
 		return 
-				(hasTerrain(GameParams.SMALL_CITY)) ||
-				(hasTerrain(GameParams.MEDIUM_CITY)) ||
-				(hasTerrain(GameParams.BIG_CITY)) ||
+				(hasTerrain(GameParams.CITY)) ||
 				(hasTerrain(GameParams.CASTLE));
 	}
 	
@@ -125,21 +123,36 @@ public class Kingdom extends MapObject{
 	
 	public int getTaxes(){
 		int tax = 0;
+		
+		
+		
+		
 		for(Terrain terrain : getTerrainList()){
-			tax += GameParams.TERRAIN_TAX[terrain.getType()];
+			
+			int marketMod = 0;
+			if(terrain.getType() == GameParams.CITY){
+				marketMod = cityManagement.getBuildingList().get(2).getActiveLevel() > -1 ? 
+						cityManagement.getBuildingList().get(2).getActiveLevel(): 0;
+			}
+			
+			tax += GameParams.TERRAIN_TAX[terrain.getType()+marketMod];
 		}
 		
-		//Sumo propiedades ciudades:
-		if(cityManagement != null){
-			
-		}
+		
 		return tax;
 	}
 	
 	public int getDefense(int progressIndex){
 		int defense = 0;
 		
-		defense = GameParams.TERRAIN_DEFENSE[terrainList.get(progressIndex).getType()];
+		//Sumo propiedades ciudades:
+		int towerMod = 0;
+		if(cityManagement != null){
+			towerMod = cityManagement.getBuildingList().get(0).getActiveLevel() > -1 ? 
+					cityManagement.getBuildingList().get(0).getActiveLevel(): 0;
+		}
+		
+		defense = GameParams.TERRAIN_DEFENSE[terrainList.get(progressIndex).getType()+towerMod];
 		
 		return defense;
 	}

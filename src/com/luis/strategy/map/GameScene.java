@@ -2,8 +2,6 @@ package com.luis.strategy.map;
 
 import java.util.List;
 
-import com.luis.lgameengine.gameutils.fonts.Font;
-import com.luis.lgameengine.gameutils.fonts.TextManager;
 import com.luis.lgameengine.gameutils.gameworld.GameCamera;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.implementation.graphics.Graphics;
@@ -119,16 +117,20 @@ public class GameScene{
 		for(Kingdom k : kingdomList){
 			for(int i = 0; i < k.getTerrainList().size(); i++){
 				Image img = null;
-				switch(k.getTerrainList().get(i).getType()){
-				case GameParams.BIG_CITY : img = GfxManager.imgTerrain.get(GameParams.BIG_CITY); break;
-				case GameParams.MEDIUM_CITY : img = GfxManager.imgTerrain.get(GameParams.MEDIUM_CITY); break;
-				case GameParams.SMALL_CITY : img = GfxManager.imgTerrain.get(GameParams.SMALL_CITY); break;
-				case GameParams.CASTLE : img = null; break;
-				case GameParams.PLAIN : img = GfxManager.imgTerrain.get(GameParams.PLAIN); break;
-				case GameParams.FOREST : img = GfxManager.imgTerrain.get(GameParams.FOREST); break;
-				case GameParams.MONTAIN : img = GfxManager.imgTerrain.get(GameParams.MONTAIN); break;
-				}
 				
+				if(k.getTerrainList().get(i).getType() == GameParams.CITY){
+					int size = k.getCityManagement().getSizeByActiveLevel();
+					img = GfxManager.imgTerrain.get(GameParams.CITY + size);
+				}else{
+					switch(k.getTerrainList().get(i).getType()){
+					
+					case GameParams.CITY : img = GfxManager.imgTerrain.get(GameParams.CITY); break;
+					case GameParams.CASTLE : img = null; break;
+					case GameParams.PLAIN : img = GfxManager.imgTerrain.get(GameParams.PLAIN); break;
+					case GameParams.FOREST : img = GfxManager.imgTerrain.get(GameParams.FOREST); break;
+					case GameParams.MONTAIN : img = GfxManager.imgTerrain.get(GameParams.MONTAIN); break;
+					}
+				}
 				if(k.getTerrainList().get(i).getButton().isTouching())
 					g.setImageSize(1.25f, 1.25f);
 				
