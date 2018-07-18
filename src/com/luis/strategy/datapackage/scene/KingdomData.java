@@ -9,6 +9,7 @@ public class KingdomData implements Serializable{
 	
 	private int id;
 	private int state;
+	private boolean protectedByFaith;
 	
 	private List<BuildingData> buildingList;
 	
@@ -29,6 +30,12 @@ public class KingdomData implements Serializable{
 	}
 	public void setBuildingList(List<BuildingData> buildingList) {
 		this.buildingList = buildingList;
+	}
+	public boolean isProtectedByFaith() {
+		return protectedByFaith;
+	}
+	public void setProtectedByFaith(boolean protectedByFaith) {
+		this.protectedByFaith = protectedByFaith;
 	}
 	
 	

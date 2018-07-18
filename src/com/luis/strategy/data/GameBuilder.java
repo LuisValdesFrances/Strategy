@@ -153,6 +153,7 @@ public class GameBuilder {
 			for(KingdomData kingdomData : playerData.getKingdomList()){
 				Kingdom k = gameScene.getKingdom(kingdomData.getId());
 				k.setState(kingdomData.getState());
+				k.setProtectedByFaith(kingdomData.isProtectedByFaith());
 				
 				//City management
 				CityManagement cityManagement = null;
@@ -243,6 +244,7 @@ public class GameBuilder {
 				KingdomData kd = new KingdomData();
 				kd.setId(k.getId());
 				kd.setState(k.getState());
+				kd.setProtectedByFaith(k.isProtectedByFaith());
 				
 				//City management
 				List<BuildingData> buildingDataList = null;

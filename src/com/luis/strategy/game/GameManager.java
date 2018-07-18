@@ -1121,6 +1121,13 @@ public class GameManager {
 				SndManager.getInstance().playMusic(Main.MUSIC_MAP, true);
 			}
 			
+			//City management
+			for(Kingdom k : getCurrentPlayer().getKingdomList()){
+				if(k.getCityManagement() != null){
+					k.getCityManagement().update();
+				}
+			}
+			
 			//Activo tropas
 			for(Player player : gameScene.getPlayerList())
 				for(Army army : player.getArmyList())
@@ -1132,6 +1139,11 @@ public class GameManager {
 			int salary = getCurrentPlayer().getCost(false);
 			
 			getCurrentPlayer().setGold(getCurrentPlayer().getGold()+tax-salary);
+			
+			//Quito los marcadores de Fe
+			for(Kingdom k : getCurrentPlayer().getKingdomList()){
+				k.setProtectedByFaith(false);
+			}
 			
 			if(getCurrentPlayer().getActionIA() == null){
 				economyBox.start(
@@ -1145,27 +1157,6 @@ public class GameManager {
 					changeState(STATE_ACTION);
 				}
 			}
-			
-			//City management
-			for(Kingdom k : getCurrentPlayer().getKingdomList()){
-				if(k.getCityManagement() != null){
-					k.getCityManagement().update();
-				}
-			}
-			
-			for(Kingdom k : gameScene.getKingdomList()){
-				k.setProtectedByFaith(false);
-				//Chequeo de Fe
-				if(k.getCityManagement() != null){
-					if(		!getCurrentPlayer().hasKingom(k) &&
-							k.getCityManagement().getBuildingList().get(2).getActiveLevel() > -1){
-						int pro = GameParams.FAITH_CHECK[k.getCityManagement().getBuildingList().get(2).getActiveLevel()];
-						int ran = Main.getRandom(0, 100);
-						k.setProtectedByFaith(ran <= pro);
-					}
-				}
-			}
-			
 			break;
 			
 		case STATE_DISCARD:
@@ -1195,6 +1186,18 @@ public class GameManager {
 				if(isFinishGame()){
 					changeState(STATE_FINISH);
 				}else{
+					
+					//Faith
+					for(Kingdom k : getCurrentPlayer().getKingdomList()){
+						//Chequeo de Fe
+						if(k.getCityManagement() != null){
+							if(k.getCityManagement().getBuildingList().get(GameParams.CHURCH).getActiveLevel() > -1){
+								int pro = GameParams.FAITH_CHECK[k.getCityManagement().getBuildingList().get(GameParams.CHURCH).getActiveLevel()];
+								int ran = Main.getRandom(0, 100);
+								k.setProtectedByFaith(ran <= pro);
+							}
+						}
+					}
 					
 					setNextPlayer();
 					
@@ -1568,6 +1571,9 @@ public class GameManager {
 				}
 			}
 		}
+		if(selected != null){
+			Log.i("Debug", "Para");
+		}
 		return selected;
 	}
 	
@@ -1735,7 +1741,7 @@ public class GameManager {
 				cost += GameParams.TROOP_COST[troop.getType()]/2;
 			}
 		}
-		army1.setSelected(true);
+		//army1.setSelected(true);
 		army1.setDefeat(army1.isDefeat() || army2.isDefeat());
 		removeArmy(army2);
 		
