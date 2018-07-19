@@ -2349,8 +2349,8 @@ public class GameManager {
 	private void checkClearMist(Mist m){
 		m.clear = false;
 		
-		int kW = GfxManager.imgMist.getWidth();
-		int kH = GfxManager.imgMist.getHeight();
+		int kW = (int)(GfxManager.imgMist.getWidth()*1.5f);
+		int kH = (int)(GfxManager.imgMist.getHeight()*1.5f);
 		for(Kingdom k : getCurrentPlayer().getKingdomList()){
 			if(GameUtils.getInstance().checkColision(
 				m.x, m.y, m.w, m.h, 
