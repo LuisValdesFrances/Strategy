@@ -83,9 +83,7 @@ TURN:
 Plain
 Forest
 Montain
-Small village
-Medium village
-Big village
+Village
 Castle
 Infantry
 Knights

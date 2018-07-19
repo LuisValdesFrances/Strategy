@@ -124,6 +124,7 @@ public class GameManager {
 	
 	//private Army activeArmy;
 	//private Kingdom selectKingdom;
+	private List<Mist> mistList;
 	
 	public GameManager(WorldConver wc, GameCamera gc, GameScene gs){
 		this.gameBuffer = Image.createImage(
@@ -222,9 +223,11 @@ public class GameManager {
 			
 			@Override
 			public void onButtonPressUp(){
+				/*
 				reset();
 				hide();
 				btnFlagCastle.hide();
+				*/
 			}
 		};
 		
@@ -439,6 +442,23 @@ public class GameManager {
 		};
 		discardBox.setY(GfxManager.imgNotificationBox.getHeight()/2);
 		
+		mistList = new ArrayList<Mist>();
+		
+		int mapW = GfxManager.imgMapList.get(0).getWidth()*gameScene.getNumberPartsW();
+		int mapH = GfxManager.imgMapList.get(0).getHeight()*gameScene.getNumberPartsH();
+		int numTilesW = mapW / GfxManager.imgMist.getWidth()+1;
+		int numTilesH = mapH / GfxManager.imgMist.getHeight()+1;
+		 
+		for(int i = 0; i < numTilesH; i++){
+			for(int j = 0; j < numTilesW; j++){
+				 int pY = (GfxManager.imgMist.getHeight()*i) + GfxManager.imgMist.getHeight()/2;
+				 int pX = (GfxManager.imgMist.getWidth()*j) + GfxManager.imgMist.getWidth()/2;
+				 Mist mist = new Mist(pX, pY, GfxManager.imgMist.getWidth(), GfxManager.imgMist.getHeight());
+				 mistList.add(mist);
+			}
+		}
+		
+		
 		changeState(STATE_INCOME);
 	}
 	
@@ -529,7 +549,7 @@ public class GameManager {
 							cameraTargetX = getSelectedArmy().getAbsoluteX();
 							cameraTargetY = getSelectedArmy().getAbsoluteY();
 							if(i == gameScene.getPlayerIndex() && army.getState() == Army.STATE_ON){
-								btnFlagHelmet.start();
+								//btnFlagHelmet.start();
 								insertTargetUnMap(getSelectedArmy());
 								changeSubState(SUB_STATE_ACTION_SELECT);
 							}else{
@@ -703,7 +723,7 @@ public class GameManager {
 						cameraTargetX = getSelectedArmy().getAbsoluteX();
 						cameraTargetY = getSelectedArmy().getAbsoluteY();
 						if(i == gameScene.getPlayerIndex() && army.getState() == Army.STATE_ON){
-							btnFlagHelmet.start();
+							//btnFlagHelmet.start();
 							insertTargetUnMap(getSelectedArmy());
 							changeSubState(SUB_STATE_ACTION_SELECT);
 						}else{
@@ -716,7 +736,7 @@ public class GameManager {
 			
 			break;
 		}
-		
+		boolean listenEvents = false;
 		if(
 			!armyBox.isActive() && 
 			!battleBox.isActive() && 
@@ -728,12 +748,13 @@ public class GameManager {
 			!cityBox.isActive()){
 			updateCamera();
 			if(
-					(getCurrentPlayer().getActionIA() == null && state == STATE_ACTION)
-					||
-					state == STATE_DEBUG){
-				gameScene.update(UserInput.getInstance().getMultiTouchHandler(), worldConver, gameCamera, delta);
+				(getCurrentPlayer().getActionIA() == null && state == STATE_ACTION)
+				||
+				state == STATE_DEBUG){
+				listenEvents = true;
 			}
 		}
+		gameScene.update(UserInput.getInstance().getMultiTouchHandler(), worldConver, gameCamera, delta, listenEvents);
 		
 		updateGUI(UserInput.getInstance().getMultiTouchHandler(), delta);
 		
@@ -831,6 +852,26 @@ public class GameManager {
 				 }
 			 }
 		 }
+		 
+		 
+		 //Mist
+		 g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+		 for(Mist m : mistList){
+			
+			if(getCurrentPlayer().getActionIA() == null){
+				checkClearMist(m);	 
+			}
+				 
+			//Chequeo para despeja niebla
+			if(!m.clear){
+				gameBuffer.getGraphics().drawImage(
+						GfxManager.imgMist, 
+						worldConver.getConversionDrawX(gameCamera.getPosX(), m.x), 
+						worldConver.getConversionDrawY(gameCamera.getPosY(), m.y), 
+						Graphics.VCENTER | Graphics.HCENTER);
+			}
+		}
+		 
 		
 		 
 		 if(game3D){
@@ -2303,6 +2344,108 @@ public class GameManager {
 	
 	private Player getCurrentPlayer() {
 		return gameScene.getPlayerList().get(gameScene.getPlayerIndex());
+	}
+	
+	private void checkClearMist(Mist m){
+		m.clear = false;
+		
+		int kW = GfxManager.imgMist.getWidth();
+		int kH = GfxManager.imgMist.getHeight();
+		for(Kingdom k : getCurrentPlayer().getKingdomList()){
+			if(GameUtils.getInstance().checkColision(
+				m.x, m.y, m.w, m.h, 
+				k.getAbsoluteX(), k.getAbsoluteY(), kW, kH)){
+				m.clear = true;
+			}
+			if(!m.clear){
+				for(Terrain t : k.getTerrainList()){
+					if(GameUtils.getInstance().checkColision(
+						m.x, m.y, m.w, m.h, 
+						t.getAbsoluteX(), t.getAbsoluteY(), kW, kH)){
+						m.clear = true;
+					}
+				}
+			}
+			
+			//Vecinos
+			if(!m.clear){
+				for(Kingdom k2 : k.getBorderList()){
+					if(GameUtils.getInstance().checkColision(
+							m.x, m.y, m.w, m.h,  
+							k2.getAbsoluteX(), k2.getAbsoluteY(), kW, kH)){
+						m.clear = true;
+					}
+					if(!m.clear){
+						for(Terrain t : k2.getTerrainList()){
+							if(GameUtils.getInstance().checkColision(
+								m.x, m.y, m.w, m.h, 
+								t.getAbsoluteX(), t.getAbsoluteY(), kW, kH)){
+								m.clear = true;
+							}
+						}
+					}
+				}
+			}
+		}
+		 
+		//Army
+		if(!m.clear){
+			 for(Army a : getCurrentPlayer().getArmyList()){
+				 
+				 
+				if(GameUtils.getInstance().checkColision(
+					m.x, m.y, m.w, m.h, 
+					a.getKingdom().getAbsoluteX(), a.getKingdom().getAbsoluteY(), kW, kH)){
+					m.clear = true;
+				}
+				if(!m.clear){
+					for(Terrain t : a.getKingdom().getTerrainList()){
+						if(GameUtils.getInstance().checkColision(
+							m.x, m.y, m.w, m.h, 
+							t.getAbsoluteX(), t.getAbsoluteY(), kW, kH)){
+							m.clear = true;
+						}
+					}
+				}
+				
+				//Vecinos
+				if(!m.clear){
+					for(Kingdom k2 : a.getKingdom().getBorderList()){
+						if(GameUtils.getInstance().checkColision(
+								m.x, m.y, m.w, m.h, 
+								k2.getAbsoluteX(), k2.getAbsoluteY(), kW, kH)){
+							m.clear = true;
+						}
+						if(!m.clear){
+							for(Terrain t : k2.getTerrainList()){
+								if(GameUtils.getInstance().checkColision(
+										m.x, m.y, m.w, m.h, 
+										t.getAbsoluteX(), t.getAbsoluteY(), kW, kH)){
+									m.clear = true;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	private class Mist{
+		
+		public Mist(int x, int y, int w, int h) {
+			super();
+			this.x = x;
+			this.y = y;
+			this.w = w;
+			this.h = h;
+			this.clear = false;
+		}
+		int x;
+		int y;
+		int w;
+		int h;
+		boolean clear;
 	}
 		
 }

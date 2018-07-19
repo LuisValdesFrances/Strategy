@@ -108,10 +108,8 @@ public class RscManager {
 	public static final int TXT_GAME_PLAIN= TXT_GAME_TURN+1;
 	public static final int TXT_GAME_FOREST= TXT_GAME_PLAIN+1;
 	public static final int TXT_GAME_MONTAIN= TXT_GAME_FOREST+1;
-	public static final int TXT_GAME_SMALL_CITY= TXT_GAME_MONTAIN+1;
-	public static final int TXT_GAME_MEDIUM_CITY= TXT_GAME_SMALL_CITY+1;
-	public static final int TXT_GAME_BIG_CITY= TXT_GAME_MEDIUM_CITY+1;
-	public static final int TXT_GAME_CASTLE= TXT_GAME_BIG_CITY+1;
+	public static final int TXT_GAME_CITY= TXT_GAME_MONTAIN+1;
+	public static final int TXT_GAME_CASTLE= TXT_GAME_CITY+1;
 	public static final int TXT_GAME_INFANTRY= TXT_GAME_CASTLE+1;
 	public static final int TXT_GAME_KNIGHTS= TXT_GAME_INFANTRY+1;
 	public static final int TXT_GAME_HARASSERS= TXT_GAME_KNIGHTS+1;

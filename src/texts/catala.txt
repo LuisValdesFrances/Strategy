@@ -83,9 +83,7 @@ TORN:
 Pla
 Bosc
 Muntanya
-Ciutat xicoteta
-Ciutat mitjana
-Ciutat gran
+Ciutat
 Castell
 Infanteria
 Caballeria

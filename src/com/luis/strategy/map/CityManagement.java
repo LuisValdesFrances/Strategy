@@ -56,23 +56,15 @@ public class CityManagement {
 		}
 	}
 	
-	public int getSizeByActiveLevel(){
-		int total = GameParams.BUILDING_STATE.length * GameParams.BUILDING_STATE[0].length;
-		
-		int count = 0;
+	public float getTotalLevel(){
+		float level = 0;
 		for (Building b : buildingList) {
-			count += (b.getActiveLevel()+1);
+			if(b.getLevel() > -1){
+				level += (b.getActiveLevel()+1);
+			}
 		}
 		
-		if(count == total){
-			return 2;
-		}
-		else if (count >= total/2){
-			return 1;
-		}
-		else{
-			return 0;
-		}
+		return level;
 	}
 
 	public List<Building> getBuildingList() {

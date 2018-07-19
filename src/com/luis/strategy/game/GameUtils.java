@@ -52,6 +52,10 @@ public class GameUtils {
 		int w2 = GfxManager.imgTargetDomain.getWidth()/8;
 		int h2 = GfxManager.imgTargetDomain.getHeight()/8;
 		
+		return checkColision(x1, y1, w1, h1, x2, y2, w2, h2);
+	}
+	
+	public boolean checkColision(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2){
 		return x1+w1/2>x2-w2/2 && x1-w1/2<x2+w2 && y1+h1/2>y2-h2/2 && y1-h1/2<y2+h2;
 	}
 

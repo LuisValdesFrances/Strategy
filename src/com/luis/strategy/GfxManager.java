@@ -68,6 +68,7 @@ public class GfxManager {
 	 * static Image imgPadAux;
 	 */
 	public static Image imgProtection;
+	public static Image imgProtectionRes;
 	public static Image imgGameHud;
 	public static Image imgChest;
 	public static Image imgCoin;
@@ -123,6 +124,7 @@ public class GfxManager {
 	public static Image imgNotificationBox;
 
 	public static List<Image> imgMapList;
+	public static Image imgMist;
 	public static Image imgTerrainOk;
 
 	public static Image imgTargetDomain;
@@ -238,6 +240,8 @@ public class GfxManager {
 					imgMapList.add(Image.createImage("/maps/map_14.png"));
 					imgMapList.add(Image.createImage("/maps/map_15.png"));
 					imgMapList.add(Image.createImage("/maps/map_16.png"));
+					
+					imgMist = Image.createImage("/maps/mist.png");
 					break;
 				}
 
@@ -268,6 +272,7 @@ public class GfxManager {
 				imgChurchBNList.add(Image.createImage("/church3_bn.png"));
 
 				imgProtection = Image.createImage("/protection.png");
+				imgProtectionRes = Image.createImage("/protection_res.png");
 				
 				imgLevelUpRelease = Image.createImage("/level_up_release.png");
 				imgLevelUpFocus = Image.createImage("/level_up_focus.png");
@@ -375,8 +380,6 @@ public class GfxManager {
 				imgTerrain.add(Image.createImage("/plain.png"));
 				imgTerrain.add(Image.createImage("/forest.png"));
 				imgTerrain.add(Image.createImage("/montain.png"));
-				imgTerrain.add(Image.createImage("/small_city.png"));
-				imgTerrain.add(Image.createImage("/medium_city.png"));
 				imgTerrain.add(Image.createImage("/big_city.png"));
 
 				imgTerrainBox.add(Image.createImage("/plain_box.png"));
@@ -614,6 +617,7 @@ public class GfxManager {
 
 		// Menu commons
 		imgProtection = null;
+		imgProtectionRes = null;
 		imgButtonMenuBigRelease = null;
 		imgButtonMenuBigFocus = null;
 
@@ -629,6 +633,7 @@ public class GfxManager {
 		imgButtonInvisible = null;
 
 		imgMapList = null;
+		imgMist = null;
 
 		imgTextBG = null;
 
