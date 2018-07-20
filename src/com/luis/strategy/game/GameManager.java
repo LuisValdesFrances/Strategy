@@ -855,23 +855,42 @@ public class GameManager {
 		 
 		 
 		 //Mist
-		 g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 		 for(Mist m : mistList){
-			
-			if(getCurrentPlayer().getActionIA() == null){
-				checkClearMist(m);	 
-			}
-				 
-			//Chequeo para despeja niebla
-			if(!m.clear){
-				gameBuffer.getGraphics().drawImage(
-						GfxManager.imgMist, 
-						worldConver.getConversionDrawX(gameCamera.getPosX(), m.x), 
-						worldConver.getConversionDrawY(gameCamera.getPosY(), m.y), 
-						Graphics.VCENTER | Graphics.HCENTER);
+			 m.clear = false;
+		 }
+		 g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+		 Player humanPlayer = null;
+		 if(getCurrentPlayer().getActionIA() == null){
+			 humanPlayer = getCurrentPlayer();
+		 }else{
+			int count = 0;
+			int i = gameScene.getPlayerIndex();
+			while(humanPlayer == null && count < gameScene.getPlayerList().size()){
+				i--;
+				if(i < 0){
+					i = gameScene.getPlayerList().size()-1;
+				}
+				count++;
+				if(gameScene.getPlayerList().get(i) != null && gameScene.getPlayerList().get(i).getActionIA() == null){
+					humanPlayer = gameScene.getPlayerList().get(i);
+				}
 			}
 		}
 		 
+		if(humanPlayer != null){//Si p == null significa que todos los jugadores son IA, asi que no pinto niebla
+			for(Mist m : mistList){
+				
+				//Chequeo para despeja niebla
+				checkClearMist(humanPlayer, m);
+				if(!m.clear){
+					gameBuffer.getGraphics().drawImage(
+							GfxManager.imgMist, 
+							worldConver.getConversionDrawX(gameCamera.getPosX(), m.x), 
+							worldConver.getConversionDrawY(gameCamera.getPosY(), m.y), 
+							Graphics.VCENTER | Graphics.HCENTER);
+				}
+			}
+		} 
 		
 		 
 		 if(game3D){
@@ -2346,12 +2365,10 @@ public class GameManager {
 		return gameScene.getPlayerList().get(gameScene.getPlayerIndex());
 	}
 	
-	private void checkClearMist(Mist m){
-		m.clear = false;
-		
+	private void checkClearMist(Player player, Mist m){
 		int kW = (int)(GfxManager.imgMist.getWidth()*1.5f);
 		int kH = (int)(GfxManager.imgMist.getHeight()*1.5f);
-		for(Kingdom k : getCurrentPlayer().getKingdomList()){
+		for(Kingdom k : player.getKingdomList()){
 			if(GameUtils.getInstance().checkColision(
 				m.x, m.y, m.w, m.h, 
 				k.getAbsoluteX(), k.getAbsoluteY(), kW, kH)){
@@ -2390,9 +2407,7 @@ public class GameManager {
 		 
 		//Army
 		if(!m.clear){
-			 for(Army a : getCurrentPlayer().getArmyList()){
-				 
-				 
+			 for(Army a : player.getArmyList()){
 				if(GameUtils.getInstance().checkColision(
 					m.x, m.y, m.w, m.h, 
 					a.getKingdom().getAbsoluteX(), a.getKingdom().getAbsoluteY(), kW, kH)){
