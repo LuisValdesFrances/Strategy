@@ -100,12 +100,12 @@ public class MainActivity extends Activity{
 	@Override
 	public void onStop(){
 		super.onStop();
-		main.saveAndSend();
 	}
 	
 	@Override
 	public void onDestroy(){
 		super.onDestroy();
+		main.saveAndSend();
 		try {
 			gameThread.join();
 		} catch (InterruptedException e) {
