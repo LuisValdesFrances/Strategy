@@ -1275,7 +1275,7 @@ public class GameManager {
 			endGameBox.start(
 					RscManager.allText[RscManager.TXT_GAME_VICTORY], 
 					RscManager.allText[RscManager.TXT_GAME_PLAYER] + " " + getWinner().getName() + " " +
-							RscManager.allText[RscManager.TXT_GAME_IS_WINNER]);
+					RscManager.allText[RscManager.TXT_GAME_IS_WINNER]);
 			break;
 		case STATE_DEBUG:
 			btnDebugPause.setDisabled(false);
@@ -1801,7 +1801,6 @@ public class GameManager {
 				cost += GameParams.TROOP_COST[troop.getType()]/2;
 			}
 		}
-		//army1.setSelected(true);
 		army1.setDefeat(army1.isDefeat() || army2.isDefeat());
 		removeArmy(army2);
 		
