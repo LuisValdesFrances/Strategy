@@ -2,8 +2,6 @@ package com.luis.strategy.map;
 
 import java.util.List;
 
-import com.luis.lgameengine.gameutils.fonts.Font;
-import com.luis.lgameengine.gameutils.fonts.TextManager;
 import com.luis.lgameengine.gameutils.gameworld.GameCamera;
 import com.luis.lgameengine.gameutils.gameworld.WorldConver;
 import com.luis.lgameengine.implementation.graphics.Graphics;
@@ -52,7 +50,12 @@ public class GameScene{
 		
 	}
 	
-	public void update(MultiTouchHandler multiTouchHandler, WorldConver worldConver, GameCamera gameCamera, float delta){
+	public void update(
+			MultiTouchHandler multiTouchHandler, 
+			WorldConver worldConver, 
+			GameCamera gameCamera, 
+			float delta,
+			boolean listenEvents){
 		if(alphaFlag){
 			alpha-= 60f*delta;
 		}else{
@@ -64,11 +67,25 @@ public class GameScene{
 		alpha = Math.max(100f, alpha);
 		alpha = Math.min(200f, alpha);
 		
+		
+		if(alphaFaithFlag){
+			alphaFaith-= 120f*delta;
+		}else{
+			alphaFaith+= 120f*delta;
+		}
+		if(alphaFaith < 10f || alphaFaith > 250f)
+			alphaFaithFlag = !alphaFaithFlag;
+		
+		alphaFaith = Math.max(10f, alphaFaith);
+		alphaFaith= Math.min(250f,  alphaFaith);
+		
 		//Evemtos touch que chocan contra los de la GUI
-		for (Kingdom k : kingdomList) {
-			k.update(multiTouchHandler, worldConver, gameCamera);
-			for (Terrain t : k.getTerrainList()) {
-				t.update(multiTouchHandler, worldConver, gameCamera);
+		if(listenEvents){
+			for (Kingdom k : kingdomList) {
+				k.update(multiTouchHandler, worldConver, gameCamera);
+				for (Terrain t : k.getTerrainList()) {
+					t.update(multiTouchHandler, worldConver, gameCamera);
+				}
 			}
 		}
 	}
@@ -92,6 +109,10 @@ public class GameScene{
 	
 	private boolean alphaFlag;
 	private float alpha = 255;
+	
+	private boolean alphaFaithFlag;
+	private float alphaFaith = 255;
+	
 	public void drawMap(Graphics g, WorldConver worldConver, GameCamera gameCamera, List<Player> playerList){
 		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 		int pW = GfxManager.imgMapList.get(0).getWidth();
@@ -119,22 +140,33 @@ public class GameScene{
 		for(Kingdom k : kingdomList){
 			for(int i = 0; i < k.getTerrainList().size(); i++){
 				Image img = null;
+				
 				switch(k.getTerrainList().get(i).getType()){
-				case GameParams.BIG_CITY : img = GfxManager.imgTerrain.get(GameParams.BIG_CITY); break;
-				case GameParams.MEDIUM_CITY : img = GfxManager.imgTerrain.get(GameParams.MEDIUM_CITY); break;
-				case GameParams.SMALL_CITY : img = GfxManager.imgTerrain.get(GameParams.SMALL_CITY); break;
-				case GameParams.CASTLE : img = null; break;
-				case GameParams.PLAIN : img = GfxManager.imgTerrain.get(GameParams.PLAIN); break;
-				case GameParams.FOREST : img = GfxManager.imgTerrain.get(GameParams.FOREST); break;
-				case GameParams.MONTAIN : img = GfxManager.imgTerrain.get(GameParams.MONTAIN); break;
+					case GameParams.CASTLE : img = null; break;
+					case GameParams.CITY : img = GfxManager.imgTerrain.get(GameParams.CITY); break;
+					case GameParams.PLAIN : img = GfxManager.imgTerrain.get(GameParams.PLAIN); break;
+					case GameParams.FOREST : img = GfxManager.imgTerrain.get(GameParams.FOREST); break;
+					case GameParams.MONTAIN : img = GfxManager.imgTerrain.get(GameParams.MONTAIN); break;
 				}
 				
+				float touchMod = 0;
 				if(k.getTerrainList().get(i).getButton().isTouching())
-					g.setImageSize(1.25f, 1.25f);
+					touchMod = 0.25f;
 				
 				if(i < k.getState()){
 					g.setAlpha(100);
 				}
+				
+				
+				if(k.getTerrainList().get(i).getType() == GameParams.CITY){
+					float total = GameParams.BUILDING_STATE.length * GameParams.BUILDING_STATE[0].length;
+					float mod = (k.getCityManagement().getTotalLevel() * 0.5f) / total;
+					float size = 0.5f+mod;
+					g.setImageSize(size+touchMod, size+touchMod);
+				}else{
+					g.setImageSize(1f+touchMod, 1f+touchMod);
+				}
+				
 				
 				g.drawImage(img, 
 					worldConver.getConversionDrawX(gameCamera.getPosX(), k.getTerrainList().get(i).getAbsoluteX()),
@@ -143,6 +175,45 @@ public class GameScene{
 				
 				g.setAlpha(255);
 				g.setImageSize(1f, 1f);
+				
+				
+				
+				//Fe
+				if(k.getTerrainList().get(i).getType() == GameParams.CITY){
+					if(k.isProtectedByFaith()){
+						g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+						
+						float total = GameParams.BUILDING_STATE.length * GameParams.BUILDING_STATE[0].length;
+						float mod = (k.getCityManagement().getTotalLevel() * 0.5f) / total;
+						float size = 0.5f+mod;
+						
+						int modW = (int)(GfxManager.imgTerrain.get(GameParams.CITY).getWidth()*size)/2;
+						int modH = (int)(GfxManager.imgTerrain.get(GameParams.CITY).getHeight()*size)/2;
+						
+						//Efecto resplandor
+						g.setAlpha((int)alphaFaith);
+						
+						g.drawImage(GfxManager.imgProtectionRes, 
+								worldConver.getConversionDrawX(gameCamera.getPosX(),
+										k.getTerrainList().get(k.getTerrainList().size()-1).getAbsoluteX()+
+										modW),
+								worldConver.getConversionDrawY(gameCamera.getPosY(),
+										k.getTerrainList().get(k.getTerrainList().size()-1).getAbsoluteY()+
+										modH),
+								Graphics.HCENTER | Graphics.VCENTER);
+						g.setAlpha(255);
+						
+						g.drawImage(GfxManager.imgProtection, 
+							worldConver.getConversionDrawX(gameCamera.getPosX(),
+									k.getTerrainList().get(k.getTerrainList().size()-1).getAbsoluteX()+
+									modW),
+							worldConver.getConversionDrawY(gameCamera.getPosY(),
+									k.getTerrainList().get(k.getTerrainList().size()-1).getAbsoluteY()+
+									modH),
+							Graphics.HCENTER | Graphics.VCENTER);
+					}
+				}
+				
 			}
 			
 			//Capitales
@@ -186,7 +257,9 @@ public class GameScene{
 				
 				switch(k.getTarget()){
 				case Kingdom.TARGET_BATTLE:
-					imgTarget = GfxManager.imgTargetBattle;
+					if(!k.isProtectedByFaith()){
+						imgTarget = GfxManager.imgTargetBattle;
+					}
 					break;
 				case Kingdom.TARGET_DOMAIN:
 					imgTarget = GfxManager.imgTargetDomain;
@@ -196,9 +269,11 @@ public class GameScene{
 					break;
 				}
 				
-				g.setAlpha((int)alpha);
-				g.drawImage(imgTarget, k.getTouchX(worldConver, gameCamera), k.getTouchY(worldConver, gameCamera), Graphics.VCENTER | Graphics.HCENTER);
-				g.setAlpha(255);
+				if(imgTarget != null){
+					g.setAlpha((int)alpha);
+					g.drawImage(imgTarget, k.getTouchX(worldConver, gameCamera), k.getTouchY(worldConver, gameCamera), Graphics.VCENTER | Graphics.HCENTER);
+					g.setAlpha(255);
+				}
 			}
 		}
 	}
@@ -247,10 +322,6 @@ public class GameScene{
 
 	public float getAlpha() {
 		return alpha;
-	}
-
-	public void setAlpha(float alpha) {
-		this.alpha = alpha;
 	}
 
 	public int getPlayerIndex() {

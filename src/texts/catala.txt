@@ -83,14 +83,15 @@ TORN:
 Pla
 Bosc
 Muntanya
-Ciutat xicoteta
-Ciutat mitjana
-Ciutat gran
+Ciutat
 Castell
 Infanteria
 Caballeria
 Fustigadors
 Setge
+Defensa
+Or
+Fe
 RESULTAT
 Jugador
 Gran derrota
@@ -132,6 +133,7 @@ ATACAR
 FUGIR
 ESPERAR
 CANCEL·LAR
+¿Desitjes millorar aquesta construcció
 Has perdut la partida.
 perd la partida.
 El teu exèrcit ha estat derrotat.

@@ -83,14 +83,15 @@ TURNO:
 Llano
 Bosque
 Montaña
-Ciudad pequeña
-Ciudad mediana
-Ciudad grande
+Ciudad
 Castillo
 Infanteria
 Caballeria
 Hostigadores
 Asedio
+Defensa
+Oro
+Fé
 RESULTADO
 Jugador
 Gran derrota
@@ -132,6 +133,7 @@ ATACAR
 HUIR
 ESPERAR
 CANCELAR
+¿Deseas mejorar esta constucción
 Has perdido la partida.
 pierde la partida.
 Tu ejercito ha sido derrotado.

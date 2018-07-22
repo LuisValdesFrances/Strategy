@@ -83,14 +83,15 @@ TURN:
 Plain
 Forest
 Montain
-Small village
-Medium village
-Big village
+Village
 Castle
 Infantry
 Knights
 Harassers
 Siege
+Defense
+Gold
+Faith
 RESULT
 Player
 Big Defeat
@@ -132,6 +133,7 @@ ATACK
 ESCAPE
 WAIT
 CANCEL
+Do you want to improve this construction
 You lost the game.
 lost the game.
 Your army has been defeated.

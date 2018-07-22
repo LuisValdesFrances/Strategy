@@ -171,22 +171,11 @@ public class Player {
 	}
 	*/
 	
+	//Falta seleccionar aquella con un nivel mayor
 	public boolean changeCapital(){
 		if(getCapitalkingdom() == null){
 			for(Kingdom k : kingdomList){
-				if(k.getTerrainList().get(k.getTerrainList().size()-1).getType() == GameParams.BIG_CITY){
-					setCapitalKingdom(k.getId());
-					return true;
-				}
-			}
-			for(Kingdom k : kingdomList){
-				if(k.getTerrainList().get(k.getTerrainList().size()-1).getType() == GameParams.MEDIUM_CITY){
-					setCapitalKingdom(k.getId());
-					return true;
-				}
-			}
-			for(Kingdom k : kingdomList){
-				if(k.getTerrainList().get(k.getTerrainList().size()-1).getType() == GameParams.SMALL_CITY){
+				if(k.getTerrainList().get(k.getTerrainList().size()-1).getType() == GameParams.CITY){
 					setCapitalKingdom(k.getId());
 					return true;
 				}

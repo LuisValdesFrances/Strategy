@@ -13,6 +13,7 @@ import com.luis.strategy.RscManager;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.map.Army;
+import com.luis.strategy.map.Kingdom;
 import com.luis.strategy.map.Terrain;
 
 public class BattleBox extends MenuBox{
@@ -22,7 +23,7 @@ public class BattleBox extends MenuBox{
 	private Army armyAtack;
 	private Army armyDefense;
 	
-	private Terrain terrain;
+	private Kingdom kingdom;
 	
 	private int troopY;
 	private int centerY;
@@ -61,7 +62,7 @@ public class BattleBox extends MenuBox{
 			@Override
 			public void onButtonPressUp(){
 				reset();
-				battleDiceBox.start(terrain, armyAtack, armyDefense, autoPlay);
+				battleDiceBox.start(kingdom, armyAtack, armyDefense, autoPlay);
 			}
 		});
 		
@@ -89,10 +90,12 @@ public class BattleBox extends MenuBox{
 	}
 	
 	private boolean autoPlay;
-	public void start(Terrain terrain, Army armyAtack, Army armyDefense, int kingdomFlag,
+	public void start(
+			Kingdom kingdom,
+			Army armyAtack, Army armyDefense, int kingdomFlag,
 			boolean waitOption, boolean scapeOption, boolean cancelOption, boolean autoPlay){
 		super.start();
-		this.terrain = terrain;
+		this.kingdom = kingdom;
 		this.armyAtack = armyAtack;
 		this.armyDefense = armyDefense;
 		this.kingdomFlag = kingdomFlag;
@@ -266,7 +269,11 @@ public class BattleBox extends MenuBox{
 						Graphics.VCENTER | Graphics.HCENTER);
 			}
 					
+			Terrain terrain = armyDefense != null ? 
+					kingdom.getTerrainList().get(0) : kingdom.getTerrainList().get(kingdom.getState());
+			
 			int relativeFlagX = GfxManager.imgTerrainBox.get(terrain.getType()).getWidth()/3;
+			
 			
 			//Left
 			TextManager.drawSimpleText(g, 
@@ -333,9 +340,7 @@ public class BattleBox extends MenuBox{
 				case GameParams.PLAIN: terrainText = RscManager.allText[RscManager.TXT_GAME_PLAIN]; break;
 				case GameParams.FOREST: terrainText = RscManager.allText[RscManager.TXT_GAME_FOREST]; break;
 				case GameParams.MONTAIN: terrainText = RscManager.allText[RscManager.TXT_GAME_MONTAIN]; break;
-				case GameParams.SMALL_CITY: terrainText = RscManager.allText[RscManager.TXT_GAME_SMALL_CITY]; break;
-				case GameParams.MEDIUM_CITY: terrainText = RscManager.allText[RscManager.TXT_GAME_MEDIUM_CITY]; break;
-				case GameParams.BIG_CITY: terrainText = RscManager.allText[RscManager.TXT_GAME_BIG_CITY]; break;
+				case GameParams.CITY: terrainText = RscManager.allText[RscManager.TXT_GAME_CITY]; break;
 			}
 			
 			TextManager.drawSimpleText(g, 
@@ -355,14 +360,13 @@ public class BattleBox extends MenuBox{
 			
 			//Distancia total
 			int barWidth = 
-			GfxManager.imgTerrainBox.get(terrain.getType()).getWidth() -
-			relativeFlagX - 
-			GfxManager.imgFlagBigList.get(GfxManager.imgFlagBigList.size()-1).getWidth();
+					GfxManager.imgTerrainBox.get(terrain.getType()).getWidth() - relativeFlagX - 
+					GfxManager.imgFlagBigList.get(GfxManager.imgFlagBigList.size()-1).getWidth();
 			int barHeight = GfxManager.imgFlagBigList.get(armyAtack.getPlayer().getFlag()).getHeight()/10;
 			
 			int atackForces = armyAtack.getPower(terrain);
-			int defenseForces = armyDefense != null? 
-					armyDefense.getPower(terrain):GameParams.TERRAIN_DEFENSE[terrain.getType()];
+			int defenseForces = armyDefense != null?
+					armyDefense.getPower(terrain): kingdom.getDefense(kingdom.getState());
 			int totalForces = atackForces+defenseForces;
 			int atackWidth = (atackForces*barWidth)/totalForces;
 			int defenseWidth = (defenseForces*barWidth)/totalForces;

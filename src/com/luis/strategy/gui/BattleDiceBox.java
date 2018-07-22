@@ -15,7 +15,7 @@ import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.game.GameUtils;
 import com.luis.strategy.map.Army;
-import com.luis.strategy.map.Terrain;
+import com.luis.strategy.map.Kingdom;
 
 public class BattleDiceBox {
 	
@@ -99,11 +99,14 @@ public class BattleDiceBox {
 	}
 	
 	private boolean autoPlay;
-	public void start(Terrain terrain, Army armyAtack, Army armyDefense, boolean autoPlay){
+	public void start(
+			Kingdom kingdom, 
+			Army armyAtack, Army armyDefense, boolean autoPlay){
 		this.state = STATE_START;
 		this.modPosY = -((Define.SIZEY-totalHeight)+totalHeight);
 		this.modPosDice = -Define.SIZEX;
-		this.diceDifficult = GameUtils.getInstance().calculateDifficult(terrain, armyAtack, armyDefense);
+		this.diceDifficult = GameUtils.getInstance().calculateDifficult(
+				kingdom, armyAtack, armyDefense);
 		this.stateCombat = 0;
 		this.autoPlay = autoPlay;
 		

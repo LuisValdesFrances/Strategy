@@ -108,16 +108,18 @@ public class RscManager {
 	public static final int TXT_GAME_PLAIN= TXT_GAME_TURN+1;
 	public static final int TXT_GAME_FOREST= TXT_GAME_PLAIN+1;
 	public static final int TXT_GAME_MONTAIN= TXT_GAME_FOREST+1;
-	public static final int TXT_GAME_SMALL_CITY= TXT_GAME_MONTAIN+1;
-	public static final int TXT_GAME_MEDIUM_CITY= TXT_GAME_SMALL_CITY+1;
-	public static final int TXT_GAME_BIG_CITY= TXT_GAME_MEDIUM_CITY+1;
-	public static final int TXT_GAME_CASTLE= TXT_GAME_BIG_CITY+1;
+	public static final int TXT_GAME_CITY= TXT_GAME_MONTAIN+1;
+	public static final int TXT_GAME_CASTLE= TXT_GAME_CITY+1;
 	public static final int TXT_GAME_INFANTRY= TXT_GAME_CASTLE+1;
 	public static final int TXT_GAME_KNIGHTS= TXT_GAME_INFANTRY+1;
 	public static final int TXT_GAME_HARASSERS= TXT_GAME_KNIGHTS+1;
 	public static final int TXT_GAME_SIEGE= TXT_GAME_HARASSERS+1;
 	
-	public static final int TXT_GAME_RESULT= TXT_GAME_SIEGE+1;
+	public static final int TXT_GAME_DEFENSE= TXT_GAME_SIEGE+1;
+	public static final int TXT_GAME_GOLD= TXT_GAME_DEFENSE+1;
+	public static final int TXT_GAME_FAITH= TXT_GAME_GOLD+1;
+	
+	public static final int TXT_GAME_RESULT= TXT_GAME_FAITH+1;
 	public static final int TXT_GAME_PLAYER= TXT_GAME_RESULT+1;
 	public static final int TXT_GAME_BIG_DEFEAT= TXT_GAME_PLAYER+1;
 	public static final int TXT_GAME_DEFEAT= TXT_GAME_BIG_DEFEAT+1;
@@ -164,8 +166,10 @@ public class RscManager {
 	public static final int TXT_GAME_WAIT= TXT_GAME_ESCAPE+1;
 	public static final int TXT_GAME_CANCEL= TXT_GAME_WAIT+1;
 	
+	public static final int TXT_GAME_CONFIRM_UPDATE_BUILDING = TXT_GAME_CANCEL+1;
+	
 	//Notificaciones online
-	public static final int TXT_NOTIFICATION_YOU_LOST_GAME= TXT_GAME_CANCEL+1; //Code 0
+	public static final int TXT_NOTIFICATION_YOU_LOST_GAME= TXT_GAME_CONFIRM_UPDATE_BUILDING+1; //Code 0
 	public static final int TXT_NOTIFICATION_LOST_GAME= TXT_NOTIFICATION_YOU_LOST_GAME+1;//Code 1
 	public static final int TXT_NOTIFICATION_YOUR_ARMY_DEFEATED= TXT_NOTIFICATION_LOST_GAME+1;//Code 2
 	public static final int TXT_NOTIFICATION_YOUR_ARMY_WON= TXT_NOTIFICATION_YOUR_ARMY_DEFEATED+1;//Code 3

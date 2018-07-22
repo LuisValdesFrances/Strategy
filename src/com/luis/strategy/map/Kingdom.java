@@ -12,6 +12,8 @@ public class Kingdom extends MapObject{
 	private String name;
 	private int id;
 	
+	private boolean protectedByFaith;
+	
 	private List<Terrain> terrainList;
 	private List<Kingdom> borderList;
 	
@@ -39,6 +41,7 @@ public class Kingdom extends MapObject{
 		this.mapWidth = mapWidth;
 		this.mapHeight = mapHeight;
 		this.state = 0;
+		this.protectedByFaith = false;
 		
 		terrainList = new ArrayList<Terrain>();
 		borderList = new ArrayList<Kingdom>();
@@ -64,10 +67,6 @@ public class Kingdom extends MapObject{
 				select = false;
 			}
 		};
-		
-		if(isACity()){
-			cityManagement = new CityManagement();
-		}
 	}
 	
 	public boolean hasTerrain(int type){
@@ -82,9 +81,7 @@ public class Kingdom extends MapObject{
 	
 	public boolean isACity(){
 		return 
-				(hasTerrain(GameParams.SMALL_CITY)) ||
-				(hasTerrain(GameParams.MEDIUM_CITY)) ||
-				(hasTerrain(GameParams.BIG_CITY)) ||
+				(hasTerrain(GameParams.CITY)) ||
 				(hasTerrain(GameParams.CASTLE));
 	}
 	
@@ -129,10 +126,49 @@ public class Kingdom extends MapObject{
 	
 	public int getTaxes(){
 		int tax = 0;
+		
 		for(Terrain terrain : getTerrainList()){
-			tax += GameParams.TERRAIN_TAX[terrain.getType()];
+			
+			//Sumo propiedades ciudades:
+			int marketMod = 0;
+			if(terrain.getType() == GameParams.CITY){
+				if(cityManagement.getBuildingList().get(GameParams.MARKET).getActiveLevel() > -1){
+					marketMod = GameParams.MARKET_TAX[cityManagement.getBuildingList().get(GameParams.MARKET).getActiveLevel()];
+				}
+			}
+			tax += GameParams.TERRAIN_TAX[terrain.getType()]+marketMod;
 		}
 		return tax;
+	}
+	
+	public int getDefense(int progressIndex){
+		int defense = 0;
+		
+		//Sumo propiedades ciudades:
+		int towerMod = 0;
+		if(terrainList.get(progressIndex).getType() == GameParams.CITY){
+			if(cityManagement.getBuildingList().get(GameParams.TOWER).getActiveLevel() > -1){
+			 towerMod = GameParams.TOWER_DEFENSE[cityManagement.getBuildingList().get(GameParams.TOWER).getActiveLevel()];
+			}
+		}
+		
+		defense = GameParams.TERRAIN_DEFENSE[terrainList.get(progressIndex).getType()]+towerMod;
+		
+		return defense;
+	}
+
+	
+	public CityManagement getCityManagement() {
+		return cityManagement;
+	}
+
+	public void setCityManagement(CityManagement cityManagement) {
+		if(isACity()){
+			if(cityManagement != null)
+				this.cityManagement = cityManagement;
+			else
+				this.cityManagement = new CityManagement();
+		}
 	}
 
 	public int getTarget() {
@@ -159,5 +195,14 @@ public class Kingdom extends MapObject{
 		this.totalStates = totalStates;
 	}
 
+	public boolean isProtectedByFaith() {
+		return protectedByFaith;
+	}
+
+	public void setProtectedByFaith(boolean protectedByFaith) {
+		this.protectedByFaith = protectedByFaith;
+	}
+
+	
 	
 }

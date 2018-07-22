@@ -23,7 +23,6 @@ import com.luis.strategy.data.GameBuilder;
 import com.luis.strategy.datapackage.scene.NotificationListData;
 import com.luis.strategy.datapackage.scene.SceneData;
 import com.luis.strategy.game.GameManager;
-import com.luis.strategy.gui.ConfigurationBox;
 import com.luis.strategy.map.GameScene;
 
 /**
@@ -95,7 +94,7 @@ public class ModeGame {
 			}
 			else if(Main.state == Define.ST_GAME_INIT_ON_LINE){
 				if(GameState.getInstance().getSceneData().getState() == 0){
-					gameScene = GameBuilder.getInstance().buildStartGameScene();
+					gameScene = GameBuilder.getInstance().buildStartOnLine();
 				}else{
 					gameScene = GameBuilder.getInstance().buildGameScene();
 				}
