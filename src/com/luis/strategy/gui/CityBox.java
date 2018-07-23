@@ -174,6 +174,7 @@ public class CityBox extends MenuBox{
 					getY() + GfxManager.imgMediumBox.getHeight()/2, 
 					null, -1){
 				public void onButtonPressUp() {
+					SndManager.getInstance().playFX(Main.FX_COINS, 0);
 					onBuy();
 				};
 			};
@@ -219,6 +220,8 @@ public class CityBox extends MenuBox{
 			public void onButtonPressUp() {
 				reset();
 				
+				SndManager.getInstance().playFX(Main.FX_NEXT, 0);
+				
 				confirmBox = new DialogBox(GfxManager.imgSmallBox){
 					@Override
 					public void onFinish() {
@@ -245,7 +248,6 @@ public class CityBox extends MenuBox{
 	
 	private void buy(Player player, int type, int level){
 		
-		
 		int cost = GameParams.BUILDING_COST[type][level];
 		player.setGold(player.getGold() - cost);
 		kingdom.getCityManagement().build(type);
@@ -253,6 +255,9 @@ public class CityBox extends MenuBox{
 		//Habilitar botones
 		for(int i = 0; i < levelUpButtonList.size();i++){
 			initLevelUpButtons(player, i);
+		}
+		if(buttonNewArmy != null){
+			buttonNewArmy.setDisabled(player.getGold() < GameParams.ARMY_COST);
 		}
 	}
 

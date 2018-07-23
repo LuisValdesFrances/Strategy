@@ -19,7 +19,7 @@ import com.luis.strategy.constants.Define;
  */
 public class Main extends Screen implements Runnable {
 	
-	public static boolean debug = true;
+	public static boolean debug = false;
 
 	public static Main instance;
 	public static Main getInstance(){

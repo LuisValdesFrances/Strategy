@@ -163,6 +163,7 @@ public class BattleDiceBox {
 							}
 						}
 					}
+					
 					//buttonCombat.setDisabled(modPosDice < 0 || resultIcon[stateCombat].modSize > 0);
 					if(callToFX){
 						callToFX = false;
@@ -170,6 +171,12 @@ public class BattleDiceBox {
 							SndManager.getInstance().playFX(Main.FX_SWORD_STRONG, 0);
 						}else{
 							SndManager.getInstance().playFX(Main.FX_SWORD_BLOOD, 0);
+						}
+						
+						
+						if(state == STATE_COMBAT_3){
+							buttonCombat.setImgRelese(GfxManager.imgButtonOkRelease);
+							buttonCombat.setImgFocus(GfxManager.imgButtonOkFocus);
 						}
 					}
 				}
