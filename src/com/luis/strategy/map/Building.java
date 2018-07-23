@@ -3,6 +3,7 @@ package com.luis.strategy.map;
 import com.luis.strategy.constants.GameParams;
 
 public class Building {
+	
 	int type;
 	int state;
 	int level;// 0, 1, 2 //Ejemplo: torre -> muralla -> fortaleza
