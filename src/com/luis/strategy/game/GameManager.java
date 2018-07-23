@@ -394,7 +394,7 @@ public class GameManager {
 					if(OnlineInputOutput.getInstance().isOnline(Main.getInstance().getContext())){
 						dataSender.sendGameScene(gameScene, 2, true);
 						//Envio notificaciones
-						//dataSender.sendGameNotifications();
+						dataSender.sendGameNotifications();
 					}else{
 						NotificationBox.getInstance().addMessage(RscManager.allText[RscManager.TXT_NO_CONNECTION]);
 					}

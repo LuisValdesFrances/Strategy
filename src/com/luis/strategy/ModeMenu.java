@@ -1538,7 +1538,9 @@ public class ModeMenu {
 					String msg = "";
 					switch(notificationListData.getNotificationDataList().get(i).getMessage()){
 					case OnlineInputOutput.CODE_NOTIFICATION_YOU_LOST_GAME:
-						msg = RscManager.allText[RscManager.TXT_NOTIFICATION_YOU_LOST_GAME];
+						msg = 
+							notificationListData.getNotificationDataList().get(i).getSceneId() + "-" +
+							RscManager.allText[RscManager.TXT_NOTIFICATION_YOU_LOST_GAME];
 						break;
 					default:
 						msg = "Notification error default";
