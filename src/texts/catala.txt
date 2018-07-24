@@ -134,6 +134,12 @@ FUGIR
 ESPERAR
 CANCEL·LAR
 ¿Desitjes millorar aquesta construcció
+Torre
+Mercart
+Esglesia
+Incrementa la defensa de la ciudat.
+Incrementa els ingresos de la ciudat.
+Protegeix el regne de cualsevol atac (Probabilidat).
 Has perdut la partida.
 perd la partida.
 El teu exèrcit ha estat derrotat.

@@ -19,7 +19,7 @@ import com.luis.strategy.datapackage.scene.SceneListData;
 
 public class OnlineInputOutput {
 	
-	public static final String GAME_VERSION = "9";
+	public static final String GAME_VERSION = "10";
 	public static final String SERVER_URL = "http://172.104.228.65:8080/KingServer/";//Online
 	//public static final String SERVER_URL = "http://192.168.1.103:8080/KingServer/";//Local
 	//public static final String SERVER_URL = "http://192.168.26.155:8080/KingServer/";//PVG

@@ -1631,9 +1631,6 @@ public class GameManager {
 				}
 			}
 		}
-		if(selected != null){
-			Log.i("Debug", "Para");
-		}
 		return selected;
 	}
 	
@@ -2367,7 +2364,11 @@ public class GameManager {
 	private void checkClearMist(Player player, Mist m){
 		int kW = (int)(GfxManager.imgMist.getWidth()*1.5f);
 		int kH = (int)(GfxManager.imgMist.getHeight()*1.5f);
+		
 		for(Kingdom k : player.getKingdomList()){
+			
+			kW = (int)(GfxManager.imgMist.getWidth()*1.5f);
+			kH = (int)(GfxManager.imgMist.getHeight()*1.5f);
 			if(GameUtils.getInstance().checkColision(
 				m.x, m.y, m.w, m.h, 
 				k.getAbsoluteX(), k.getAbsoluteY(), kW, kH)){
@@ -2384,6 +2385,8 @@ public class GameManager {
 			}
 			
 			//Vecinos
+			kW = (int)(GfxManager.imgMist.getWidth());
+			kH = (int)(GfxManager.imgMist.getHeight());
 			if(!m.clear){
 				for(Kingdom k2 : k.getBorderList()){
 					if(GameUtils.getInstance().checkColision(
@@ -2407,6 +2410,9 @@ public class GameManager {
 		//Army
 		if(!m.clear){
 			 for(Army a : player.getArmyList()){
+				 
+				kW = (int)(GfxManager.imgMist.getWidth()*1.5f);
+				kH = (int)(GfxManager.imgMist.getHeight()*1.5f);
 				if(GameUtils.getInstance().checkColision(
 					m.x, m.y, m.w, m.h, 
 					a.getKingdom().getAbsoluteX(), a.getKingdom().getAbsoluteY(), kW, kH)){
@@ -2423,6 +2429,8 @@ public class GameManager {
 				}
 				
 				//Vecinos
+				kW = (int)(GfxManager.imgMist.getWidth());
+				kH = (int)(GfxManager.imgMist.getHeight());
 				if(!m.clear){
 					for(Kingdom k2 : a.getKingdom().getBorderList()){
 						if(GameUtils.getInstance().checkColision(

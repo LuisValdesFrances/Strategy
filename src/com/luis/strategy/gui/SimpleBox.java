@@ -61,7 +61,6 @@ public class SimpleBox extends MenuBox{
 			});
 	}
 	
-	
 	public void start(String textHeader, String textBody){
 		this.textHeader = textHeader;
 		this.textBody = textBody;

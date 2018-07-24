@@ -168,8 +168,15 @@ public class RscManager {
 	
 	public static final int TXT_GAME_CONFIRM_UPDATE_BUILDING = TXT_GAME_CANCEL+1;
 	
+	public static final int TXT_GAME_TOWER = TXT_GAME_CONFIRM_UPDATE_BUILDING+1;
+	public static final int TXT_GAME_MARKET = TXT_GAME_TOWER+1;
+	public static final int TXT_GAME_CHURCH = TXT_GAME_MARKET+1;
+	public static final int TXT_GAME_TOWER_DESC = TXT_GAME_CHURCH+1;
+	public static final int TXT_GAME_MARKET_DESC = TXT_GAME_TOWER_DESC+1;
+	public static final int TXT_GAME_CHURCH_DESC = TXT_GAME_MARKET_DESC+1;
+	
 	//Notificaciones online
-	public static final int TXT_NOTIFICATION_YOU_LOST_GAME= TXT_GAME_CONFIRM_UPDATE_BUILDING+1; //Code 0
+	public static final int TXT_NOTIFICATION_YOU_LOST_GAME= TXT_GAME_CHURCH_DESC+1; //Code 0
 	public static final int TXT_NOTIFICATION_LOST_GAME= TXT_NOTIFICATION_YOU_LOST_GAME+1;//Code 1
 	public static final int TXT_NOTIFICATION_YOUR_ARMY_DEFEATED= TXT_NOTIFICATION_LOST_GAME+1;//Code 2
 	public static final int TXT_NOTIFICATION_YOUR_ARMY_WON= TXT_NOTIFICATION_YOUR_ARMY_DEFEATED+1;//Code 3

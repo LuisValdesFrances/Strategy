@@ -134,6 +134,12 @@ ESCAPE
 WAIT
 CANCEL
 Do you want to improve this construction
+Tower
+Market
+Church
+Increase the defense of the city.
+Increase the gold of the city.
+Protect the kingdom from any attack (Probability).
 You lost the game.
 lost the game.
 Your army has been defeated.

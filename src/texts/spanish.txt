@@ -134,6 +134,12 @@ HUIR
 ESPERAR
 CANCELAR
 ¿Deseas mejorar esta constucción
+Torre
+Mercado
+Iglesia
+Incrementa la defensa de la ciudad.
+Incrementa los ingresos de la ciudad.
+Protege el reino de cualquier ataque (Probabilidad).
 Has perdido la partida.
 pierde la partida.
 Tu ejercito ha sido derrotado.

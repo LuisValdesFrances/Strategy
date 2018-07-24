@@ -26,6 +26,7 @@ public class CityBox extends MenuBox{
 	private boolean recruited;
 	
 	private DialogBox confirmBox;
+	private DescriptionBox infoBox;
 	
 	private BuildingImage[][] buildingImageList;
 	
@@ -64,6 +65,23 @@ public class CityBox extends MenuBox{
 				SndManager.getInstance().playFX(Main.FX_BACK, 0);
 			}
 		});
+		
+		infoBox = new DescriptionBox(GfxManager.imgSmallBox);
+		
+		buttonInfo = new Button(
+				GfxManager.imgButtonInfoRelease, GfxManager.imgButtonInfoFocus, 
+				getX() - GfxManager.imgMediumBox.getWidth()/2, 
+				getY() + GfxManager.imgMediumBox.getHeight()/2, 
+				null, -1){
+			public void onButtonPressUp() {
+				reset();
+				SndManager.getInstance().playFX(Main.FX_NEXT, 0);
+				infoBox.start(
+						RscManager.TXT_GAME_TOWER, 
+						RscManager.TXT_GAME_TOWER_DESC,
+						GameParams.BUILDING_STATE[0].length);
+			};
+		};
 	}
 	
 	private int headY;
@@ -98,15 +116,6 @@ public class CityBox extends MenuBox{
 		int initW = getX() - totalWidth/2;
 		
 		headY = initY + Font.getFontHeight(Font.FONT_SMALL)/2 + sepH;
-		
-		buttonInfo = new Button(
-				GfxManager.imgButtonInfoRelease, GfxManager.imgButtonInfoFocus, 
-				getX() - GfxManager.imgMediumBox.getWidth()/2, 
-				getY() + GfxManager.imgMediumBox.getHeight()/2, 
-				null, -1){
-			public void onButtonPressUp() {
-			};
-		};
 		
 		//Building
 		int numberBuilding = GameParams.BUILDING_STATE.length;
@@ -263,24 +272,28 @@ public class CityBox extends MenuBox{
 
 	@Override
 	public boolean update(MultiTouchHandler touchHandler, float delta) {
-		if(state == STATE_ACTIVE){
-			if(confirmBox != null){
-				confirmBox.update(touchHandler, delta);
-			}
-			
-			if(confirmBox == null || (confirmBox != null && !confirmBox.isActive())){
-				buttonInfo.update(touchHandler);
-				if(levelUpButtonList != null){
-					for(Button b : levelUpButtonList){
-						b.update(touchHandler);
+		if(!infoBox.update(touchHandler, delta)){
+			if(state == STATE_ACTIVE){
+				if(confirmBox != null){
+					confirmBox.update(touchHandler, delta);
+				}
+				
+				if(confirmBox == null || (confirmBox != null && !confirmBox.isActive())){
+					buttonInfo.update(touchHandler);
+					if(levelUpButtonList != null){
+						for(Button b : levelUpButtonList){
+							b.update(touchHandler);
+						}
+					}
+					if(buttonNewArmy != null && !buttonNewArmy.isDisabled()){
+						buttonNewArmy.update(touchHandler);
 					}
 				}
-				if(buttonNewArmy != null && !buttonNewArmy.isDisabled()){
-					buttonNewArmy.update(touchHandler);
-				}
 			}
+			return super.update(touchHandler, delta);
+		}else{
+			return true;
 		}
-		return super.update(touchHandler, delta);
 	}
 	
 	public void draw(Graphics g){
@@ -364,6 +377,8 @@ public class CityBox extends MenuBox{
 			if(buttonNewArmy != null){
 				buttonNewArmy.draw(g, (int)modPosX, 0);
 			}
+			
+			infoBox.draw(g, GfxManager.imgBlackBG);
 		}
 	}
 	
