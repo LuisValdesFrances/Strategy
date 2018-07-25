@@ -883,11 +883,14 @@ public class GameManager {
 				//Chequeo para despeja niebla
 				checkClearMist(humanPlayer, m);
 				if(!m.clear){
-					gameBuffer.getGraphics().drawImage(
-							GfxManager.imgMist, 
-							worldConver.getConversionDrawX(gameCamera.getPosX(), m.x), 
-							worldConver.getConversionDrawY(gameCamera.getPosY(), m.y), 
-							Graphics.VCENTER | Graphics.HCENTER);
+					if(worldConver.isObjectInGameLayout(
+							gameCamera.getPosX(), gameCamera.getPosY(), m.x-m.w/2, m.y-m.h/2, m.w, m.h)){
+						gameBuffer.getGraphics().drawImage(
+								GfxManager.imgMist, 
+								worldConver.getConversionDrawX(gameCamera.getPosX(), m.x), 
+								worldConver.getConversionDrawY(gameCamera.getPosY(), m.y), 
+								Graphics.VCENTER | Graphics.HCENTER);
+					}
 				}
 			}
 		} 
