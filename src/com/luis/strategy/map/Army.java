@@ -32,7 +32,6 @@ public class Army extends MapObject{
 	private Kingdom kingdom;
 	
 	private int state;
-	private int lastState;
 	public static final int STATE_NONE = -1;
 	public static final int STATE_ON = 0;
 	public static final int STATE_MOVE = 1;
@@ -110,7 +109,6 @@ public class Army extends MapObject{
 	
 	public void update(MultiTouchHandler multiTouchHandler, WorldConver worldConver, GameCamera gameCamera, float delta){
 		
-		
 		switch(state){
 		case STATE_ON:
 			super.update(multiTouchHandler, worldConver, gameCamera);
@@ -167,9 +165,7 @@ public class Army extends MapObject{
 					changeState(STATE_NONE);
 				}
 				break;
-			
 			}
-			
 			break;
 		}
 	}
@@ -371,8 +367,8 @@ public class Army extends MapObject{
 			waitCount = 0;
 			if(state != STATE_DEAD){
 				anim = ANIN_IDLE;
+				spriteList.get(anim).resetAnimation(0);
 			}
-			spriteList.get(anim).resetAnimation(0);
 			flip = lastKingdom.getAbsoluteX() > kingdom.getAbsoluteX();
 			break;
 		}
