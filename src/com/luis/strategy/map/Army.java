@@ -189,153 +189,162 @@ public class Army extends MapObject{
 			Graphics g, WorldConver worldConver, GameCamera gameCamera, GameScene gameScene, boolean isSelected, boolean isActive, 
 			float distorsionX, float distorsionY, int typeGame){
 		
-		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 		
-		int pX = worldConver.getConversionDrawX(gameCamera.getPosX(), getAbsoluteX());
-		int pY = worldConver.getConversionDrawY(gameCamera.getPosY(), getAbsoluteY());
+		if(worldConver.isObjectInGameLayout(
+				gameCamera.getPosX(), 
+				gameCamera.getPosY(),
+				getAbsoluteX()-getWidth()/2, 
+				getAbsoluteY()-getHeight()/2, 
+				getWidth(), getHeight())){
 		
-		
-		float modSize = 0;
-		/*
-		//Modo 3D
-		//Tamaño
-		float modSize = (((float)pY) * (distorsionY -1f)) / worldConver.getLayoutY();
-		g.setImageSize(1+modSize, 1+modSize);
-		
-		float extraWidth = (distorsionX-1f)*worldConver.getLayoutX();
-		float extraHeight = (distorsionY-1f)*worldConver.getLayoutY();
-		//Deformacion en la posicion X
-		float sepCenter = pX - worldConver.getCentGameLayoutX();
-		//Deformacion máxima en x
-		float maxX = (sepCenter * extraWidth) / worldConver.getLayoutX()/2;
-		//Relativizacion de la deformacion máxima (Menos acusada cuando mas al fondo)
-		float relativeModX = (maxX * pY) /  worldConver.getLayoutY();
-		
-		//Deformacion en la posicion Y
-		float relativeModY = (pY * extraHeight) / worldConver.getLayoutY();
-		
-		
-		pX += relativeModX;
-		pY += relativeModY;
-		*/
-		
-		if(isSelected){
-			g.setAlpha((int)gameScene.getAlpha());
-			g.drawImage(
-					isActive?GfxManager.imgMapSelectGreen:GfxManager.imgMapSelectRed, 
-					pX,
-					pY+getHeight()/2,
-					Graphics.VCENTER | Graphics.HCENTER);
-			g.setAlpha(255);
-		}
-		
-		if(state == STATE_OFF){
-			g.setAlpha(140);
-		}
-		
-		
-		if(state != STATE_DEAD){
 			g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 			
-			float flagX;
-			if(state != STATE_MOVE && state != STATE_ATACK){
-				flagX = (float) (pX
-					-GfxManager.imgFlagSmallList.get(flag).getWidth()*0.75);
-			}else{
-				flagX = pX
-					+
-					(int)(flip?
-					-GfxManager.imgFlagSmallList.get(flag).getWidth()*0.25:
-					-GfxManager.imgFlagSmallList.get(flag).getWidth()*0.75);
+			int pX = worldConver.getConversionDrawX(gameCamera.getPosX(), getAbsoluteX());
+			int pY = worldConver.getConversionDrawY(gameCamera.getPosY(), getAbsoluteY());
+			
+			
+			float modSize = 0;
+			/*
+			//Modo 3D
+			//Tamaño
+			float modSize = (((float)pY) * (distorsionY -1f)) / worldConver.getLayoutY();
+			g.setImageSize(1+modSize, 1+modSize);
+			
+			float extraWidth = (distorsionX-1f)*worldConver.getLayoutX();
+			float extraHeight = (distorsionY-1f)*worldConver.getLayoutY();
+			//Deformacion en la posicion X
+			float sepCenter = pX - worldConver.getCentGameLayoutX();
+			//Deformacion máxima en x
+			float maxX = (sepCenter * extraWidth) / worldConver.getLayoutX()/2;
+			//Relativizacion de la deformacion máxima (Menos acusada cuando mas al fondo)
+			float relativeModX = (maxX * pY) /  worldConver.getLayoutY();
+			
+			//Deformacion en la posicion Y
+			float relativeModY = (pY * extraHeight) / worldConver.getLayoutY();
+			
+			
+			pX += relativeModX;
+			pY += relativeModY;
+			*/
+			
+			if(isSelected){
+				g.setAlpha((int)gameScene.getAlpha());
+				g.drawImage(
+						isActive?GfxManager.imgMapSelectGreen:GfxManager.imgMapSelectRed, 
+						pX,
+						pY+getHeight()/2,
+						Graphics.VCENTER | Graphics.HCENTER);
+				g.setAlpha(255);
 			}
-						  
-			float flagY = pY-GfxManager.imgFlagSmallList.get(flag).getHeight();
-			int angle = flip?15:-15;
 			
-			g.drawRegion(GfxManager.imgFlagSmallList.get(flag), 
-					(int)flagX,
-					(int)flagY,
-					0, 0, 
-					GfxManager.imgFlagSmallList.get(flag).getWidth(), GfxManager.imgFlagSmallList.get(flag).getHeight(), 
-					angle, 
-					(int)flagX+GfxManager.imgFlagSmallList.get(flag).getWidth()/2, 
-					(int)flagY+GfxManager.imgFlagSmallList.get(flag).getHeight()/2);
-		}
-		
-		
-		switch(anim){
-		case ANIN_IDLE:
-			spriteList.get(anim).drawFrame(g, GfxManager.imgArmyIdle, 
-					pX,
-					pY,
-					(1+modSize),(1+modSize),
-					flip, Graphics.VCENTER | Graphics.HCENTER);
-			break;
-		case ANIN_MOVE:
-			spriteList.get(anim).drawFrame(g, GfxManager.imgArmyRun,
-					pX,
-					pY,
-					(1+modSize),(1+modSize),
-					flip, Graphics.VCENTER | Graphics.HCENTER);
-			break;
-		case ANIN_ATACK:
-			spriteList.get(anim).drawFrame(g, GfxManager.imgArmyAtack,
-					pX,
-					pY,
-					(1+modSize),(1+modSize),
-					flip, Graphics.VCENTER | Graphics.HCENTER);
-			break;
-		case ANIN_DEAD:
-			spriteList.get(anim).drawFrame(g, GfxManager.imgArmyDead,
-					pX,
-					pY,
-					(1+modSize),(1+modSize),
-					flip, Graphics.VCENTER | Graphics.HCENTER);
-			break;
-		}
-		
-		//Test
-		/*
-		g.setTextSize(Font.SYSTEM_SIZE[Settings.getInstance().getNativeResolution()]);
-		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-		g.drawText(""+(relativeModX), pX+30, pY+20, Color.RED);
-		g.drawImage(GfxManager.imgCoin, pX, pY,  Graphics.VCENTER | Graphics.HCENTER);
-		*/
-		g.setImageSize(1, 1);
-		g.setAlpha(255);
-		/*
-		else{
-			g.drawImage(GfxManager.imgArmyOff, 
-					getAbsoluteX()+GfxManager.imgArmyOff.getWidth()/2, 
-					getAbsoluteY()-GfxManager.imgArmyOff.getHeight()/2,
-					Graphics.HFLIP);
-		}
-		*/
-		
-		if(typeGame == GameState.GAME_MODE_ONLINE && state != STATE_DEAD && getPlayer() != null){
+			if(state == STATE_OFF){
+				g.setAlpha(140);
+			}
+			
+			
+			if(state != STATE_DEAD){
+				g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+				
+				float flagX;
+				if(state != STATE_MOVE && state != STATE_ATACK){
+					flagX = (float) (pX
+						-GfxManager.imgFlagSmallList.get(flag).getWidth()*0.75);
+				}else{
+					flagX = pX
+						+
+						(int)(flip?
+						-GfxManager.imgFlagSmallList.get(flag).getWidth()*0.25:
+						-GfxManager.imgFlagSmallList.get(flag).getWidth()*0.75);
+				}
+							  
+				float flagY = pY-GfxManager.imgFlagSmallList.get(flag).getHeight();
+				int angle = flip?15:-15;
+				
+				g.drawRegion(GfxManager.imgFlagSmallList.get(flag), 
+						(int)flagX,
+						(int)flagY,
+						0, 0, 
+						GfxManager.imgFlagSmallList.get(flag).getWidth(), GfxManager.imgFlagSmallList.get(flag).getHeight(), 
+						angle, 
+						(int)flagX+GfxManager.imgFlagSmallList.get(flag).getWidth()/2, 
+						(int)flagY+GfxManager.imgFlagSmallList.get(flag).getHeight()/2);
+			}
+			
+			
+			switch(anim){
+			case ANIN_IDLE:
+				spriteList.get(anim).drawFrame(g, GfxManager.imgArmyIdle, 
+						pX,
+						pY,
+						(1+modSize),(1+modSize),
+						flip, Graphics.VCENTER | Graphics.HCENTER);
+				break;
+			case ANIN_MOVE:
+				spriteList.get(anim).drawFrame(g, GfxManager.imgArmyRun,
+						pX,
+						pY,
+						(1+modSize),(1+modSize),
+						flip, Graphics.VCENTER | Graphics.HCENTER);
+				break;
+			case ANIN_ATACK:
+				spriteList.get(anim).drawFrame(g, GfxManager.imgArmyAtack,
+						pX,
+						pY,
+						(1+modSize),(1+modSize),
+						flip, Graphics.VCENTER | Graphics.HCENTER);
+				break;
+			case ANIN_DEAD:
+				spriteList.get(anim).drawFrame(g, GfxManager.imgArmyDead,
+						pX,
+						pY,
+						(1+modSize),(1+modSize),
+						flip, Graphics.VCENTER | Graphics.HCENTER);
+				break;
+			}
+			
+			//Test
+			/*
+			g.setTextSize(Font.SYSTEM_SIZE[Settings.getInstance().getNativeResolution()]);
 			g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-			Graphics _g = imgNickBuffer.getGraphics();
-			_g.drawImage(
-					GfxManager.imgNickBox, imgNickBuffer.getWidth()/2, 
-					imgNickBuffer.getHeight()/2,
-					Graphics.VCENTER | Graphics.HCENTER);
-			TextManager.drawSimpleText(_g, Font.FONT_SMALL, 
-					getPlayer().getName(), 
-					imgNickBuffer.getWidth()/2, 
-					imgNickBuffer.getHeight()/2, 
-					Graphics.VCENTER | Graphics.HCENTER);
-			
-			float scale=0.65f;
-			int nickX = pX + getWidth()/2 + imgNickBuffer.getWidth()/2;
-			int nickY = pY - getHeight()/4 - imgNickBuffer.getHeight()/2;
-			g.setImageSize(scale, scale);
-			g.setAlpha(180);
-			g.drawImage(imgNickBuffer, 
-					nickX - (int)((GfxManager.imgNickBox.getWidth()*(1f-scale))/2), 
-					nickY + (int)((GfxManager.imgNickBox.getHeight()*(1f-scale))/2), 
-					Graphics.VCENTER | Graphics.HCENTER);
+			g.drawText(""+(relativeModX), pX+30, pY+20, Color.RED);
+			g.drawImage(GfxManager.imgCoin, pX, pY,  Graphics.VCENTER | Graphics.HCENTER);
+			*/
+			g.setImageSize(1, 1);
 			g.setAlpha(255);
-			g.setImageSize(1f, 1f);
+			/*
+			else{
+				g.drawImage(GfxManager.imgArmyOff, 
+						getAbsoluteX()+GfxManager.imgArmyOff.getWidth()/2, 
+						getAbsoluteY()-GfxManager.imgArmyOff.getHeight()/2,
+						Graphics.HFLIP);
+			}
+			*/
+			
+			if(typeGame == GameState.GAME_MODE_ONLINE && state != STATE_DEAD && getPlayer() != null){
+				g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+				Graphics _g = imgNickBuffer.getGraphics();
+				_g.drawImage(
+						GfxManager.imgNickBox, imgNickBuffer.getWidth()/2, 
+						imgNickBuffer.getHeight()/2,
+						Graphics.VCENTER | Graphics.HCENTER);
+				TextManager.drawSimpleText(_g, Font.FONT_SMALL, 
+						getPlayer().getName(), 
+						imgNickBuffer.getWidth()/2, 
+						imgNickBuffer.getHeight()/2, 
+						Graphics.VCENTER | Graphics.HCENTER);
+				
+				float scale=0.65f;
+				int nickX = pX + getWidth()/2 + imgNickBuffer.getWidth()/2;
+				int nickY = pY - getHeight()/4 - imgNickBuffer.getHeight()/2;
+				g.setImageSize(scale, scale);
+				g.setAlpha(180);
+				g.drawImage(imgNickBuffer, 
+						nickX - (int)((GfxManager.imgNickBox.getWidth()*(1f-scale))/2), 
+						nickY + (int)((GfxManager.imgNickBox.getHeight()*(1f-scale))/2), 
+						Graphics.VCENTER | Graphics.HCENTER);
+				g.setAlpha(255);
+				g.setImageSize(1f, 1f);
+			}
 		}
 	}
 	

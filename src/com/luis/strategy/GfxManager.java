@@ -107,6 +107,8 @@ public class GfxManager {
 	public static Image imgButtonFlagHelmetFocus;
 	public static Image imgButtonFlagCastleRelease;
 	public static Image imgButtonFlagCastleFocus;
+	public static Image imgButtonHelmetRelease;
+	public static Image imgButtonHelmetFocus;
 
 	public static Image imgButtonYellowRelease;
 	public static Image imgButtonYellowFocus;
@@ -353,6 +355,9 @@ public class GfxManager {
 						.createImage("/flag_castle_release.png");
 				imgButtonFlagCastleFocus = Image
 						.createImage("/flag_castle_focus.png");
+				
+				imgButtonHelmetRelease = Image.createImage("/helmet_release.png");
+				imgButtonHelmetFocus = Image.createImage("/helmet_focus.png");
 
 				imgButtonMapRelease = Image
 						.createImage("/icon_map_release.png");
@@ -701,6 +706,8 @@ public class GfxManager {
 		imgButtonFlagHelmetFocus = null;
 		imgButtonFlagCastleRelease = null;
 		imgButtonFlagCastleFocus = null;
+		imgButtonHelmetRelease = null;
+		imgButtonHelmetFocus = null;
 
 		imgFlagList = null;
 		imgFlagSmallList = null;

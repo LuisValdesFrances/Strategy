@@ -71,7 +71,14 @@ public abstract class MapObject{
 	public void update(MultiTouchHandler multiTouchHandler, WorldConver worldConver, GameCamera gameCamera){
 		button.setX(getTouchX(worldConver, gameCamera));
 		button.setY(getTouchY(worldConver, gameCamera));
-		button.update(multiTouchHandler);
+		if(worldConver.isObjectInGameLayout(
+				gameCamera.getPosX(), 
+				gameCamera.getPosY(),
+				getAbsoluteX()-button.getWidth()/2, 
+				getAbsoluteY()-button.getHeight()/2, 
+				button.getWidth(), button.getHeight())){
+			button.update(multiTouchHandler);
+		}
 	}
 	
 	public int getAbsoluteX() {

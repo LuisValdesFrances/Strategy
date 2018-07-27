@@ -110,6 +110,7 @@ public class GameManager {
 	private FlagButton btnFlagCastle;
 	
 	private Button btnMap;
+	private Button btnArmy;
 	
 	private ArmyBox armyBox;
 	private BattleBox battleBox;
@@ -207,6 +208,35 @@ public class GameManager {
 						gameScene.cleanKingdomTarget();
 						changeSubState(SUB_STATE_ACTION_WAIT);
 						break;
+					}
+				}
+				reset();
+			}
+		};
+		
+		btnArmy = new Button(
+				GfxManager.imgButtonHelmetRelease, 
+				GfxManager.imgButtonHelmetFocus, 
+				Define.SIZEX4,
+				Define.SIZEY - GfxManager.imgGameHud.getHeight()/2 + GfxManager.imgButtonHelmetRelease.getHeight()/4,
+				null, 0){
+			@Override
+			public void onButtonPressDown(){}
+			
+			@Override
+			public void onButtonPressUp(){
+				SndManager.getInstance().playFX(Main.FX_BACK, 0);
+				if(state == STATE_ACTION){
+					if(getCurrentPlayer().getActionIA() == null){
+						
+						Army nextArmy = getNextArmy();
+						
+						if(nextArmy != null){
+							cleanArmyAction();
+							setSelectedArmy(nextArmy);
+							cameraTargetX = getSelectedArmy().getAbsoluteX();
+							cameraTargetY = getSelectedArmy().getAbsoluteY();
+						}
 					}
 				}
 				reset();
@@ -877,7 +907,8 @@ public class GameManager {
 			}
 		}
 		 
-		if(humanPlayer != null){//Si p == null significa que todos los jugadores son IA, asi que no pinto niebla
+		
+		if(!Main.debug && humanPlayer != null){//Si p == null significa que todos los jugadores son IA, asi que no pinto niebla
 			for(Mist m : mistList){
 				
 				//Chequeo para despeja niebla
@@ -981,6 +1012,7 @@ public class GameManager {
 		btnCancel.update(multiTouchHandler);
 		btnNext.update(multiTouchHandler);
 		btnMap.update(multiTouchHandler);
+		btnArmy.update(multiTouchHandler);
 		btnFlagHelmet.update(multiTouchHandler, delta);
 		btnFlagCastle.update(multiTouchHandler, delta);
 		if(Main.debug){
@@ -1019,6 +1051,7 @@ public class GameManager {
 		btnFlagHelmet.draw(g);
 		btnFlagCastle.draw(g);
 		btnMap.draw(g, 0, 0);
+		btnArmy.draw(g, 0, 0);
 		if(Main.debug){
 			btnDebugPause.draw(g, 0, 0);
 		}
@@ -1163,6 +1196,7 @@ public class GameManager {
 		btnNext.setDisabled(true);
 		btnCancel.setDisabled(true);
 		btnMap.setDisabled(true);
+		btnArmy.setDisabled(true);
 		btnFlagHelmet.hide();
 		btnFlagCastle.hide();
 		subState = 0;
@@ -1292,6 +1326,7 @@ public class GameManager {
 		btnNext.setDisabled(true);
 		btnCancel.setDisabled(true);
 		btnMap.setDisabled(true);
+		btnArmy.setDisabled(true);
 		subState = newSubState;
 		
 		switch(state){
@@ -1325,6 +1360,18 @@ public class GameManager {
 				btnNext.setDisabled(getCurrentPlayer().getActionIA()!=null);
 				btnCancel.setDisabled(true);
 				btnMap.setDisabled(false);
+				
+				//Se deshabilita este boton, si no quedan tropas activas
+				boolean disabled = true;
+				if(getCurrentPlayer().getActionIA() == null){
+					for(int i = 0; i < getCurrentPlayer().getArmyList().size() && disabled; i++){
+						if(getCurrentPlayer().getArmyList().get(i).getState() == Army.STATE_ON){
+							disabled = false;
+						}
+					}
+				}
+				btnArmy.setDisabled(disabled);
+				
 				cleanArmyAction();
 				//
 				if(getDefeatArmy() != null){
@@ -1648,6 +1695,9 @@ public class GameManager {
 	}
 	
 	private void setSelectedArmy(Army army){
+		if(getSelectedArmy() != null){
+			getSelectedArmy().setSelected(false);
+		}
 		for(Player player : gameScene.getPlayerList()){
 			for(Army a : player.getArmyList()){
 				if(a.getId() == army.getId()){
@@ -2454,6 +2504,60 @@ public class GameManager {
 				}
 			}
 		}
+	}
+	
+	private Army getNextArmy(){
+		Army army = null;
+		
+		if(getCurrentPlayer().getArmyList().size() > 0){
+		
+			if(getCurrentPlayer().getArmyList().size() == 1 && getCurrentPlayer().getArmyList().get(0).getState() == Army.STATE_ON){
+				army = getCurrentPlayer().getArmyList().get(0);
+			}
+			else{
+			
+				//Ordeno segun id
+				for(int i = 0; i < getCurrentPlayer().getArmyList().size(); i++){
+					for(int j = 1; j < (getCurrentPlayer().getArmyList().size()-i); j++){
+						if(getCurrentPlayer().getArmyList().get(j-1).getId() > getCurrentPlayer().getArmyList().get(j).getId()){
+							Army sav = getCurrentPlayer().getArmyList().get(j-1);
+							getCurrentPlayer().getArmyList().set(j-1, getCurrentPlayer().getArmyList().get(j));
+							getCurrentPlayer().getArmyList().set(j, sav);
+							
+						}
+					}
+				}
+				
+				
+				int currentIndex = 0;
+				if(getSelectedArmy() != null){
+					for(int i = 0; i < getCurrentPlayer().getArmyList().size() && currentIndex == 0; i++){
+						if(getCurrentPlayer().getArmyList().get(i).isSelected()){
+							currentIndex = i;
+						}
+					}
+				}
+				
+				//Busco al siguiente
+				int nextIndex = currentIndex+1;
+
+				for(int i = 0; i < getCurrentPlayer().getArmyList().size() && army == null; i++){
+					
+					if(nextIndex >= getCurrentPlayer().getArmyList().size()){
+						army = getCurrentPlayer().getArmyList().get(0);
+					}else{
+						if(
+								getCurrentPlayer().getArmyList().get(nextIndex).getState() == Army.STATE_ON && 
+								getCurrentPlayer().getArmyList().get(nextIndex).getId() > getCurrentPlayer().getArmyList().get(currentIndex).getId()){
+							army = getCurrentPlayer().getArmyList().get(nextIndex);
+						}
+						nextIndex++;
+					}
+					
+				}
+			}
+		}
+		return army;
 	}
 	
 	private class Mist{
