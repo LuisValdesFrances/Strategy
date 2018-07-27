@@ -106,11 +106,11 @@ public class GameManager {
 	//GUI
 	private Button btnNext;
 	private Button btnCancel;
+	private Button btnArmy;
 	private FlagButton btnFlagHelmet;
 	private FlagButton btnFlagCastle;
 	
 	private Button btnMap;
-	private Button btnArmy;
 	
 	private ArmyBox armyBox;
 	private BattleBox battleBox;
@@ -217,7 +217,7 @@ public class GameManager {
 		btnArmy = new Button(
 				GfxManager.imgButtonHelmetRelease, 
 				GfxManager.imgButtonHelmetFocus, 
-				Define.SIZEX4,
+				Define.SIZEX2- GfxManager.imgButtonCancelRelease.getWidth()*4,
 				Define.SIZEY - GfxManager.imgGameHud.getHeight()/2 + GfxManager.imgButtonHelmetRelease.getHeight()/4,
 				null, 0){
 			@Override
@@ -804,23 +804,34 @@ public class GameManager {
 		for(Player player : gameScene.getPlayerList()){
 			int i=0;
 			for(Kingdom kingdom : player.getKingdomList()){
-				//Controla que no se pinta la ultima bandera mientras se ejecuta e efecto de conquista del jugador en curso
-				if(
+				
+				int flagX = kingdom.getTerrainList().get(kingdom.getTerrainList().size()-1).getAbsoluteX() + 
+						GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth()/2;
+				int flagY = kingdom.getTerrainList().get(kingdom.getTerrainList().size()-1).getAbsoluteY() + 
+						GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight()/2;
+				
+				if(worldConver.isObjectInGameLayout(
+						gameCamera.getPosX(), 
+						gameCamera.getPosY(),
+						flagX-GfxManager.imgFlagList.get(player.getFlag()).getWidth()/2, 
+						flagY-GfxManager.imgFlagList.get(player.getFlag()).getHeight(), 
+						GfxManager.imgFlagList.get(player.getFlag()).getWidth(), 
+						GfxManager.imgFlagList.get(player.getFlag()).getHeight())){
+				
+				
+					//Controla que no se pinta la ultima bandera mientras se ejecuta el efecto de conquista del jugador en curso
+					if(
 						player.getId() != getCurrentPlayer().getId() ||
 						(!startConquest && subState != SUB_STATE_ACTION_CONQUEST) || 
 						i!=player.getKingdomList().size()-1){
-					
-					gameBuffer.getGraphics().setClip(0, 0, gameBuffer.getWidth(), gameBuffer.getHeight());
-					gameBuffer.getGraphics().drawImage(GfxManager.imgFlagList.get(player.getFlag()),
-							worldConver.getConversionDrawX(
-							gameCamera.getPosX(), kingdom.getTerrainList().get(kingdom.getTerrainList().size()-1).getAbsoluteX())+
-								GfxManager.imgTerrain.get(GameParams.PLAIN).getWidth()/2,
-							worldConver.getConversionDrawY(
-							gameCamera.getPosY(), kingdom.getTerrainList().get(kingdom.getTerrainList().size()-1).getAbsoluteY())+
-								GfxManager.imgTerrain.get(GameParams.PLAIN).getHeight()/2,
-							
-							Graphics.BOTTOM | Graphics.HCENTER);
-					i++;
+						
+						gameBuffer.getGraphics().setClip(0, 0, gameBuffer.getWidth(), gameBuffer.getHeight());
+						gameBuffer.getGraphics().drawImage(GfxManager.imgFlagList.get(player.getFlag()),
+								worldConver.getConversionDrawX(gameCamera.getPosX(), flagX),
+								worldConver.getConversionDrawY(gameCamera.getPosY(), flagY),
+								Graphics.BOTTOM | Graphics.HCENTER);
+						i++;
+					}
 				}
 			}
 		}

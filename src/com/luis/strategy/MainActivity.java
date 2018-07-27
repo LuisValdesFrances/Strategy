@@ -46,7 +46,7 @@ public class MainActivity extends Activity{
 									false,
 									false,
 									true,
-									false
+									true
 		}
 		);
 		
