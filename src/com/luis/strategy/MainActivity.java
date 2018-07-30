@@ -44,9 +44,9 @@ public class MainActivity extends Activity{
 		Settings.getInstance().init(
 				this, new boolean[]{
 									false,
-									false,
 									true,
-									true
+									true,
+									false
 		}
 		);
 		
