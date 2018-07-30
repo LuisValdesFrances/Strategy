@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.os.Bundle;
@@ -27,7 +28,7 @@ public class MainActivity extends Activity{
 	private Thread gameThread;
 	private Main main;
 	
-	
+	//private BroadcastReceiver receiver;
 	
 	private PowerManager powerManager;
 	private PowerManager.WakeLock wakeLock;
@@ -39,6 +40,18 @@ public class MainActivity extends Activity{
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		
+		
+		IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+
+		filter.addAction(Intent.ACTION_SCREEN_OFF);
+		filter.addAction(Intent.ACTION_USER_PRESENT);
+
+		// Customized BroadcastReceiver class
+		/*
+		receiver = new ScreenReceiver();
+		registerReceiver(receiver, filter);
+		*/
 		
 		Log.i("Debug", "lGameEngine INIT");
 		Settings.getInstance().init(
@@ -100,18 +113,33 @@ public class MainActivity extends Activity{
 	@Override
 	public void onStop(){
 		super.onStop();
+		try{
+			main.saveAndSend();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
+	
 	
 	@Override
 	public void onDestroy(){
 		super.onDestroy();
-		main.saveAndSend();
-		try {
-			gameThread.join();
-		} catch (InterruptedException e) {
+		try{
+			main.saveAndSend();
+			if(gameThread.isAlive()){
+				main.finishGame();
+			}
+			/*
+			if (receiver != null){
+				unregisterReceiver(receiver);
+	            receiver = null;
+	        }
+	        */
+		}catch(Exception e){
 			e.printStackTrace();
 		}
 		Log.i("Debug", "Thread stoped with exit!");
+		finish();
 	}
 	
 	

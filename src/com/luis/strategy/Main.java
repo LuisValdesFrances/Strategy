@@ -52,7 +52,10 @@ public class Main extends Screen implements Runnable {
 	public static long lastTime;
 
 	private static long minDurationFrame;
-	private static boolean isGameRun;
+	private boolean isGameRun;
+	public void finishGame(){
+		isGameRun = false;
+	}
 
 	public static int state;
 	public static int lastState;
@@ -457,6 +460,7 @@ public class Main extends Screen implements Runnable {
 	public void saveAndSend(){
 		if(state >= Define.ST_GAME_RUN && GameState.getInstance().getGameMode() == GameState.GAME_MODE_ONLINE){
 			ModeGame.sendSceneToServerAsin(Define.ST_MENU_MAIN);
+			changeState(Define.ST_MENU_MAIN, true);
 		}
 	}
 
