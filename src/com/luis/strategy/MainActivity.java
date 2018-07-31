@@ -96,7 +96,6 @@ public class MainActivity extends Activity{
 		if(wakeLock != null){
 			wakeLock.acquire();
 		}
-		
 		main.unPause();
 	}
 	
@@ -125,7 +124,7 @@ public class MainActivity extends Activity{
 	public void onDestroy(){
 		super.onDestroy();
 		try{
-			main.saveAndSend();
+			//main.saveAndSend();
 			if(gameThread.isAlive()){
 				main.finishGame();
 			}
