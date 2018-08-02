@@ -1136,12 +1136,6 @@ public class GameManager {
 		}
 	}
 	
-	private void cleanTargetKingdom(){
-		for(Kingdom kingdom : gameScene.getKingdomList()){
-			kingdom.setTarget(-1);
-		}
-	}
-	
 	private void insertTargetUnMap(Army army){
 		
 		//Quito todos lo indicadores de target
@@ -1351,7 +1345,7 @@ public class GameManager {
 			
 			switch(subState){
 			case SUB_STATE_ACTION_IA_WAIT_START:
-				cleanTargetKingdom();
+				gameScene.cleanKingdomTarget();
 				IAWaitCount = 0;
 				//Solo espero si IA va a dar una torta
 				if(!(getSelectedArmy() != null && 
@@ -1364,7 +1358,7 @@ public class GameManager {
 				}
 				break;
 			case SUB_STATE_ACTION_WAIT:
-				cleanTargetKingdom();
+				gameScene.cleanKingdomTarget();
 				gameScene.resetKingdoms();
 				btnFlagHelmet.hide();
 				btnFlagCastle.hide();
@@ -1418,13 +1412,13 @@ public class GameManager {
 				break;
 				
 			case SUB_STATE_ACTION_EXCEED:
-				cleanTargetKingdom();
+				gameScene.cleanKingdomTarget();
 				btnFlagHelmet.hide();
 				btnFlagCastle.hide();
 				troopExceedBox.start(null, RscManager.allText[RscManager.TXT_GAME_EXCEED_TROOPS]);
 			break;
 			case SUB_STATE_ACTION_MOVE:
-				cleanTargetKingdom();
+				gameScene.cleanKingdomTarget();
 				btnFlagHelmet.hide();
 				btnFlagCastle.hide();
 				SndManager.getInstance().playFX(Main.FX_MARCH, 0);
@@ -1445,39 +1439,39 @@ public class GameManager {
 				
 				break;
 			case SUB_STATE_ACTION_RESOLVE_MOVE:
-				cleanTargetKingdom();
+				gameScene.cleanKingdomTarget();
 				gameScene.resetKingdoms();
 				resolveMovement();
 				break;
 			case SUB_STATE_ACTION_ANIM_ATACK:
-				cleanTargetKingdom();
+				gameScene.cleanKingdomTarget();
 				gameScene.resetKingdoms();
 				getSelectedArmy().changeState(Army.STATE_ATACK);
 				break;
 			case SUB_STATE_ACTION_COMBAT:
-				cleanTargetKingdom();
+				gameScene.cleanKingdomTarget();
 				gameScene.resetKingdoms();
 				btnFlagHelmet.hide();
 				btnFlagCastle.hide();
 				//getSelectedArmy().changeState(Army.STATE_OFF);//OJO
 				break;
 			case SUB_STATE_ACTION_RESULT:
-				cleanTargetKingdom();
+				gameScene.cleanKingdomTarget();
 				gameScene.resetKingdoms();
 				break;
 			case SUB_STATE_ACTION_ANIM_DEAD:
-				cleanTargetKingdom();
+				gameScene.cleanKingdomTarget();
 				gameScene.resetKingdoms();
 				getDefeatArmy().changeState(Army.STATE_DEAD);
 				break;
 			case SUB_STATE_ACTION_CONQUEST:
-				cleanTargetKingdom();
+				gameScene.cleanKingdomTarget();
 				gameScene.resetKingdoms();
 				getSelectedArmy().changeState(Army.STATE_OFF);
 				startConquest(getSelectedArmy().getKingdom(), getSelectedArmy().getPlayer().getFlag());
 				break;
 			case SUB_STATE_ACTION_SCAPE:
-				cleanTargetKingdom();
+				gameScene.cleanKingdomTarget();
 				gameScene.resetKingdoms();
 				//Si el que huye no es el que ataca
 				if(getDefeatArmy().getId() != getSelectedArmy().getId()){
@@ -1490,18 +1484,18 @@ public class GameManager {
 				getDefeatArmy().changeState(Army.STATE_MOVE);
 				break;
 			case SUB_STATE_ACTION_RESOLVE_SCAPE:
-				cleanTargetKingdom();
+				gameScene.cleanKingdomTarget();
 				gameScene.resetKingdoms();
 				resolveScape();
 				break;
 			case SUB_STATE_ARMY_MANAGEMENT:
 			case SUB_STATE_CITY_MANAGEMENT:
 			case SUB_STATE_MAP_MANAGEMENT:
-				cleanTargetKingdom();
+				gameScene.cleanKingdomTarget();
 				gameScene.resetKingdoms();
 				break;
 			case SUB_STATE_ACTION_IA_WAIT_END:
-				cleanTargetKingdom();
+				gameScene.cleanKingdomTarget();
 				gameScene.resetKingdoms();
 				IAWaitCount = 0;
 				break;
@@ -1521,7 +1515,7 @@ public class GameManager {
 		do{
 			gameScene.setPlayerIndex((gameScene.getPlayerIndex()+1)%gameScene.getPlayerList().size());
 		}
-		while(getCurrentPlayer().getCapitalkingdom() == null);
+		while(getCurrentPlayer().getNumberCitys() == 0);
 		
 		if(gameScene.getPlayerIndex()==0){
 			gameScene.setTurnCount(gameScene.getTurnCount()+1);
@@ -1688,7 +1682,7 @@ public class GameManager {
 			for(Army army : player.getArmyList()){
 				if(army.isSelected()){
 					selected = army;
-					break;
+					return selected;
 				}
 			}
 		}
@@ -1713,7 +1707,7 @@ public class GameManager {
 			for(Army a : player.getArmyList()){
 				if(a.getId() == army.getId()){
 					a.setSelected(true);
-					break;
+					return;
 				}
 			}
 		}
@@ -2176,7 +2170,11 @@ public class GameManager {
 				}
 			}
 		}
-		
+		/*
+		if(deletePlayer){
+			gameScene.removePlayer(defeatPlayer);
+		}
+		*/
 		if(showResultBox){
 			resultBox.start(textB.length() > 0 ?textH:null, textB.length() > 0 ?textB:textH);
 			
@@ -2528,6 +2526,7 @@ public class GameManager {
 			else{
 			
 				//Ordeno segun id
+				/*
 				for(int i = 0; i < getCurrentPlayer().getArmyList().size(); i++){
 					for(int j = 1; j < (getCurrentPlayer().getArmyList().size()-i); j++){
 						if(getCurrentPlayer().getArmyList().get(j-1).getId() > getCurrentPlayer().getArmyList().get(j).getId()){
@@ -2538,7 +2537,7 @@ public class GameManager {
 						}
 					}
 				}
-				
+				*/
 				
 				int currentIndex = 0;
 				if(getSelectedArmy() != null){
