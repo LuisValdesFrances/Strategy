@@ -70,7 +70,7 @@ public class PushNotifications extends Thread{
 						.getInstance().reviceSceneListData(Main.getInstance().getActivity(), user);
 				
 				if (sceneListData != null) {
-					//Añado nuevas escenas si no existen
+					//Aï¿½ado nuevas escenas si no existen
 					for (SceneData sceneData : sceneListData.getSceneDataList()) {
 						boolean add = true;
 						for(Notification notification : notificationList){
@@ -95,11 +95,12 @@ public class PushNotifications extends Thread{
 										!notification.notified){
 									
 									//Aviso al usuario
+									/*
 									Main.getInstance().getActivity().
 									sendNotification(notificationId++,
 											RscManager.allText[RscManager.TXT_KINGDOM_NEEDS_YOU], 
 											""+notification.scene + "-" + RscManager.allText[RscManager.TXT_GAME_ANSWER]);
-									
+									*/
 									notification.notified = true;
 								}
 							}

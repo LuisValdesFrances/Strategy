@@ -48,7 +48,7 @@ public abstract class MapObject{
 		this.touchX = getAbsoluteX();
 		this.touchY = getAbsoluteY();
 		
-		this.button = new Button(width, height, -1, -1){
+		this.button = new Button(-1, -1, width, height){
 			@Override
 			public void onButtonPressDown(){
 				SndManager.getInstance().playFX(onDownSoundIndex, 0);

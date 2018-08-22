@@ -12,9 +12,9 @@ public class Player {
 	
 	private static int idCount;
 	public static void init(){
-		idCount=0;
+		idCount = 0;
 	}
-	
+
 	private int id;
 	private String name;
 	private int gold;
@@ -207,7 +207,7 @@ public class Player {
 		}
 		return kingdom;
 	}
-	
+
 	public int getNumberCitys(){
 		int n = 0;
 		for(int i = 0; i < kingdomList.size(); i++){

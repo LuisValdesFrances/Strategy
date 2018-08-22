@@ -50,7 +50,7 @@ public class Kingdom extends MapObject{
 		
 		target = -1;
 		
-		this.button = new Button(width, height, -1, -1){
+		this.button = new Button(-1, -1, width, height){
 			@Override
 			public void onButtonPressDown(){};
 			@Override

@@ -24,7 +24,7 @@ public class Army extends MapObject{
 	public Player player;
 	private static int idCount;
 	public static void init(){
-		idCount=0;
+		idCount = 0;
 	}
 	private int id;
 	
@@ -102,7 +102,7 @@ public class Army extends MapObject{
 	}
 	
 	public void initTroops() {
-		// Añado el minimo de tropas
+		// Aï¿½ado el minimo de tropas
 		for (int i = 0; i < GameParams.TROOP_START.length; i++) {
 			for (int j = 0; j < GameParams.TROOP_START[i]; j++) {
 				getTroopList().add(new Troop(i, true));
@@ -209,7 +209,7 @@ public class Army extends MapObject{
 			float modSize = 0;
 			/*
 			//Modo 3D
-			//Tamaño
+			//Size
 			float modSize = (((float)pY) * (distorsionY -1f)) / worldConver.getLayoutY();
 			g.setImageSize(1+modSize, 1+modSize);
 			
@@ -217,9 +217,9 @@ public class Army extends MapObject{
 			float extraHeight = (distorsionY-1f)*worldConver.getLayoutY();
 			//Deformacion en la posicion X
 			float sepCenter = pX - worldConver.getCentGameLayoutX();
-			//Deformacion máxima en x
+			//Deformacion maxima en x
 			float maxX = (sepCenter * extraWidth) / worldConver.getLayoutX()/2;
-			//Relativizacion de la deformacion máxima (Menos acusada cuando mas al fondo)
+			//Relativizacion de la deformacion maxima (Menos acusada cuando mas al fondo)
 			float relativeModX = (maxX * pY) /  worldConver.getLayoutY();
 			
 			//Deformacion en la posicion Y

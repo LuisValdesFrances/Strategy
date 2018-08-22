@@ -12,6 +12,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.luis.strategy.Main;
 import com.luis.strategy.datapackage.scene.NotificationListData;
 import com.luis.strategy.datapackage.scene.PreSceneListData;
 import com.luis.strategy.datapackage.scene.SceneData;
@@ -23,10 +24,12 @@ public class OnlineInputOutput {
 	
 	public static final String URL_LOGIN_USER = "loginUserServlet";
 	public static final String URL_CREATE_USER = "createUserServlet";
+    public static final String URL_CREATE_FIREBASE_ID_DEVICE_TOKEN = "createFirebaseIdDeviceTokenServlet";
 	
 	public static final String URL_CREATE_INSCRIPTION = "createInscriptionServlet";
 	public static final String URL_CREATE_PRE_SCENE = "createPreSceneServlet";
 	public static final String URL_CREATE_NOTIFICATION = "createNotificationServlet";
+	public static final String URL_CREATE_INCIDENCE = "createIncidenceServlet";
 	
 	public static final String URL_GET_GAME_VERSION = "getGameVersionServlet";
 	public static final String URL_GET_PRE_SCENE_LIST = "getPreSceneListServlet";
@@ -39,6 +42,7 @@ public class OnlineInputOutput {
 	public static final String URL_UPDATE_SCENE = "updateSceneServlet";
 	
 	public static final String MSG_NO_CONNECTION = "No connection";
+	public static final String MSG_DEBUG = "Debug";
 	
 	//Notifications code
 	public static final int CODE_NOTIFICATION_YOU_LOST_GAME= 0;
@@ -103,7 +107,11 @@ public class OnlineInputOutput {
 	}
 
 	public String sendNotification(Context context, String scene, String from, String to, String message, String type){
-		
+
+		if(Main.IS_GAME_DEBUG){
+			return MSG_DEBUG;
+		}
+
 		if(!isOnline(context)){
 			return MSG_NO_CONNECTION;
 		}
@@ -127,6 +135,50 @@ public class OnlineInputOutput {
 			connection.setUseCaches(false);
 
 			BufferedReader in = 
+					new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+			String str = "";
+			while ((str = in.readLine()) != null) {
+				result += str;// + "\n";
+			}
+			in.close();
+
+			System.out.println(result);
+			connection.disconnect();
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = e.getMessage();
+		}
+		return result;
+	}
+
+	public String sendIncidence(Context context, String scene, String player, String message){
+
+        if(Main.IS_GAME_DEBUG){
+            return MSG_DEBUG;
+        }
+
+		if(!isOnline(context)){
+			return MSG_NO_CONNECTION;
+		}
+
+		HttpURLConnection connection = null;
+		String result = "";
+
+		try {
+			// open URL connection
+			URL url = new URL(ServerURL.SERVER_URL + URL_CREATE_INCIDENCE);
+			connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestProperty("Content-Type", "application/octet-stream");
+			connection.setRequestMethod("POST");
+			connection.setRequestProperty("scene", scene);
+			connection.setRequestProperty("player", player);
+			connection.setRequestProperty("message", message);
+			connection.setDoInput(true);
+			connection.setDoOutput(true);
+			connection.setUseCaches(false);
+
+			BufferedReader in =
 					new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
 			String str = "";
@@ -177,8 +229,11 @@ public class OnlineInputOutput {
 		return notificationListData;
 	}
 	
-	public String sendUser(Context context, String URL, String name, String password){
-		
+	public String sendUser(Context context, String URL, String name, String password, String firebaseIdDeviceToken){
+
+        if(Main.IS_GAME_DEBUG){
+            return MSG_DEBUG;
+        }
 		if(!isOnline(context)){
 			return MSG_NO_CONNECTION;
 		}
@@ -193,6 +248,7 @@ public class OnlineInputOutput {
 			connection.setRequestMethod("POST");
 			connection.setRequestProperty("name", name);
 			connection.setRequestProperty("password", password);
+			connection.setRequestProperty("firebaseiddevicetoken", firebaseIdDeviceToken);
 			connection.setDoInput(true);
 			connection.setDoOutput(true);
 			connection.setUseCaches(false);
@@ -214,8 +270,53 @@ public class OnlineInputOutput {
 		}
 		return result;
 	}
+
+    public String sendFirebaseIdDeviceToken(Context context, String name, String firebaseIdDeviceToken){
+
+        if(Main.IS_GAME_DEBUG){
+            return MSG_DEBUG;
+        }
+        if(!isOnline(context)){
+            return MSG_NO_CONNECTION;
+        }
+
+        HttpURLConnection connection = null;
+        String result = "";
+        try {
+            // open URL connection
+            URL url = new URL(ServerURL.SERVER_URL + URL_CREATE_FIREBASE_ID_DEVICE_TOKEN);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestProperty("Content-Type", "application/octet-stream");
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("name", name);
+            connection.setRequestProperty("firebaseiddevicetoken", firebaseIdDeviceToken);
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+            connection.setUseCaches(false);
+
+            BufferedReader in =
+                    new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+            String str = "";
+            while ((str = in.readLine()) != null) {
+                result += str;// + "\n";
+            }
+            in.close();
+
+            System.out.println(result);
+            connection.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = e.getMessage();
+        }
+        return result;
+    }
 	
 	public String sendPreScene(Context context, String URL, String map, String user, String name){
+
+        if(Main.IS_GAME_DEBUG){
+            return MSG_DEBUG;
+        }
 		if(!isOnline(context)){
 			return MSG_NO_CONNECTION;
 		}
@@ -253,6 +354,10 @@ public class OnlineInputOutput {
 	}
 	
 	public String sendInscription(Context context, String scene, String user, String create){
+
+        if(Main.IS_GAME_DEBUG){
+            return MSG_DEBUG;
+        }
 		if(!isOnline(context)){
 			return MSG_NO_CONNECTION;
 		}
@@ -290,6 +395,10 @@ public class OnlineInputOutput {
 	}
 	
 	public String sendDataPackage(Context context, String URL, Serializable dataPackage){
+
+        if(Main.IS_GAME_DEBUG){
+            return MSG_DEBUG;
+        }
 		if(!isOnline(context)){
 			return MSG_NO_CONNECTION;
 		}
@@ -389,8 +498,7 @@ public class OnlineInputOutput {
 		}
 		return sceneListData;
 	}
-	
-	
+
 	public SceneData reviceSceneData(Context context, String URL, String scene){
 		if(!isOnline(context)){
 			return null;

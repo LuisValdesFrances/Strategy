@@ -20,7 +20,7 @@ English
 Español
 Català
 CAMPAING
-CONTINUE
+PLAY
 START
 MULTIPLAYER
 ON LINE
@@ -41,7 +41,7 @@ Yes
 HELP
 ABOUT
 Texto help.
-Designed and developed: Luis Valdes. @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Music and FX: Francisco Hoyos. @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ All right reserved.
+Designed and developed: Luis Valdes. @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Music & FX: Francisco Hoyos and Mr.Dufay. @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ All right reserved.
 SELECT GAME
 CREATE GAME
 JOIN TO GAME
@@ -50,6 +50,7 @@ HUMAN
 AI
 YOUR TURN
 NEXT
+You must select at least one human player.
 Points:
 Record:
 Continue
@@ -133,7 +134,10 @@ ATACK
 ESCAPE
 WAIT
 CANCEL
-Do you want to improve this construction
+Increase the defense of the city to a
+Increase the collection of the city to a
+Increase protection of the city to a
+percent
 Tower
 Market
 Church
@@ -142,8 +146,8 @@ Increase the gold of the city.
 Protect the kingdom from any attack (Probability).
 You lost the game.
 lost the game.
-Your army has been defeated.
-Your army has won.
-Your army has been destroyed.
-Your army has destroyed to enemy.
+Your army has been defeated by
+You have defeated the army of
+Your army has been destroyed by
+You have destroyed the army of
 change his capital.

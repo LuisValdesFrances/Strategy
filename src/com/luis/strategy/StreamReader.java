@@ -18,19 +18,19 @@ public class StreamReader {
 
     public String[] read() {
 
-        //El total de líneas del archivo .TXT:
+        //El total de lineas del archivo .TXT:
         String[] text = new String[ms_iTextSize];
 
         try {
-            //"this.getClass().getResourceAsStream" no sólo crea un vinculo hacia
-            //el archivo a leer, sino que además cuando es  usado en el objeto Reader 
-            //como parámetro, carga una nueva líena del archivo .TXT 
-            //cada vez que este ejecuta su método "read". 
-            //El parámetro que se le pasa es la ruta del archivo .TXT:
+            //"this.getClass().getResourceAsStream" no solo crea un vinculo hacia
+            //el archivo a leer, sino que ademas cuando es  usado en el objeto Reader
+            //como parametro, carga una nueva liena del archivo .TXT
+            //cada vez que este ejecuta su metodo "read".
+            //El parametro que se le pasa es la ruta del archivo .TXT:
             InputStream is = this.getClass().getResourceAsStream(ms_sArchiveName);
             //Al estar cargado con "is", el cual conoce la informacion del archivo .TXT, 
-            //es capaz de leer caracteres de la siguiente línia distinta, 
-            //por cada vez que se ejecute su método "read":
+            //es capaz de leer caracteres de la siguiente linea distinta,
+            //por cada vez que se ejecute su metodo "read":
             Reader r = new InputStreamReader(is, "UTF-8");
 
             for (int i = 0; i < ms_iTextSize; i++) {
@@ -57,8 +57,8 @@ public class StreamReader {
 
     }
 
-    //Este método SOLO LEE una línea entera del .TXT
-    //Para obtener todo el texto, se debe de invocar tantas veces como líneas
+    //Este mï¿½todo SOLO LEE una lï¿½nea entera del .TXT
+    //Para obtener todo el texto, se debe de invocar tantas veces como lï¿½neas
     //tenga el .TXT
     private static String readLine(Reader r) throws IOException {
         String res = null;
@@ -71,16 +71,16 @@ public class StreamReader {
                 c = r.read();
                
 
-                //Si se produce un salto de línea o termina la línea (devuelve -1),
-                //se rompe el bucle y se da la línea como leída y el método como concluido:
+                //Si se produce un salto de lï¿½nea o termina la lï¿½nea (devuelve -1),
+                //se rompe el bucle y se da la lï¿½nea como leï¿½da y el mï¿½todo como concluido:
                 if (c == '\n' || c == -1) {
                     break;
                 }
-                //Sólo queremos añadir caracteres a nuestro StringBuffer, no el 
-                //retorno de carro(que tambien es un carácter en la tabla Ascii).
-                //Si añadimos tambien el carácter Ascii del retorno de carro, nos
-                //quedará un salto de línea ANTES del inicio del texto de cada línea,
-                //con excepción de la primera:
+                //Sï¿½lo queremos aï¿½adir caracteres a nuestro StringBuffer, no el 
+                //retorno de carro(que tambien es un carï¿½cter en la tabla Ascii).
+                //Si aï¿½adimos tambien el carï¿½cter Ascii del retorno de carro, nos
+                //quedarï¿½ un salto de lï¿½nea ANTES del inicio del texto de cada lï¿½nea,
+                //con excepciï¿½n de la primera:
                 if (c != '\r') {
                     //System.out.println("c(char) es " + (char) c);
                     linea.append((char) c);

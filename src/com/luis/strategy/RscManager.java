@@ -69,7 +69,8 @@ public class RscManager {
 	public static final int TXT_MAP_CONFIG_IA = TXT_MAP_CONFIG_HUMAN+1;
 	public static final int TXT_YOUR_TURN = TXT_MAP_CONFIG_IA+1;
 	public static final int TXT_NEXT = TXT_YOUR_TURN+1;
-	public static final int TXT_POINTS= TXT_NEXT+1;
+	public static final int TXT_SELECT_ONE_HUMAN = TXT_NEXT+1;
+	public static final int TXT_POINTS= TXT_SELECT_ONE_HUMAN+1;
 	public static final int TXT_RECORD= TXT_POINTS+1;
 	public static final int TXT_CONTINUE_GAME= TXT_RECORD+1;
 	public static final int TXT_QUIT= TXT_CONTINUE_GAME+1;
@@ -123,8 +124,8 @@ public class RscManager {
 	public static final int TXT_GAME_PLAYER= TXT_GAME_RESULT+1;
 	public static final int TXT_GAME_BIG_DEFEAT= TXT_GAME_PLAYER+1;
 	public static final int TXT_GAME_DEFEAT= TXT_GAME_BIG_DEFEAT+1;
-	public static final int TXT_GAME_VICTORY= TXT_GAME_DEFEAT+1;
-	public static final int TXT_GAME_BIG_VICTORY= TXT_GAME_VICTORY+1;
+	public static final int TXT_GAME_WIN = TXT_GAME_DEFEAT+1;
+	public static final int TXT_GAME_BIG_VICTORY= TXT_GAME_WIN +1;
 	public static final int TXT_GAME_YOU_LOST_GAME= TXT_GAME_BIG_VICTORY+1;
 	public static final int TXT_GAME_LOST_GAME= TXT_GAME_YOU_LOST_GAME+1;
 	
@@ -166,9 +167,12 @@ public class RscManager {
 	public static final int TXT_GAME_WAIT= TXT_GAME_ESCAPE+1;
 	public static final int TXT_GAME_CANCEL= TXT_GAME_WAIT+1;
 	
-	public static final int TXT_GAME_CONFIRM_UPDATE_BUILDING = TXT_GAME_CANCEL+1;
+	public static final int TXT_GAME_INCREASE_TOWER = TXT_GAME_CANCEL+1;
+	public static final int TXT_GAME_INCREASE_MARKET = TXT_GAME_INCREASE_TOWER+1;
+	public static final int TXT_GAME_INCREASE_CHURCH = TXT_GAME_INCREASE_MARKET+1;
+    public static final int TXT_GAME_PERCENT = TXT_GAME_INCREASE_CHURCH+1;
 	
-	public static final int TXT_GAME_TOWER = TXT_GAME_CONFIRM_UPDATE_BUILDING+1;
+	public static final int TXT_GAME_TOWER = TXT_GAME_PERCENT+1;
 	public static final int TXT_GAME_MARKET = TXT_GAME_TOWER+1;
 	public static final int TXT_GAME_CHURCH = TXT_GAME_MARKET+1;
 	public static final int TXT_GAME_TOWER_DESC = TXT_GAME_CHURCH+1;

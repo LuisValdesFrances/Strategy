@@ -21,7 +21,7 @@ public class GameParams {
 	public static final int[] TOWER_DEFENSE = 		new int[]{6, 12, 18};
 	public static final int[] MARKET_TAX = 			new int[]{30, 60, 80};
 	
-	public static final int[] FAITH_CHECK =			new int[]{10, 20, 30};
+	public static final int[] FAITH_CHECK =			new int[]{20, 30, 40};
 	
 	//Building
 	public static final int TOWER = 0;
@@ -52,7 +52,7 @@ public class GameParams {
 	
 	//GAME CONFIG:
 	public static final float CAMERA_SPEED = 180f;//Pixeles por segundo
-	public static final int BG_BLACK_ALPHA = 160;
+	public static final int BG_BLACK_ALPHA = 200;
 	public static final int START_GOLD = 10;
 	
 	//ROLL CONFIG

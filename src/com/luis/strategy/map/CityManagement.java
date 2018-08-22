@@ -10,15 +10,14 @@ public class CityManagement {
 	/*
 	 * Militar: Torre -> Muralla -> Fortaleza (Aumentan defensa)
 	 * 
-	 * Economico -> Taller -> Gremios -> Mercado (Aumentan recaudación)
+	 * Economico -> Taller -> Gremios -> Mercado (Aumentan recaudacion)
 	 * 
-	 * Religioso -> Capilla -> Iglesia -> Catedral (Cabeza de la Iglesia->
-	 * ¿blindarse?)
+	 * Religioso -> Capilla -> Iglesia -> Catedral
 	 */
 
 	/*
-	 * Cabeza de la Iglesia: este seria un jugador que podría blindarse y no
-	 * recibir ataques ¿?
+	 * Cabeza de la Iglesia: este seria un jugador que podria blindarse y no
+	 * recibir ataques?
 	 * 
 	 * Se blinda el reino con la catedral ->
 	 * nivel 1 = 12% de blindaje

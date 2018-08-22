@@ -87,7 +87,7 @@ public class ModeGame {
 			gfxEffects = GfxEffects.getInstance();
 			
 			GameScene gameScene = null;
-			
+
 			//Reseteo los contadores
 			Player.init();
 			Army.init();
@@ -147,25 +147,25 @@ public class ModeGame {
 						
 						String msg = "";
 						switch(notificationListData.getNotificationDataList().get(i).getMessage()){
-						case OnlineInputOutput.CODE_NOTIFICATION_YOUR_ARMY_DEFEATED:
+						case OnlineInputOutput.CODE_NOTIFICATION_YOUR_ARMY_DEFEATED://Tu ejercito pierde contra NOMBRE
 							msg = 
-									notificationListData.getNotificationDataList().get(i).getFrom() + "-" +
-									RscManager.allText[RscManager.TXT_NOTIFICATION_YOUR_ARMY_DEFEATED];
+									RscManager.allText[RscManager.TXT_NOTIFICATION_YOUR_ARMY_DEFEATED]  + " " +
+									notificationListData.getNotificationDataList().get(i).getFrom();
 							break;
-						case OnlineInputOutput.CODE_NOTIFICATION_YOUR_ARMY_WON:
+						case OnlineInputOutput.CODE_NOTIFICATION_YOUR_ARMY_WON://Tu ejercito gana contra NOMBRE
 							msg = 
-									notificationListData.getNotificationDataList().get(i).getFrom() + "-" +
-									RscManager.allText[RscManager.TXT_NOTIFICATION_YOUR_ARMY_WON];
+									RscManager.allText[RscManager.TXT_NOTIFICATION_YOUR_ARMY_WON]  + " " +
+									notificationListData.getNotificationDataList().get(i).getFrom();
 							break;
-						case OnlineInputOutput.CODE_NOTIFICATION_YOUR_ARMY_DESTROYED:
+						case OnlineInputOutput.CODE_NOTIFICATION_YOUR_ARMY_DESTROYED://Tu ejercito ha sido destruido por NOMBRE
 							msg = 
-									notificationListData.getNotificationDataList().get(i).getFrom() + "-" +
-									RscManager.allText[RscManager.TXT_NOTIFICATION_YOUR_ARMY_DESTROYED];
+									RscManager.allText[RscManager.TXT_NOTIFICATION_YOUR_ARMY_DESTROYED] + " " +
+									notificationListData.getNotificationDataList().get(i).getFrom();
 							break;
-						case OnlineInputOutput.CODE_NOTIFICATION_YOUR_ARMY_DESTROYED_ENEMY:
+						case OnlineInputOutput.CODE_NOTIFICATION_YOUR_ARMY_DESTROYED_ENEMY://Has destruído al ejercito de NOMBRE
 							msg = 
-									notificationListData.getNotificationDataList().get(i).getFrom() + "-" +
-									RscManager.allText[RscManager.TXT_NOTIFICATION_YOUR_ARMY_DESTROYED_ENEMY];
+									RscManager.allText[RscManager.TXT_NOTIFICATION_YOUR_ARMY_DESTROYED_ENEMY] + " " +
+									notificationListData.getNotificationDataList().get(i).getFrom();
 							break;
 						case OnlineInputOutput.CODE_NOTIFICATION_CHANGE_CAPITAL:
 							msg = 
@@ -316,12 +316,21 @@ public class ModeGame {
 			 }
 			break;
 		case Define.ST_GAME_RUN:
-			
-			btnPause.update(UserInput.getInstance().getMultiTouchHandler());
-			
+				btnPause.update(UserInput.getInstance().getMultiTouchHandler());
 			particleManager.update(Main.getDeltaSec());
 			gfxEffects.update(Main.getDeltaSec());
-			gameManager.update(Main.getDeltaSec());
+			try {
+                gameManager.update(Main.getDeltaSec());
+			}catch (Exception e){
+				if(GameState.getInstance().getGameMode() == GameState.GAME_MODE_ONLINE){
+					OnlineInputOutput.getInstance().sendIncidence(
+							Main.getInstance().getContext(),
+							""+GameState.getInstance().getSceneData().getId(),
+							GameState.getInstance().getName(),
+							e.getMessage() + " - " + e.toString());
+				}
+				e.printStackTrace();
+			}
 			updateDebugButton();
 			break;
 			
@@ -401,7 +410,7 @@ public class ModeGame {
 	public static final int DEBUG_BUTTON_X = Define.SIZEX-DEBUG_BUTTON_W-DEBUG_BUTTON_W/2;
 	public static final int DEBUG_BUTTON_Y = Define.SIZEY4 - DEBUG_BUTTON_H/2;
 	private static void drawDebugButton(Graphics _g){
-		if(Main.debug){
+		if(Main.IS_GAME_DEBUG){
 			_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
 			if(!showDebugInfo){
 				_g.setColor(Main.COLOR_RED);
@@ -413,7 +422,7 @@ public class ModeGame {
 	}
 	
 	private static void updateDebugButton(){
-		if(Main.debug){
+		if(Main.IS_GAME_DEBUG){
 			if((UserInput.getInstance().getMultiTouchHandler().getTouchFrames(0) == 1) && 
 				UserInput.getInstance().compareTouch(
 					DEBUG_BUTTON_X, DEBUG_BUTTON_Y, DEBUG_BUTTON_X + DEBUG_BUTTON_W, DEBUG_BUTTON_Y + DEBUG_BUTTON_H, 0)){

@@ -50,7 +50,7 @@ public class ActionIA {
 		int salary = player.getTaxes()
 		int gold = player.getGold();
 		*/
-		boolean canBuy;//Controla que haya alguna ciudad libre (Generar ejercito )o haya algún ejercito en una ciudad (Aquirir tropas)
+		boolean canBuy;//Controla que haya alguna ciudad libre (Generar ejercito )o haya algun ejercito en una ciudad (Aquirir tropas)
 		
 		//Presupuestos
 		int armyBudget;

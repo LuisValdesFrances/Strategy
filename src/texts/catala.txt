@@ -22,7 +22,7 @@ Català
 CAMPANYA
 CONTINUAR
 COMENÇAR
-MULTIJUGADOR
+JUGAR
 ON LINE
 NOVA PARTIDA
 NOU COMPTE
@@ -41,7 +41,7 @@ Si
 AJUDA
 SOBRE
 Text help.
-Dissenyat i desenvolupat: Luis Valdes. @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Musica y FX: Francisco Hoyos. @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ All right reserved.
+Dissenyat i desenvolupat: Luis Valdes. @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Musica y FX: Francisco Hoyos i Mr.Dufay. @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ All right reserved.
 SELECCIONA UNA PARTIDA
 CREA UNA PARTIDA
 UNEIX-TE A UNA PARTIDA
@@ -50,6 +50,7 @@ HUMÀ
 IA
 EL TEU TORN
 TORN
+Has de seleccionar un jugador humà com a mínim.
 Punts:
 Record:
 Continua
@@ -133,17 +134,20 @@ ATACAR
 FUGIR
 ESPERAR
 CANCEL·LAR
-¿Desitjes millorar aquesta construcció
+Aumenta la defensa de la ciutat a un
+Aumenta la recaudació de la ciutat a un
+Aumenta la protecció de la ciutat a un
 Torre
 Mercart
 Esglesia
 Incrementa la defensa de la ciudat.
 Incrementa els ingresos de la ciudat.
+percent
 Protegeix el regne de cualsevol atac (Probabilidat).
 Has perdut la partida.
 perd la partida.
-El teu exèrcit ha estat derrotat.
-El teu exèrcit ha vençut.
-El teu exèrcit ha estat destruït.
-El teu exèrcit ha destruït l'enemic.
+El teu ejercit ha estat derrotar per
+Has vençut al ejercit de
+El teu ejercit ha estat destruit per
+Has destruit al ejercit de
 canvia la seva capital.

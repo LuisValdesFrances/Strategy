@@ -4,7 +4,6 @@ import java.util.Random;
 
 import android.util.Log;
 
-import com.luis.strategy.R;
 import com.luis.lgameengine.gameutils.GamePerformance;
 import com.luis.lgameengine.gameutils.Settings;
 import com.luis.lgameengine.gameutils.fonts.Font;
@@ -19,8 +18,6 @@ import com.luis.strategy.constants.Define;
  */
 public class Main extends Screen implements Runnable {
 	
-	public static boolean debug = false;
-
 	public static Main instance;
 	public static Main getInstance(){
 		return instance;
@@ -42,7 +39,7 @@ public class Main extends Screen implements Runnable {
 	}
 	public static float getDeltaSec(){
 		float d = Math.min(((float)deltaTime / 1000f), 0.1f);
-		if(debug){
+		if(IS_GAME_DEBUG){
 			if(d > 0.1f){
 				d = 0.1f;
 			}
@@ -52,10 +49,10 @@ public class Main extends Screen implements Runnable {
 	public static long lastTime;
 
 	private static long minDurationFrame;
-	private boolean isGameRun;
-	public void finishGame(){
-		isGameRun = false;
-	}
+	private static boolean isGameRun;
+    public void finishGame(){
+        isGameRun = false;
+    }
 
 	public static int state;
 	public static int lastState;
@@ -80,11 +77,11 @@ public class Main extends Screen implements Runnable {
 	public static final int COLOR_GREEN_BG = 0xff8bfc88;
 	public static final int COLOR_YELOW_BG = 0xfffcf659;
 
-	public static final boolean IS_FPS = true;
-	public static final boolean IS_DEBUG = false;
-	public static final boolean IS_TOUCH_INPUT_DEBUG = false;
-	public static final boolean IS_KEY_INPUT_DEBUG = false;
-	public static final boolean IS_GAME_DEBUG = false;
+	public static boolean IS_FPS = false;
+	public static boolean IS_DEBUG = false;
+	public static boolean IS_TOUCH_INPUT_DEBUG = false;
+	public static boolean IS_KEY_INPUT_DEBUG = false;
+    public static boolean IS_GAME_DEBUG = false;
 
 	public static final int INDEX_DATA_LANGUAGE = 0;
 	public static final int INDEX_DATA_RECORD = 1;
@@ -92,8 +89,10 @@ public class Main extends Screen implements Runnable {
 	
 	//Sound
 	public static final byte MUSIC_INTRO = 0;
-	public static final byte MUSIC_MAP = 1;
-	public static final byte MUSIC_START_BATTLE = 2;
+    public static final byte MUSIC_MAIN = 1;
+	public static final byte MUSIC_MAP = 2;
+	public static final byte MUSIC_START_BATTLE = 3;
+    public static final byte MUSIC_SIR_ROBIN = 4;
 	
 	//FX
 	public static final byte FX_HIT = 0;
@@ -116,30 +115,32 @@ public class Main extends Screen implements Runnable {
 	public static final byte FX_DEAD = 17;
 	 
 	private static final int MUSIC_LIST [] = {
-		R.raw.intro,
-		R.raw.map,
-		R.raw.battle_start
+			R.raw.intro,
+			R.raw.main,
+			R.raw.map,
+			R.raw.battle_start,
+			R.raw.sir_robin
 	 };
 	
 	private static final int FX_FILE [] = {
-		R.raw.fx_hit,
-	    R.raw.fx_next,
-	    R.raw.fx_back,
-	    R.raw.fx_select,
-	    R.raw.fx_sword,
-	    R.raw.fx_sword_blood,
-	    R.raw.fx_sword_strong,
-	    R.raw.fx_fail,
-	    R.raw.fx_fanfarria_start,
-	    R.raw.fx_fanfarria_end,
-	    R.raw.fx_battle,
-	    R.raw.fx_select_army,
-	    R.raw.fx_march,
-	    R.raw.fx_coins,
-	    R.raw.fx_start_game,
-	    R.raw.fx_victory,
-	    R.raw.fx_defeat,
-	    R.raw.fx_dead,
+			R.raw.fx_hit,
+			R.raw.fx_next,
+			R.raw.fx_back,
+			R.raw.fx_select,
+			R.raw.fx_sword,
+			R.raw.fx_sword_blood,
+			R.raw.fx_sword_strong,
+			R.raw.fx_fail,
+			R.raw.fx_fanfarria_start,
+			R.raw.fx_fanfarria_end,
+			R.raw.fx_battle,
+			R.raw.fx_select_army,
+			R.raw.fx_march,
+			R.raw.fx_coins,
+			R.raw.fx_start_game,
+			R.raw.fx_victory,
+			R.raw.fx_defeat,
+			R.raw.fx_dead,
 	    
 	};
 	 
@@ -151,41 +152,44 @@ public class Main extends Screen implements Runnable {
 	public void setActivity(MainActivity activity) {
 		this.activity = activity;
 	}
-	
-	public Main(MainActivity activity) {
-		super(activity, Define.SIZEX, Define.SIZEY);
+
+	private boolean notification;
+	public boolean isNotification(){
+		return  notification;
+	}
+
+	public Main(MainActivity activity, Settings settings, boolean notification) {
+		super(activity, settings.getScreenWidth(), settings.getScreenHeight());
 		this.activity = activity;
+		this.notification = notification;
+		Log.i("Debug", "Screen size " + settings.getScreenWidth() + "x" + settings.getScreenHeight());
+        Log.i("Debug", "Real size " + Settings.getInstance().getRealWidth() + "x" + Settings.getInstance().getRealHeight());
 		instance = this;
-		// if(Integer.parseInt(VERSION.SDK) < 5)
-		// touchHandler = new SingleTouchHandler(view, scaleX, scaleY);
-		// else
-		// touchHandler = new MultiTouchHandler(view, scaleX, scaleY);
-		
+
+		Define.init(settings.getScreenWidth(), settings.getScreenHeight());
+
 		UserInput.getInstance().init(multiTouchHandler, keyboardHandler);
 		SndManager.getInstance().inicialize(activity, MUSIC_LIST, FX_FILE);
 		isGameRun = true;
 	}
 
 	private void initGame() {
-		Log.i("INFO", "initMain run");
+		Log.i("Debug", "Game initialized");
 		targetFPS = GamePerformance.getInstance().getOptimalFrames();//30;
 		minDurationFrame = 1000 / targetFPS;
 		changeState(Define.ST_MENU_START, true);
 	}
 
-	
-	
 	@Override
 	public void run() {
 
-		Log.i("Debug", "Game thread start");
 		initGame();
-		
+
 		while (isGameRun) {
-			
+
 			deltaTime = System.currentTimeMillis() - lastTime;
 			lastTime = System.currentTimeMillis();
-			
+
 			if(orderToChangeState){
 				updateChangeState();
 			}else{
@@ -204,14 +208,14 @@ public class Main extends Screen implements Runnable {
 					case Define.ST_MENU_SELECT_MAP:
 					case Define.ST_MENU_CONFIG_MAP:
 					case Define.ST_MENU_CAMPAING:
-						
+
 					case Define.ST_MENU_ON_LINE_START:
 					case Define.ST_MENU_ON_LINE_CREATE_USER:
 					case Define.ST_MENU_ON_LINE_LOGIN:
 					case Define.ST_MENU_ON_LINE_LIST_ALL_GAME:
 					case Define.ST_MENU_ON_LINE_LIST_JOIN_GAME:
 					case Define.ST_MENU_ON_LINE_CREATE_SCENE:
-					
+
 					case Define.ST_TEST:
 					if (!isLoading) {
 						ModeMenu.update();
@@ -387,8 +391,16 @@ public class Main extends Screen implements Runnable {
 					(UserInput.getInstance().getKeyboardHandler().getPressedKeys(UserInput.KEYCODE_SHIELD_A).getAction()), 0, _g.getTextHeight() * 3, COLOR_WHITE);
 				_g.drawText("Key B: " + 
 					(UserInput.getInstance().getKeyboardHandler().getPressedKeys(UserInput.KEYCODE_SHIELD_B).getAction()), Define.SIZEX2,_g.getTextHeight() * 3, COLOR_WHITE);
-				
-
+			}if(IS_GAME_DEBUG){
+				//Margenes
+				if(isIntervalTwo()) {
+					_g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
+					_g.setColor(Main.COLOR_GREEN);
+					_g.fillRect(0, 0, Define.SCR_MIDLE/32, Define.SCR_MIDLE/32);
+					_g.fillRect(0, Define.SIZEY-Define.SCR_MIDLE/32, Define.SCR_MIDLE/32, Define.SCR_MIDLE/32);
+					_g.fillRect(Define.SIZEX-Define.SCR_MIDLE/32, 0, Define.SCR_MIDLE/32, Define.SCR_MIDLE/32);
+					_g.fillRect(Define.SIZEX-Define.SCR_MIDLE/32, Define.SIZEY-Define.SCR_MIDLE/32, Define.SCR_MIDLE/32, Define.SCR_MIDLE/32);
+				}
 			}
 			_g.setAlpha(255);
 		} else {

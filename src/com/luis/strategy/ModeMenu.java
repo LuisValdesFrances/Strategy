@@ -21,7 +21,6 @@ import com.luis.lgameengine.implementation.graphics.Image;
 import com.luis.lgameengine.implementation.sound.SndManager;
 import com.luis.strategy.GameState.PlayerConf;
 import com.luis.strategy.connection.OnlineInputOutput;
-import com.luis.strategy.connection.PushNotifications;
 import com.luis.strategy.constants.Define;
 import com.luis.strategy.constants.GameParams;
 import com.luis.strategy.data.DataKingdom;
@@ -40,14 +39,9 @@ import com.luis.strategy.gui.SceneDataListBox;
 import com.luis.strategy.gui.SimpleBox;
 
 public class ModeMenu {
-	
-	public static final int NUMBER_OPTS_LANGUAGE = 3;
-	public static final int NUMBER_OPTS_SOUND = 2;
-	public static final int NUMBER_OPTS_MAIN_MENU = 4;
-	public static final int NUMBER_OPTS_MORE_MENU = 2;
-	
-	public static int cita;
-	public static int author;
+
+	private static int cita;
+    private static int author;
 	
 	private static Button btnCancel;
 	private static Button btnBack;
@@ -56,7 +50,6 @@ public class ModeMenu {
 	private static Button btnOnLine;
 	private static Button btnPassAndPlay;
 	private static Button btnCampaign;
-	//private static Button btnContinueCampaing;
 	private static Button btnContinuePassAndPlay;
 	
 	private static Button btnNewAccount;
@@ -68,6 +61,9 @@ public class ModeMenu {
 	
 	private static Button btnAbout;
 	private static Button btnHelp;
+
+    private static Button btnEasterEgg;
+	private static Button btnDebug;
 	
 	
 	private static ListBox createSceneBox;
@@ -81,6 +77,7 @@ public class ModeMenu {
 	private static SimpleBox gameVersionBox;
 	private static ListBox notificationBox;
 	private static DialogBox dialogBox;
+    private static SimpleBox simpleBox;
 	public static ConfigurationBox configurationBox;
 	
 	private static boolean createUsserSucces;
@@ -95,10 +92,9 @@ public class ModeMenu {
 	private static String onLineGameName;
 	
 	private static int numLetters;
-	
-	private static String dataConfig;
-	
-	private static PushNotifications pushNotifications;
+
+	private static int debugCount;
+    private static int easterEggCount;
 	
 	public static void init(int _iMenuState){
 		Log.i("Info", "Init State: "+ _iMenuState);
@@ -108,7 +104,7 @@ public class ModeMenu {
 			Font.init(GfxManager.vImgFontSmall, GfxManager.vImgFontMedium, GfxManager.vImgFontBig);
 			
 			//Miro si hay datos guardados
-			dataConfig = FileIO.getInstance().loadData(Define.DATA_CONFIG, Main.getInstance().getActivity());
+			String dataConfig = FileIO.getInstance().loadData(Define.DATA_CONFIG, Main.getInstance().getActivity());
 			
 			if(dataConfig == null){
 				
@@ -119,13 +115,13 @@ public class ModeMenu {
 				int lang=0;
 				if(language.equals("english")){
 					lang=0;
-				}else if(language.equals("español")){
+				}else if(language.equals("espaÃ±ol")){
 					lang=1;
 				}else if(language.equals("catala")){
 					lang=2;
 				}
 				
-				dataConfig = ""+lang+"\ntrue\ntrue\nfalse";//Añadir resto de configuraciones;
+				dataConfig = ""+lang+"\ntrue\ntrue\nfalse";//Aï¿½adir resto de configuraciones;
 				FileIO.getInstance().saveData(dataConfig, Define.DATA_CONFIG, Main.getInstance().getActivity());
 			}
 			
@@ -142,18 +138,6 @@ public class ModeMenu {
 			//Sonido
 			SndManager.getInstance().setSound(dataConfig.split("\n")[1].equals("true"));
 			
-			//Notificaciones
-			String dataUser = FileIO.getInstance().loadData(Define.DATA_USER, 
-					Settings.getInstance().getActiviy().getApplicationContext());
-			if(dataUser != null){
-				String n =  dataUser.split("\n")[0];
-				pushNotifications = new PushNotifications(Main.getInstance().getActivity(), n);
-				
-				if(dataConfig.split("\n")[2].equals("true")){
-					pushNotifications.start();
-				}
-			}
-			
 			//Modo 3D
 			GameManager.game3D = dataConfig.split("\n")[3].equals("true");
 			
@@ -166,11 +150,7 @@ public class ModeMenu {
 			
 			configurationBox = new ConfigurationBox(){
 				@Override
-				public void onFinish(){
-					if(pushNotifications != null){
-						pushNotifications.setActive(configurationBox.isNotifications());
-					}
-				}
+				public void onFinish(){}
 			};
 			
 			btnBack = new Button(GfxManager.imgButtonArrowBackRelease, GfxManager.imgButtonArrowBackFocus,
@@ -286,6 +266,7 @@ public class ModeMenu {
 			
 			break;
 		case Define.ST_MENU_MAIN:
+
 			if(Main.lastState < Define.ST_MENU_MAIN){
 				alpha = 255;
 				startTime = System.currentTimeMillis();
@@ -330,11 +311,94 @@ public class ModeMenu {
 						Main.changeState(Define.ST_MENU_SELECT_GAME, false);
 					}
 				};
+
+                debugCount = 0;
+                btnDebug = new Button(Define.SIZEX8, Define.SIZEY8, 0, Define.SIZEY-Define.SIZEY8){
+                    @Override
+                    public void onButtonPressDown(){}
+
+                    @Override
+                    public void onButtonPressUp(){
+                        if(debugCount == 8){
+                            debugCount = 0;
+                            Main.IS_GAME_DEBUG = !Main.IS_GAME_DEBUG;
+                            NotificationBox.getInstance().addMessage(Main.IS_GAME_DEBUG?"DEBUG ON":"DEBUG OFF");
+                        }else{
+                            debugCount++;
+                        }
+                        reset();
+                    }
+                };
+
+
+                btnEasterEgg = new Button(
+                        GfxManager.imgTitle.getWidth(),GfxManager.imgTitle.getHeight(),
+                        Define.SIZEX-(int)(GfxManager.imgButtonMenuBigRelease.getWidth()/2)-Define.SIZEY64,
+                        GfxManager.imgTitle.getHeight()/2 + Define.SIZEY32){
+                    @Override
+                    public void onButtonPressDown(){}
+
+                    @Override
+                    public void onButtonPressUp(){
+                        if(easterEggCount == 8){
+                            easterEggCount = 0;
+
+                            SndManager.getInstance().stopMusic();
+                            NotificationBox.getInstance().addMessage("SOUND ON");
+                            String dataConfig = FileIO.getInstance().loadData(Define.DATA_CONFIG, Main.getInstance().getActivity());
+                            int language = Integer.parseInt(dataConfig.split("\n")[0]);
+                            boolean notifications = dataConfig.split("\n")[2].equals("true");
+                            boolean game3D = dataConfig.split("\n")[3].equals("true");
+                            String data = "" + language + "\n" + true + "\n" + notifications + "\n" + game3D;
+                            FileIO.getInstance().saveData(dataConfig, Define.DATA_CONFIG, Main.getInstance().getActivity());
+
+
+                            SndManager.getInstance().playMusic(Main.MUSIC_SIR_ROBIN, false);
+                        }else{
+                            easterEggCount++;
+                        }
+                        SndManager.getInstance().playFX(Main.FX_COINS, 0);
+                        reset();
+                    }
+                };
 				
 				btnCampaign.setDisabled(true);
-			}
+
+
+				//firebase (Temporal)
+                //Chequeo si la version del juego es la ultima
+                String result = OnlineInputOutput.getInstance().checkGameVersion(Main.getInstance().getActivity());
+
+                if(result.equals("Succes")){
+                    String data = FileIO.getInstance().loadData(Define.DATA_USER,
+                            Settings.getInstance().getActiviy().getApplicationContext());
+
+                    if (data != null && data.length() > 0) {
+                        String[] d = data.split("\n");
+                        final String userName = d[0];
+                        final String firebaseIdDeviceToken = Main.getInstance().getActivity().getFirebaseDeviceToken();
+
+                        Thread t = new Thread(){
+                            @Override
+                            public void run(){
+                                OnlineInputOutput.getInstance().sendFirebaseIdDeviceToken(
+                                        Main.getInstance().getActivity(), userName, firebaseIdDeviceToken
+                                );
+                            }
+                        };
+                        t.start();
+
+                    }
+                }
+                else if(result.equals("Server error")){
+                    NotificationBox.getInstance().addMessage(RscManager.allText[RscManager.TXT_SERVER_ERROR]);
+                }
+
+            }
 			else if(Main.lastState > Define.ST_GAME_INIT_PASS_AND_PLAY){
-				SndManager.getInstance().playMusic(Main.MUSIC_INTRO, true);
+				MenuElement.bgAlpha = (int)(GameParams.BG_BLACK_ALPHA*0.5);
+				SndManager.getInstance().playMusic(Main.MUSIC_MAIN, true);
+				Main.getInstance().getActivity().requestInterstitial();
 			}
 			
 			break;
@@ -379,8 +443,7 @@ public class ModeMenu {
 					Main.getInstance().getActivity().startActivity(i);
 				}
 			};
-			
-			break;
+            break;
 		case Define. ST_MENU_EXIT:
 		case Define. ST_MENU_HELP:
 		case Define. ST_MENU_ABOUT:
@@ -445,7 +508,12 @@ public class ModeMenu {
 					else if(result.equals("Version error")){
 						gameVersionBox = new SimpleBox(GfxManager.imgSmallBox, true, false){
 							@Override
-							public void onFinish(){}
+							public void onFinish(){
+								String url = "https://play.google.com/store/apps/details?id=com.luis.strategy";
+								Intent i = new Intent(Intent.ACTION_VIEW);
+								i.setData(Uri.parse(url));
+								Main.getInstance().getActivity().startActivity(i);
+							}
 						};
 						gameVersionBox.start(null, RscManager.allText[RscManager.TXT_UPDATE_GAME]);
 					}
@@ -529,13 +597,32 @@ public class ModeMenu {
 			createSceneBox.start();
 			break;
 		case Define.ST_MENU_CONFIG_MAP:
+
+            simpleBox = new SimpleBox(GfxManager.imgSmallBox, true, false) {
+                @Override
+                public void onFinish() {
+                    Main.changeState(Define.ST_MENU_CONFIG_MAP, false);
+                }
+            };
+
 			configMapBox = new ConfigMapBox(GameState.getInstance().getPlayerConfList()){
 				@Override
 				public void onFinish(){
 					if(getIndexPressed() != -1){
-						//Borro los datos guardados en caso de haberlos
-						GameState.getInstance().setSceneData(null);
-						Main.changeState(Define.ST_GAME_INIT_PASS_AND_PLAY, true);
+                        //Chequeo de que se haya seleccionado almenos un jugador real
+						boolean onlyIA = true;
+						for(int i = 0; i < GameState.getInstance().getPlayerConfList().length && onlyIA; i++){
+						    if(!GameState.getInstance().getPlayerConfList()[i].IA){
+                                onlyIA = false;
+                            }
+                        }
+                        if(onlyIA && !Main.IS_GAME_DEBUG){
+                            simpleBox.start(null, RscManager.allText[RscManager.TXT_SELECT_ONE_HUMAN]);
+						}else{
+							//Borro los datos guardados en caso de haberlos
+							GameState.getInstance().setSceneData(null);
+							Main.changeState(Define.ST_GAME_INIT_PASS_AND_PLAY, true);
+						}
 					}else{
 						Main.changeState(Define.ST_MENU_SELECT_MAP, false);
 					}
@@ -595,11 +682,13 @@ public class ModeMenu {
 					  }
 					  else{
 						 //Escrutura online
-						 String msg = "";
+						 String msg;
 						 Main.getInstance().startClock(Main.TYPE_EARTH);
+						 String firebaseIdDeviceToken = Main.getInstance().getActivity().
+								 getFirebaseDeviceToken()!=null?Main.getInstance().getActivity().getFirebaseDeviceToken():"";
 						 String result = OnlineInputOutput.getInstance().sendUser(
-								 Main.getInstance().getActivity(), OnlineInputOutput.URL_CREATE_USER, 
-								 getTextName(), getTextPassword());//check
+								 Main.getInstance().getActivity(), OnlineInputOutput.URL_CREATE_USER,
+								 getTextName(), getTextPassword(), firebaseIdDeviceToken);//check
 						 Main.getInstance().stopClock();
 						 
 						 if(result.equals("Server error")){
@@ -654,8 +743,11 @@ public class ModeMenu {
 					 super.onSendForm();
 					 String msg = "";
 					 Main.getInstance().startClock(Main.TYPE_EARTH);
+					 String firebaseIdDeviceToken = Main.getInstance().getActivity().
+							 getFirebaseDeviceToken()!=null?Main.getInstance().getActivity().getFirebaseDeviceToken():"";
 					 String result = OnlineInputOutput.getInstance().sendUser(
-							 Main.getInstance().getActivity(), OnlineInputOutput.URL_LOGIN_USER, getTextName(), getTextPassword());//check
+							 Main.getInstance().getActivity(), OnlineInputOutput.URL_LOGIN_USER,
+							 getTextName(), getTextPassword(), firebaseIdDeviceToken);//check
 					 Main.getInstance().stopClock();
 					 
 					if(result.equals("Server error")){
@@ -698,18 +790,8 @@ public class ModeMenu {
 			 loginBox.start();
 			 break;
 		 case Define.ST_MENU_ON_LINE_LIST_ALL_GAME:
-			 
-			 if(pushNotifications == null){
-				 pushNotifications = new PushNotifications(Main.getInstance().getActivity(), GameState.getInstance().getName());
-				 
-				 if(dataConfig.split("\n")[1].equals("true")){
-					 if(!pushNotifications.isAlive()){
-						pushNotifications.start();
-					 }
-				 }
-			 }
-			 
-			 btnSearchGame = new Button(
+
+		     btnSearchGame = new Button(
 						GfxManager.imgButtonSearchBigRelease, 
 						GfxManager.imgButtonSearchBigFocus, 
 						Define.SIZEX - (GfxManager.imgButtonSearchBigRelease.getWidth()/2) - Define.SIZEY64, 
@@ -746,7 +828,8 @@ public class ModeMenu {
 				
 			Main.getInstance().startClock(Main.TYPE_EARTH);
 			SceneListData sceneListData = OnlineInputOutput.getInstance().reviceSceneListData(
-					Main.getInstance().getActivity(), GameState.getInstance().getName());//check
+					Main.getInstance().getActivity(),
+                    Main.IS_GAME_DEBUG?"-1":GameState.getInstance().getName());//check
 			Main.getInstance().stopClock();
 
 			if (sceneListData != null) {
@@ -816,7 +899,9 @@ public class ModeMenu {
 						}
 					}
 				};
-				selectSceneBox.setDisabledList(disableList);
+				if(!Main.IS_GAME_DEBUG) {
+					selectSceneBox.setDisabledList(disableList);
+				}
 				selectSceneBox.start();
 				
 				updateScenes();
@@ -828,7 +913,8 @@ public class ModeMenu {
 			}
 			
 			if(Main.lastState > Define.ST_GAME_INIT_PASS_AND_PLAY){
-				SndManager.getInstance().playMusic(Main.MUSIC_INTRO, true);
+				SndManager.getInstance().playMusic(Main.MUSIC_MAIN, true);
+                Main.getInstance().getActivity().requestInterstitial();
 			}
 			
 			break;
@@ -837,7 +923,9 @@ public class ModeMenu {
 			 Main.getInstance().startClock(Main.TYPE_EARTH);
 			 PreSceneListData preSceneListData =  
 					 OnlineInputOutput.getInstance().revicePreSceneListData(
-							 Main.getInstance().getActivity(), OnlineInputOutput.URL_GET_PRE_SCENE_LIST, GameState.getInstance().getName());//check
+							 Main.getInstance().getActivity(),
+                             OnlineInputOutput.URL_GET_PRE_SCENE_LIST,
+                             Main.IS_GAME_DEBUG?"-1":GameState.getInstance().getName());//check
 			 Main.getInstance().stopClock();
 			 
 			 dialogBox = new DialogBox(GfxManager.imgMediumBox){
@@ -1025,12 +1113,12 @@ public class ModeMenu {
 		
 		switch (Main.state) {
 		case Define.ST_MENU_START:
-			if(!runPresentation(ST_TIME_CITA_1, ST_TIME_CITA_2, ST_TIME_CITA_3) || Main.debug){
+			if(!runPresentation(ST_TIME_CITA_1, ST_TIME_CITA_2, ST_TIME_CITA_3) || Main.IS_GAME_DEBUG || Main.getInstance().isNotification()){
 				Main.changeState(Define.ST_MENU_LOGO, false);
 			}
 			break;
 		case Define.ST_MENU_LOGO:
-			if(!runPresentation(ST_TIME_LOGO_1, ST_TIME_LOGO_2, ST_TIME_LOGO_3) || Main.debug){
+			if(!runPresentation(ST_TIME_LOGO_1, ST_TIME_LOGO_2, ST_TIME_LOGO_3) || Main.IS_GAME_DEBUG || Main.getInstance().isNotification()){
 				Main.changeState(Define.ST_MENU_MAIN, false);
 			}
 			break;
@@ -1042,8 +1130,9 @@ public class ModeMenu {
 		
 		case Define.ST_MENU_MAIN:
 			runMenuBG(Main.getDeltaSec());
+			NotificationBox.getInstance().update(Main.getDeltaSec());
 			configurationBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
-				
+
 			btnConfiguration.setDisabled(configurationBox.isActive());
 			btnConfiguration.update(UserInput.getInstance().getMultiTouchHandler());
 			btnCampaign.update(UserInput.getInstance().getMultiTouchHandler());
@@ -1051,7 +1140,9 @@ public class ModeMenu {
 			btnMultiPlayer.update(UserInput.getInstance().getMultiTouchHandler());
 			btnInfo.setDisabled(configurationBox.isActive());
 			btnInfo.update(UserInput.getInstance().getMultiTouchHandler());
-			
+			btnDebug.update(UserInput.getInstance().getMultiTouchHandler());
+            btnEasterEgg.update(UserInput.getInstance().getMultiTouchHandler());
+
 			break;
 			
 		case Define.ST_MENU_INFO:
@@ -1117,6 +1208,7 @@ public class ModeMenu {
 			btnBack.update(UserInput.getInstance().getMultiTouchHandler());
 			btnNext.update(UserInput.getInstance().getMultiTouchHandler());
 			configMapBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
+            simpleBox.update(UserInput.getInstance().getMultiTouchHandler(), Main.getDeltaSec());
 			break;
 			
         case Define.ST_MENU_ON_LINE_START:
@@ -1234,6 +1326,7 @@ public class ModeMenu {
 			_g.setAlpha(alpha);
 			_g.drawImage(GfxManager.imgBlackBG, 0, 0, Graphics.TOP | Graphics.LEFT);
 			_g.setAlpha(255);
+            NotificationBox.getInstance().draw(_g);
 			break;
 			
 		case Define.ST_MENU_OPTIONS:
@@ -1283,12 +1376,13 @@ public class ModeMenu {
 			btnBack.draw(_g, 0, 0);
 			createSceneBox.draw(_g, GfxManager.imgBlackBG);
 			break;
-		
+
 		case Define.ST_MENU_CONFIG_MAP:
 			drawMenuBG(_g);
 			btnBack.draw(_g, 0, 0);
 			btnNext.draw(_g, 0, 0);
 			configMapBox.draw(_g);
+            simpleBox.draw(_g, GfxManager.imgBlackBG);
 			break;
 			
 		 case Define.ST_MENU_ON_LINE_START:
@@ -1403,19 +1497,19 @@ public class ModeMenu {
         }
     }
 	
-	public static long startTime;
+	private static long startTime;
 	public static final long ST_TIME_CITA_1 = 1000;
 	public static final long ST_TIME_CITA_2 = 6000;
 	public static final long ST_TIME_CITA_3 = 2000;
-	
-	
+
+
 	public static final long ST_TIME_LOGO_1 = 1000;
 	public static final long ST_TIME_LOGO_2 = 800;
 	public static final long ST_TIME_LOGO_3 = 1000;
-	
+
 	public static final long ST_TIME_MAIN = 1200;
-	
-	public static int statePresentation;
+
+    private static int statePresentation;
 	public static final int ST_PRESENTATION_1 = 0;
 	public static final int ST_PRESENTATION_2 = 2;
 	public static final int ST_PRESENTATION_3 = 3;
@@ -1604,7 +1698,8 @@ public class ModeMenu {
 							selectSceneBox != null){
 						SceneListData sceneListData = 
 								OnlineInputOutput.getInstance().reviceSceneListData(
-										Main.getInstance().getActivity(), GameState.getInstance().getName());
+										Main.getInstance().getActivity(),
+                                        Main.IS_GAME_DEBUG?"-1":GameState.getInstance().getName());
 						
 						if (sceneListData != null) {
 							Log.i("Debug", "Actualizando selectSceneBox " + Main.iFrame);
@@ -1628,7 +1723,9 @@ public class ModeMenu {
 								}
 							}
 						selectSceneBox.refresh(sceneListData, RscManager.allText[RscManager.TXT_SELECT_GAME], textList);
-						selectSceneBox.setDisabledList(disableList);
+                            if(!Main.IS_GAME_DEBUG) {
+                                selectSceneBox.setDisabledList(disableList);
+                            }
 						}
 						
 						updateNotificatons();
@@ -1662,7 +1759,9 @@ public class ModeMenu {
 						
 						preSceneListData =  
 								OnlineInputOutput.getInstance().revicePreSceneListData(
-										Main.getInstance().getActivity(), OnlineInputOutput.URL_GET_PRE_SCENE_LIST, GameState.getInstance().getName());
+										Main.getInstance().getActivity(),
+                                        OnlineInputOutput.URL_GET_PRE_SCENE_LIST,
+                                        Main.IS_GAME_DEBUG?"-1":GameState.getInstance().getName());
 						if (preSceneListData != null) {
 							Log.i("Debug", "Actualizando selectPreSceneBox " + Main.iFrame);
 							String[] textList = new String[preSceneListData.getPreSceneDataList().size()];
@@ -1676,7 +1775,7 @@ public class ModeMenu {
 										preSceneListData.getPreSceneDataList().get(i).getPlayerList().size() + 
 										"/" + numPlayer;
 								}
-							joinPreSceneBox.refresh(preSceneListData, RscManager.allText[RscManager.TXT_SELECT_GAME], textList);
+							joinPreSceneBox.refresh(preSceneListData, RscManager.allText[RscManager.TXT_JOIN_GAME], textList);
 						}
 					}
 				}

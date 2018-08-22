@@ -8,29 +8,48 @@ import com.luis.lgameengine.gameutils.Settings;
 */
 public class Define {
 	
-	public static final int SIZEX = (int) Settings.getInstance().getScreenWidth();
-	public static final int SIZEY = (int) Settings.getInstance().getScreenHeight();
+	public static void init(int screenW, int screenH){
 
-	public static final int SIZEX2 = SIZEX >> 1;
-	public static final int SIZEY2 = SIZEY >> 1;
-	public static final int SIZEX4 = SIZEX >> 2;
-	public static final int SIZEY4 = SIZEY >> 2;
-	public static final int SIZEX8 = SIZEX >> 3;
-	public static final int SIZEY8 = SIZEY >> 3;
-	public static final int SIZEX12 = SIZEX / 12;
-	public static final int SIZEY12 = SIZEY / 12;
-	public static final int SIZEX16 = SIZEX >> 4;
-	public static final int SIZEY16 = SIZEY >> 4;
-	public static final int SIZEX24 = SIZEX / 24;
-	public static final int SIZEY24 = SIZEY / 24;
-	public static final int SIZEX32 = SIZEX >> 5;
-	public static final int SIZEY32 = SIZEY >> 5;
-	public static final int SIZEX64 = SIZEX >> 6;
-	public static final int SIZEY64 = SIZEY >> 6;
+		SIZEX = screenW;
+		SIZEY = screenH;
+		SIZEX2 = SIZEX >> 1;
+		SIZEY2 = SIZEY >> 1;
+		SIZEX4 = SIZEX >> 2;
+		SIZEY4 = SIZEY >> 2;
+		SIZEX8 = SIZEX >> 3;
+		SIZEY8 = SIZEY >> 3;
+		SIZEX12 = SIZEX / 12;
+		SIZEY12 = SIZEY / 12;
+		SIZEX16 = SIZEX >> 4;
+		SIZEY16 = SIZEY >> 4;
+		SIZEX24 = SIZEX / 24;
+		SIZEY24 = SIZEY / 24;
+		SIZEX32 = SIZEX >> 5;
+		SIZEY32 = SIZEY >> 5;
+		SIZEX64 = SIZEX >> 6;
+		SIZEY64 = SIZEY >> 6;
+        SCR_MIDLE = (SIZEX+SIZEY)/2;
+	}
 
-	public static final int SCR_MIDLE = (SIZEX + SIZEY) / 2;
-
-	public static final int FX_POINT = 8;
+	public static int SIZEX;
+	public static int SIZEY;
+	public static int SIZEX2;
+	public static int SIZEY2;
+	public static int SIZEX4;
+	public static int SIZEY4;
+	public static int SIZEX8;
+	public static int SIZEY8;
+	public static int SIZEX12;
+	public static int SIZEY12;
+	public static int SIZEX16;
+	public static int SIZEY16;
+	public static int SIZEX24;
+	public static int SIZEY24;
+	public static int SIZEX32;
+	public static int SIZEY32;
+	public static int SIZEX64;
+	public static int SIZEY64;
+    public static int SCR_MIDLE;
 
 	// Menu States:
 	public static final int ST_MENU_START = 0;

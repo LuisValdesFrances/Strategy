@@ -106,7 +106,7 @@ public class GameBuilder {
 			playerList.add(player);
 		}
 		
-		/*//Deben de venir ordenados por fecha de inscripción del servidor
+		/*//Deben de venir ordenados por fecha de inscripcion del servidor
 		//Ordeno los players para que, en caso de una nueva partida, sea el host el primero
 		if(GameState.getInstance().getSceneData().getState() == 0){
 			for(int i = 0; i < playerList.size(); i++){
@@ -225,7 +225,7 @@ public class GameBuilder {
 				kingdomData.setId(a.getKingdom().getId());
 				kingdomData.setState(a.getKingdom().getState());
 				ad.setKingdom(kingdomData);
-				//Añado las tropas
+				//Add troops
 				List<TroopData> troopList = new ArrayList<TroopData>();
 				for(Troop t : a.getTroopList()){
 					TroopData troopData = new TroopData();
@@ -269,7 +269,7 @@ public class GameBuilder {
 			playerDataList.add(pd);
 		}
 		
-		//Añado las lista de jugadores
+		//Aï¿½ado las lista de jugadores
 		sceneData.setPlayerDataList(playerDataList);
 		
 		return sceneData;

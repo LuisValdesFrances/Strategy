@@ -31,6 +31,7 @@ import com.luis.strategy.gui.BattleBox;
 import com.luis.strategy.gui.DialogBox;
 import com.luis.strategy.gui.FlagButton;
 import com.luis.strategy.gui.MapBox;
+import com.luis.strategy.gui.RankingBox;
 import com.luis.strategy.gui.SimpleBox;
 import com.luis.strategy.gui.CityBox;
 import com.luis.strategy.map.ActionIA;
@@ -48,26 +49,26 @@ public class GameManager {
 	//
 	public static boolean game3D = false;
 	private Image gameBuffer;
-	public float distorsion = 1.16f;
-	
-	public DataSender dataSender;
-	
-	public static Button btnDebugPause;
+	private float distorsion = 1.16f;
+
+
+	private static Button btnDebugPause;
 	private static boolean isDebugPaused;
-	
+
 	private static final float IA_WAIT = 1f;
-	
+
 	private static float IAWaitCount;
-	
+
 	//Pad
 	private int lastTouchX;
 	private int lastTouchY;
 	private float cameraTargetX;
 	private float cameraTargetY;
-	
-	public GameCamera gameCamera;
-	public WorldConver worldConver;
-	
+
+	private GameCamera gameCamera;
+	private WorldConver worldConver;
+	private DataSender dataSender;
+
 	private GameScene gameScene;
 	
 	private int localTurnCount;
@@ -78,8 +79,9 @@ public class GameManager {
 	public static final int STATE_DISCARD = 2;
 	public static final int STATE_ACTION = 3;
 	public static final int STATE_END = 4;
-	public static final int STATE_FINISH = 5;
-	public static final int STATE_DEBUG = 6;
+	public static final int STATE_WIN = 5;
+    public static final int STATE_GAME_OVER = 6;
+	public static final int STATE_DEBUG = 7;
 	
 	
 	//SUB-STATE ACTION
@@ -101,21 +103,24 @@ public class GameManager {
 	public static final int SUB_STATE_ARMY_MANAGEMENT = 13;
 	public static final int SUB_STATE_CITY_MANAGEMENT = 14;
 	public static final int SUB_STATE_MAP_MANAGEMENT = 15;
-	public static final int SUB_STATE_ACTION_IA_WAIT_END = 16;
+    public static final int SUB_STATE_RANKING_MANAGEMENT = 16;
+	public static final int SUB_STATE_ACTION_IA_WAIT_END = 17;
 	
 	//GUI
 	private Button btnNext;
 	private Button btnCancel;
 	private Button btnArmy;
+    private Button btnChest;
 	private FlagButton btnFlagHelmet;
 	private FlagButton btnFlagCastle;
 	
 	private Button btnMap;
-	
+
 	private ArmyBox armyBox;
 	private BattleBox battleBox;
 	private CityBox cityBox;
 	private MapBox mapBox;
+    private RankingBox rankingBox;
 	private SimpleBox economyBox;
 	private SimpleBox resultBox;
 	private SimpleBox discardBox;
@@ -126,6 +131,8 @@ public class GameManager {
 	//private Army activeArmy;
 	//private Kingdom selectKingdom;
 	private List<Mist> mistList;
+
+	private int intertitialCount;
 	
 	public GameManager(WorldConver wc, GameCamera gc, GameScene gs){
 		this.gameBuffer = Image.createImage(
@@ -140,11 +147,13 @@ public class GameManager {
 		
 		this.cameraTargetX=0;//worldConver.getCentlayoutX();
 		this.cameraTargetY=0;//=worldConver.getCentlayoutY();
+
+		this.intertitialCount = 0;
 		
 		this.dataSender = new DataSender();
 		MenuElement.bgAlpha = GameParams.BG_BLACK_ALPHA;
 		
-		if(Main.debug){
+		if(Main.IS_GAME_DEBUG){
 			btnDebugPause = new Button(
 					GfxManager.imgButtonDebugPauseRelease, 
 					GfxManager.imgButtonDebugPauseFocus, 
@@ -313,6 +322,34 @@ public class GameManager {
 				}
 			}
 		};
+
+        int margin = Define.SIZEY64;
+        String text = "" + getCurrentPlayer().getGold();
+        int totalWidth = GfxManager.imgButtonChestRelease.getWidth() + margin + Font.getFontWidth(Font.FONT_MEDIUM)*text.length();
+        int x = Define.SIZEX - Define.SIZEX4 - totalWidth/2;
+        int y = Define.SIZEY - GfxManager.imgGameHud.getHeight()/2 + GfxManager.imgButtonChestRelease.getHeight()/4;
+        btnChest = new Button(
+                GfxManager.imgButtonChestRelease,
+                GfxManager.imgButtonChestFocus,
+                x, y,
+                null, 0){
+            @Override
+            public void onButtonPressDown(){}
+
+            @Override
+            public void onButtonPressUp(){
+                if(state == STATE_DEBUG){
+                    rankingBox.start(gameScene.getPlayerList());
+                    btnChest.setDisabled(true);
+                }else{
+                    if(getCurrentPlayer().getActionIA() == null && subState == SUB_STATE_ACTION_WAIT){
+                        changeSubState(SUB_STATE_RANKING_MANAGEMENT);
+                        rankingBox.start(gameScene.getPlayerList());
+                        setDisabled(true);
+                    }
+                }
+            }
+        };
 		
 		armyBox = new ArmyBox(){
 			@Override
@@ -355,6 +392,7 @@ public class GameManager {
 		};
 		
 		mapBox = new MapBox(worldConver, gameScene.getNumberPartsW(), gameScene.getNumberPartsH());
+        rankingBox = new RankingBox(worldConver, gameScene.getNumberPartsW(), gameScene.getNumberPartsH());
 		
 		battleBox = new BattleBox(){
 			@Override
@@ -487,8 +525,8 @@ public class GameManager {
 				 mistList.add(mist);
 			}
 		}
-		
-		
+
+		Main.getInstance().getActivity().loadInterstitial();
 		changeState(STATE_INCOME);
 	}
 	
@@ -699,6 +737,11 @@ public class GameManager {
 					changeSubState(SUB_STATE_ACTION_WAIT);
 				}
 				break;
+			case SUB_STATE_RANKING_MANAGEMENT:
+                    if(!rankingBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
+                        changeSubState(SUB_STATE_ACTION_WAIT);
+                    }
+                    break;
 			case SUB_STATE_ACTION_IA_WAIT_END:
 				if(getCurrentPlayer().getActionIA() != null && IAWaitCount < IA_WAIT){
 					IAWaitCount+=delta;
@@ -711,7 +754,8 @@ public class GameManager {
 		break;
 		
 		
-		case STATE_FINISH:
+		    case STATE_WIN:
+		    case STATE_GAME_OVER:
 			if(!endGameBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
 				
 			}
@@ -720,6 +764,9 @@ public class GameManager {
 			if(!mapBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
 				btnMap.setDisabled(false);
 			}
+            if(!rankingBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
+                btnChest.setDisabled(false);
+            }
 			
 			if(!cityBox.update(UserInput.getInstance().getMultiTouchHandler(), delta)){
 			
@@ -919,7 +966,7 @@ public class GameManager {
 		}
 		 
 		
-		if(!Main.debug && humanPlayer != null){//Si p == null significa que todos los jugadores son IA, asi que no pinto niebla
+		if(!Main.IS_GAME_DEBUG && humanPlayer != null){//Si p == null significa que todos los jugadores son IA, asi que no pinto niebla
 			for(Mist m : mistList){
 				
 				//Chequeo para despeja niebla
@@ -961,17 +1008,20 @@ public class GameManager {
 		drawGUI(g);
 		
 		if(ModeGame.showDebugInfo){
+		    /*
 			for(Kingdom k : gameScene.getKingdomList())
 				TextManager.drawSimpleText(g, Font.FONT_SMALL, 
 						"ST/TA:" + k.getState() + "/" + k.getTarget(),
 					worldConver.getConversionDrawX(gameCamera.getPosX(), k.getAbsoluteX()),
 					worldConver.getConversionDrawY(gameCamera.getPosY(), k.getAbsoluteY()),
 					Graphics.BOTTOM | Graphics.RIGHT);
+			*/
 			
 			for(Player p : gameScene.getPlayerList())
 				for(Army a : p.getArmyList())
-					TextManager.drawSimpleText(g, Font.FONT_SMALL, 
-					""+a.getKingdom().getId() + "-" + a.getId() + " (" + a.getState() + ")",
+					TextManager.drawSimpleText(g, Font.FONT_MEDIUM,
+                            ""+ a.getId(),
+					//""+a.getKingdom().getId() + "-" + a.getId() + " (" + a.getState() + ")",
 					worldConver.getConversionDrawX(gameCamera.getPosX(), a.getAbsoluteX()-Define.SIZEX64),
 					worldConver.getConversionDrawY(gameCamera.getPosY(), a.getAbsoluteY()-Define.SIZEX64),
 					Graphics.BOTTOM | Graphics.RIGHT);
@@ -1023,10 +1073,11 @@ public class GameManager {
 		btnCancel.update(multiTouchHandler);
 		btnNext.update(multiTouchHandler);
 		btnMap.update(multiTouchHandler);
+        btnChest.update(multiTouchHandler);
 		btnArmy.update(multiTouchHandler);
 		btnFlagHelmet.update(multiTouchHandler, delta);
 		btnFlagCastle.update(multiTouchHandler, delta);
-		if(Main.debug){
+		if(Main.IS_GAME_DEBUG){
 			btnDebugPause.update(multiTouchHandler);
 		}
 		
@@ -1039,14 +1090,14 @@ public class GameManager {
 				GfxManager.imgButtonDebugPauseRelease.getHeight(), 
 				Graphics.VCENTER | Graphics.LEFT);
 		}
-		drawRanking(g);
+
+
 		if(state != STATE_END){
 			TextManager.drawSimpleText(g, Font.FONT_MEDIUM, getCurrentPlayer().getName(), 
 					0, Define.SIZEY-GfxManager.imgGameHud.getHeight(), Graphics.BOTTOM | Graphics.LEFT);
 			}
 		g.drawImage(GfxManager.imgGameHud, 0, Define.SIZEY, Graphics.BOTTOM | Graphics.LEFT);
-		drawGold(g);
-		
+
 		economyBox.draw(g, GfxManager.imgBlackBG);
 		armyBox.draw(g);
 		discardBox.draw(g, null);
@@ -1055,6 +1106,7 @@ public class GameManager {
 		battleBox.draw(g);
 		cityBox.draw(g);
 		mapBox.draw(g);
+		rankingBox.draw(g);
 		endGameBox.draw(g, GfxManager.imgBlackBG);
 		resultBox.draw(g, GfxManager.imgBlackBG);
 		btnCancel.draw(g, 0, 0);
@@ -1063,12 +1115,23 @@ public class GameManager {
 		btnFlagCastle.draw(g);
 		btnMap.draw(g, 0, 0);
 		btnArmy.draw(g, 0, 0);
-		if(Main.debug){
+		btnChest.draw(g, 0, 0);
+
+        //Gold
+        TextManager.drawSimpleText(g, Font.FONT_MEDIUM,
+                "" + getCurrentPlayer().getGold(),
+                btnChest.getX()+ btnChest.getWidth()/2,
+                btnChest.getY(),
+                Graphics.VCENTER | Graphics.LEFT);
+
+
+        if(Main.IS_GAME_DEBUG){
 			btnDebugPause.draw(g, 0, 0);
 		}
 		NotificationBox.getInstance().draw(g);
 	}
-	
+
+	/*
 	private void drawGold(Graphics g){
 		int margin = Define.SIZEY64;
 		String text = "" + getCurrentPlayer().getGold();
@@ -1081,42 +1144,7 @@ public class GameManager {
 			y, 
 			Graphics.VCENTER | Graphics.HCENTER);
 	}
-	
-	private void drawRanking(Graphics g){
-		int nPlayer = 0;
-		for(Player player : gameScene.getPlayerList()){
-			if(player.getCapitalkingdom() != null){
-				nPlayer++;
-			}
-		}
-		Player[] pList = new Player[nPlayer];
-		int index = 0;
-		for(int i = 0; i < gameScene.getPlayerList().size(); i++){
-			if(gameScene.getPlayerList().get(i).getCapitalkingdom() != null){
-				pList[index++] = gameScene.getPlayerList().get(i);
-			}
-		}
-		
-		//Ordeno
-		for(int i = 0; i < pList.length-1; i++){
-			for(int j = 0; j < pList.length-1; j++){
-				if(pList[j].getTaxes() >  pList[j+1].getTaxes()){
-					Player aux = pList[j+1];
-					pList[j+1] = pList[j];
-					pList[j] = aux;
-				}
-			}
-		}
-		g.setClip(0, 0, Define.SIZEX, Define.SIZEY);
-		for(int i = pList.length-1; i > -1; i--){
-			TextManager.drawSimpleText(g, Font.FONT_SMALL, 
-					pList[i].getName() + " " + pList[i].getTaxes(), 
-					Define.SIZEX-Define.SIZEX64, 
-					Define.SIZEY-GfxManager.imgGameHud.getHeight() - (i*Font.getFontHeight(Font.FONT_SMALL)), 
-					Graphics.BOTTOM | Graphics.RIGHT);
-		}
-		
-	}
+	*/
 	
 	private void cleanArmyAction(){
 		for(Player player : gameScene.getPlayerList()){
@@ -1183,7 +1211,7 @@ public class GameManager {
 				}
 			}
 		}
-		//Si estoy en territorio hostil(A midad de una conquista), lo añado a los seleccionables
+		//Si estoy en territorio hostil(A midad de una conquista), lo anyado a los seleccionables
 		if(!getCurrentPlayer().hasKingom(getSelectedArmy().getKingdom())){
 			getSelectedArmy().getKingdom().setTarget(Kingdom.TARGET_BATTLE);
 			getSelectedArmy().getKingdom().setTouchX(getSelectedArmy().getKingdom().
@@ -1201,6 +1229,7 @@ public class GameManager {
 		btnNext.setDisabled(true);
 		btnCancel.setDisabled(true);
 		btnMap.setDisabled(true);
+        btnChest.setDisabled(true);
 		btnArmy.setDisabled(true);
 		btnFlagHelmet.hide();
 		btnFlagCastle.hide();
@@ -1208,17 +1237,75 @@ public class GameManager {
 		state = newState;
 		switch(state){
 		case STATE_INCOME:
-			if(Main.debug){
+
+		    //Validaciones
+            if(GameState.getInstance().getGameMode() == GameState.GAME_MODE_ONLINE){
+
+                //Validacion del jugador
+                if(!getCurrentPlayer().getName().equals(GameState.getInstance().getName())){
+					OnlineInputOutput.getInstance().sendIncidence(
+							Main.getInstance().getContext(),
+							""+GameState.getInstance().getSceneData().getId(),
+							GameState.getInstance().getName(), "getCurrentPlayer().getName() No coincide con GameState.getInstance().getName()");
+						Main.changeState(Define.ST_MENU_MAIN, true);
+                }
+
+                //Validacion de tropas
+                List<Integer> idList = new ArrayList<Integer>();
+                int numTroop = 0;
+                for(Player p : gameScene.getPlayerList()){
+                    for(Army a : p.getArmyList()){
+                        numTroop++;
+                        boolean exist = false;
+                        for(Integer id : idList){
+                            exist = id == a.getId();
+                        }
+                        if(!exist){
+                            idList.add(a.getId());
+                        }
+                    }
+                }
+                if(idList.size() != numTroop){
+                    OnlineInputOutput.getInstance().sendIncidence(
+                            Main.getInstance().getContext(),
+                            ""+GameState.getInstance().getSceneData().getId(),
+                            GameState.getInstance().getName(), "Discrepancia con ID tropas");
+                    Main.changeState(Define.ST_MENU_MAIN, true);
+                }
+            }
+
+			if(Main.IS_GAME_DEBUG){
 				btnDebugPause.setDisabled(getCurrentPlayer().getActionIA() == null);
 			}
 			startPresentation(Font.FONT_BIG, RscManager.allText[RscManager.TXT_GAME_TURN] + 
 					(gameScene.getTurnCount()+1) + " - " + getCurrentPlayer().getName());
 			cameraTargetX = getCurrentPlayer().getCapitalkingdom().getAbsoluteX();
 			cameraTargetY = getCurrentPlayer().getCapitalkingdom().getAbsoluteY();
+
+
+
+			if(GameState.getInstance().getGameMode() == GameState.GAME_MODE_PLAY_AND_PASS) {
+				if (getCurrentPlayer().getActionIA() == null) {
+					intertitialCount += 2;
+				} else {
+					intertitialCount += 1;
+				}
+				if (getCurrentPlayer().getActionIA() == null && intertitialCount >= 20) {
+					Main.getInstance().getActivity().requestInterstitial();
+				}
+			}
 			break;
 			
 		case STATE_ECONOMY:
-			
+			if(GameState.getInstance().getGameMode() == GameState.GAME_MODE_PLAY_AND_PASS) {
+				if (getCurrentPlayer().getActionIA() == null) {
+					if (getCurrentPlayer().getActionIA() == null && intertitialCount >= 20) {
+						Main.getInstance().getActivity().loadInterstitial();
+						intertitialCount = 0;
+					}
+				}
+			}
+
 			if(localTurnCount == 0){
 				SndManager.getInstance().playMusic(Main.MUSIC_MAP, true);
 			}
@@ -1241,7 +1328,7 @@ public class GameManager {
 			int salary = getCurrentPlayer().getCost(false);
 			
 			getCurrentPlayer().setGold(getCurrentPlayer().getGold()+tax-salary);
-			
+
 			//Quito los marcadores de Fe
 			for(Kingdom k : getCurrentPlayer().getKingdomList()){
 				k.setProtectedByFaith(false);
@@ -1285,9 +1372,13 @@ public class GameManager {
 			if(isDebugPaused){
 				changeState(STATE_DEBUG);
 			}else{
-				if(isFinishGame()){
-					changeState(STATE_FINISH);
-				}else{
+				if(isWinGame()){
+					changeState(STATE_WIN);
+				}
+                else if(isGameOver()){
+                    changeState(STATE_GAME_OVER);
+                }
+				else{
 					
 					//Faith
 					for(Kingdom k : getCurrentPlayer().getKingdomList()){
@@ -1313,15 +1404,20 @@ public class GameManager {
 				}
 			}
 			break;
-		case STATE_FINISH:
+		    case STATE_WIN:
 			endGameBox.start(
-					RscManager.allText[RscManager.TXT_GAME_VICTORY], 
+					RscManager.allText[RscManager.TXT_GAME_WIN],
 					RscManager.allText[RscManager.TXT_GAME_PLAYER] + " " + getWinner().getName() + " " +
 					RscManager.allText[RscManager.TXT_GAME_IS_WINNER]);
 			break;
-		case STATE_DEBUG:
-			btnDebugPause.setDisabled(false);
-			break;
+			case STATE_GAME_OVER:
+                endGameBox.start(
+                        null,
+                        RscManager.allText[RscManager.TXT_GAME_YOU_LOST_GAME]);
+                break;
+		    case STATE_DEBUG:
+			    btnDebugPause.setDisabled(false);
+			    break;
 		}
 	}
 	
@@ -1331,6 +1427,7 @@ public class GameManager {
 		btnNext.setDisabled(true);
 		btnCancel.setDisabled(true);
 		btnMap.setDisabled(true);
+        btnChest.setDisabled(true);
 		btnArmy.setDisabled(true);
 		subState = newSubState;
 		
@@ -1365,6 +1462,7 @@ public class GameManager {
 				btnNext.setDisabled(getCurrentPlayer().getActionIA()!=null);
 				btnCancel.setDisabled(true);
 				btnMap.setDisabled(false);
+                btnChest.setDisabled(false);
 				
 				//Se deshabilita este boton, si no quedan tropas activas
 				boolean disabled = true;
@@ -1456,7 +1554,7 @@ public class GameManager {
 				//getSelectedArmy().changeState(Army.STATE_OFF);//OJO
 				break;
 			case SUB_STATE_ACTION_RESULT:
-				gameScene.cleanKingdomTarget();
+                gameScene.cleanKingdomTarget();
 				gameScene.resetKingdoms();
 				break;
 			case SUB_STATE_ACTION_ANIM_DEAD:
@@ -1491,6 +1589,7 @@ public class GameManager {
 			case SUB_STATE_ARMY_MANAGEMENT:
 			case SUB_STATE_CITY_MANAGEMENT:
 			case SUB_STATE_MAP_MANAGEMENT:
+			case SUB_STATE_RANKING_MANAGEMENT:
 				gameScene.cleanKingdomTarget();
 				gameScene.resetKingdoms();
 				break;
@@ -1507,6 +1606,7 @@ public class GameManager {
 		case STATE_DEBUG:
 			gameScene.resetKingdoms();
 			btnMap.setDisabled(false);
+            btnChest.setDisabled(false);
 			break;
 		}
 	}
@@ -1533,12 +1633,14 @@ public class GameManager {
 			if(result.equals("Succes")){
 				dataSender.sendGameNotifications();
 				NotificationBox.getInstance().addMessage(RscManager.allText[RscManager.TXT_SEND_DATA]);
-				Main.changeState(newState, true);
-			}else{
-				if(notificationResult){
-					NotificationBox.getInstance().addMessage(result);
-				}
 			}
+			else if(result.equals("Server validation error")){
+				NotificationBox.getInstance().addMessage(RscManager.allText[RscManager.TXT_SEND_DATA]);
+			}
+            if(notificationResult){
+                NotificationBox.getInstance().addMessage(result);
+            }
+            Main.changeState(newState, true);
 		}else{
 			if(notificationResult){
 				NotificationBox.getInstance().addMessage(RscManager.allText[RscManager.TXT_NO_CONNECTION]);
@@ -1682,7 +1784,7 @@ public class GameManager {
 			for(Army army : player.getArmyList()){
 				if(army.isSelected()){
 					selected = army;
-					return selected;
+                    return selected;
 				}
 			}
 		}
@@ -1712,10 +1814,10 @@ public class GameManager {
 			}
 		}
 	}
-	
-	private Player getWinner(){
+
+    private Player getWinner(){
 		Player winner = null;
-		if(isFinishGame()){
+		if(isWinGame()){
 			for(int i = 0; i < gameScene.getPlayerList().size() && winner == null; i++){
 				if(gameScene.getPlayerList().get(i).getCapitalkingdom() != null){
 					winner = gameScene.getPlayerList().get(i);
@@ -1737,7 +1839,7 @@ public class GameManager {
 		return player;
 	}
 	
-	private boolean isFinishGame(){
+	private boolean isWinGame(){
 		boolean end = true;
 		for(int i = 0; i < gameScene.getPlayerList().size() && end; i++){
 			if(gameScene.getPlayerList().get(i).getId() != getCurrentPlayer().getId()){
@@ -1748,6 +1850,22 @@ public class GameManager {
 		}
 		return end;
 	}
+
+
+    private boolean isGameOver(){
+	    if(GameState.getInstance().getGameMode() != GameState.GAME_MODE_ONLINE && !Main.IS_GAME_DEBUG){
+            boolean end = true;
+
+            for(int i = 0; i < gameScene.getPlayerList().size() && end; i++){
+                if(gameScene.getPlayerList().get(i).getActionIA() == null){
+                    end = false;
+                }
+            }
+            return end;
+        }else{
+	        return false;
+        }
+    }
 	
 	/**
 	 * Devuelve true si el ejercito que se pasa por parametro pertenece al jugador en curso.
@@ -1953,8 +2071,8 @@ public class GameManager {
 		Army enemy = getEnemyAtKingdom(getCurrentPlayer());
 		
 		/*
-		 * El ejercito ganador genera la mitad de su valor en daño al ejercito perdedor
-		 * El ejercito perdedor genera la la cuarta parte de su daño al ejercito ganador
+		 * El ejercito ganador genera la mitad de su valor en daï¿½o al ejercito perdedor
+		 * El ejercito perdedor genera la la cuarta parte de su daï¿½o al ejercito ganador
 		 */
 		boolean showResultBox = 
 				getSelectedArmy().getPlayer().getActionIA() == null ||
@@ -1980,13 +2098,13 @@ public class GameManager {
 				textH=RscManager.allText[RscManager.TXT_GAME_DEFEAT];
 				break;
 			case 2: 
-				textH=RscManager.allText[RscManager.TXT_GAME_VICTORY];
+				textH=RscManager.allText[RscManager.TXT_GAME_WIN];
 				break;
 			case 3: 
 				textH=RscManager.allText[RscManager.TXT_GAME_BIG_VICTORY];
 				break;
 		}
-		//Ñapa
+		//Nyapa
 		//result = 3;
 		
 		//Hay ejercito enemigo
@@ -2023,7 +2141,7 @@ public class GameManager {
 				}
 			}else{
 				defeated.setDefeat(true);
-				//Daño
+				//Danyo
 				int casualtiesFromArmy = 0;
 				int casualtiesFromEnemy = 0;
 				if(result == 1){//Ejercito selecionado pierde
@@ -2066,16 +2184,17 @@ public class GameManager {
 					//getSelectedArmy().getKingdom().setTarget(-1);
 				}else{//Conquista
 					startConquest = true;
-					
+					//Obtengo al perdedor antes de cambiar el reino de dueÃ±o
+					defeatPlayer = getPlayerByKingdom(getSelectedArmy().getKingdom());
+
 					getSelectedArmy().getKingdom().setState(0);
 					//getSelectedArmy().getKingdom().setTarget(-1);
 					addNewConquest(getCurrentPlayer(), getSelectedArmy().getKingdom());
-					
+
 					if(getSelectedArmy().getKingdom().isACity()) {
-						defeatPlayer = getPlayerByKingdom(getSelectedArmy().getKingdom());
 						//Cambio de capital
 						changeCapital = defeatPlayer != null && defeatPlayer.changeCapital();
-						
+
 						//Eliminacion jugador
 						deletePlayer = defeatPlayer != null && defeatPlayer.getCapitalkingdom() == null;
 					}
@@ -2176,7 +2295,7 @@ public class GameManager {
 				}
 			}
 		}
-		 ///*
+        ///*
 		if(deletePlayer){
 			gameScene.removePlayerKingdoms(defeatPlayer);
 		}
@@ -2523,16 +2642,32 @@ public class GameManager {
 	
 	private Army getNextArmy(){
 		Army army = null;
-		
+
+
+
+
+
 		if(getCurrentPlayer().getArmyList().size() > 0){
-		
+
+		    //Si solo tento un ejercito y esta activo, devuelvo ese
 			if(getCurrentPlayer().getArmyList().size() == 1 && getCurrentPlayer().getArmyList().get(0).getState() == Army.STATE_ON){
 				army = getCurrentPlayer().getArmyList().get(0);
+			}
+			//Si no tengo seleccionado ninguno o tengo seleccionado uno del enemigo, devuelvo el primero activo
+			else if(getSelectedArmy() == null || (getSelectedArmy() != null && !isSelectedArmyFromCurrentPlayer(getSelectedArmy()))){
+
+                for (int i = 0; i < getCurrentPlayer().getArmyList().size() && army == null; i++) {
+                    {
+                        if ( getCurrentPlayer().getArmyList().get(i).getState() == Army.STATE_ON) {
+                            army = getCurrentPlayer().getArmyList().get(i);
+                        }
+                    }
+                }
 			}
 			else{
 			
 				//Ordeno segun id
-				/*
+                /*
 				for(int i = 0; i < getCurrentPlayer().getArmyList().size(); i++){
 					for(int j = 1; j < (getCurrentPlayer().getArmyList().size()-i); j++){
 						if(getCurrentPlayer().getArmyList().get(j-1).getId() > getCurrentPlayer().getArmyList().get(j).getId()){
@@ -2544,6 +2679,13 @@ public class GameManager {
 					}
 				}
 				*/
+
+                int numActive = 0;
+                for(Army a : getCurrentPlayer().getArmyList()){
+                    if(a.getState() == Army.STATE_ON){
+                        numActive++;
+                    }
+                }
 				
 				int currentIndex = 0;
 				if(getSelectedArmy() != null){
@@ -2553,24 +2695,38 @@ public class GameManager {
 						}
 					}
 				}
-				
-				//Busco al siguiente
-				int nextIndex = currentIndex+1;
+                //Si solo queda uno activo, devuelvo ese:
+				if(numActive == 1){
+                    army = getCurrentPlayer().getArmyList().get(currentIndex);
+                }else {
 
-				for(int i = 0; i < getCurrentPlayer().getArmyList().size() && army == null; i++){
-					
-					if(nextIndex >= getCurrentPlayer().getArmyList().size()){
-						army = getCurrentPlayer().getArmyList().get(0);
-					}else{
-						if(
-								getCurrentPlayer().getArmyList().get(nextIndex).getState() == Army.STATE_ON && 
-								getCurrentPlayer().getArmyList().get(nextIndex).getId() > getCurrentPlayer().getArmyList().get(currentIndex).getId()){
-							army = getCurrentPlayer().getArmyList().get(nextIndex);
-						}
-						nextIndex++;
-					}
-					
-				}
+                    //Busco al siguiente
+                    int nextIndex;
+
+                    if (currentIndex == getCurrentPlayer().getArmyList().size() - 1) {
+                        currentIndex = 0;
+                        nextIndex = 0;
+                    } else {
+                        nextIndex = currentIndex + 1;
+                    }
+
+
+                    for (int i = 0; i < getCurrentPlayer().getArmyList().size() && army == null; i++) {
+                        {
+                            if (
+                                    getCurrentPlayer().getArmyList().get(nextIndex).getState() == Army.STATE_ON &&
+                                            getCurrentPlayer().getArmyList().get(nextIndex).getId() >= getCurrentPlayer().getArmyList().get(currentIndex).getId()) {
+                                army = getCurrentPlayer().getArmyList().get(nextIndex);
+                            }
+                            nextIndex++;
+
+                            if(nextIndex >= getCurrentPlayer().getArmyList().size()){
+                                nextIndex=0;
+                                currentIndex=0;
+                            }
+                        }
+                    }
+                }
 			}
 		}
 		return army;
