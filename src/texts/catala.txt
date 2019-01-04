@@ -22,7 +22,7 @@ Català
 CAMPANYA
 CONTINUAR
 COMENÇAR
-JUGAR
+PARTIDA RÀPIDA
 ON LINE
 NOVA PARTIDA
 NOU COMPTE
@@ -134,6 +134,9 @@ ATACAR
 FUGIR
 ESPERAR
 CANCEL·LAR
+RANKING
+BOTÍN
+Total
 Aumenta la defensa de la ciutat a un
 Aumenta la recaudació de la ciutat a un
 Aumenta la protecció de la ciutat a un
